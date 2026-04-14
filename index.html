@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>夢競娛樂</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
+        body { background-color: #121212; color: #fff; min-height: 100vh; }
+        .header { background-color: #1f1f1f; border-bottom: 2px solid #ff69b4; padding: 15px 30px; display: none; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; }
+        .logo { font-size: 24px; font-weight: bold; color: #ff69b4; }
+        .nav a { color: #fff; margin-left: 25px; text-decoration: none; font-size: 16px; cursor: pointer; }
+        .nav a:hover { color: #ff69b4; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .card { background-color: #1e1e1e; border-radius: 10px; border: 1px solid #333; padding: 35px; margin-bottom: 40px; box-shadow: 0 0 10px rgba(255,105,180,0.1); }
+        .card-title { color: #ff69b4; font-size: 22px; margin-bottom: 25px; border-left: 4px solid #ff69b4; padding-left: 10px; }
+        .section { display: none; }
+        .section.active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table th, table td { padding: 16px; text-align: left; border-bottom: 1px solid #333; vertical-align: top; }
+        table th { color: #ff69b4; background-color: #252525; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px; }
+        .shop-item { background: #252525; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #333; }
+        .shop-item h3 { color: #ff69b4; margin-bottom: 10px; }
+        .shop-item p { margin: 8px 0; }
+        .btn { padding: 8px 16px; background: #ff69b4; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+        .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+        .user-info p { margin: 14px 0; font-size: 16px; }
+        .user-info span { color: #ff69b4; font-weight: bold; }
+        .login-box { max-width: 400px; margin: 60px auto; padding: 30px; }
+        .login-box input { width: 100%; padding: 12px; margin: 10px 0; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px; }
+        .login-box .btn { width: 100%; margin-top: 15px; padding: 12px; }
+        .link { color: #ff69b4; cursor: pointer; margin-top: 15px; display: inline-block; }
+        .empty { text-align: center; padding: 60px 0; color: #999; font-size: 16px; }
+        .shop-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
+        .shop-tab { padding: 10px 18px; background: #252525; border: 1px solid #444; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; }
+        .shop-tab.active { background: #ff69b4; color: #fff; border-color: #ff69b4; }
+        .shop-tab.locked { opacity: 0.5; cursor: not-allowed; color: #ccc; }
+        .shop-cat { display: none; }
+        .shop-cat.active { display: block; }
+        .search-box { margin-bottom: 25px; }
+        .search-box input { width: 100%; padding: 12px 15px; background: #252525; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 15px; }
+        .rule-box { line-height: 2.2; margin-top: 15px; font-size: 15px; padding-left: 10px; }
+        .brand-bottom { text-align: center; margin-top: 50px; font-size: 20px; color: #ff69b4; font-weight: bold; }
+        .brand-bottom a, .logo a { color: #ff69b4; text-decoration: none; }
+        .member-row { display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
+        .member-left { flex: 0 0 auto; min-width: 300px; }
+        .member-right { flex: 1; min-width: 300px; }
+        .rule-title { font-size: 20px; color: #ff69b4; margin-bottom: 15px; font-weight: bold; padding-left: 10px; }
+        .status-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; border: 1px solid #444; }
+        .status-pill.locked { color: #ff8080; }
+        .status-pill.open { color: #7dff9e; }
+        .svip { color: #999999 !important; font-weight:bold; font-size: 16px; }
+        .vip1 { color: #ffffff !important; font-weight:bold; font-size: 16px; }
+        .vip2, .vip3 { color: #00ff00 !important; font-weight:bold; font-size: 16px; }
+        .vip4, .vip5 { color: #0099ff !important; font-weight:bold; font-size: 16px; }
+        .vip6, .vip7 { color: #9933ff !important; font-weight:bold; font-size: 16px; }
+        .vip8, .vip9 { color: #ffcc00 !important; font-weight:bold; font-size: 16px; }
+        .vip10 { color: #ff0000 !important; font-weight:bold; font-size: 16px; }
+        .msg { margin-top: 12px; color: #ffb3d9; min-height: 22px; }
+    </style>
+</head>
+<body>
+<div class="header" id="mainHeader">
+    <div class="logo"><a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener">夢競娛樂</a></div>
+    <div class="nav">
+        <a onclick="showSection('home')">首頁</a>
+        <a onclick="showSection('vip')">VIP說明</a>
+        <a onclick="showSection('shop')">市集兌換</a>
+        <a onclick="showSection('record')">購買紀錄</a>
+        <a onclick="showSection('recharge')">儲值紀錄</a>
+        <a onclick="showSection('renewPage')">會員續期</a>
+        <a onclick="logout()">登出</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="section active" id="loginPage">
+        <div class="card login-box">
+            <div class="card-title">會員登入</div>
+            <input id="login_user" placeholder="請輸入帳號">
+            <input id="login_pwd" type="password" placeholder="請輸入密碼">
+            <button class="btn" onclick="userLogin()">登入</button>
+            <div class="link" onclick="showSection('registerPage')">沒有帳號？註冊會員</div>
+            <div class="link" onclick="showSection('forgetPage')" style="margin-left:10px;">忘記密碼？</div>
+            <div class="msg" id="loginMsg"></div>
+        </div>
+        <div class="brand-bottom"><a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener">夢競娛樂</a></div>
+    </div>
+
+    <div class="section" id="registerPage">
+        <div class="card login-box">
+            <div class="card-title">會員註冊</div>
+            <input id="reg_user" placeholder="設定帳號 (6碼以上)">
+            <input id="reg_pwd" type="password" placeholder="設定密碼 (8碼以上)">
+            <input id="reg_email" placeholder="Gmail 信箱（找密碼用）">
+            <input id="reg_code" placeholder="請輸入會員碼">
+            <button class="btn" onclick="userRegister()">註冊</button>
+            <div class="link" onclick="showSection('loginPage')">返回登入</div>
+            <div class="msg" id="registerMsg"></div>
+        </div>
+    </div>
+
+    <div class="section" id="renewPage">
+        <div class="card login-box">
+            <div class="card-title">會員續期（30天）</div>
+            <input id="renew_user" placeholder="請輸入帳號">
+            <input id="renew_code" placeholder="請輸入會員碼">
+            <button class="btn" onclick="userRenew()">續期</button>
+            <div class="link" onclick="showSection('home')">返回首頁</div>
+            <div class="msg" id="renewMsg"></div>
+        </div>
+    </div>
+
+    <div class="section" id="forgetPage">
+        <div class="card login-box">
+            <div class="card-title">忘記密碼</div>
+            <input id="forget_email" placeholder="請輸入註冊時的 Gmail">
+            <button class="btn" onclick="findPassword()">送出重設申請</button>
+            <div class="link" onclick="showSection('loginPage')">返回登入</div>
+            <div class="msg" id="forgetMsg"></div>
+        </div>
+    </div>
+
+    <div class="section" id="home">
+        <div class="card">
+            <div class="card-title">會員中心</div>
+            <div class="member-row">
+                <div class="member-left">
+                    <div class="user-info">
+                        <p>會員ID：<span id="show_userid">00000000</span></p>
+                        <p>會員名稱：<span id="show_username">未登入</span></p>
+                        <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
+                        <p>VIP經驗值：<span id="show_exp">500 / 298888</span></p>
+                        <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
+                        <p>會員到期：<span id="show_expire">未開通</span></p>
+                        <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
+                    </div>
+                </div>
+                <div class="member-right">
+                    <div class="card" style="margin:0; padding:25px;">
+                        <div class="rule-title">平台規則</div>
+                        <div class="rule-box">
+                            1. 會員有效期限為30天。<br>
+                            2. 會員到期後，需向<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂</a>索取新會員碼並再次輸入續期。<br>
+                            3. 會員到期後不會增加任何經驗值。<br>
+                            4. 會員到期後不享有任何 VIP 權益，前台顯示為鎖定。<br>
+                            5. 需要儲值短陌請私訊<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂</a>。<br>
+                            6. 市集商品為網格狀排列，支援搜尋。<br>
+                            7. 會員碼僅可使用一次，系統後端採雜湊安全保存。<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">團隊介紹</div>
+            <div class="rule-box">
+                <a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂</a> 致力於電競、經紀經營，是整合創作者資源與整合行銷的領先公司。
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="vip">
+        <div class="card">
+            <div class="card-title">VIP 等級與經驗值</div>
+            <table>
+                <tr><th>VIP等級</th><th>專屬稱號</th><th>所需經驗值</th><th>專屬權益</th></tr>
+                <tr><td class="svip">SVIP</td><td class="svip">客官</td><td>1000</td><td>會員有效時可使用 VIP 權益；到期後顯示鎖定</td></tr>
+                <tr><td class="vip1">VIP1</td><td class="vip1">雅客</td><td>1888</td><td>同原規則</td></tr>
+                <tr><td class="vip2">VIP2</td><td class="vip2">太學博士</td><td>6888</td><td>同原規則</td></tr>
+                <tr><td class="vip3">VIP3</td><td class="vip3">四征將軍</td><td>13888</td><td>同原規則</td></tr>
+                <tr><td class="vip4">VIP4</td><td class="vip4">中郎將</td><td>35888</td><td>同原規則</td></tr>
+                <tr><td class="vip5">VIP5</td><td class="vip5">驃騎將軍</td><td>55888</td><td>同原規則</td></tr>
+                <tr><td class="vip6">VIP6</td><td class="vip6">尚書令</td><td>76888</td><td>同原規則</td></tr>
+                <tr><td class="vip7">VIP7</td><td class="vip7">御史大夫</td><td>90888</td><td>同原規則</td></tr>
+                <tr><td class="vip8">VIP8</td><td class="vip8">太子太傅</td><td>158888</td><td>同原規則</td></tr>
+                <tr><td class="vip9">VIP9</td><td class="vip9">攝政王</td><td>198888</td><td>同原規則</td></tr>
+                <tr><td class="vip10">VIP10</td><td class="vip10">絕代風華</td><td>298888</td><td>同原規則</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section" id="shop">
+        <div class="card">
+            <div class="card-title">市集 - 短陌兌換</div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜尋商品名稱、類型..." oninput="renderShop()">
+            </div>
+            <div class="shop-tabs">
+                <div class="shop-tab active" data-tab="all" onclick="switchShop('all')">全部</div>
+                <div class="shop-tab" data-tab="fun" onclick="switchShop('fun')">趣味單</div>
+                <div class="shop-tab" data-tab="guarantee" onclick="switchShop('guarantee')">保底單</div>
+                <div class="shop-tab" data-tab="assign" onclick="switchShop('assign')">指定單</div>
+                <div class="shop-tab" data-tab="play" onclick="switchShop('play')">娛樂陪</div>
+                <div class="shop-tab" data-tab="special" onclick="switchShop('special')">特色單</div>
+                <div class="shop-tab" data-tab="limit" onclick="switchShop('limit')">限時單</div>
+            </div>
+            <div class="empty" id="emptyShop">暫無商品</div>
+            <div class="shop-cat active" id="shopContainer"></div>
+        </div>
+    </div>
+
+    <div class="section" id="record">
+        <div class="card">
+            <div class="card-title">購買紀錄</div>
+            <table id="recordTable">
+                <tr><th>序號</th><th>商品名稱</th><th>消耗短陌</th><th>購買時間</th></tr>
+                <tr><td colspan="4" class="empty">暫無紀錄</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section" id="recharge">
+        <div class="card">
+            <div class="card-title">儲值紀錄</div>
+            <table id="rechargeTable">
+                <tr><th>序號</th><th>儲值金額</th><th>獲得短陌</th><th>是否增加經驗值</th><th>儲值時間</th></tr>
+                <tr><td colspan="5" class="empty">暫無紀錄</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_BASE = "http://localhost/backend/api.php";
+const state = { user: null, shopItems: [], activeCat: 'all' };
+
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function setMessage(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = text || '';
+}
+
+async function api(action, extra = {}) {
+    const res = await fetch(API_BASE, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, ...extra })
+    });
+    return await res.json();
+}
+
+function vipClass(level) {
+    if (level <= 0) return 'svip';
+    return 'vip' + level;
+}
+
+function updateUserUI(user) {
+    state.user = user;
+    document.getElementById('show_userid').innerText = user.id;
+    document.getElementById('show_username').innerText = user.username;
+    const vipEl = document.getElementById('userVipLevel');
+    vipEl.className = vipClass(user.vip_level);
+    vipEl.innerText = user.vip_title;
+    document.getElementById('show_exp').innerText = `${user.exp} / 298888`;
+    document.getElementById('show_coin').innerText = user.coin;
+    document.getElementById('show_expire').innerText = user.member_expire || '未開通';
+    const vipStatus = document.getElementById('show_vip_status');
+    vipStatus.innerText = user.vip_benefits_status;
+    vipStatus.className = 'status-pill ' + (user.member_active ? 'open' : 'locked');
+    document.getElementById('mainHeader').style.display = 'flex';
+    document.getElementById('renew_user').value = user.username;
+    renderRecords(user.buy_records || []);
+    renderRecharges(user.recharge_records || []);
+    renderShop();
+}
+
+function renderRecords(records) {
+    const table = document.getElementById('recordTable');
+    let html = '<tr><th>序號</th><th>商品名稱</th><th>消耗短陌</th><th>購買時間</th></tr>';
+    if (!records.length) {
+        html += '<tr><td colspan="4" class="empty">暫無紀錄</td></tr>';
+    } else {
+        records.forEach((item, idx) => {
+            html += `<tr><td>${idx + 1}</td><td>${escapeHtml(item.name)}</td><td>${item.cost}</td><td>${escapeHtml(item.time)}</td></tr>`;
+        });
+    }
+    table.innerHTML = html;
+}
+
+function renderRecharges(records) {
+    const table = document.getElementById('rechargeTable');
+    let html = '<tr><th>序號</th><th>儲值金額</th><th>獲得短陌</th><th>是否增加經驗值</th><th>儲值時間</th></tr>';
+    if (!records.length) {
+        html += '<tr><td colspan="5" class="empty">暫無紀錄</td></tr>';
+    } else {
+        records.forEach((item, idx) => {
+            html += `<tr><td>${idx + 1}</td><td>${item.money}</td><td>${item.coin}</td><td>${Number(item.give_exp) === 1 ? '是' : '否'}</td><td>${escapeHtml(item.time)}</td></tr>`;
+        });
+    }
+    table.innerHTML = html;
+}
+
+function switchShop(cat) {
+    state.activeCat = cat;
+    document.querySelectorAll('.shop-tab').forEach(el => el.classList.remove('active'));
+    const tab = document.querySelector(`.shop-tab[data-tab="${cat}"]`);
+    if (tab) tab.classList.add('active');
+    renderShop();
+}
+
+function renderShop() {
+    const container = document.getElementById('shopContainer');
+    const empty = document.getElementById('emptyShop');
+    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+    let items = state.shopItems.slice();
+    if (state.activeCat !== 'all') {
+        items = items.filter(item => item.cat === state.activeCat);
+    }
+    if (keyword) {
+        items = items.filter(item =>
+            item.name.toLowerCase().includes(keyword) ||
+            item.cat_label.toLowerCase().includes(keyword)
+        );
+    }
+
+    if (state.activeCat === 'special' && (!state.user || !state.user.member_active)) {
+        empty.style.display = 'block';
+        empty.innerText = '會員已到期，VIP 權益鎖定，請先續期後使用特色單';
+        container.innerHTML = '';
+        return;
+    }
+
+    if (!items.length) {
+        empty.style.display = 'block';
+        empty.innerText = '暫無商品';
+        container.innerHTML = '';
+        return;
+    }
+    empty.style.display = 'none';
+
+    let html = '<div class="shop-grid">';
+    items.forEach(item => {
+        const disabled = !state.user || !state.user.member_active;
+        html += `
+        <div class="shop-item">
+            <h3>${escapeHtml(item.name)}</h3>
+            <p>類別：${escapeHtml(item.cat_label)}</p>
+            <p>消耗：${item.cost} 短陌</p>
+            <button class="btn" ${disabled ? 'disabled' : ''} onclick="buyItem(${item.id})">${disabled ? '會員鎖定' : '立即兌換'}</button>
+        </div>`;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function escapeHtml(text) {
+    return String(text ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+}
+
+async function loadShop() {
+    const res = await api('shop_list');
+    if (res.ok) {
+        state.shopItems = res.items || [];
+        renderShop();
+    }
+}
+
+async function refreshSession() {
+    try {
+        const res = await api('session');
+        if (res.logged_in) {
+            updateUserUI(res.user);
+        } else {
+            document.getElementById('mainHeader').style.display = 'none';
+            showSection('loginPage');
+        }
+    } catch (e) {}
+}
+
+async function userLogin() {
+    const username = document.getElementById('login_user').value.trim();
+    const password = document.getElementById('login_pwd').value.trim();
+    const res = await api('login', { username, password });
+    setMessage('loginMsg', res.message);
+    if (res.ok) {
+        updateUserUI(res.user);
+        showSection('home');
+        loadShop();
+    }
+}
+
+async function userRegister() {
+    const username = document.getElementById('reg_user').value.trim();
+    const password = document.getElementById('reg_pwd').value.trim();
+    const email = document.getElementById('reg_email').value.trim();
+    const code = document.getElementById('reg_code').value.trim();
+    const res = await api('register', { username, password, email, code });
+    setMessage('registerMsg', res.message);
+    if (res.ok) {
+        showSection('loginPage');
+    }
+}
+
+async function userRenew() {
+    const username = document.getElementById('renew_user').value.trim();
+    const code = document.getElementById('renew_code').value.trim();
+    const res = await api('renew', { username, code });
+    setMessage('renewMsg', res.message);
+    if (res.ok && state.user && state.user.username === username) {
+        await refreshSession();
+    }
+}
+
+async function buyItem(id) {
+    const res = await api('buy', { item_id: id });
+    alert(res.message);
+    if (res.ok) {
+        await refreshSession();
+    }
+}
+
+async function findPassword() {
+    const email = document.getElementById('forget_email').value.trim();
+    const res = await api('request_reset', { email });
+    setMessage('forgetMsg', res.message);
+}
+
+async function logout() {
+    await api('logout');
+    state.user = null;
+    document.getElementById('mainHeader').style.display = 'none';
+    showSection('loginPage');
+}
+
+window.onload = async function () {
+    await loadShop();
+    await refreshSession();
+    switchShop('all');
+};
+</script>
+</body>
+</html>
