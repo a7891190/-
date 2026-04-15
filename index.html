@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>夢競娛樂</title>
+    <link rel="icon" href="data:,">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
         body { background-color: #121212; color: #fff; min-height: 100vh; }
@@ -50,13 +51,13 @@
         .status-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; border: 1px solid #444; }
         .status-pill.locked { color: #ff8080; }
         .status-pill.open { color: #7dff9e; }
-        .svip { color: #999999 !important; font-weight:bold; font-size: 16px; }
-        .vip1 { color: #ffffff !important; font-weight:bold; font-size: 16px; }
-        .vip2, .vip3 { color: #00ff00 !important; font-weight:bold; font-size: 16px; }
-        .vip4, .vip5 { color: #0099ff !important; font-weight:bold; font-size: 16px; }
-        .vip6, .vip7 { color: #9933ff !important; font-weight:bold; font-size: 16px; }
-        .vip8, .vip9 { color: #ffcc00 !important; font-weight:bold; font-size: 16px; }
-        .vip10 { color: #ff0000 !important; font-weight:bold; font-size: 16px; }
+        .svip { color: #999999 !important; font-weight: bold; font-size: 16px; }
+        .vip1 { color: #ffffff !important; font-weight: bold; font-size: 16px; }
+        .vip2, .vip3 { color: #00ff00 !important; font-weight: bold; font-size: 16px; }
+        .vip4, .vip5 { color: #0099ff !important; font-weight: bold; font-size: 16px; }
+        .vip6, .vip7 { color: #9933ff !important; font-weight: bold; font-size: 16px; }
+        .vip8, .vip9 { color: #ffcc00 !important; font-weight: bold; font-size: 16px; }
+        .vip10 { color: #ff0000 !important; font-weight: bold; font-size: 16px; }
         .msg { margin-top: 12px; color: #ffb3d9; min-height: 22px; }
     </style>
 </head>
@@ -80,18 +81,7 @@
             <div class="card-title">會員登入</div>
             <input id="login_user" placeholder="請輸入帳號">
             <input id="login_pwd" type="password" placeholder="請輸入密碼">
-            <button class="btn" onclick="async function userLogin() {
-    const username = document.getElementById('login_user').value.trim();
-    const password = document.getElementById('login_pwd').value.trim();
-    const res = await api('login', { username, password });
-    setMessage('loginMsg', res.message);
-
-    if (res.ok) {
-        await refreshSession();
-        showSection('home');
-        await loadShop();
-    }
-}">登入</button>
+            <button class="btn" onclick="userLogin()">登入</button>
             <div class="link" onclick="showSection('registerPage')">沒有帳號？註冊會員</div>
             <div class="link" onclick="showSection('forgetPage')" style="margin-left:10px;">忘記密碼？</div>
             <div class="msg" id="loginMsg"></div>
@@ -142,7 +132,7 @@
                         <p>會員ID：<span id="show_userid">00000000</span></p>
                         <p>會員名稱：<span id="show_username">未登入</span></p>
                         <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
-                        <p>VIP經驗值：<span id="show_exp">500 / 298888</span></p>
+                        <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
                         <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
                         <p>會員到期：<span id="show_expire">未開通</span></p>
                         <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
@@ -265,19 +255,24 @@ function vipClass(level) {
 
 function updateUserUI(user) {
     state.user = user;
-    document.getElementById('show_userid').innerText = user.id;
-    document.getElementById('show_username').innerText = user.username;
+    document.getElementById('show_userid').innerText = user.id ?? '';
+    document.getElementById('show_username').innerText = user.username ?? '未登入';
+
     const vipEl = document.getElementById('userVipLevel');
-    vipEl.className = vipClass(user.vip_level);
-    vipEl.innerText = user.vip_title;
-    document.getElementById('show_exp').innerText = `${user.exp} / 298888`;
-    document.getElementById('show_coin').innerText = user.coin;
+    vipEl.className = vipClass(Number(user.vip_level || 0));
+    vipEl.innerText = user.vip_title || 'SVIP 客官';
+
+    document.getElementById('show_exp').innerText = `${Number(user.exp || 0)} / 298888`;
+    document.getElementById('show_coin').innerText = Number(user.coin || 0);
     document.getElementById('show_expire').innerText = user.member_expire || '未開通';
+
     const vipStatus = document.getElementById('show_vip_status');
-    vipStatus.innerText = user.vip_benefits_status;
+    vipStatus.innerText = user.vip_benefits_status || '鎖定';
     vipStatus.className = 'status-pill ' + (user.member_active ? 'open' : 'locked');
+
     document.getElementById('mainHeader').style.display = 'flex';
-    document.getElementById('renew_user').value = user.username;
+    document.getElementById('renew_user').value = user.username || '';
+
     renderRecords(user.buy_records || []);
     renderRecharges(user.recharge_records || []);
     renderShop();
@@ -321,14 +316,15 @@ function renderShop() {
     const container = document.getElementById('shopContainer');
     const empty = document.getElementById('emptyShop');
     const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+
     let items = state.shopItems.slice();
     if (state.activeCat !== 'all') {
         items = items.filter(item => item.cat === state.activeCat);
     }
     if (keyword) {
         items = items.filter(item =>
-            item.name.toLowerCase().includes(keyword) ||
-            item.cat_label.toLowerCase().includes(keyword)
+            String(item.name || '').toLowerCase().includes(keyword) ||
+            String(item.cat_label || item.cat || '').toLowerCase().includes(keyword)
         );
     }
 
@@ -345,6 +341,7 @@ function renderShop() {
         container.innerHTML = '';
         return;
     }
+
     empty.style.display = 'none';
 
     let html = '<div class="shop-grid">';
@@ -353,7 +350,7 @@ function renderShop() {
         html += `
         <div class="shop-item">
             <h3>${escapeHtml(item.name)}</h3>
-            <p>類別：${escapeHtml(item.cat_label)}</p>
+            <p>類別：${escapeHtml(item.cat_label || item.cat || '')}</p>
             <p>消耗：${item.cost} 短陌</p>
             <button class="btn" ${disabled ? 'disabled' : ''} onclick="buyItem(${item.id})">${disabled ? '會員鎖定' : '立即兌換'}</button>
         </div>`;
@@ -363,13 +360,22 @@ function renderShop() {
 }
 
 function escapeHtml(text) {
-    return String(text ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    return String(text ?? '').replace(/[&<>"']/g, s => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[s]));
 }
 
 async function loadShop() {
     const res = await api('shop_list');
     if (res.ok) {
-        state.shopItems = res.items || [];
+        state.shopItems = (res.items || []).map(item => ({
+            ...item,
+            cat_label: item.cat_label || item.cat || ''
+        }));
         renderShop();
     }
 }
@@ -379,11 +385,15 @@ async function refreshSession() {
         const res = await api('session');
         if (res.logged_in) {
             updateUserUI(res.user);
+            return true;
         } else {
             document.getElementById('mainHeader').style.display = 'none';
             showSection('loginPage');
+            return false;
         }
-    } catch (e) {}
+    } catch (e) {
+        return false;
+    }
 }
 
 async function userLogin() {
@@ -391,10 +401,19 @@ async function userLogin() {
     const password = document.getElementById('login_pwd').value.trim();
     const res = await api('login', { username, password });
     setMessage('loginMsg', res.message);
+
     if (res.ok) {
-        updateUserUI(res.user);
-        showSection('home');
-        loadShop();
+        if (res.user) {
+            updateUserUI(res.user);
+            showSection('home');
+            await loadShop();
+        } else {
+            const loggedIn = await refreshSession();
+            if (loggedIn) {
+                showSection('home');
+                await loadShop();
+            }
+        }
     }
 }
 
