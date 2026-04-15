@@ -80,7 +80,18 @@
             <div class="card-title">會員登入</div>
             <input id="login_user" placeholder="請輸入帳號">
             <input id="login_pwd" type="password" placeholder="請輸入密碼">
-            <button class="btn" onclick="userLogin()">登入</button>
+            <button class="btn" onclick="async function userLogin() {
+    const username = document.getElementById('login_user').value.trim();
+    const password = document.getElementById('login_pwd').value.trim();
+    const res = await api('login', { username, password });
+    setMessage('loginMsg', res.message);
+
+    if (res.ok) {
+        await refreshSession();
+        showSection('home');
+        await loadShop();
+    }
+}">登入</button>
             <div class="link" onclick="showSection('registerPage')">沒有帳號？註冊會員</div>
             <div class="link" onclick="showSection('forgetPage')" style="margin-left:10px;">忘記密碼？</div>
             <div class="msg" id="loginMsg"></div>
