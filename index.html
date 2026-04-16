@@ -62,7 +62,7 @@
     </style>
 </head>
 <body>
-<div class="header" id="mainHeader">
+<div class="header" id="mainHeader" style="display:none;">
     <div class="logo"><a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener">夢競娛樂</a></div>
     <div class="nav">
         <a onclick="showSection('home')">首頁</a>
@@ -226,6 +226,12 @@
 
 <script>
 const API_BASE = "https://api.131rwjuh.com/backend/api.php";
+document.addEventListener('DOMContentLoaded', function () {
+    const header = document.getElementById('mainHeader');
+    if (header) {
+        header.style.display = 'none';
+    }
+});
 const state = { user: null, shopItems: [], activeCat: 'all' };
 
 function showSection(id) {
