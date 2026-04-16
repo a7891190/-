@@ -191,14 +191,212 @@
             color: #ddd;
         }
 
-        @media (max-width: 900px) {
-            .header { padding: 15px 20px; }
-            .nav { gap: 10px; }
-            .nav a { font-size: 14px; }
-            .card { padding: 24px; }
-            .podium { gap: 10px; }
-            .podium-item { width: 150px; }
-        }
+       @media (max-width: 900px) {
+    .header {
+        padding: 12px 14px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo {
+        position: static;
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .nav {
+        width: 100%;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .nav a {
+        font-size: 14px;
+        padding: 4px 0;
+    }
+
+    .container {
+        margin: 18px auto;
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
+
+    .member-row {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .member-left,
+    .member-right {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    .user-info p {
+        font-size: 14px;
+        margin: 10px 0;
+        line-height: 1.7;
+    }
+
+    .rule-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .rule-box {
+        font-size: 14px;
+        line-height: 1.9;
+        padding-left: 0;
+    }
+
+    .avatar-preview {
+        width: 90px;
+        height: 90px;
+    }
+
+    .avatar-upload-input {
+        font-size: 13px;
+    }
+
+    .podium-wrap {
+        margin-top: 18px;
+    }
+
+    .podium-title {
+        font-size: 18px;
+        margin-bottom: 14px;
+        padding-left: 0;
+        text-align: center;
+    }
+
+    .podium {
+        align-items: stretch;
+        justify-content: center;
+        gap: 12px;
+        min-height: auto;
+        flex-direction: column;
+    }
+
+    .podium-item {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .podium-top {
+        padding: 14px 10px 12px;
+    }
+
+    .podium-avatar {
+        width: 72px;
+        height: 72px;
+    }
+
+    .podium-name {
+        font-size: 15px;
+    }
+
+    .podium-vip,
+    .podium-exp {
+        font-size: 13px;
+    }
+
+    .podium-first .podium-base,
+    .podium-second .podium-base,
+    .podium-third .podium-base {
+        height: 56px;
+        font-size: 18px;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        margin-top: 14px;
+    }
+
+    table th,
+    table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .ranking-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .shop-tabs {
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .shop-tab {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .search-box input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .shop-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .shop-item {
+        padding: 16px;
+    }
+
+    .shop-item h3 {
+        font-size: 17px;
+    }
+
+    .shop-item p {
+        font-size: 14px;
+    }
+
+    .login-box {
+        max-width: 100%;
+        margin: 24px auto;
+        padding: 22px;
+    }
+
+    .login-box input {
+        font-size: 14px;
+        padding: 11px;
+    }
+
+    .login-box .btn,
+    .btn {
+        font-size: 14px;
+    }
+
+    .brand-bottom {
+        font-size: 18px;
+        margin-top: 24px;
+    }
+
+    .empty {
+        font-size: 14px;
+        padding: 30px 0;
+    }
+}
     </style>
 </head>
 <body>
