@@ -239,15 +239,36 @@ function setMessage(id, text) {
 }
 
 async function api(action, extra = {}) {
-    const res = await fetch(API_BASE, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, ...extra })
-    });
-    return await res.json();
-}
+    try {
+        const response = await fetch(API_BASE, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action, ...extra })
+        });
 
+        const text = await response.text();
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            return {
+                ok: false,
+                message: '後端回傳格式錯誤：' + text
+            };
+        }
+
+        return data;
+    } catch (error) {
+        return {
+            ok: false,
+            message: '連線失敗：' + error.message
+        };
+    }
+}
 function vipClass(level) {
     if (level <= 0) return 'svip';
     return 'vip' + level;
