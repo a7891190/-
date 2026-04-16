@@ -223,20 +223,25 @@
         </div>
     </div>
 </div>
-
 <script>
 const API_BASE = "https://api.131rwjuh.com/backend/api.php";
+const state = {
+    user: null,
+    shopItems: [],
+    activeCat: 'all'
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     const header = document.getElementById('mainHeader');
     if (header) {
         header.style.display = 'none';
     }
 });
-const state = { user: null, shopItems: [], activeCat: 'all' };
 
 function showSection(id) {
     document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
 }
 
 function setMessage(id, text) {
@@ -257,17 +262,14 @@ async function api(action, extra = {}) {
 
         const text = await response.text();
 
-        let data;
         try {
-            data = JSON.parse(text);
+            return JSON.parse(text);
         } catch (e) {
             return {
                 ok: false,
                 message: '後端回傳格式錯誤：' + text
             };
         }
-
-        return data;
     } catch (error) {
         return {
             ok: false,
@@ -275,9 +277,77 @@ async function api(action, extra = {}) {
         };
     }
 }
+
 function vipClass(level) {
     if (level <= 0) return 'svip';
     return 'vip' + level;
+}
+
+function renderRecords(records) {
+    const tbody = document.getElementById('recordBody');
+    if (!tbody) return;
+
+    const list = Array.isArray(records) ? records : [];
+    if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="empty">目前沒有購買紀錄</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = list.map(item => `
+        <tr>
+            <td>${item.time || ''}</td>
+            <td>${item.name || ''}</td>
+            <td>${item.cost || 0}</td>
+        </tr>
+    `).join('');
+}
+
+function renderRecharges(records) {
+    const tbody = document.getElementById('rechargeBody');
+    if (!tbody) return;
+
+    const list = Array.isArray(records) ? records : [];
+    if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = list.map(item => `
+        <tr>
+            <td>${item.time || ''}</td>
+            <td>${item.money || 0}</td>
+            <td>${item.coin || 0}</td>
+        </tr>
+    `).join('');
+}
+
+function updateUserUI(user) {
+    state.user = user;
+
+    document.getElementById('show_userid').innerText = user.id ?? '';
+    document.getElementById('show_username').innerText = user.username ?? '未登入';
+
+    const vipEl = document.getElementById('userVipLevel');
+    vipEl.className = vipClass(Number(user.vip_level || 0));
+    vipEl.innerText = user.vip_name || '客官';
+
+    document.getElementById('show_exp').innerText = `${Number(user.exp || 0)} / 298888`;
+    document.getElementById('show_coin').innerText = Number(user.coin || 0);
+    document.getElementById('show_expire').innerText = user.member_expire || '未開通';
+
+    const vipStatus = document.getElementById('show_vip_status');
+    const vipActive = !!user.vip_active;
+    vipStatus.innerText = vipActive ? '開通' : '鎖定';
+    vipStatus.className = 'status-pill ' + (vipActive ? 'open' : 'locked');
+
+    const renewUser = document.getElementById('renew_user');
+    if (renewUser) renewUser.value = user.username || '';
+
+    renderRecords(user.buy_records || []);
+    renderRecharges(user.recharge_records || []);
+
+    document.getElementById('mainHeader').style.display = 'flex';
+    showSection('home');
 }
 
 function renderLoggedOut() {
@@ -297,113 +367,12 @@ function renderLoggedOut() {
     vipStatus.innerText = '鎖定';
     vipStatus.className = 'status-pill locked';
 
-    document.getElementById('renew_user').value = '';
+    const renewUser = document.getElementById('renew_user');
+    if (renewUser) renewUser.value = '';
 
     renderRecords([]);
     renderRecharges([]);
     showSection('loginPage');
-}
-
-function renderRecords(records) {
-    const table = document.getElementById('recordTable');
-    let html = '<tr><th>序號</th><th>商品名稱</th><th>消耗短陌</th><th>購買時間</th></tr>';
-    if (!records.length) {
-        html += '<tr><td colspan="4" class="empty">暫無紀錄</td></tr>';
-    } else {
-        records.forEach((item, idx) => {
-            html += `<tr><td>${idx + 1}</td><td>${escapeHtml(item.name)}</td><td>${item.cost}</td><td>${escapeHtml(item.time)}</td></tr>`;
-        });
-    }
-    table.innerHTML = html;
-}
-
-function renderRecharges(records) {
-    const table = document.getElementById('rechargeTable');
-    let html = '<tr><th>序號</th><th>儲值金額</th><th>獲得短陌</th><th>是否增加經驗值</th><th>儲值時間</th></tr>';
-    if (!records.length) {
-        html += '<tr><td colspan="5" class="empty">暫無紀錄</td></tr>';
-    } else {
-        records.forEach((item, idx) => {
-            html += `<tr><td>${idx + 1}</td><td>${item.money}</td><td>${item.coin}</td><td>${Number(item.give_exp) === 1 ? '是' : '否'}</td><td>${escapeHtml(item.time)}</td></tr>`;
-        });
-    }
-    table.innerHTML = html;
-}
-
-function switchShop(cat) {
-    state.activeCat = cat;
-    document.querySelectorAll('.shop-tab').forEach(el => el.classList.remove('active'));
-    const tab = document.querySelector(`.shop-tab[data-tab="${cat}"]`);
-    if (tab) tab.classList.add('active');
-    renderShop();
-}
-
-function renderShop() {
-    const container = document.getElementById('shopContainer');
-    const empty = document.getElementById('emptyShop');
-    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-
-    let items = state.shopItems.slice();
-    if (state.activeCat !== 'all') {
-        items = items.filter(item => item.cat === state.activeCat);
-    }
-    if (keyword) {
-        items = items.filter(item =>
-            String(item.name || '').toLowerCase().includes(keyword) ||
-            String(item.cat_label || item.cat || '').toLowerCase().includes(keyword)
-        );
-    }
-
-    if (state.activeCat === 'special' && (!state.user || !state.user.member_active)) {
-        empty.style.display = 'block';
-        empty.innerText = '會員已到期，VIP 權益鎖定，請先續期後使用特色單';
-        container.innerHTML = '';
-        return;
-    }
-
-    if (!items.length) {
-        empty.style.display = 'block';
-        empty.innerText = '暫無商品';
-        container.innerHTML = '';
-        return;
-    }
-
-    empty.style.display = 'none';
-
-    let html = '<div class="shop-grid">';
-    items.forEach(item => {
-        const disabled = !state.user || !state.user.member_active;
-        html += `
-        <div class="shop-item">
-            <h3>${escapeHtml(item.name)}</h3>
-            <p>類別：${escapeHtml(item.cat_label || item.cat || '')}</p>
-            <p>消耗：${item.cost} 短陌</p>
-            <button class="btn" ${disabled ? 'disabled' : ''} onclick="buyItem(${item.id})">${disabled ? '會員鎖定' : '立即兌換'}</button>
-        </div>`;
-    });
-    html += '</div>';
-    container.innerHTML = html;
-}
-
-function escapeHtml(text) {
-    return String(text ?? '').replace(/[&<>"']/g, s => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-    }[s]));
-}
-
-async function loadShop() {
-    const res = await api('shop_list');
-    if (res.ok) {
-        state.shopItems = (res.items || []).map(item => ({
-            ...item,
-            cat_label: item.cat_label || item.cat || ''
-        }));
-        renderShop();
-    }
 }
 
 async function refreshSession() {
@@ -425,19 +394,20 @@ async function refreshSession() {
 
 async function userLogin() {
     const username = document.getElementById('login_user').value.trim();
-    const password = document.getElementById('login_pwd').value.trim();
+    const password = document.getElementById('login_pwd').value;
+
+    setMessage('loginMsg', '登入中...');
+
     const res = await api('login', { username, password });
-    setMessage('loginMsg', res.message);
+    setMessage('loginMsg', res.message || '');
 
     if (res.ok) {
         if (res.user) {
             updateUserUI(res.user);
-            showSection('home');
             await loadShop();
         } else {
             const loggedIn = await refreshSession();
             if (loggedIn) {
-                showSection('home');
                 await loadShop();
             }
         }
@@ -446,43 +416,113 @@ async function userLogin() {
 
 async function userRegister() {
     const username = document.getElementById('reg_user').value.trim();
-    const password = document.getElementById('reg_pwd').value.trim();
+    const password = document.getElementById('reg_pwd').value;
     const email = document.getElementById('reg_email').value.trim();
     const code = document.getElementById('reg_code').value.trim();
+
+    setMessage('registerMsg', '處理中...');
+
     const res = await api('register', { username, password, email, code });
-    setMessage('registerMsg', res.message);
+    setMessage('registerMsg', res.message || '');
+
     if (res.ok) {
-        showSection('loginPage');
+        document.getElementById('reg_user').value = '';
+        document.getElementById('reg_pwd').value = '';
+        document.getElementById('reg_email').value = '';
+        document.getElementById('reg_code').value = '';
     }
 }
 
 async function userRenew() {
     const username = document.getElementById('renew_user').value.trim();
     const code = document.getElementById('renew_code').value.trim();
-    const res = await api('renew', { username, code });
-    setMessage('renewMsg', res.message);
-    if (res.ok && state.user && state.user.username === username) {
-        await refreshSession();
-    }
-}
 
-async function buyItem(id) {
-    const res = await api('buy', { item_id: id });
-    alert(res.message);
+    setMessage('renewMsg', '處理中...');
+
+    const res = await api('renew', { username, code });
+    setMessage('renewMsg', res.message || '');
+
     if (res.ok) {
+        document.getElementById('renew_code').value = '';
         await refreshSession();
     }
 }
 
 async function findPassword() {
     const email = document.getElementById('forget_email').value.trim();
-    const res = await api('request_reset', { email });
-    setMessage('forgetMsg', res.message);
+
+    setMessage('forgetMsg', '處理中...');
+
+    const res = await api('forgot_password', { email });
+    setMessage('forgetMsg', res.message || '');
 }
 
 async function logout() {
     await api('logout');
     renderLoggedOut();
+}
+
+async function loadShop() {
+    const res = await api('shop_list');
+    if (res.ok && Array.isArray(res.items)) {
+        state.shopItems = res.items;
+        renderShop();
+    }
+}
+
+function switchShop(cat) {
+    state.activeCat = cat;
+    document.querySelectorAll('.shop-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === cat);
+    });
+    renderShop();
+}
+
+function renderShop() {
+    const container = document.getElementById('shopList');
+    if (!container) return;
+
+    const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+    let items = state.shopItems || [];
+
+    if (state.activeCat !== 'all') {
+        items = items.filter(item => item.cat === state.activeCat);
+    }
+
+    if (keyword) {
+        items = items.filter(item =>
+            String(item.name || '').toLowerCase().includes(keyword) ||
+            String(item.cat || '').toLowerCase().includes(keyword)
+        );
+    }
+
+    if (!items.length) {
+        container.innerHTML = '<div class="empty">目前沒有商品</div>';
+        return;
+    }
+
+    container.innerHTML = items.map(item => `
+        <div class="shop-item">
+            <h3>${item.name || ''}</h3>
+            <p>類型：${item.cat || ''}</p>
+            <p>消耗：${item.cost || 0} 短陌</p>
+            <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
+        </div>
+    `).join('');
+}
+
+async function buyItem(itemId) {
+    if (!state.user) {
+        alert('請先登入');
+        return;
+    }
+
+    const res = await api('buy', { item_id: itemId });
+    alert(res.message || '');
+
+    if (res.ok) {
+        await refreshSession();
+    }
 }
 
 window.onload = async function () {
