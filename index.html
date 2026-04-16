@@ -409,6 +409,54 @@ function maskUsername(name) {
 
   return name.slice(0, 2) + '***' + name.slice(-1);
 }
+    async function loadVipRanking() {
+  const box = document.getElementById('rankingList');
+  if (!box) return;
+
+  box.innerHTML = '載入中...';
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'vip_ranking' })
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      box.innerHTML = '排行榜載入失敗';
+      return;
+    }
+
+    if (!Array.isArray(data.ranking) || data.ranking.length === 0) {
+      box.innerHTML = '目前沒有排行榜資料';
+      return;
+    }
+
+    box.innerHTML = `
+      <table>
+        <tr>
+          <th>排名</th>
+          <th>會員帳號</th>
+          <th>VIP稱號</th>
+          <th>經驗值</th>
+        </tr>
+        ${data.ranking.map(item => `
+          <tr>
+            <td>${item.rank}</td>
+            <td>${maskUsername(item.username)}</td>
+            <td>${item.vip_name}</td>
+            <td>${item.exp}</td>
+          </tr>
+        `).join('')}
+      </table>
+    `;
+  } catch (err) {
+    box.innerHTML = '排行榜載入失敗';
+  }
+}
 const API_BASE = "https://api.131rwjuh.com/backend/api.php";
 const state = {
     user: null,
