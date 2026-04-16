@@ -282,69 +282,68 @@
     }
 
     /* 手機版把前三名放到會員中心上方，縮小後三個並排 */
-    .podium-wrap {
-        order: -1;
-        margin-bottom: 18px;
-        margin-top: 0;
-    }
+   .podium-card-home {
+    padding: 14px 12px;
+    margin-bottom: 16px;
+}
 
-    .podium-title {
-        font-size: 18px;
-        margin-bottom: 14px;
-        padding-left: 0;
-        text-align: center;
-    }
+.podium-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+    padding-left: 0;
+    text-align: center;
+}
 
-    .podium {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: center;
-        gap: 8px;
-        min-height: 180px;
-        flex-wrap: nowrap;
-    }
+.podium {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    min-height: 165px;
+    flex-wrap: nowrap;
+}
 
-    .podium-item {
-        width: 31%;
-        max-width: none;
-        margin: 0;
-    }
+.podium-item {
+    width: 31%;
+    max-width: none;
+    margin: 0;
+}
 
-    .podium-top {
-        padding: 8px 4px 8px;
-    }
+.podium-top {
+    padding: 8px 4px 8px;
+}
 
-    .podium-avatar {
-        width: 48px;
-        height: 48px;
-    }
+.podium-avatar {
+    width: 46px;
+    height: 46px;
+}
 
-    .podium-name {
-        font-size: 11px;
-        line-height: 1.2;
-    }
+.podium-name {
+    font-size: 11px;
+    line-height: 1.2;
+}
 
-    .podium-vip,
-    .podium-exp {
-        font-size: 10px;
-        line-height: 1.2;
-    }
+.podium-vip,
+.podium-exp {
+    font-size: 10px;
+    line-height: 1.2;
+}
 
-    .podium-first .podium-base {
-        height: 58px;
-        font-size: 16px;
-    }
+.podium-first .podium-base {
+    height: 56px;
+    font-size: 16px;
+}
 
-    .podium-second .podium-base {
-        height: 46px;
-        font-size: 14px;
-    }
+.podium-second .podium-base {
+    height: 44px;
+    font-size: 14px;
+}
 
-    .podium-third .podium-base {
-        height: 38px;
-        font-size: 13px;
-    }
+.podium-third .podium-base {
+    height: 36px;
+    font-size: 13px;
+}
 
     /* 手機版購買紀錄 / 儲值紀錄修正右邊留白 */
     #recordTable,
@@ -569,41 +568,60 @@
     </div>
 
     <div class="section" id="home">
-        <div class="card">
-            <div class="card-title">會員中心</div>
-            <div class="member-row">
-                <div class="member-left">
-    <div class="user-info">
-        <div class="avatar-box">
-            <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
-            <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
-            <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
-            <div class="msg" id="avatarMsg"></div>
+    <div class="card podium-card-home">
+        <div class="podium-title">本期前三名</div>
+        <div id="topPodium" class="podium">
+            <div class="empty" style="padding:20px 0;">載入中...</div>
         </div>
+    </div>
 
-        <p>會員ID：<span id="show_userid">00000000</span></p>
-        <p>會員名稱：<span id="show_username">未登入</span></p>
-        <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
-        <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
-        <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
-        <p>會員到期：<span id="show_expire">未開通</span></p>
-        <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
+    <div class="card">
+        <div class="card-title">會員中心</div>
+        <div class="member-row">
+            <div class="member-left">
+                <div class="user-info">
+                    <div class="avatar-box">
+                        <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
+                        <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
+                        <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
+                        <div class="msg" id="avatarMsg"></div>
+                    </div>
+
+                    <p>會員ID：<span id="show_userid">00000000</span></p>
+                    <p>會員名稱：<span id="show_username">未登入</span></p>
+                    <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
+                    <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
+                    <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
+                    <p>會員到期：<span id="show_expire">未開通</span></p>
+                    <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
+                </div>
+            </div>
+
+            <div class="member-right">
+                <div class="card" style="margin:0; padding:25px;">
+                    <div class="rule-title">平台規則</div>
+                    <div class="rule-box">
+                        1. 會員有效期限為30天。<br>
+                        2. 會員到期後一概不享有會員權益。<br>
+                        3. 會員到期後需至<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂LINE官方</a>購買30天會員卡。<br>
+                        4. 未成年儲值請經過父母同意，造成糾紛自行負責。<br>
+                        5. 儲值後一概不退款，請慎重決定。<br>
+                        6. 1台幣 = 1短陌 = 1.2倍VIP經驗值。<br>
+                        7. 需要儲值（短陌）請私訊<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂LINE官方</a>。<br>
+                        8. 平台製作由夢競私人研發，製作不易，請勿暴力測試。<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">團隊介紹</div>
+        <div class="rule-box">
+            <a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂</a> 致力於電競、經紀經營，是整合創作者資源與整合行銷的領先公司。
+        </div>
     </div>
 </div>
-
-                <div class="member-right">
-                    <div class="card" style="margin:0; padding:25px;">
-                        <div class="rule-title">平台規則</div>
-                        <div class="rule-box">
-                            1. 會員有效期限為30天。<br>
-                            2. 會員到期後一概不享有會員權益。<br>
-                            3. 會員到期後需至<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂LINE官方</a>購買30天會員卡。<br>
-                            4. 未成年儲值請經過父母同意，造成糾紛自行負責。<br>
-                            5. 儲值後一概不退款，請慎重決定。<br>
-                            6. 1台幣 = 1短陌 = 1.2倍VIP經驗值。<br>
-                            7. 需要儲值（短陌）請私訊<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂LINE官方</a>。<br>
-                            8. 平台製作由夢競私人研發，製作不易，請勿暴力測試。<br>
-                        </div>
 
                         <div class="podium-wrap">
                             <div class="podium-title">本期前三名</div>
