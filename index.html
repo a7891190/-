@@ -191,8 +191,8 @@
             color: #ddd;
         }
 
-       @media (max-width: 900px) {
-     .header {
+        @media (max-width: 900px) {
+    .header {
         padding: 12px 14px;
         justify-content: space-between;
         align-items: flex-start;
@@ -208,7 +208,7 @@
         white-space: nowrap;
         align-self: flex-start;
     }
-           
+
     .nav {
         width: 100%;
         gap: 10px;
@@ -236,6 +236,7 @@
     }
 
     .member-row {
+        display: flex;
         flex-direction: column;
         gap: 18px;
     }
@@ -246,21 +247,29 @@
         width: 100%;
     }
 
+    .user-info {
+        text-align: center;
+    }
+
     .user-info p {
         font-size: 14px;
         margin: 10px 0;
         line-height: 1.7;
+        text-align: center;
     }
 
     .rule-title {
         font-size: 18px;
         margin-bottom: 10px;
+        text-align: center;
+        padding-left: 0;
     }
 
     .rule-box {
         font-size: 14px;
         line-height: 1.9;
         padding-left: 0;
+        text-align: center;
     }
 
     .avatar-preview {
@@ -268,9 +277,22 @@
         height: 90px;
     }
 
+    .avatar-upload-input {
+        font-size: 13px;
+    }
+
+    /* 手機版把前三名放到會員中心上方，縮小後三個並排 */
     .podium-wrap {
         order: -1;
         margin-bottom: 18px;
+        margin-top: 0;
+    }
+
+    .podium-title {
+        font-size: 18px;
+        margin-bottom: 14px;
+        padding-left: 0;
+        text-align: center;
     }
 
     .podium {
@@ -278,8 +300,8 @@
         flex-direction: row;
         align-items: flex-end;
         justify-content: center;
-        gap: 10px;
-        min-height: 220px;
+        gap: 8px;
+        min-height: 180px;
         flex-wrap: nowrap;
     }
 
@@ -290,40 +312,41 @@
     }
 
     .podium-top {
-        padding: 10px 6px 10px;
+        padding: 8px 4px 8px;
     }
 
     .podium-avatar {
-        width: 56px;
-        height: 56px;
+        width: 48px;
+        height: 48px;
     }
 
     .podium-name {
-        font-size: 12px;
-        line-height: 1.3;
+        font-size: 11px;
+        line-height: 1.2;
     }
 
     .podium-vip,
     .podium-exp {
-        font-size: 11px;
-        line-height: 1.3;
+        font-size: 10px;
+        line-height: 1.2;
     }
 
     .podium-first .podium-base {
-        height: 70px;
-        font-size: 18px;
-    }
-
-    .podium-second .podium-base {
-        height: 54px;
+        height: 58px;
         font-size: 16px;
     }
 
-    .podium-third .podium-base {
-        height: 44px;
-        font-size: 15px;
+    .podium-second .podium-base {
+        height: 46px;
+        font-size: 14px;
     }
 
+    .podium-third .podium-base {
+        height: 38px;
+        font-size: 13px;
+    }
+
+    /* 手機版購買紀錄 / 儲值紀錄修正右邊留白 */
     #recordTable,
     #rechargeTable {
         table-layout: fixed;
@@ -362,61 +385,8 @@
     #rechargeTable td:nth-child(3) {
         width: 33%;
     }
-           
-    .avatar-upload-input {
-        font-size: 13px;
-    }
 
-    .podium-wrap {
-        margin-top: 18px;
-    }
-
-    .podium-title {
-        font-size: 18px;
-        margin-bottom: 14px;
-        padding-left: 0;
-        text-align: center;
-    }
-
-    .podium {
-        align-items: stretch;
-        justify-content: center;
-        gap: 12px;
-        min-height: auto;
-        flex-direction: column;
-    }
-
-    .podium-item {
-        width: 100%;
-        max-width: 320px;
-        margin: 0 auto;
-    }
-
-    .podium-top {
-        padding: 14px 10px 12px;
-    }
-
-    .podium-avatar {
-        width: 72px;
-        height: 72px;
-    }
-
-    .podium-name {
-        font-size: 15px;
-    }
-
-    .podium-vip,
-    .podium-exp {
-        font-size: 13px;
-    }
-
-    .podium-first .podium-base,
-    .podium-second .podium-base,
-    .podium-third .podium-base {
-        height: 56px;
-        font-size: 18px;
-    }
-
+    /* 手機版排行榜縮小 */
     table {
         display: block;
         width: 100%;
@@ -432,9 +402,47 @@
         font-size: 13px;
     }
 
+    #rankingList table {
+        table-layout: auto;
+        width: 100%;
+        white-space: normal;
+    }
+
+    #rankingList th,
+    #rankingList td {
+        text-align: center;
+        font-size: 12px;
+        padding: 8px 6px;
+    }
+
+    #rankingList th:nth-child(1),
+    #rankingList td:nth-child(1) {
+        width: 52px;
+    }
+
+    #rankingList th:nth-child(2),
+    #rankingList td:nth-child(2) {
+        width: 56px;
+    }
+
+    #rankingList th:nth-child(3),
+    #rankingList td:nth-child(3) {
+        width: 90px;
+    }
+
+    #rankingList th:nth-child(4),
+    #rankingList td:nth-child(4) {
+        width: 90px;
+    }
+
+    #rankingList th:nth-child(5),
+    #rankingList td:nth-child(5) {
+        width: 72px;
+    }
+
     .ranking-avatar {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
     }
 
     .shop-tabs {
@@ -494,66 +502,6 @@
         font-size: 14px;
         padding: 30px 0;
     }
-           
-.user-info {
-    text-align: center;
-}
-
-.user-info p {
-    text-align: center;
-}
-
-.rule-title {
-    text-align: center;
-    padding-left: 0;
-}
-
-.rule-box {
-    text-align: center;
-    padding-left: 0;
-}
-
-#rankingList table {
-    table-layout: auto;
-    width: 100%;
-    white-space: normal;
-}
-
-#rankingList th,
-#rankingList td {
-    text-align: center;
-    font-size: 12px;
-    padding: 8px 6px;
-}
-
-#rankingList th:nth-child(1),
-#rankingList td:nth-child(1) {
-    width: 52px;
-}
-
-#rankingList th:nth-child(2),
-#rankingList td:nth-child(2) {
-    width: 56px;
-}
-
-#rankingList th:nth-child(3),
-#rankingList td:nth-child(3) {
-    width: 90px;
-}
-
-#rankingList th:nth-child(4),
-#rankingList td:nth-child(4) {
-    width: 90px;
-}
-
-#rankingList th:nth-child(5),
-#rankingList td:nth-child(5) {
-    width: 72px;
-}
-
-.ranking-avatar {
-    width: 32px;
-    height: 32px;
 }
     </style>
 </head>
