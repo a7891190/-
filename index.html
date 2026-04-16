@@ -274,29 +274,28 @@ function vipClass(level) {
     return 'vip' + level;
 }
 
-function updateUserUI(user) {
-    state.user = user;
-    document.getElementById('show_userid').innerText = user.id ?? '';
-    document.getElementById('show_username').innerText = user.username ?? '未登入';
+function renderLoggedOut() {
+    state.user = null;
 
-    const vipEl = document.getElementById('userVipLevel');
-    vipEl.className = vipClass(Number(user.vip_level || 0));
-    vipEl.innerText = user.vip_title || 'SVIP 客官';
+    document.getElementById('mainHeader').style.display = 'none';
 
-    document.getElementById('show_exp').innerText = `${Number(user.exp || 0)} / 298888`;
-    document.getElementById('show_coin').innerText = Number(user.coin || 0);
-    document.getElementById('show_expire').innerText = user.member_expire || '未開通';
+    document.getElementById('show_userid').innerText = '00000000';
+    document.getElementById('show_username').innerText = '未登入';
+    document.getElementById('userVipLevel').className = 'svip';
+    document.getElementById('userVipLevel').innerText = 'SVIP 客官';
+    document.getElementById('show_exp').innerText = '0 / 298888';
+    document.getElementById('show_coin').innerText = '0';
+    document.getElementById('show_expire').innerText = '未開通';
 
     const vipStatus = document.getElementById('show_vip_status');
-    vipStatus.innerText = user.vip_benefits_status || '鎖定';
-    vipStatus.className = 'status-pill ' + (user.member_active ? 'open' : 'locked');
+    vipStatus.innerText = '鎖定';
+    vipStatus.className = 'status-pill locked';
 
-    document.getElementById('mainHeader').style.display = 'flex';
-    document.getElementById('renew_user').value = user.username || '';
+    document.getElementById('renew_user').value = '';
 
-    renderRecords(user.buy_records || []);
-    renderRecharges(user.recharge_records || []);
-    renderShop();
+    renderRecords([]);
+    renderRecharges([]);
+    showSection('loginPage');
 }
 
 function renderRecords(records) {
@@ -404,15 +403,16 @@ async function loadShop() {
 async function refreshSession() {
     try {
         const res = await api('session');
-        if (res.logged_in) {
+
+        if (res.logged_in && res.user) {
             updateUserUI(res.user);
             return true;
         } else {
-            document.getElementById('mainHeader').style.display = 'none';
-            showSection('loginPage');
+            renderLoggedOut();
             return false;
         }
     } catch (e) {
+        renderLoggedOut();
         return false;
     }
 }
@@ -476,12 +476,11 @@ async function findPassword() {
 
 async function logout() {
     await api('logout');
-    state.user = null;
-    document.getElementById('mainHeader').style.display = 'none';
-    showSection('loginPage');
+    renderLoggedOut();
 }
 
 window.onload = async function () {
+    renderLoggedOut();
     await loadShop();
     await refreshSession();
     switchShop('all');
