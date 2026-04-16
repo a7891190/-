@@ -198,8 +198,7 @@
                 <div class="shop-tab" data-tab="special" onclick="switchShop('special')">特色單</div>
                 <div class="shop-tab" data-tab="limit" onclick="switchShop('limit')">限時單</div>
             </div>
-            <div class="empty" id="emptyShop">暫無商品</div>
-            <div class="shop-cat active" id="shopContainer"></div>
+            <div id="shopList" class="shop-cat active"></div>
         </div>
     </div>
 
@@ -207,8 +206,12 @@
         <div class="card">
             <div class="card-title">購買紀錄</div>
             <table id="recordTable">
-                <tr><th>序號</th><th>商品名稱</th><th>消耗短陌</th><th>購買時間</th></tr>
-                <tr><td colspan="4" class="empty">暫無紀錄</td></tr>
+                <thead>
+                    <tr><th>購買時間</th><th>商品名稱</th><th>消耗短陌</th></tr>
+                </thead>
+                <tbody id="recordBody">
+                    <tr><td colspan="3" class="empty">目前沒有購買紀錄</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -217,12 +220,17 @@
         <div class="card">
             <div class="card-title">儲值紀錄</div>
             <table id="rechargeTable">
-                <tr><th>序號</th><th>儲值金額</th><th>獲得短陌</th><th>是否增加經驗值</th><th>儲值時間</th></tr>
-                <tr><td colspan="5" class="empty">暫無紀錄</td></tr>
+                <thead>
+                    <tr><th>儲值時間</th><th>儲值金額</th><th>獲得短陌</th></tr>
+                </thead>
+                <tbody id="rechargeBody">
+                    <tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
 <script>
 const API_BASE = "https://api.131rwjuh.com/backend/api.php";
 const state = {
@@ -401,16 +409,21 @@ async function userLogin() {
     const res = await api('login', { username, password });
     setMessage('loginMsg', res.message || '');
 
-    if (res.ok) {
-        if (res.user) {
-            updateUserUI(res.user);
-            await loadShop();
-        } else {
-            const loggedIn = await refreshSession();
-            if (loggedIn) {
-                await loadShop();
-            }
-        }
+    if (!res.ok) {
+        return;
+    }
+
+    if (res.user) {
+        updateUserUI(res.user);
+        showSection('home');
+        await loadShop();
+        return;
+    }
+
+    const loggedIn = await refreshSession();
+    if (loggedIn) {
+        showSection('home');
+        await loadShop();
     }
 }
 
@@ -501,14 +514,18 @@ function renderShop() {
         return;
     }
 
-    container.innerHTML = items.map(item => `
-        <div class="shop-item">
-            <h3>${item.name || ''}</h3>
-            <p>類型：${item.cat || ''}</p>
-            <p>消耗：${item.cost || 0} 短陌</p>
-            <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
+    container.innerHTML = `
+        <div class="shop-grid">
+            ${items.map(item => `
+                <div class="shop-item">
+                    <h3>${item.name || ''}</h3>
+                    <p>類型：${item.cat || ''}</p>
+                    <p>消耗：${item.cost || 0} 短陌</p>
+                    <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+    `;
 }
 
 async function buyItem(itemId) {
