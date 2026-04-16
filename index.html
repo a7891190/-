@@ -63,6 +63,7 @@
     <div class="logo"><a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener">夢競娛樂</a></div>
     <div class="nav">
         <a onclick="showSection('home')">首頁</a>
+        <a onclick="showSection('ranking')">VIP排行榜</a>
         <a onclick="showSection('vip')">VIP說明</a>
         <a onclick="showSection('shop')">市集兌換</a>
         <a onclick="showSection('record')">購買紀錄</a>
@@ -94,33 +95,33 @@
             <input id="reg_email" placeholder="Gmail 信箱（找密碼用）">
             <input id="reg_code" placeholder="請輸入會員碼">
             <button class="btn" onclick="userRegister()">註冊</button>
-            <div class="link" onclick="showSection('loginPage')">返回登入</div>
+            <div class="link" onclick="show('loginPage')">返回登入</div>
             <div class="msg" id="registerMsg"></div>
         </div>
     </div>
 
-    <div class="section" id="renewPage">
+    <div class="" id="renewPage">
         <div class="card login-box">
             <div class="card-title">會員續期（30天）</div>
             <input id="renew_user" placeholder="請輸入帳號">
             <input id="renew_code" placeholder="請輸入會員碼">
             <button class="btn" onclick="userRenew()">續期</button>
-            <div class="link" onclick="showSection('home')">返回首頁</div>
+            <div class="link" onclick="show('home')">返回首頁</div>
             <div class="msg" id="renewMsg"></div>
         </div>
     </div>
 
-    <div class="section" id="forgetPage">
+    <div class="" id="forgetPage">
         <div class="card login-box">
             <div class="card-title">忘記密碼</div>
             <input id="forget_email" placeholder="請輸入註冊時的 Gmail">
             <button class="btn" onclick="findPassword()">送出重設申請</button>
-            <div class="link" onclick="showSection('loginPage')">返回登入</div>
+            <div class="link" onclick="show('loginPage')">返回登入</div>
             <div class="msg" id="forgetMsg"></div>
         </div>
     </div>
 
-    <div class="section" id="home">
+    <div class="" id="home">
         <div class="card">
             <div class="card-title">會員中心</div>
             <div class="member-row">
@@ -160,7 +161,12 @@
             </div>
         </div>
     </div>
-
+<div class="section" id="ranking">
+    <div class="card">
+        <div class="card-title">VIP經驗值排行榜</div>
+        <div id="rankingList">載入中...</div>
+    </div>
+</div>
     <div class="section" id="vip">
     <div class="card">
         <div class="card-title">VIP 等級與經驗值</div>
