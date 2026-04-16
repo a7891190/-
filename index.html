@@ -36,9 +36,6 @@
         .shop-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
         .shop-tab { padding: 10px 18px; background: #252525; border: 1px solid #444; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; }
         .shop-tab.active { background: #ff69b4; color: #fff; border-color: #ff69b4; }
-        .shop-tab.locked { opacity: 0.5; cursor: not-allowed; color: #ccc; }
-        .shop-cat { display: none; }
-        .shop-cat.active { display: block; }
         .search-box { margin-bottom: 25px; }
         .search-box input { width: 100%; padding: 12px 15px; background: #252525; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 15px; }
         .rule-box { line-height: 2.2; margin-top: 15px; font-size: 15px; padding-left: 10px; }
@@ -198,8 +195,7 @@
                 <div class="shop-tab" data-tab="special" onclick="switchShop('special')">特色單</div>
                 <div class="shop-tab" data-tab="limit" onclick="switchShop('limit')">限時單</div>
             </div>
-            <div class="empty" id="emptyShop">暫無商品</div>
-            <div class="shop-cat active" id="shopContainer"></div>
+            <div id="shopList" class="shop-cat active"></div>
         </div>
     </div>
 
@@ -207,8 +203,12 @@
         <div class="card">
             <div class="card-title">購買紀錄</div>
             <table id="recordTable">
-                <tr><th>序號</th><th>商品名稱</th><th>消耗短陌</th><th>購買時間</th></tr>
-                <tr><td colspan="4" class="empty">暫無紀錄</td></tr>
+                <thead>
+                    <tr><th>購買時間</th><th>商品名稱</th><th>消耗短陌</th></tr>
+                </thead>
+                <tbody id="recordBody">
+                    <tr><td colspan="3" class="empty">目前沒有購買紀錄</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -217,12 +217,17 @@
         <div class="card">
             <div class="card-title">儲值紀錄</div>
             <table id="rechargeTable">
-                <tr><th>序號</th><th>儲值金額</th><th>獲得短陌</th><th>是否增加經驗值</th><th>儲值時間</th></tr>
-                <tr><td colspan="5" class="empty">暫無紀錄</td></tr>
+                <thead>
+                    <tr><th>儲值時間</th><th>儲值金額</th><th>獲得短陌</th></tr>
+                </thead>
+                <tbody id="rechargeBody">
+                    <tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
 <script>
 const API_BASE = "https://api.131rwjuh.com/backend/api.php";
 const state = {
@@ -418,6 +423,7 @@ async function userLogin() {
         await loadShop();
     }
 }
+
 async function userRegister() {
     const username = document.getElementById('reg_user').value.trim();
     const password = document.getElementById('reg_pwd').value;
@@ -505,14 +511,18 @@ function renderShop() {
         return;
     }
 
-    container.innerHTML = items.map(item => `
-        <div class="shop-item">
-            <h3>${item.name || ''}</h3>
-            <p>類型：${item.cat || ''}</p>
-            <p>消耗：${item.cost || 0} 短陌</p>
-            <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
+    container.innerHTML = `
+        <div class="shop-grid">
+            ${items.map(item => `
+                <div class="shop-item">
+                    <h3>${item.name || ''}</h3>
+                    <p>類型：${item.cat || ''}</p>
+                    <p>消耗：${item.cost || 0} 短陌</p>
+                    <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+    `;
 }
 
 async function buyItem(itemId) {
@@ -530,10 +540,11 @@ async function buyItem(itemId) {
 }
 
 window.onload = async function () {
-    renderLoggedOut();
+    document.body.style.visibility = 'hidden';
     await loadShop();
     await refreshSession();
     switchShop('all');
+    document.body.style.visibility = 'visible';
 };
 </script>
 </body>
