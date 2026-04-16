@@ -8,7 +8,18 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
         body { background-color: #121212; color: #fff; min-height: 100vh; }
-        .header { background-color: #1f1f1f; border-bottom: 2px solid #ff69b4; padding: 15px 30px; display: none; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; }
+        .header {
+    background-color: #1f1f1f;
+    border-bottom: 2px solid #ff69b4;
+    padding: 15px 30px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
         .logo { font-size: 24px; font-weight: bold; color: #ff69b4; }
         .nav { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
         .nav a { color: #fff; text-decoration: none; font-size: 16px; cursor: pointer; }
