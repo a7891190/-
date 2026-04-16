@@ -19,7 +19,7 @@
         .section { display: none; }
         .section.active { display: block; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        table th, table td { padding: 16px; text-align: left; border-bottom: 1px solid #333; vertical-align: top; }
+        table th, table td { padding: 16px; text-align: left; border-bottom: 1px solid #333; vertical-align: middle; }
         table th { color: #ff69b4; background-color: #252525; }
         .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px; }
         .shop-item { background: #252525; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #333; }
@@ -42,7 +42,7 @@
         .rule-box { line-height: 2.2; margin-top: 15px; font-size: 15px; padding-left: 10px; }
         .brand-bottom { text-align: center; margin-top: 50px; font-size: 20px; color: #ff69b4; font-weight: bold; }
         .brand-bottom a, .logo a { color: #ff69b4; text-decoration: none; }
-        .member-row { display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
+        .member-row { display: flex; gap: 30px; align-items: stretch; flex-wrap: wrap; }
         .member-left { flex: 0 0 auto; min-width: 300px; }
         .member-right { flex: 1; min-width: 300px; }
         .rule-title { font-size: 20px; color: #ff69b4; margin-bottom: 15px; font-weight: bold; padding-left: 10px; }
@@ -58,11 +58,111 @@
         .vip10 { color: #ff0000 !important; font-weight: bold; font-size: 16px; }
         .msg { margin-top: 12px; color: #ffb3d9; min-height: 22px; }
 
+        .avatar-box { margin-top: 18px; text-align: center; }
+        .avatar-preview {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff69b4;
+            background: #2a2a2a;
+            display: block;
+            margin: 0 auto 12px;
+        }
+        .avatar-upload-input {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        .ranking-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ff69b4;
+            background: #2a2a2a;
+        }
+
+        .podium-wrap {
+            margin-top: 20px;
+        }
+        .podium-title {
+            color: #ff69b4;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+        .podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 18px;
+            min-height: 340px;
+            flex-wrap: wrap;
+        }
+        .podium-item {
+            width: 170px;
+            text-align: center;
+        }
+        .podium-top {
+            background: #252525;
+            border: 1px solid #444;
+            border-radius: 14px 14px 0 0;
+            padding: 18px 12px 14px;
+        }
+        .podium-base {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 22px;
+            border-radius: 0 0 14px 14px;
+        }
+        .podium-first .podium-base {
+            height: 120px;
+            background: linear-gradient(180deg, #ff69b4, #cc4f91);
+        }
+        .podium-second .podium-base {
+            height: 90px;
+            background: linear-gradient(180deg, #5e5e5e, #444);
+        }
+        .podium-third .podium-base {
+            height: 70px;
+            background: linear-gradient(180deg, #7a4b2c, #5c351c);
+        }
+        .podium-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff69b4;
+            background: #2a2a2a;
+            margin: 0 auto 10px;
+        }
+        .podium-name {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .podium-vip {
+            color: #ff69b4;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .podium-exp {
+            font-size: 14px;
+            color: #ddd;
+        }
+
         @media (max-width: 900px) {
             .header { padding: 15px 20px; }
             .nav { gap: 10px; }
             .nav a { font-size: 14px; }
             .card { padding: 24px; }
+            .podium { gap: 10px; }
+            .podium-item { width: 150px; }
         }
     </style>
 </head>
@@ -143,7 +243,15 @@
                         <p>會員到期：<span id="show_expire">未開通</span></p>
                         <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
                     </div>
+
+                    <div class="avatar-box">
+                        <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
+                        <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
+                        <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
+                        <div class="msg" id="avatarMsg"></div>
+                    </div>
                 </div>
+
                 <div class="member-right">
                     <div class="card" style="margin:0; padding:25px;">
                         <div class="rule-title">平台規則</div>
@@ -156,6 +264,13 @@
                             6. 1台幣 = 1短陌 = 1.2倍VIP經驗值。<br>
                             7. 需要儲值（短陌）請私訊<a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener" style="color:#ff69b4;">夢競娛樂LINE官方</a>。<br>
                             8. 平台製作由夢競私人研發，製作不易，請勿暴力測試。<br>
+                        </div>
+
+                        <div class="podium-wrap">
+                            <div class="podium-title">本期前三名</div>
+                            <div id="topPodium" class="podium">
+                                <div class="empty" style="padding:20px 0;">載入中...</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -191,159 +306,67 @@
                     <td class="svip">SVIP</td>
                     <td class="svip">客官</td>
                     <td>1000</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 累計儲值達1888短陌下單送+600w保底（需當週打完不保留）<br>
-                        3. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 累計儲值達1888短陌下單送+600w保底（需當週打完不保留）<br>3. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip1">VIP1</td>
                     <td class="vip1">雅客</td>
                     <td>1888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 累計儲值達3888短陌下單送+1500w保底（需當週打完不保留）<br>
-                        3. 單筆儲值2000短陌下單送1200w保底<br>
-                        4. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 累計儲值達3888短陌下單送+1500w保底（需當週打完不保留）<br>3. 單筆儲值2000短陌下單送1200w保底<br>4. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip2">VIP2</td>
                     <td class="vip2">太學博士</td>
                     <td>6888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 儲值1200短陌返利400短陌<br>
-                        3. 累計儲值達8688送點單額外+3000w保底（可保留）<br>
-                        4. 累計儲值達10888送當週可點三次體驗單+1000保底（必須當週打完）<br>
-                        5. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 儲值1200短陌返利400短陌<br>3. 累計儲值達8688送點單額外+3000w保底（可保留）<br>4. 累計儲值達10888送當週可點三次體驗單+1000保底（必須當週打完）<br>5. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip3">VIP3</td>
                     <td class="vip3">四征將軍</td>
                     <td>13888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 每週不定時與名將得吃<br>
-                        3. 生日月福利驚喜<br>
-                        4. 累計儲值達25888送當週儲值5000短陌立即返利2000短陌並贈送三次點單炸單+80w保底<br>
-                        5. 累計儲值達17888送當週可點五次體驗單+2000保底（必須當週打完）<br>
-                        6. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 每週不定時與名將得吃<br>3. 生日月福利驚喜<br>4. 累計儲值達25888送當週儲值5000短陌立即返利2000短陌並贈送三次點單炸單+80w保底<br>5. 累計儲值達17888送當週可點五次體驗單+2000保底（必須當週打完）<br>6. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip4">VIP4</td>
                     <td class="vip4">中郎將</td>
                     <td>35888</td>
-                    <td>
-                        1. 炸單時+80w<br>
-                        2. 每週不定時與名將得吃<br>
-                        3. 生日月福利驚喜<br>
-                        4. 解鎖特色單（短陌≥1000）<br>
-                        5. 累計儲值達40688下任意兩單趣味單送立即贈送隨機稀有紅皮並免費2H與女護試用紅皮<br>
-                        6. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 炸單時+80w<br>2. 每週不定時與名將得吃<br>3. 生日月福利驚喜<br>4. 解鎖特色單（短陌≥1000）<br>5. 累計儲值達40688下任意兩單趣味單送立即贈送隨機稀有紅皮並免費2H與女護試用紅皮<br>6. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip5">VIP5</td>
                     <td class="vip5">驃騎將軍</td>
                     <td>55888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 累計儲值達65688送三賽季頂級通行證+隨機送稀有紅皮<br>
-                        3. 炸單時+80w<br>
-                        4. 每週不定時與名將得吃<br>
-                        5. 享有次等派單通道<br>
-                        6. 生日月福利驚喜<br>
-                        7. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 累計儲值達65688送三賽季頂級通行證+隨機送稀有紅皮<br>3. 炸單時+80w<br>4. 每週不定時與名將得吃<br>5. 享有次等派單通道<br>6. 生日月福利驚喜<br>7. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip6">VIP6</td>
                     <td class="vip6">尚書令</td>
                     <td>76888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 炸單時+80w<br>
-                        3. 每週不定時與名將得吃<br>
-                        4. 指定免等待優先上崗<br>
-                        5. 享有特等派單通道<br>
-                        6. 生日月福利驚喜<br>
-                        7. 累計儲值達90888當月儲值10000短陌送隨機一台電競手機<br>
-                        8. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 炸單時+80w<br>3. 每週不定時與名將得吃<br>4. 指定免等待優先上崗<br>5. 享有特等派單通道<br>6. 生日月福利驚喜<br>7. 累計儲值達90888當月儲值10000短陌送隨機一台電競手機<br>8. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip7">VIP7</td>
                     <td class="vip7">御史大夫</td>
                     <td>90888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 炸單時+80w<br>
-                        3. 每週不定時與名將得吃<br>
-                        4. 享有特等派單通道<br>
-                        5. 專線直通急事瞬達<br>
-                        6. 生日月福利驚喜<br>
-                        7. 最新玩法搶先體驗<br>
-                        8. 累計儲值達118888當月儲值10000送一台PS5數位版<br>
-                        9. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 炸單時+80w<br>3. 每週不定時與名將得吃<br>4. 享有特等派單通道<br>5. 專線直通急事瞬達<br>6. 生日月福利驚喜<br>7. 最新玩法搶先體驗<br>8. 累計儲值達118888當月儲值10000送一台PS5數位版<br>9. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip8">VIP8</td>
                     <td class="vip8">太子太傅</td>
                     <td>158888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 炸單時+80w<br>
-                        3. 每週不定時與名將得吃<br>
-                        4. 指定免等待優先上崗<br>
-                        5. 享有特等派單通道<br>
-                        6. 專線直通急事瞬達<br>
-                        7. 生日月福利驚喜<br>
-                        8. 優先預約名將陪玩<br>
-                        9. 最新玩法搶先體驗<br>
-                        10. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 炸單時+80w<br>3. 每週不定時與名將得吃<br>4. 指定免等待優先上崗<br>5. 享有特等派單通道<br>6. 專線直通急事瞬達<br>7. 生日月福利驚喜<br>8. 優先預約名將陪玩<br>9. 最新玩法搶先體驗<br>10. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip9">VIP9</td>
                     <td class="vip9">攝政王</td>
                     <td>198888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 炸單時+80w<br>
-                        3. 每週不定時與名將得吃<br>
-                        4. 指定免等待優先上崗<br>
-                        5. 享有特等派單通道<br>
-                        6. 專線直通急事瞬達<br>
-                        7. 生日月福利驚喜<br>
-                        8. 優先預約名將陪玩<br>
-                        9. 最新玩法搶先體驗<br>
-                        10. 累計儲值達228888當月儲值滿15000短陌送東亞國家經濟艙雙人來回機票乙次<br>
-                        11. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 炸單時+80w<br>3. 每週不定時與名將得吃<br>4. 指定免等待優先上崗<br>5. 享有特等派單通道<br>6. 專線直通急事瞬達<br>7. 生日月福利驚喜<br>8. 優先預約名將陪玩<br>9. 最新玩法搶先體驗<br>10. 累計儲值達228888當月儲值滿15000短陌送東亞國家經濟艙雙人來回機票乙次<br>11. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
                 <tr>
                     <td class="vip10">VIP10</td>
                     <td class="vip10">絕代風華</td>
                     <td>298888</td>
-                    <td>
-                        1. 解鎖特色單（短陌≥1000）<br>
-                        2. 累計儲值達300000當月儲值滿28000短陌送冰島經濟艙雙人來回機票乙次<br>
-                        3. 炸單時+80w<br>
-                        4. 每週不定時與名將得吃<br>
-                        5. 指定免等待優先上崗<br>
-                        6. 享有特等派單通道<br>
-                        7. 專線直通急事瞬達<br>
-                        8. 生日月福利驚喜<br>
-                        9. 優先預約名將陪玩<br>
-                        10. 最新玩法搶先體驗<br>
-                        11. 一對一專人服務<br>
-                        12. 未開通會員時，以上權益將鎖定，但仍可查看說明。
-                    </td>
+                    <td>1. 解鎖特色單（短陌≥1000）<br>2. 累計儲值達300000當月儲值滿28000短陌送冰島經濟艙雙人來回機票乙次<br>3. 炸單時+80w<br>4. 每週不定時與名將得吃<br>5. 指定免等待優先上崗<br>6. 享有特等派單通道<br>7. 專線直通急事瞬達<br>8. 生日月福利驚喜<br>9. 優先預約名將陪玩<br>10. 最新玩法搶先體驗<br>11. 一對一專人服務<br>12. 未開通會員時，以上權益將鎖定，但仍可查看說明。</td>
                 </tr>
             </table>
         </div>
@@ -409,6 +432,17 @@
 </div>
 
 <script>
+const DEFAULT_AVATAR = 'https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP';
+const API_BASE = "https://api.131rwjuh.com/backend/api.php";
+const AVATAR_UPLOAD_URL = "https://api.131rwjuh.com/backend/upload_avatar.php";
+
+const state = {
+    user: null,
+    shopItems: [],
+    activeCat: 'all',
+    ranking: []
+};
+
 function maskUsername(name) {
     if (!name) return '';
     if (name.length <= 1) return '*';
@@ -418,18 +452,13 @@ function maskUsername(name) {
     return name.slice(0, 2) + '***' + name.slice(-1);
 }
 
-const API_BASE = "https://api.131rwjuh.com/backend/api.php";
-const state = {
-    user: null,
-    shopItems: [],
-    activeCat: 'all'
-};
+function safeAvatar(url) {
+    return url && String(url).trim() ? url : DEFAULT_AVATAR;
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     const header = document.getElementById('mainHeader');
-    if (header) {
-        header.style.display = 'none';
-    }
+    if (header) header.style.display = 'none';
 });
 
 function show(id) {
@@ -456,9 +485,7 @@ async function api(action, extra = {}) {
         const response = await fetch(API_BASE, {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action, ...extra })
         });
 
@@ -467,17 +494,59 @@ async function api(action, extra = {}) {
         try {
             return JSON.parse(text);
         } catch (e) {
-            return {
-                ok: false,
-                message: '後端回傳格式錯誤：' + text
-            };
+            return { ok: false, message: '後端回傳格式錯誤：' + text };
         }
     } catch (error) {
-        return {
-            ok: false,
-            message: '連線失敗：' + error.message
-        };
+        return { ok: false, message: '連線失敗：' + error.message };
     }
+}
+
+function renderTopPodium(ranking) {
+    const box = document.getElementById('topPodium');
+    if (!box) return;
+
+    if (!Array.isArray(ranking) || ranking.length === 0) {
+        box.innerHTML = '<div class="empty" style="padding:20px 0;">目前沒有排行榜資料</div>';
+        return;
+    }
+
+    const first = ranking.find(item => item.rank === 1);
+    const second = ranking.find(item => item.rank === 2);
+    const third = ranking.find(item => item.rank === 3);
+
+    const renderItem = (item, cls, rankText) => {
+        if (!item) {
+            return `
+                <div class="podium-item ${cls}">
+                    <div class="podium-top">
+                        <img class="podium-avatar" src="${DEFAULT_AVATAR}" alt="avatar">
+                        <div class="podium-name">尚無資料</div>
+                        <div class="podium-vip">-</div>
+                        <div class="podium-exp">0</div>
+                    </div>
+                    <div class="podium-base">${rankText}</div>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="podium-item ${cls}">
+                <div class="podium-top">
+                    <img class="podium-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar">
+                    <div class="podium-name">${maskUsername(item.username)}</div>
+                    <div class="podium-vip">${item.vip_name}</div>
+                    <div class="podium-exp">${item.exp}</div>
+                </div>
+                <div class="podium-base">${rankText}</div>
+            </div>
+        `;
+    };
+
+    box.innerHTML = `
+        ${renderItem(third, 'podium-third', '3')}
+        ${renderItem(first, 'podium-first', '1')}
+        ${renderItem(second, 'podium-second', '2')}
+    `;
 }
 
 async function loadVipRanking() {
@@ -490,19 +559,25 @@ async function loadVipRanking() {
 
     if (!res.ok) {
         box.innerHTML = '<div class="empty">排行榜載入失敗</div>';
+        renderTopPodium([]);
         return;
     }
 
     if (!Array.isArray(res.ranking) || res.ranking.length === 0) {
         box.innerHTML = '<div class="empty">目前沒有排行榜資料</div>';
+        renderTopPodium([]);
         return;
     }
+
+    state.ranking = res.ranking;
+    renderTopPodium(res.ranking);
 
     box.innerHTML = `
         <table>
             <thead>
                 <tr>
                     <th>排名</th>
+                    <th>大頭照</th>
                     <th>會員帳號</th>
                     <th>VIP稱號</th>
                     <th>經驗值</th>
@@ -512,6 +587,7 @@ async function loadVipRanking() {
                 ${res.ranking.map(item => `
                     <tr>
                         <td>${item.rank}</td>
+                        <td><img class="ranking-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar"></td>
                         <td>${maskUsername(item.username)}</td>
                         <td>${item.vip_name}</td>
                         <td>${item.exp}</td>
@@ -587,18 +663,21 @@ function updateUserUI(user) {
     const renewUser = document.getElementById('renew_user');
     if (renewUser) renewUser.value = user.username || '';
 
+    const avatarPreview = document.getElementById('userAvatarPreview');
+    if (avatarPreview) avatarPreview.src = safeAvatar(user.avatar_url);
+
     renderRecords(user.buy_records || []);
     renderRecharges(user.recharge_records || []);
 
     document.getElementById('mainHeader').style.display = 'flex';
     showSection('home');
+    loadVipRanking();
 }
 
 function renderLoggedOut() {
     state.user = null;
 
     document.getElementById('mainHeader').style.display = 'none';
-
     document.getElementById('show_userid').innerText = '00000000';
     document.getElementById('show_username').innerText = '未登入';
     document.getElementById('userVipLevel').className = 'svip';
@@ -614,8 +693,12 @@ function renderLoggedOut() {
     const renewUser = document.getElementById('renew_user');
     if (renewUser) renewUser.value = '';
 
+    const avatarPreview = document.getElementById('userAvatarPreview');
+    if (avatarPreview) avatarPreview.src = DEFAULT_AVATAR;
+
     renderRecords([]);
     renderRecharges([]);
+    renderTopPodium([]);
     showSection('loginPage');
 }
 
@@ -703,6 +786,49 @@ async function findPassword() {
 
     const res = await api('request_reset', { email });
     setMessage('forgetMsg', res.message || '');
+}
+
+async function uploadAvatar() {
+    if (!state.user) {
+        setMessage('avatarMsg', '請先登入');
+        return;
+    }
+
+    const input = document.getElementById('avatarInput');
+    if (!input || !input.files || !input.files[0]) {
+        setMessage('avatarMsg', '請先選擇圖片');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('avatar', input.files[0]);
+
+    setMessage('avatarMsg', '上傳中...');
+
+    try {
+        const response = await fetch(AVATAR_UPLOAD_URL, {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!data.ok) {
+            setMessage('avatarMsg', data.message || '上傳失敗');
+            return;
+        }
+
+        setMessage('avatarMsg', data.message || '上傳成功');
+
+        const avatarPreview = document.getElementById('userAvatarPreview');
+        if (avatarPreview) avatarPreview.src = safeAvatar(data.avatar_url);
+
+        await refreshSession();
+        await loadVipRanking();
+    } catch (error) {
+        setMessage('avatarMsg', '上傳失敗：' + error.message);
+    }
 }
 
 async function logout() {
