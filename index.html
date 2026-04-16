@@ -234,23 +234,23 @@
             <div class="card-title">會員中心</div>
             <div class="member-row">
                 <div class="member-left">
-                    <div class="user-info">
-                        <p>會員ID：<span id="show_userid">00000000</span></p>
-                        <p>會員名稱：<span id="show_username">未登入</span></p>
-                        <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
-                        <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
-                        <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
-                        <p>會員到期：<span id="show_expire">未開通</span></p>
-                        <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
-                    </div>
+    <div class="user-info">
+        <div class="avatar-box">
+            <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
+            <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
+            <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
+            <div class="msg" id="avatarMsg"></div>
+        </div>
 
-                    <div class="avatar-box">
-                        <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
-                        <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
-                        <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
-                        <div class="msg" id="avatarMsg"></div>
-                    </div>
-                </div>
+        <p>會員ID：<span id="show_userid">00000000</span></p>
+        <p>會員名稱：<span id="show_username">未登入</span></p>
+        <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
+        <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
+        <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
+        <p>會員到期：<span id="show_expire">未開通</span></p>
+        <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
+    </div>
+</div>
 
                 <div class="member-right">
                     <div class="card" style="margin:0; padding:25px;">
