@@ -426,7 +426,7 @@ async function userLogin() {
 
 async function userRegister() {
     const username = document.getElementById('reg_user').value.trim();
-    const password = document.getElementById('reg_pwd').value;
+    const password = document.getElementById('reg_pwd').value.trim();
     const email = document.getElementById('reg_email').value.trim();
     const code = document.getElementById('reg_code').value.trim();
 
@@ -440,6 +440,7 @@ async function userRegister() {
         document.getElementById('reg_pwd').value = '';
         document.getElementById('reg_email').value = '';
         document.getElementById('reg_code').value = '';
+        showSection('loginPage');
     }
 }
 
