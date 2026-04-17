@@ -1228,13 +1228,6 @@ async function buyItem(itemId) {
 
     openBuyModal(itemId);
 }
-    const res = await api('buy', { item_id: itemId });
-    alert(res.message || '');
-
-    if (res.ok) {
-        await refreshSession();
-    }
-}
 
 window.onload = async function () {
     document.body.style.visibility = 'hidden';
