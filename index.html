@@ -1329,6 +1329,107 @@ window.onload = async function () {
     switchShop('全部');
     document.body.style.visibility = 'visible';
 };
+
+function getShopItemsFromResponse(res) {
+    if (Array.isArray(res.items)) return res.items;
+    if (Array.isArray(res.shop_items)) return res.shop_items;
+    if (Array.isArray(res.data)) return res.data;
+    return [];
+}
+
+async function loadShop() {
+    const box = document.getElementById('shopList');
+    if (box) box.innerHTML = '<div class="empty">載入中...</div>';
+
+    const res = await api('shop_list');
+    const items = getShopItemsFromResponse(res);
+
+    if (!res.ok && !items.length) {
+        state.shopItems = [];
+        if (box) box.innerHTML = '<div class="empty">商品載入失敗</div>';
+        return;
+    }
+
+    state.shopItems = items.map((item, index) => ({
+        id: item.id ?? item.item_id ?? index + 1,
+        name: item.name ?? item.title ?? '未命名商品',
+        category: item.category ?? item.type ?? '未分類',
+        cost: Number(item.cost ?? item.coin ?? item.price ?? 0),
+        desc: item.desc ?? item.description ?? ''
+    }));
+
+    renderShop();
+}
+
+function switchShop(cat) {
+    state.activeCat = cat;
+
+    document.querySelectorAll('.shop-tab').forEach(tab => {
+        if (tab.dataset.tab === cat) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
+    renderShop();
+}
+
+function renderShop() {
+    const box = document.getElementById('shopList');
+    const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+
+    if (!box) return;
+
+    let list = Array.isArray(state.shopItems) ? [...state.shopItems] : [];
+
+    if (state.activeCat && state.activeCat !== '全部') {
+        list = list.filter(item => String(item.category || '') === state.activeCat);
+    }
+
+    if (keyword) {
+        list = list.filter(item =>
+            String(item.name || '').toLowerCase().includes(keyword) ||
+            String(item.category || '').toLowerCase().includes(keyword) ||
+            String(item.desc || '').toLowerCase().includes(keyword)
+        );
+    }
+
+    if (!list.length) {
+        box.innerHTML = '<div class="empty">目前沒有符合的商品</div>';
+        return;
+    }
+
+    box.innerHTML = `
+        <div class="shop-grid">
+            ${list.map(item => `
+                <div class="shop-item">
+                    <h3>${item.name}</h3>
+                    <p>類型：${item.category}</p>
+                    <p>價格：${item.cost} 短陌</p>
+                    <p>${item.desc || '暫無說明'}</p>
+                    <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+async function logout() {
+    const res = await api('logout');
+    if (res && res.message) {
+        setMessage('loginMsg', res.message);
+    }
+    renderLoggedOut();
+}
+
+window.onload = async function () {
+    document.body.style.visibility = 'hidden';
+    await loadShop();
+    await refreshSession();
+    switchShop('全部');
+    document.body.style.visibility = 'visible';
+};
 window.onload = async function () {
     document.body.style.visibility = 'hidden';
     await loadShop();
