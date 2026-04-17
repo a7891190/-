@@ -1220,7 +1220,7 @@ async function submitBuy() {
     }
 }
 
-function buyItem(itemId) {
+async function buyItem(itemId) {
     if (!state.user) {
         alert('請先登入');
         return;
