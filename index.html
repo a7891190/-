@@ -593,6 +593,7 @@
                     <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
                     <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
                     <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
+                    <p>累計短陌儲值：<span id="show_total_recharge_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
                     <p>會員到期：<span id="show_expire">未開通</span></p>
                     <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
                 </div>
@@ -1023,8 +1024,8 @@ function updateUserUI(user) {
 
     document.getElementById('show_exp').innerText = `${Number(user.exp || 0)} / 298888`;
     document.getElementById('show_coin').innerText = Number(user.coin || 0);
+    document.getElementById('show_total_recharge_coin').innerText = Number(user.total_recharge_coin || 0);
     document.getElementById('show_expire').innerText = user.member_expire || '未開通';
-
     const vipStatus = document.getElementById('show_vip_status');
     const vipActive = !!user.vip_active;
     vipStatus.innerText = vipActive ? '開通' : '鎖定';
@@ -1054,6 +1055,7 @@ function renderLoggedOut() {
     document.getElementById('userVipLevel').innerText = 'SVIP 客官';
     document.getElementById('show_exp').innerText = '0 / 298888';
     document.getElementById('show_coin').innerText = '0';
+    document.getElementById('show_total_recharge_coin').innerText = '0';
     document.getElementById('show_expire').innerText = '未開通';
 
     const vipStatus = document.getElementById('show_vip_status');
