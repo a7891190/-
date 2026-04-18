@@ -1187,6 +1187,7 @@ function closeBuyModal() {
     document.getElementById('buy_role_uid').value = '';
     document.getElementById('buy_reserve_time').value = '';
     document.getElementById('buy_assign_type').value = '';
+    document.getElementById('buy_note').value = '';
 }
 
 async function submitBuy() {
@@ -1196,6 +1197,7 @@ async function submitBuy() {
     const role_uid = document.getElementById('buy_role_uid').value.trim();
     const reserve_time = document.getElementById('buy_reserve_time').value.trim();
     const assign_type = document.getElementById('buy_assign_type').value;
+    const note = document.getElementById('buy_note').value.trim();
 
     if (!game_name || !server_name || !role_name || !role_uid || !reserve_time) {
         document.getElementById('buyModalMsg').innerText = '請完整填寫必填資料';
@@ -1209,7 +1211,8 @@ async function submitBuy() {
         role_name,
         role_uid,
         reserve_time,
-        assign_type
+        assign_type,
+        note
     });
 
     document.getElementById('buyModalMsg').innerText = res.message || '';
@@ -1219,7 +1222,6 @@ async function submitBuy() {
         await refreshSession();
     }
 }
-
 async function buyItem(itemId) {
     if (!state.user) {
         alert('請先登入');
@@ -1449,13 +1451,60 @@ window.onload = async function () {
         <input id="buy_role_uid" placeholder="角色UID" style="width:100%; margin-bottom:10px;">
         <input id="buy_reserve_time" placeholder="預約時間" style="width:100%; margin-bottom:10px;">
 
-        <select id="buy_assign_type" style="width:100%; margin-bottom:10px;">
+       <div id="buyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#1e1e1e; border:1px solid #333; border-radius:10px; padding:20px; width:min(92%,520px);">
+        <h3 style="color:#ff69b4; margin-bottom:15px;">填寫兌換資料</h3>
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">遊戲名</div>
+        <input
+            id="buy_game_name"
+            placeholder="例如：三角洲行動、傳說對決、荒野行動、PUBGM，和該單相關內容的遊戲。"
+            style="width:100%; margin-bottom:12px;"
+        >
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">伺服器</div>
+        <input
+            id="buy_server_name"
+            placeholder="請輸入伺服器"
+            style="width:100%; margin-bottom:12px;"
+        >
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">角色名</div>
+        <input
+            id="buy_role_name"
+            placeholder="請輸入角色名"
+            style="width:100%; margin-bottom:12px;"
+        >
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">角色UID</div>
+        <input
+            id="buy_role_uid"
+            placeholder="請輸入角色UID"
+            style="width:100%; margin-bottom:12px;"
+        >
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">預約時間</div>
+        <input
+            id="buy_reserve_time"
+            placeholder="請輸入預約時間"
+            style="width:100%; margin-bottom:12px;"
+        >
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">指定</div>
+        <select id="buy_assign_type" style="width:100%; margin-bottom:12px;">
             <option value="">不指定</option>
             <option value="1人200短陌">1人200短陌</option>
             <option value="2人400短陌">2人400短陌</option>
             <option value="提前一天1人150短陌">提前一天1人150短陌</option>
             <option value="提前一天2人300短陌">提前一天2人300短陌</option>
         </select>
+
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">備註</div>
+        <textarea
+            id="buy_note"
+            placeholder="例如：指定陪玩名稱、合理特殊需求"
+            style="width:100%; min-height:90px; margin-bottom:12px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical;"
+        ></textarea>
 
         <div id="buyModalMsg" style="color:#ffb3d9; min-height:22px; margin-bottom:10px;"></div>
 
