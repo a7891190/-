@@ -1188,6 +1188,7 @@ function closeBuyModal() {
     document.getElementById('buy_reserve_time').value = '';
     document.getElementById('buy_assign_type').value = '';
     document.getElementById('buy_note').value = '';
+    document.getElementById('buyModalMsg').innerText = '';
 }
 
 async function submitBuy() {
@@ -1222,6 +1223,7 @@ async function submitBuy() {
         await refreshSession();
     }
 }
+
 async function buyItem(itemId) {
     if (!state.user) {
         alert('請先登入');
@@ -1331,167 +1333,52 @@ window.onload = async function () {
     switchShop('全部');
     document.body.style.visibility = 'visible';
 };
-
-function getShopItemsFromResponse(res) {
-    if (Array.isArray(res.items)) return res.items;
-    if (Array.isArray(res.shop_items)) return res.shop_items;
-    if (Array.isArray(res.data)) return res.data;
-    return [];
-}
-
-async function loadShop() {
-    const box = document.getElementById('shopList');
-    if (box) box.innerHTML = '<div class="empty">載入中...</div>';
-
-    const res = await api('shop_list');
-    const items = getShopItemsFromResponse(res);
-
-    if (!res.ok && !items.length) {
-        state.shopItems = [];
-        if (box) box.innerHTML = '<div class="empty">商品載入失敗</div>';
-        return;
-    }
-
-    state.shopItems = items.map((item, index) => ({
-        id: item.id ?? item.item_id ?? index + 1,
-        name: item.name ?? item.title ?? '未命名商品',
-        category: item.category ?? item.type ?? '未分類',
-        cost: Number(item.cost ?? item.coin ?? item.price ?? 0),
-        desc: item.desc ?? item.description ?? ''
-    }));
-
-    renderShop();
-}
-
-function switchShop(cat) {
-    state.activeCat = cat;
-
-    document.querySelectorAll('.shop-tab').forEach(tab => {
-        if (tab.dataset.tab === cat) {
-            tab.classList.add('active');
-        } else {
-            tab.classList.remove('active');
-        }
-    });
-
-    renderShop();
-}
-
-function renderShop() {
-    const box = document.getElementById('shopList');
-    const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
-
-    if (!box) return;
-
-    let list = Array.isArray(state.shopItems) ? [...state.shopItems] : [];
-
-    if (state.activeCat && state.activeCat !== '全部') {
-        list = list.filter(item => String(item.category || '') === state.activeCat);
-    }
-
-    if (keyword) {
-        list = list.filter(item =>
-            String(item.name || '').toLowerCase().includes(keyword) ||
-            String(item.category || '').toLowerCase().includes(keyword) ||
-            String(item.desc || '').toLowerCase().includes(keyword)
-        );
-    }
-
-    if (!list.length) {
-        box.innerHTML = '<div class="empty">目前沒有符合的商品</div>';
-        return;
-    }
-
-    box.innerHTML = `
-        <div class="shop-grid">
-            ${list.map(item => `
-                <div class="shop-item">
-                    <h3>${item.name}</h3>
-                    <p>類型：${item.category}</p>
-                    <p>價格：${item.cost} 短陌</p>
-                    <p>${item.desc || '暫無說明'}</p>
-                    <button class="btn" onclick="buyItem(${Number(item.id)})">立即兌換</button>
-                </div>
-            `).join('')}
-        </div>
-    `;
-}
-
-async function logout() {
-    const res = await api('logout');
-    if (res && res.message) {
-        setMessage('loginMsg', res.message);
-    }
-    renderLoggedOut();
-}
-
-window.onload = async function () {
-    document.body.style.visibility = 'hidden';
-    await loadShop();
-    await refreshSession();
-    switchShop('全部');
-    document.body.style.visibility = 'visible';
-};
-window.onload = async function () {
-    document.body.style.visibility = 'hidden';
-    await loadShop();
-    await refreshSession();
-    switchShop('全部');
-    document.body.style.visibility = 'visible';
-};
 </script>
 
-<div id="buyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#1e1e1e; border:1px solid #333; border-radius:10px; padding:20px; width:min(92%,500px);">
-        <h3 style="color:#ff69b4; margin-bottom:15px;">填寫兌換資料</h3>
+<div id="buyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.78); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#1e1e1e; border:1px solid #333; border-radius:14px; padding:24px; width:min(92%,560px); box-shadow:0 0 20px rgba(255,105,180,0.12);">
+        <h3 style="color:#ff69b4; margin-bottom:18px; font-size:28px; font-weight:bold;">填寫兌換資料</h3>
 
-        <input id="buy_game_name" placeholder="遊戲名" style="width:100%; margin-bottom:10px;">
-        <input id="buy_server_name" placeholder="伺服器" style="width:100%; margin-bottom:10px;">
-        <input id="buy_role_name" placeholder="角色名" style="width:100%; margin-bottom:10px;">
-        <input id="buy_role_uid" placeholder="角色UID" style="width:100%; margin-bottom:10px;">
-        <input id="buy_reserve_time" placeholder="預約時間" style="width:100%; margin-bottom:10px;">
-
-       <div id="buyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#1e1e1e; border:1px solid #333; border-radius:10px; padding:20px; width:min(92%,520px);">
-        <h3 style="color:#ff69b4; margin-bottom:15px;">填寫兌換資料</h3>
-
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">遊戲名</div>
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">遊戲名</div>
         <input
             id="buy_game_name"
             placeholder="例如：三角洲行動、傳說對決、荒野行動、PUBGM，和該單相關內容的遊戲。"
-            style="width:100%; margin-bottom:12px;"
+            style="width:100%; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px;"
         >
 
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">伺服器</div>
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">伺服器</div>
         <input
             id="buy_server_name"
             placeholder="請輸入伺服器"
-            style="width:100%; margin-bottom:12px;"
+            style="width:100%; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px;"
         >
 
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">角色名</div>
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">角色名</div>
         <input
             id="buy_role_name"
             placeholder="請輸入角色名"
-            style="width:100%; margin-bottom:12px;"
+            style="width:100%; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px;"
         >
 
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">角色UID</div>
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">角色UID</div>
         <input
             id="buy_role_uid"
             placeholder="請輸入角色UID"
-            style="width:100%; margin-bottom:12px;"
+            style="width:100%; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px;"
         >
 
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">預約時間</div>
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">預約時間</div>
         <input
             id="buy_reserve_time"
             placeholder="請輸入預約時間"
-            style="width:100%; margin-bottom:12px;"
+            style="width:100%; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px;"
         >
 
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">指定</div>
-        <select id="buy_assign_type" style="width:100%; margin-bottom:12px;">
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">指定</div>
+        <select
+            id="buy_assign_type"
+            style="width:100%; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px;"
+        >
             <option value="">不指定</option>
             <option value="1人200短陌">1人200短陌</option>
             <option value="2人400短陌">2人400短陌</option>
@@ -1499,14 +1386,14 @@ window.onload = async function () {
             <option value="提前一天2人300短陌">提前一天2人300短陌</option>
         </select>
 
-        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold;">備註</div>
+        <div style="margin-bottom:6px; color:#ff69b4; font-weight:bold; font-size:15px;">備註</div>
         <textarea
             id="buy_note"
             placeholder="例如：指定陪玩名稱、合理特殊需求"
-            style="width:100%; min-height:90px; margin-bottom:12px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical;"
+            style="width:100%; min-height:100px; margin-bottom:14px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical;"
         ></textarea>
 
-        <div id="buyModalMsg" style="color:#ffb3d9; min-height:22px; margin-bottom:10px;"></div>
+        <div id="buyModalMsg" style="color:#ffb3d9; min-height:22px; margin-bottom:12px;"></div>
 
         <div style="display:flex; gap:10px;">
             <button class="btn" style="flex:1;" onclick="submitBuy()">確認兌換</button>
