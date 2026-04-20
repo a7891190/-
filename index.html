@@ -76,9 +76,14 @@
         .record-status.completed { color:#7ec8ff; }
         .record-status.returned { color:#ff9aa8; }
         .chat-box-common { height:320px; overflow-y:auto; background:#252525; border:1px solid #333; border-radius:8px; padding:15px; margin-bottom:15px; }
-        .chat-item-common { background:#2a2a2a; border-radius:8px; padding:10px 12px; margin-bottom:10px; line-height:1.7; }
-        .chat-item-common.me { border:1px solid #ff69b4; }
+        .chat-row-common { display:flex; margin-bottom:10px; }
+        .chat-row-common.me { justify-content:flex-end; }
+        .chat-row-common.other { justify-content:flex-start; }
+        .chat-item-common { max-width:78%; border-radius:14px; padding:10px 12px; line-height:1.7; background:#2a2a2a; border:1px solid #444; }
+        .chat-row-common.me .chat-item-common { background:#4a2139; border:1px solid #ff69b4; }
         .chat-meta-common { color:#999; font-size:12px; margin-bottom:4px; }
+        .companion-idle-text { color:#7dff9e; font-weight:bold; }
+        .companion-busy-text { color:#ff8080; font-weight:bold; }
         .shop-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
         .shop-tab { padding: 10px 18px; background: #252525; border: 1px solid #444; border-radius: 6px; cursor: pointer; color: #fff; display: flex; align-items: center; gap: 6px; }
         .shop-tab.active { background: #ff69b4; color: #fff; border-color: #ff69b4; }
@@ -639,8 +644,8 @@
         <div class="card-title">陪玩即時狀態</div>
         <div class="user-info">
             <p>陪玩總人數：<span id="companion_total">0</span></p>
-            <p>空閒中：<span id="companion_idle">0</span></p>
-            <p>忙碌中：<span id="companion_busy">0</span></p>
+            <p>空閒中：<span id="companion_idle" class="companion-idle-text">0</span></p>
+            <p>忙碌中：<span id="companion_busy" class="companion-busy-text">0</span></p>
         </div>
     </div>
 
@@ -783,17 +788,22 @@
             </table>
 
             <div id="memberOrderChatPanel" style="margin-top:20px; display:none;">
-                <div class="card-title" style="font-size:18px; margin-bottom:15px;">會員 / 陪玩共同聊天室</div>
-                <div id="memberOrderChatInfo" style="margin-bottom:10px; color:#999;">請先從上方訂單開啟聊天室</div>
-                <div id="memberOrderChatBox" class="chat-box-common"><div class="empty">尚未開啟聊天室</div></div>
-                <textarea id="memberOrderChatText" placeholder="輸入要傳給陪玩的訊息" style="width:100%; min-height:100px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical; margin-bottom:10px;"></textarea>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <button class="btn" onclick="sendMemberOrderChatMessage()">送出訊息</button>
-                    <button class="btn" style="background:#555;" onclick="loadMemberOrderChatMessages()">重新整理</button>
-                    <button class="btn" style="background:#444;" onclick="closeMemberOrderChat()">關閉聊天室</button>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <div class="card-title" style="font-size:18px; margin-bottom:15px;">會員 / 陪玩共同聊天室</div>
+                    <button class="btn" style="background:#444; margin-bottom:15px;" type="button" onclick="toggleMemberOrderChatBody(this)" data-open-text="收起聊天室" data-close-text="展開聊天室">收起聊天室</button>
                 </div>
-                <div style="margin-top:10px; color:#999; font-size:13px;">聊天室訊息僅保留 24 小時，超過時間會自動刪除。</div>
-                <div id="memberOrderChatMsg" class="msg"></div>
+                <div id="memberOrderChatBody">
+                    <div id="memberOrderChatInfo" style="margin-bottom:10px; color:#999;">請先從上方訂單開啟聊天室</div>
+                    <div id="memberOrderChatBox" class="chat-box-common"><div class="empty">尚未開啟聊天室</div></div>
+                    <textarea id="memberOrderChatText" placeholder="輸入要傳給陪玩的訊息" style="width:100%; min-height:100px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical; margin-bottom:10px;"></textarea>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn" onclick="sendMemberOrderChatMessage()">送出訊息</button>
+                        <button class="btn" style="background:#555;" onclick="loadMemberOrderChatMessages()">重新整理</button>
+                        <button class="btn" style="background:#444;" onclick="closeMemberOrderChat()">關閉聊天室</button>
+                    </div>
+                    <div style="margin-top:10px; color:#999; font-size:13px;">聊天室訊息僅保留 24 小時，超過時間會自動刪除，訂單完成後會立即關閉。</div>
+                    <div id="memberOrderChatMsg" class="msg"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -932,8 +942,8 @@ async function loadCompanionStats() {
         const busyEl = document.getElementById('companion_busy');
 
         if (totalEl) totalEl.innerText = String(total);
-        if (idleEl) idleEl.innerText = String(idle);
-        if (busyEl) busyEl.innerText = String(busy);
+        if (idleEl) { idleEl.innerText = String(idle); idleEl.classList.add('companion-idle-text'); }
+        if (busyEl) { busyEl.innerText = String(busy); busyEl.classList.add('companion-busy-text'); }
     } catch (e) {
     }
 }
@@ -1081,6 +1091,11 @@ function orderStatusText(item) {
     return '<span class="record-status waiting">等待派單</span>';
 }
 
+function memberCanOpenChat(item) {
+    const status = String(item?.order_status || '');
+    return !!item?.order_id && !['completed', 'returned_to_member'].includes(status);
+}
+
 function renderRecords(records) {
     const tbody = document.getElementById('recordBody');
     if (!tbody) return;
@@ -1098,7 +1113,7 @@ function renderRecords(records) {
             <td>${item.cost || 0}</td>
             <td>${orderStatusText(item)}</td>
             <td>
-                ${item.order_id ? `<button class="btn" onclick="openMemberOrderChat(${Number(item.order_id)}, '${String(item.name || '').replaceAll("'", "\'")}')">查看聊天室</button>` : '-'}
+                ${memberCanOpenChat(item) ? `<button class="btn" onclick="openMemberOrderChat(${Number(item.order_id)}, '${String(item.name || '').replaceAll("'", "\'")}')">查看聊天室</button>` : '<span style="color:#999;">聊天室已關閉</span>'}
             </td>
         </tr>
     `).join('');
@@ -1496,6 +1511,14 @@ function escapeHtml(str) {
 }
 
 
+function toggleMemberOrderChatBody(btn) {
+    const body = document.getElementById('memberOrderChatBody');
+    if (!body || !btn) return;
+    const collapsed = body.style.display === 'none';
+    body.style.display = collapsed ? 'block' : 'none';
+    btn.innerText = collapsed ? (btn.dataset.openText || '收起聊天室') : (btn.dataset.closeText || '展開聊天室');
+}
+
 function renderMemberOrderChatMessages(messages) {
     const box = document.getElementById('memberOrderChatBox');
     if (!box) return;
@@ -1509,16 +1532,18 @@ function renderMemberOrderChatMessages(messages) {
         const sender = item.sender_type === 'companion'
             ? `陪玩：${item.companion_display_name || item.companion_username || '陪玩'}`
             : `會員：${item.member_username || (state.user?.username || '我')}`;
-        const mine = item.sender_type === 'user' ? ' me' : '';
+        const mine = item.sender_type === 'user';
         return `
-            <div class="chat-item-common${mine}">
-                <div class="chat-meta-common">${sender} ｜ ${item.created_at || ''}</div>
-                <div>${String(item.message_text || '')
-                    .replaceAll('&', '&amp;')
-                    .replaceAll('<', '&lt;')
-                    .replaceAll('>', '&gt;')
-                    .replaceAll('"', '&quot;')
-                    .replaceAll("'", '&#039;')}</div>
+            <div class="chat-row-common ${mine ? 'me' : 'other'}">
+                <div class="chat-item-common">
+                    <div class="chat-meta-common">${sender} ｜ ${item.created_at || ''}</div>
+                    <div>${String(item.message_text || '')
+                        .replaceAll('&', '&amp;')
+                        .replaceAll('<', '&lt;')
+                        .replaceAll('>', '&gt;')
+                        .replaceAll('"', '&quot;')
+                        .replaceAll("'", '&#039;')}</div>
+                </div>
             </div>
         `;
     }).join('');
@@ -1557,6 +1582,10 @@ async function loadMemberOrderChatMessages() {
     });
 
     if (!res.ok) {
+        if ((res.message || '').includes('聊天室已關閉')) {
+            document.getElementById('memberOrderChatBox').innerHTML = '<div class="empty">此訂單聊天室已關閉</div>';
+            document.getElementById('memberOrderChatText').value = '';
+        }
         setMessage('memberOrderChatMsg', res.message || '聊天室載入失敗');
         return;
     }
@@ -1588,16 +1617,6 @@ async function sendMemberOrderChatMessage() {
 
     document.getElementById('memberOrderChatText').value = '';
     await loadMemberOrderChatMessages();
-}
-
-
-function startMemberOrderChatTimer() {
-    if (state.memberOrderChatTimer) return;
-    state.memberOrderChatTimer = setInterval(async () => {
-        if (document.visibilityState !== 'visible') return;
-        if (!state.user || !state.currentRecordChatOrderId) return;
-        await loadMemberOrderChatMessages();
-    }, 1200);
 }
 
 async function loadSupportMessages() {
@@ -1726,7 +1745,6 @@ window.onload = async function () {
     await loadCompanionStats();
     switchShop('全部');
     await loadSupportUnreadBadge();
-    startMemberOrderChatTimer();
 
     setInterval(async () => {
         await loadCompanionStats();
@@ -1738,7 +1756,7 @@ window.onload = async function () {
                 await loadSupportMessages();
             }
         }
-    }, 2000);
+    }, 5000);
 
     document.body.style.visibility = 'visible';
 };
