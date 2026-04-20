@@ -544,8 +544,9 @@
             <div class="card-title">會員註冊</div>
             <input id="reg_user" placeholder="設定帳號 (6碼以上)">
             <input id="reg_pwd" type="password" placeholder="設定密碼 (8碼以上)">
+            <input id="reg_pwd_confirm" type="password" placeholder="確認密碼（需與上面相同）">
             <input id="reg_email" placeholder="Gmail 信箱（找密碼用）">
-            <input id="reg_code" placeholder="請輸入會員碼">
+            <input id="reg_code" placeholder="請輸入會員碼（選填）">
             <button class="btn" onclick="userRegister()">註冊</button>
             <div class="link" onclick="show('loginPage')">返回登入</div>
             <div class="msg" id="registerMsg"></div>
@@ -598,7 +599,8 @@
                     <p>VIP等級：<span class="svip" id="userVipLevel">SVIP 客官</span></p>
                     <p>VIP經驗值：<span id="show_exp">0 / 298888</span></p>
                     <p>可用短陌：<span id="show_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
-                    <p>累計短陌儲值：<span id="show_total_recharge_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
+                    <p>VIP累計儲值：<span id="show_vip_total_recharge_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
+                    <p>普通累計儲值：<span id="show_normal_total_recharge_coin">0</span> <span style="color:#ff69b4; font-weight:bold;">短陌</span></p>
                     <p>會員到期：<span id="show_expire">未開通</span></p>
                     <p>VIP權益：<span id="show_vip_status" class="status-pill locked">鎖定</span></p>
                 </div>
@@ -1010,36 +1012,6 @@ function vipClass(level) {
     return 'vip' + level;
 }
 
-
-function formatTaipeiMinute(value) {
-    if (!value) return '';
-
-    const raw = String(value).trim();
-    if (!raw) return '';
-
-    let iso = raw.replace(' ', 'T');
-
-    if (!/[zZ]|[+\-]\d{2}:\d{2}$/.test(iso)) {
-        iso += 'Z';
-    }
-
-    const date = new Date(iso);
-
-    if (Number.isNaN(date.getTime())) {
-        return raw.replace('T', ' ').slice(0, 16);
-    }
-
-    return new Intl.DateTimeFormat('zh-TW', {
-        timeZone: 'Asia/Taipei',
-        hour12: false,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    }).format(date).replace(/\//g, '-');
-}
-
 function renderRecords(records) {
     const tbody = document.getElementById('recordBody');
     if (!tbody) return;
@@ -1052,7 +1024,7 @@ function renderRecords(records) {
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td>${formatTaipeiMinute(item.time || '')}</td>
+            <td>${item.time || ''}</td>
             <td>${item.name || ''}</td>
             <td>${item.cost || 0}</td>
         </tr>
@@ -1071,7 +1043,7 @@ function renderRecharges(records) {
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td>${formatTaipeiMinute(item.time || '')}</td>
+            <td>${item.time || ''}</td>
             <td>${item.money || 0}</td>
             <td>${item.coin || 0}</td>
         </tr>
@@ -1090,8 +1062,9 @@ function updateUserUI(user) {
 
     document.getElementById('show_exp').innerText = `${Number(user.exp || 0)} / 298888`;
     document.getElementById('show_coin').innerText = Number(user.coin || 0);
-    document.getElementById('show_total_recharge_coin').innerText = Number(user.total_recharge_coin || 0);
-    document.getElementById('show_expire').innerText = user.member_expire ? formatTaipeiMinute(user.member_expire) : '未開通';
+    document.getElementById('show_vip_total_recharge_coin').innerText = Number(user.vip_total_recharge_coin || 0);
+    document.getElementById('show_normal_total_recharge_coin').innerText = Number(user.normal_total_recharge_coin || 0);
+    document.getElementById('show_expire').innerText = user.member_expire || '未開通';
     const vipStatus = document.getElementById('show_vip_status');
     const vipActive = !!user.vip_active;
     vipStatus.innerText = vipActive ? '開通' : '鎖定';
@@ -1122,7 +1095,8 @@ function renderLoggedOut() {
     document.getElementById('userVipLevel').innerText = 'SVIP 客官';
     document.getElementById('show_exp').innerText = '0 / 298888';
     document.getElementById('show_coin').innerText = '0';
-    document.getElementById('show_total_recharge_coin').innerText = '0';
+    document.getElementById('show_vip_total_recharge_coin').innerText = '0';
+    document.getElementById('show_normal_total_recharge_coin').innerText = '0';
     document.getElementById('show_expire').innerText = '未開通';
 
     const vipStatus = document.getElementById('show_vip_status');
@@ -1187,22 +1161,30 @@ async function userLogin() {
 async function userRegister() {
     const username = document.getElementById('reg_user').value.trim();
     const password = document.getElementById('reg_pwd').value.trim();
+    const confirmPassword = document.getElementById('reg_pwd_confirm').value.trim();
     const email = document.getElementById('reg_email').value.trim();
     const code = document.getElementById('reg_code').value.trim();
 
+    if (password !== confirmPassword) {
+        setMessage('registerMsg', '確認密碼必須與上方密碼相同');
+        return;
+    }
+
     setMessage('registerMsg', '處理中...');
 
-    const res = await api('register', { username, password, email, code });
+    const res = await api('register', { username, password, confirm_password: confirmPassword, email, code });
     setMessage('registerMsg', res.message || '');
 
     if (res.ok) {
         document.getElementById('reg_user').value = '';
         document.getElementById('reg_pwd').value = '';
+        document.getElementById('reg_pwd_confirm').value = '';
         document.getElementById('reg_email').value = '';
         document.getElementById('reg_code').value = '';
         showSection('loginPage');
     }
 }
+
 
 async function userRenew() {
     const username = document.getElementById('renew_user').value.trim();
@@ -1463,7 +1445,7 @@ async function loadSupportMessages() {
             <div style="margin-bottom:12px; display:flex; justify-content:${mine ? 'flex-end' : 'flex-start'};">
                 <div style="max-width:78%; background:${mine ? '#ff69b4' : '#333'}; color:#fff; padding:10px 12px; border-radius:10px;">
                     <div style="font-size:12px; opacity:0.8; margin-bottom:6px;">
-                        ${mine ? '你' : '客服'}｜${formatTaipeiMinute(msg.created_at || '')}
+                        ${mine ? '你' : '客服'}｜${msg.created_at || ''}
                     </div>
                     ${msg.message_text ? `<div style="white-space:pre-wrap;">${escapeHtml(msg.message_text)}</div>` : ''}
                     ${msg.image_url ? `<div style="margin-top:8px;"><a href="${msg.image_url}" target="_blank"><img src="${msg.image_url}" style="max-width:220px; border-radius:8px; border:1px solid #555;"></a></div>` : ''}
@@ -1534,6 +1516,22 @@ async function loadSupportUnreadBadge() {
     const count = Number(res.count || 0);
     badge.style.display = count > 0 ? 'inline' : 'none';
 }
+
+async function handleEmailVerifyFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const token = (params.get('verify_email') || '').trim();
+    if (!token) return;
+
+    document.body.style.visibility = 'hidden';
+    showSection('loginPage');
+    const res = await api('verify_email', { token });
+    setMessage('loginMsg', res.message || '');
+    params.delete('verify_email');
+    const newUrl = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '');
+    window.history.replaceState({}, '', newUrl);
+    document.body.style.visibility = 'visible';
+}
+
 async function logout() {
     const res = await api('logout');
     if (res && res.message) {
@@ -1544,6 +1542,7 @@ async function logout() {
 
 window.onload = async function () {
     document.body.style.visibility = 'hidden';
+    await handleEmailVerifyFromUrl();
     await loadShop();
     await refreshSession();
     await loadCompanionStats();
