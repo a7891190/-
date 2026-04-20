@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>夢競娛樂</title>
+    <title>夢競娛樂 - 遊戲陪玩丨語音陪聊</title>
     <link rel="icon" href="data:,">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
@@ -827,6 +827,35 @@ const state = {
     currentBuyItemId: null
 };
 
+function formatMinute(value, shiftUtc = true) {
+    const raw = String(value ?? '').trim();
+    if (!raw) return '';
+
+    const normalized = raw.replace('T', ' ').replace(/\.\d+$/, '');
+
+    if (!shiftUtc) {
+        return normalized.length >= 16 ? normalized.slice(0, 16) : normalized;
+    }
+
+    const hasZone = /[+-]\d{2}:\d{2}$|Z$/.test(normalized);
+    const iso = normalized.replace(' ', 'T') + (hasZone ? '' : 'Z');
+    const dt = new Date(iso);
+
+    if (Number.isNaN(dt.getTime())) {
+        return normalized.length >= 16 ? normalized.slice(0, 16) : normalized;
+    }
+
+    return new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).format(dt).replace(/\//g, '-');
+}
+
 function maskUsername(name) {
     if (!name) return '';
     if (name.length <= 1) return '*';
@@ -1024,7 +1053,7 @@ function renderRecords(records) {
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td>${item.time || ''}</td>
+            <td>${formatMinute(item.time)}</td>
             <td>${item.name || ''}</td>
             <td>${item.cost || 0}</td>
         </tr>
@@ -1043,7 +1072,7 @@ function renderRecharges(records) {
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td>${item.time || ''}</td>
+            <td>${formatMinute(item.time)}</td>
             <td>${item.money || 0}</td>
             <td>${item.coin || 0}</td>
         </tr>
@@ -1064,7 +1093,7 @@ function updateUserUI(user) {
     document.getElementById('show_coin').innerText = Number(user.coin || 0);
     document.getElementById('show_vip_total_recharge_coin').innerText = Number(user.vip_total_recharge_coin || 0);
     document.getElementById('show_normal_total_recharge_coin').innerText = Number(user.normal_total_recharge_coin || 0);
-    document.getElementById('show_expire').innerText = user.member_expire || '未開通';
+    document.getElementById('show_expire').innerText = user.member_expire ? formatMinute(user.member_expire) : '未開通';
     const vipStatus = document.getElementById('show_vip_status');
     const vipActive = !!user.vip_active;
     vipStatus.innerText = vipActive ? '開通' : '鎖定';
@@ -1445,7 +1474,7 @@ async function loadSupportMessages() {
             <div style="margin-bottom:12px; display:flex; justify-content:${mine ? 'flex-end' : 'flex-start'};">
                 <div style="max-width:78%; background:${mine ? '#ff69b4' : '#333'}; color:#fff; padding:10px 12px; border-radius:10px;">
                     <div style="font-size:12px; opacity:0.8; margin-bottom:6px;">
-                        ${mine ? '你' : '客服'}｜${msg.created_at || ''}
+                        ${mine ? '你' : '客服'}｜${formatMinute(msg.created_at)}
                     </div>
                     ${msg.message_text ? `<div style="white-space:pre-wrap;">${escapeHtml(msg.message_text)}</div>` : ''}
                     ${msg.image_url ? `<div style="margin-top:8px;"><a href="${msg.image_url}" target="_blank"><img src="${msg.image_url}" style="max-width:220px; border-radius:8px; border:1px solid #555;"></a></div>` : ''}
