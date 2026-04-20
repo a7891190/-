@@ -888,11 +888,12 @@ function setMessage(id, text) {
 
 async function api(action, extra = {}) {
     try {
+        const payload = JSON.stringify({ action, ...extra });
+
         const response = await fetch(API_BASE, {
             method: 'POST',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action, ...extra })
+            body: payload
         });
 
         const text = await response.text();
