@@ -1590,6 +1590,16 @@ async function sendMemberOrderChatMessage() {
     await loadMemberOrderChatMessages();
 }
 
+
+function startMemberOrderChatTimer() {
+    if (state.memberOrderChatTimer) return;
+    state.memberOrderChatTimer = setInterval(async () => {
+        if (document.visibilityState !== 'visible') return;
+        if (!state.user || !state.currentRecordChatOrderId) return;
+        await loadMemberOrderChatMessages();
+    }, 1200);
+}
+
 async function loadSupportMessages() {
     if (!state.user) return;
 
@@ -1716,6 +1726,7 @@ window.onload = async function () {
     await loadCompanionStats();
     switchShop('全部');
     await loadSupportUnreadBadge();
+    startMemberOrderChatTimer();
 
     setInterval(async () => {
         await loadCompanionStats();
@@ -1727,7 +1738,7 @@ window.onload = async function () {
                 await loadSupportMessages();
             }
         }
-    }, 5000);
+    }, 2000);
 
     document.body.style.visibility = 'visible';
 };
