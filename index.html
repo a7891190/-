@@ -91,7 +91,12 @@
         .vip6, .vip7 { color: #9933ff !important; font-weight: bold; font-size: 16px; }
         .vip8, .vip9 { color: #ffcc00 !important; font-weight: bold; font-size: 16px; }
         .vip10 { color: #ff0000 !important; font-weight: bold; font-size: 16px; }
-        .msg { margin-top: 12px; color: #ffb3d9; min-height: 22px; }
+        .msg {
+    margin-top: 12px;
+    color: #ffb3d9;
+    min-height: 22px;
+    white-space: pre-line;
+}
 
         .avatar-box { margin-top: 18px; text-align: center; }
         .avatar-preview {
@@ -617,6 +622,16 @@
         </div>
     </div>
 
+
+    <div class="card">
+        <div class="card-title">陪玩即時狀態</div>
+        <div class="user-info">
+            <p>陪玩總人數：<span id="companion_total">0</span></p>
+            <p>空閒中：<span id="companion_idle">0</span></p>
+            <p>忙碌中：<span id="companion_busy">0</span></p>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-title">團隊介紹</div>
         <div class="rule-box">
@@ -846,6 +861,26 @@ function showSection(id) {
     }
 }
 
+
+async function loadCompanionStats() {
+    try {
+        const res = await api('companion_front_stats');
+        const stats = res.stats || {};
+        const total = Number(stats.total || 0);
+        const idle = Number(stats.idle || 0);
+        const busy = Number(stats.busy || 0);
+
+        const totalEl = document.getElementById('companion_total');
+        const idleEl = document.getElementById('companion_idle');
+        const busyEl = document.getElementById('companion_busy');
+
+        if (totalEl) totalEl.innerText = String(total);
+        if (idleEl) idleEl.innerText = String(idle);
+        if (busyEl) busyEl.innerText = String(busy);
+    } catch (e) {
+    }
+}
+
 function setMessage(id, text) {
     const el = document.getElementById(id);
     if (el) el.innerText = text || '';
@@ -1043,6 +1078,7 @@ function updateUserUI(user) {
     document.getElementById('mainHeader').style.display = 'flex';
     showSection('home');
     loadVipRanking();
+    loadCompanionStats();
 }
 
 function renderLoggedOut() {
@@ -1071,6 +1107,7 @@ function renderLoggedOut() {
     renderRecords([]);
     renderRecharges([]);
     renderTopPodium([]);
+    loadCompanionStats();
     showSection('loginPage');
 }
 
@@ -1148,16 +1185,29 @@ async function userRenew() {
     if (res.ok) {
         document.getElementById('renew_code').value = '';
         await refreshSession();
+        await loadCompanionStats();
     }
 }
 
 async function findPassword() {
     const email = document.getElementById('forget_email').value.trim();
 
+    if (!email) {
+        setMessage('forgetMsg', '請先輸入註冊信箱');
+        return;
+    }
+
     setMessage('forgetMsg', '處理中...');
 
     const res = await api('request_reset', { email });
-    setMessage('forgetMsg', res.message || '');
+
+    let msg = res.message || '';
+
+    if (res.ok) {
+        msg += '\n請到收件匣、垃圾郵件、促銷內容分頁確認。';
+    }
+
+    setMessage('forgetMsg', msg);
 }
 
 async function uploadAvatar() {
@@ -1253,6 +1303,7 @@ async function submitBuy() {
     if (res.ok) {
         closeBuyModal();
         await refreshSession();
+        await loadCompanionStats();
     }
 }
 
@@ -1464,10 +1515,12 @@ window.onload = async function () {
     document.body.style.visibility = 'hidden';
     await loadShop();
     await refreshSession();
+    await loadCompanionStats();
     switchShop('全部');
     await loadSupportUnreadBadge();
 
     setInterval(async () => {
+        await loadCompanionStats();
         if (state.user) {
             await loadSupportUnreadBadge();
 
