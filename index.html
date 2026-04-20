@@ -1005,17 +1005,39 @@ async function loadVipRanking() {
     `;
 }
 
-
-function formatDateMinute(value) {
-    if (!value) return '';
-    const s = String(value).replace('T', ' ');
-    const m = s.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2})/);
-    return m ? m[1] : s;
-}
-
 function vipClass(level) {
     if (level <= 0) return 'svip';
     return 'vip' + level;
+}
+
+
+function formatTaipeiMinute(value) {
+    if (!value) return '';
+
+    const raw = String(value).trim();
+    if (!raw) return '';
+
+    let iso = raw.replace(' ', 'T');
+
+    if (!/[zZ]|[+\-]\d{2}:\d{2}$/.test(iso)) {
+        iso += 'Z';
+    }
+
+    const date = new Date(iso);
+
+    if (Number.isNaN(date.getTime())) {
+        return raw.replace('T', ' ').slice(0, 16);
+    }
+
+    return new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    }).format(date).replace(/\//g, '-');
 }
 
 function renderRecords(records) {
@@ -1030,7 +1052,7 @@ function renderRecords(records) {
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td>${formatDateMinute(item.time)}</td>
+            <td>${formatTaipeiMinute(item.time || '')}</td>
             <td>${item.name || ''}</td>
             <td>${item.cost || 0}</td>
         </tr>
@@ -1049,7 +1071,7 @@ function renderRecharges(records) {
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td>${formatDateMinute(item.time)}</td>
+            <td>${formatTaipeiMinute(item.time || '')}</td>
             <td>${item.money || 0}</td>
             <td>${item.coin || 0}</td>
         </tr>
@@ -1069,7 +1091,7 @@ function updateUserUI(user) {
     document.getElementById('show_exp').innerText = `${Number(user.exp || 0)} / 298888`;
     document.getElementById('show_coin').innerText = Number(user.coin || 0);
     document.getElementById('show_total_recharge_coin').innerText = Number(user.total_recharge_coin || 0);
-    document.getElementById('show_expire').innerText = formatDateMinute(user.member_expire) || '未開通';
+    document.getElementById('show_expire').innerText = user.member_expire ? formatTaipeiMinute(user.member_expire) : '未開通';
     const vipStatus = document.getElementById('show_vip_status');
     const vipActive = !!user.vip_active;
     vipStatus.innerText = vipActive ? '開通' : '鎖定';
@@ -1441,7 +1463,7 @@ async function loadSupportMessages() {
             <div style="margin-bottom:12px; display:flex; justify-content:${mine ? 'flex-end' : 'flex-start'};">
                 <div style="max-width:78%; background:${mine ? '#ff69b4' : '#333'}; color:#fff; padding:10px 12px; border-radius:10px;">
                     <div style="font-size:12px; opacity:0.8; margin-bottom:6px;">
-                        ${mine ? '你' : '客服'}｜${formatDateMinute(msg.created_at)}
+                        ${mine ? '你' : '客服'}｜${formatTaipeiMinute(msg.created_at || '')}
                     </div>
                     ${msg.message_text ? `<div style="white-space:pre-wrap;">${escapeHtml(msg.message_text)}</div>` : ''}
                     ${msg.image_url ? `<div style="margin-top:8px;"><a href="${msg.image_url}" target="_blank"><img src="${msg.image_url}" style="max-width:220px; border-radius:8px; border:1px solid #555;"></a></div>` : ''}
