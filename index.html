@@ -603,11 +603,12 @@
             <div class="member-left">
                 <div class="user-info">
                     <div class="avatar-box">
-                        <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
-                        <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
-                        <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
-                        <div class="msg" id="avatarMsg"></div>
-                    </div>
+    <img id="userAvatarPreview" class="avatar-preview" src="https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP" alt="大頭照">
+    <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
+    <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
+    <button class="btn" style="margin-top:10px;" onclick="enablePushNotifications()">啟用手機推播</button>
+    <div class="msg" id="avatarMsg"></div>
+</div>
 
                     <p>會員ID：<span id="show_userid">00000000</span></p>
                     <p>會員名稱：<span id="show_username">未登入</span></p>
@@ -973,6 +974,62 @@ async function api(action, extra = {}) {
         }
     } catch (error) {
         return { ok: false, message: '連線失敗：' + error.message };
+    }
+}
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+}
+
+async function enablePushNotifications() {
+    try {
+        if (!('serviceWorker' in navigator)) {
+            alert('此裝置不支援 Service Worker');
+            return;
+        }
+
+        if (!('PushManager' in window)) {
+            alert('此裝置不支援 Push 通知');
+            return;
+        }
+
+        if (!('Notification' in window)) {
+            alert('此瀏覽器不支援通知');
+            return;
+        }
+
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+            alert('你尚未允許通知');
+            return;
+        }
+
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        await navigator.serviceWorker.ready;
+
+        let subscription = await registration.pushManager.getSubscription();
+        if (!subscription) {
+            subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array('BGc40oblWYqwtH1vVhZLsbKYt6FcjNUtnXFNMq_2wFRklxsmJzdsfxA838UBWUCu4xyo4mfAc0zlOA7sNNwYhKc')
+            });
+        }
+
+        const result = await api('save_push_subscription', {
+            subscription: subscription.toJSON()
+        });
+
+        if (result?.ok) {
+            alert('已成功啟用手機推播通知');
+        } else {
+            alert(result?.message || '啟用推播失敗');
+        }
+    } catch (error) {
+        console.error('enablePushNotifications error:', error);
+        alert('啟用推播失敗，請稍後再試');
     }
 }
 
