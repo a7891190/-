@@ -1010,13 +1010,15 @@ async function enablePushNotifications() {
         const registration = await navigator.serviceWorker.register('/sw.js');
         await navigator.serviceWorker.ready;
 
-        let subscription = await registration.pushManager.getSubscription();
-        if (!subscription) {
-            subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array('BGc40oblWYqwtH1vVhZLsbKYt6FcjNUtnXFNMq_2wFRklxsmJzdsfxA838UBWUCu4xyo4mfAc0zlOA7sNNwYhKc')
-            });
+        const oldSubscription = await registration.pushManager.getSubscription();
+        if (oldSubscription) {
+            await oldSubscription.unsubscribe();
         }
+
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array('BGc40oblWYqwtH1vVhZLsbKYt6FcjNUtnXFNMq_2wFRklxsmJzdsfxA838UBWUCu4xyo4mfAc0zlOA7sNNwYhKc')
+        });
 
         const result = await api('save_push_subscription', {
             subscription: subscription.toJSON()
@@ -1029,7 +1031,7 @@ async function enablePushNotifications() {
         }
     } catch (error) {
         console.error('enablePushNotifications error:', error);
-        alert('啟用推播失敗，請稍後再試');
+        alert('啟用推播失敗：' + (error?.message || '未知錯誤'));
     }
 }
 
