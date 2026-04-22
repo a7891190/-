@@ -1146,7 +1146,7 @@ function renderRecords(records) {
                 <td>${orderStatusText(item)}</td>
                 <td>
                     ${memberCanOpenChat(item)
-                        ? `<button class="btn" onclick="openMemberOrderChat(${orderId}, '${safeName}')">查看聊天室</button>`
+                        ? `<button class="btn" async function openMemberOrderChat(orderId) {>查看聊天室</button>`
                         : '<span style="color:#999;">聊天室已關閉</span>'}
                 </td>
             </tr>
