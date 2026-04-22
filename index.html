@@ -863,18 +863,19 @@ const state = {
     currentRecordChatTitle: ''
 };
 
-function formatMinute(value, shiftUtc = true) {
+function formatMinute(value) {
     const raw = String(value ?? '').trim();
     if (!raw) return '';
 
     const normalized = raw.replace('T', ' ').replace(/\.\d+$/, '');
 
-    if (!shiftUtc) {
+    // 已經是 YYYY-MM-DD HH:mm:ss 這種沒有時區的字串
+    // 直接當台灣時間顯示，不再額外轉換
+    if (!/[+-]\d{2}:\d{2}$|Z$/.test(normalized)) {
         return normalized.length >= 16 ? normalized.slice(0, 16) : normalized;
     }
 
-    const hasZone = /[+-]\d{2}:\d{2}$|Z$/.test(normalized);
-    const iso = normalized.replace(' ', 'T') + (hasZone ? '' : 'Z');
+    const iso = normalized.replace(' ', 'T');
     const dt = new Date(iso);
 
     if (Number.isNaN(dt.getTime())) {
@@ -1135,42 +1136,61 @@ function renderRecords(records) {
     }
 
     tbody.innerHTML = list.map(item => {
-        const orderId = Number(item.order_id || item.companion_order_id || 0);
-        const safeName = String(item.name || '').replaceAll("'", "\\'");
+        const orderId = Number(
+            item.order_id ||
+            item.companion_order_id ||
+            item.companionOrderId ||
+            0
+        );
+
+        const status = String(
+            item.order_status ||
+            item.companion_order_status ||
+            item.companionOrderStatus ||
+            ''
+        );
+
+        const accepted = Number(item.accepted_count || 0);
+        const required = Number(item.required_companions || 0);
+
+        let statusHtml = '<span class="record-status waiting">未建立陪玩訂單</span>';
+
+        if (orderId > 0) {
+            if (status === 'returned_to_member') {
+                statusHtml = '<span class="record-status returned">已退回</span>';
+            } else if (status === 'completed') {
+                statusHtml = '<span class="record-status completed">已完成</span>';
+            } else if (status === 'processing') {
+                statusHtml = '<span class="record-status processing">已承接</span>';
+            } else if (status === 'partial') {
+                statusHtml = '<span class="record-status partial">部分承接</span>';
+            } else if (status === 'dispatched' || status === 'waiting_dispatch') {
+                statusHtml = '<span class="record-status waiting">未承接</span>';
+            } else if (accepted >= Math.max(required, 1)) {
+                statusHtml = '<span class="record-status processing">已承接</span>';
+            } else if (accepted > 0) {
+                statusHtml = '<span class="record-status partial">部分承接</span>';
+            } else {
+                statusHtml = '<span class="record-status waiting">未承接</span>';
+            }
+        }
+
+        const canOpenChat = orderId > 0 && !['completed', 'returned_to_member'].includes(status);
 
         return `
             <tr>
                 <td>${formatMinute(item.time)}</td>
                 <td>${item.name || ''}</td>
                 <td>${item.cost || 0}</td>
-                <td>${orderStatusText(item)}</td>
+                <td>${statusHtml}</td>
                 <td>
-                    ${memberCanOpenChat(item)
-                        ? `<button class="btn" async function openMemberOrderChat(orderId) {>查看聊天室</button>`
+                    ${canOpenChat
+                        ? `<button class="btn" onclick="openMemberOrderChat(${orderId})">查看聊天室</button>`
                         : '<span style="color:#999;">聊天室已關閉</span>'}
                 </td>
             </tr>
         `;
     }).join('');
-}
-
-function renderRecharges(records) {
-    const tbody = document.getElementById('rechargeBody');
-    if (!tbody) return;
-
-    const list = Array.isArray(records) ? records : [];
-    if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>';
-        return;
-    }
-
-    tbody.innerHTML = list.map(item => `
-        <tr>
-            <td>${formatMinute(item.time)}</td>
-            <td>${item.money || 0}</td>
-            <td>${item.coin || 0}</td>
-        </tr>
-    `).join('');
 }
 
 function updateUserUI(user) {
