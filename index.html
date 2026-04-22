@@ -1911,6 +1911,7 @@ function updateUserUI(user) {
 
 function renderLoggedOut() {
     state.user = null;
+    try { sessionStorage.removeItem('member_session_live'); } catch (e) {}
 
     document.getElementById('mainHeader').style.display = 'none';
     document.getElementById('show_userid').innerText = '00000000';
@@ -1950,6 +1951,7 @@ async function refreshSession() {
         const res = await api('session');
 
         if (res.logged_in && res.user) {
+            try { sessionStorage.setItem('member_session_live', '1'); } catch (e) {}
             updateUserUI(res.user);
             return true;
         } else {
@@ -1974,6 +1976,7 @@ async function userLogin() {
     if (!res.ok) return;
 
     if (res.user) {
+        try { sessionStorage.setItem('member_session_live', '1'); } catch (e) {}
         updateUserUI(res.user);
         showSection('home');
         if (!state.shopLoaded) {
@@ -2261,6 +2264,8 @@ function attachMemberOrderChatPanelInline() {
     const panel = document.getElementById('memberOrderChatPanel');
     if (!panel) return;
 
+    panel.style.width = '100%';
+
     const dock = document.getElementById('memberOrderChatDock');
     const host = state.currentRecordChatOrderId
         ? document.querySelector(`[data-chat-host-for="${state.currentRecordChatOrderId}"] .record-inline-chat-host`)
@@ -2330,18 +2335,29 @@ async function openMemberOrderChat(orderId) {
 
     state.currentRecordChatOrderId = nextOrderId;
     state.currentRecordChatTitle = '';
+
     const info = document.getElementById('memberOrderChatInfo');
+    const box = document.getElementById('memberOrderChatBox');
+    const textInput = document.getElementById('memberOrderChatText');
+
     if (info) info.innerText = `目前聊天室：訂單 #${state.currentRecordChatOrderId}`;
+    if (box) box.innerHTML = '<div class="empty">載入聊天室中...</div>';
+    if (textInput) textInput.value = '';
+
     renderRecords(state.user?.buy_records || []);
     attachMemberOrderChatPanelInline();
+
+    if (panel) {
+        panel.style.display = 'block';
+        panel.style.width = '100%';
+    }
+    if (body) body.style.display = 'block';
+    if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
     const host = document.querySelector(`[data-chat-host-for="${state.currentRecordChatOrderId}"]`);
     if (host) {
         host.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
-    if (body) body.style.display = 'block';
-    if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
     setMessage('memberOrderChatMsg', '載入聊天室中...');
     await loadMemberOrderChatMessages();
@@ -2521,6 +2537,7 @@ async function handleEmailVerifyFromUrl() {
 }
 
 async function logout() {
+    try { sessionStorage.removeItem('member_session_live'); } catch (e) {}
     const res = await api('logout');
     if (res && res.message) {
         setMessage('loginMsg', res.message);
@@ -2534,12 +2551,21 @@ window.onload = async function () {
     document.getElementById('recharge_amount')?.addEventListener('input', renderRechargePresets);
     switchShop('全部');
 
-    const sessionLoggedIn = await refreshSession();
-    loadCompanionStats();
+    const keepLoginInThisTab = (() => {
+        try { return sessionStorage.getItem('member_session_live') === '1'; } catch (e) { return false; }
+    })();
 
-    if (sessionLoggedIn) {
-        loadOrderUnreadSummary();
+    if (!keepLoginInThisTab) {
+        await api('logout');
+        renderLoggedOut();
+    } else {
+        const sessionLoggedIn = await refreshSession();
+        if (sessionLoggedIn) {
+            loadOrderUnreadSummary();
+        }
     }
+
+    loadCompanionStats();
 
     if (state.backgroundRefreshTimer) {
         clearInterval(state.backgroundRefreshTimer);
