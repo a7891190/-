@@ -69,7 +69,8 @@
         .notice-image-card { background:#181818; border:1px solid #333; border-radius:14px; padding:14px; }
         .notice-image-card img { width:100%; height:auto; display:block; border-radius:10px; }
         .notice-image-title { color:#ff69b4; font-size:16px; margin-bottom:10px; font-weight:bold; }
-        .recharge-layout { display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px; }
+        .recharge-layout { display:grid; grid-template-columns:minmax(320px, 0.9fr) minmax(0, 1.1fr); gap:20px; align-items:start; }
+        .recharge-side, .recharge-main { display:flex; flex-direction:column; gap:18px; }
         .recharge-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-top:18px; }
         .recharge-card { background:#252525; border:1px solid #333; border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition:0.2s; }
         .recharge-card.active { border-color:#ff69b4; box-shadow:0 0 0 1px #ff69b4 inset; }
@@ -246,7 +247,8 @@
         .recharge-proof-note { color:#ffd6ea; font-size:13px; line-height:1.8; margin-top:8px; }
         .recharge-proof-box { margin-top:14px; padding:14px; border:1px dashed #555; border-radius:10px; background:#202020; }
         .recharge-proof-box input[type="file"] { width:100%; color:#fff; margin-top:8px; }
-        .transfer-box.compact-top { margin-bottom:18px; }
+        .transfer-box.compact-top { margin-bottom:0; }
+        .recharge-main .recharge-form { width:100%; }
 
         @media (max-width: 900px) {
     .header {
@@ -621,8 +623,13 @@
         gap:14px;
     }
 
+    .recharge-side,
+    .recharge-main {
+        gap:14px;
+    }
+
     .transfer-box.compact-top {
-        order:-1;
+        order:0;
         margin-bottom:0;
     }
 
@@ -989,7 +996,7 @@
         <div class="card">
             <div class="card-title">儲值中心</div>
             <div class="recharge-layout">
-                <div class="recharge-form">
+                <div class="recharge-side">
                     <div class="transfer-box compact-top">
                         <h3>會員付款資料</h3>
                         <div class="transfer-info-row"><div class="transfer-label">銀行名稱</div><div class="transfer-value">中國信託</div></div>
@@ -997,56 +1004,55 @@
                         <div class="transfer-info-row"><div class="transfer-label">戶名</div><div class="transfer-value">林x翰</div></div>
                         <div class="transfer-info-row"><div class="transfer-label">帳號</div><div class="transfer-value">901560800917</div></div>
                         <div class="recharge-hint">一般銀行轉帳、無卡匯款都必須附上匯款截圖或交易明細。</div>
-                        <div class="recharge-hint">送出申請後，系統會自動把資料送到客服，待人工確認入帳後補入短陌。</div>
+                        <div class="recharge-hint">送出申請後，資料會送到客服與訂單群組通知，待人工確認後再入帳。</div>
                     </div>
+                </div>
 
-                    <h3>選擇儲值面額</h3>
-                    <div class="recharge-hint">短陌 : NT$ = 1 : 1。固定面額如下，點一下即可帶入。</div>
-                    <div id="rechargePresetGrid" class="recharge-grid"></div>
+                <div class="recharge-main">
+                    <div class="recharge-form">
+                        <h3>選擇儲值面額</h3>
+                        <div class="recharge-hint">短陌 : NT$ = 1 : 1。固定面額如下，點一下即可帶入。</div>
+                        <div id="rechargePresetGrid" class="recharge-grid"></div>
 
-                    <label for="recharge_amount">自訂儲值金額</label>
-                    <input id="recharge_amount" type="number" min="500" step="100" placeholder="最低 500，且需以 100 為單位輸入">
-                    <div class="recharge-hint">除固定面額外，會員也可自訂金額。最低儲值金額 500，自訂金額需以 100 為單位。</div>
+                        <label for="recharge_amount">自訂儲值金額</label>
+                        <input id="recharge_amount" type="number" min="500" step="100" placeholder="最低 500，且需以 100 為單位輸入">
+                        <div class="recharge-hint">除固定面額外，也可自訂金額。最低 500，且需以 100 為單位。</div>
 
-                    <label for="recharge_method">付款方式</label>
-                    <select id="recharge_method" onchange="toggleRechargeMethodHint()">
-                        <option value="一般銀行轉帳">一般銀行轉帳</option>
-                        <option value="無卡匯款">無卡匯款</option>
-                    </select>
-                    <div id="rechargeMethodHint" class="recharge-hint">一般銀行轉帳請填寫匯款人姓名、匯款時間，並附上匯款截圖或明細。</div>
+                        <label for="recharge_method">付款方式</label>
+                        <select id="recharge_method" onchange="toggleRechargeMethodHint()">
+                            <option value="一般銀行轉帳">一般銀行轉帳</option>
+                            <option value="無卡匯款">無卡匯款</option>
+                        </select>
+                        <div id="rechargeMethodHint" class="recharge-hint">一般銀行轉帳請填寫匯款人姓名、匯款時間，並附上匯款截圖或明細。</div>
 
-                    <label for="recharge_name">匯款人姓名</label>
-                    <input id="recharge_name" placeholder="請輸入匯款人姓名">
+                        <label for="recharge_name">匯款人姓名</label>
+                        <input id="recharge_name" placeholder="請輸入匯款人姓名">
 
-                    <div id="rechargeLast5Wrap">
-                        <label for="recharge_last5">匯款帳號末 5 碼</label>
-                        <input id="recharge_last5" maxlength="5" inputmode="numeric" placeholder="一般銀行轉帳必填，方便客服核對">
+                        <div id="rechargeLast5Wrap">
+                            <label for="recharge_last5">匯款帳號末 5 碼</label>
+                            <input id="recharge_last5" maxlength="5" inputmode="numeric" placeholder="一般銀行轉帳必填，方便客服核對">
+                        </div>
+
+                        <label for="recharge_time">匯款時間</label>
+                        <input id="recharge_time" type="datetime-local">
+
+                        <div class="recharge-proof-box">
+                            <label for="recharge_proof" style="margin:0;">匯款截圖 / 交易明細</label>
+                            <div class="recharge-proof-note">此欄位必填，請上傳一般銀行轉帳或無卡匯款的截圖 / 明細。</div>
+                            <input id="recharge_proof" type="file" accept=".jpg,.jpeg,.png,.webp,.pdf">
+                        </div>
+
+                        <label for="recharge_note">備註</label>
+                        <textarea id="recharge_note" placeholder="可填寫無卡匯款說明、金額確認、其他補充"></textarea>
+
+                        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+                            <button class="btn" type="button" onclick="submitRechargeRequest()">送出儲值申請</button>
+                            <button class="btn btn-secondary" type="button" onclick="clearRechargeForm()">清空</button>
+                        </div>
+                        <div id="rechargeApplyMsg" class="msg"></div>
                     </div>
-
-                    <label for="recharge_time">匯款時間</label>
-                    <input id="recharge_time" type="datetime-local">
-
-                    <div class="recharge-proof-box">
-                        <label for="recharge_proof" style="margin:0;">匯款截圖 / 交易明細</label>
-                        <div class="recharge-proof-note">此欄位必填，請上傳一般銀行轉帳或無卡匯款的截圖 / 明細。</div>
-                        <input id="recharge_proof" type="file" accept=".jpg,.jpeg,.png,.webp,.pdf">
-                    </div>
-
-                    <label for="recharge_note">備註</label>
-                    <textarea id="recharge_note" placeholder="可填寫無卡匯款說明、金額確認、其他補充"></textarea>
-
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
-                        <button class="btn" type="button" onclick="submitRechargeRequest()">送出儲值申請</button>
-                        <button class="btn btn-secondary" type="button" onclick="clearRechargeForm()">清空</button>
-                    </div>
-                    <div id="rechargeApplyMsg" class="msg"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">儲值紀錄</div>
-            <div class="rule-box">儲值紀錄已移到獨立頁面，請點上方導覽列的「儲值紀錄」查看全部紀錄。</div>
         </div>
     </div>
 
@@ -2152,6 +2158,11 @@ async function openMemberOrderChat(orderId) {
     const info = document.getElementById('memberOrderChatInfo');
     if (info) info.innerText = `目前聊天室：訂單 #${state.currentRecordChatOrderId}`;
     renderRecords(state.user?.buy_records || []);
+    attachMemberOrderChatPanelInline();
+    const host = document.querySelector(`[data-chat-host-for="${state.currentRecordChatOrderId}"]`);
+    if (host) {
+        host.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
     setMessage('memberOrderChatMsg', '載入聊天室中...');
     await loadMemberOrderChatMessages();
 }
@@ -2175,11 +2186,15 @@ async function loadMemberOrderChatMessages() {
     });
 
     if (!res.ok) {
+        const box = document.getElementById('memberOrderChatBox');
+        if (box) {
+            box.innerHTML = `<div class="empty">${res.message || '聊天室載入失敗'}</div>`;
+        }
         if ((res.message || '').includes('聊天室已關閉')) {
-            document.getElementById('memberOrderChatBox').innerHTML = '<div class="empty">此訂單聊天室已關閉</div>';
             document.getElementById('memberOrderChatText').value = '';
         }
         setMessage('memberOrderChatMsg', res.message || '聊天室載入失敗');
+        attachMemberOrderChatPanelInline();
         return;
     }
 
