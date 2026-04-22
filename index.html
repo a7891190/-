@@ -1687,7 +1687,9 @@ function renderRecharges(records) {
     `).join('');
 }
 
+<script>
 function updateUserUI(user) {
+    state.user = user;
 
     document.getElementById('show_userid').innerText = user.id ?? '';
     document.getElementById('show_username').innerText = user.username ?? '未登入';
@@ -1701,6 +1703,7 @@ function updateUserUI(user) {
     document.getElementById('show_vip_total_recharge_coin').innerText = Number(user.vip_total_recharge_coin || 0);
     document.getElementById('show_normal_total_recharge_coin').innerText = Number(user.normal_total_recharge_coin || 0);
     document.getElementById('show_expire').innerText = user.member_expire ? formatMinute(user.member_expire) : '未開通';
+
     const vipStatus = document.getElementById('show_vip_status');
     const vipActive = !!user.vip_active;
     vipStatus.innerText = vipActive ? '開通' : '鎖定';
@@ -1722,6 +1725,7 @@ function updateUserUI(user) {
     loadVipRanking();
     loadCompanionStats();
 }
+</script>
 
 function renderLoggedOut() {
     state.user = null;
