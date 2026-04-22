@@ -2461,7 +2461,7 @@ async function loadMemberOrderChatMessages(options = {}) {
     if (forceOpen && toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
     const orderId = state.currentRecordChatOrderId;
-    const res = await api('member_order_chat_messages', { order_id: orderId });
+    const res = await api('companion_order_chat_messages', { order_id: orderId });
 
     if (token !== state.chatRequestToken || orderId !== state.currentRecordChatOrderId || !state.chatPanelOpen) {
         return;
