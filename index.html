@@ -1242,6 +1242,9 @@ async function api(action, extra = {}) {
         const response = await fetch(API_BASE, {
             method: 'POST',
             credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: payload
         });
 
