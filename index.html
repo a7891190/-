@@ -1061,7 +1061,7 @@
             <div class="card-title">儲值紀錄</div>
             <table id="rechargeHistoryTable">
                 <thead>
-                    <tr><th>儲值時間</th><th>儲值金額</th><th>獲得短陌</th></tr>
+                    <tr><th>申請時間</th><th>申請金額</th><th>申請短陌</th><th>審核狀態</th></tr>
                 </thead>
                 <tbody id="rechargeHistoryBody">
                     <tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>
@@ -1085,7 +1085,8 @@ const state = {
     currentRecordChatOrderId: null,
     currentRecordChatTitle: '',
     orderUnreadMap: {},
-    totalOrderUnread: 0
+    totalOrderUnread: 0,
+    rechargeRequestRecords: []
 };
 
 const RECHARGE_PRESETS = [200, 500, 1000, 2000, 3000, 5000, 8000, 10000, 12000, 15000, 20000, 30000];
@@ -1158,6 +1159,10 @@ function showSection(id) {
 
     if (id === 'record' && state.user) {
         markRecordUnreadSeen();
+    }
+
+    if (id === 'rechargeHistory' && state.user) {
+        loadRechargeRequestHistory();
     }
 }
 
@@ -1401,17 +1406,6 @@ async function submitRechargeRequest() {
         if (!ok) return;
     }
 
-    const messageText = [
-        '【儲值申請】',
-        `會員帳號：${state.user?.username || ''}`,
-        `申請金額：NT$ ${amount} / ${amount} 短陌`,
-        `付款方式：${method}`,
-        `匯款人姓名：${payerName}`,
-        `匯款帳號末5碼：${method === '無卡匯款' ? '無' : last5}`,
-        `匯款時間：${transferTime.replace('T', ' ')}`,
-        `備註：${note || '無'}`
-    ].join('\n');
-
     setMessage('rechargeApplyMsg', '送出中...');
     let imageUrl = '';
     try {
@@ -1421,13 +1415,39 @@ async function submitRechargeRequest() {
         return;
     }
 
-    const res = await api('support_send', { message_text: messageText, image_url: imageUrl });
+    const res = await api('recharge_request_submit', {
+        amount,
+        method,
+        payer_name: payerName,
+        last5: method === '無卡匯款' ? '' : last5,
+        transfer_time: transferTime.replace('T', ' '),
+        note,
+        image_url: imageUrl
+    });
     setMessage('rechargeApplyMsg', res.message || '');
 
     if (res.ok) {
         clearRechargeForm();
+        await loadRechargeRequestHistory();
         setMessage('rechargeApplyMsg', '儲值申請已送出，請等待人工確認入帳。');
     }
+}
+
+
+async function loadRechargeRequestHistory() {
+    if (!state.user) {
+        state.rechargeRequestRecords = [];
+        renderRecharges([]);
+        return;
+    }
+
+    const res = await api('recharge_request_history');
+    if (!res.ok) {
+        return;
+    }
+
+    state.rechargeRequestRecords = Array.isArray(res.records) ? res.records : [];
+    renderRecharges(state.rechargeRequestRecords);
 }
 
 function getOrderUnreadDot(orderId) {
@@ -1703,21 +1723,28 @@ function renderRecords(records) {
     attachMemberOrderChatPanelInline();
 }
 
+function rechargeStatusText(status) {
+    if (status === 'approved') return '該筆已入賬';
+    if (status === 'returned') return '申請退回';
+    return '尚未審核';
+}
+
 function renderRecharges(records) {
     const tbody = document.getElementById('rechargeHistoryBody');
     if (!tbody) return;
 
     const list = Array.isArray(records) ? records : [];
     if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">目前沒有儲值申請紀錄</td></tr>';
         return;
     }
 
     tbody.innerHTML = list.map(item => `
         <tr>
-            <td data-label="儲值時間">${formatMinute(item.time)}</td>
-            <td data-label="儲值金額">${item.money || 0}</td>
-            <td data-label="獲得短陌">${item.coin || 0}</td>
+            <td data-label="申請時間">${formatMinute(item.created_at || item.time)}</td>
+            <td data-label="申請金額">NT$ ${item.amount || item.money || 0}</td>
+            <td data-label="申請短陌">${item.coin || item.amount || 0}</td>
+            <td data-label="審核狀態">${rechargeStatusText(item.status || '')}</td>
         </tr>
     `).join('');
 }
@@ -1750,9 +1777,10 @@ function updateUserUI(user) {
     if (avatarPreview) avatarPreview.src = safeAvatar(user.avatar_url);
 
     renderRecords(user.buy_records || []);
-    renderRecharges(user.recharge_records || []);
+    renderRecharges(state.rechargeRequestRecords || []);
     renderRechargePresets();
     loadOrderUnreadSummary();
+    loadRechargeRequestHistory();
 
     document.getElementById('mainHeader').style.display = 'flex';
     showSection('home');
@@ -1785,6 +1813,7 @@ function renderLoggedOut() {
     if (avatarPreview) avatarPreview.src = DEFAULT_AVATAR;
 
     renderRecords([]);
+    state.rechargeRequestRecords = [];
     renderRecharges([]);
     renderRechargePresets();
     state.orderUnreadMap = {};
