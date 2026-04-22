@@ -99,6 +99,14 @@
         .record-status.completed { color:#7ec8ff; }
         .record-status.returned { color:#ff9aa8; }
         .chat-box-common { height:320px; overflow-y:auto; background:#252525; border:1px solid #333; border-radius:8px; padding:15px; margin-bottom:15px; }
+.record-inline-chat-row td {
+    padding: 14px 8px 18px;
+    background: #1a1a1a;
+}
+.record-inline-chat-host {
+    width: 100%;
+}
+
         .chat-row-common { display:flex; margin-bottom:10px; }
         .chat-row-common.me { justify-content:flex-end; }
         .chat-row-common.other { justify-content:flex-start; }
@@ -396,7 +404,7 @@
 
     /* 手機版購買紀錄 / 儲值紀錄改成卡片式更好讀 */
     #recordTable,
-    #rechargeTable {
+    #rechargeHistoryTable {
         display:block;
         width:100%;
         overflow:visible;
@@ -662,6 +670,7 @@
         <a onclick="showSection('shop')">市集兌換</a>
         <a onclick="showSection('record')"><span class="nav-link-with-dot">購買紀錄 <span id="recordNavDot" class="nav-alert-dot" style="display:none;"></span></span></a>
         <a onclick="showSection('recharge')">儲值中心</a>
+        <a onclick="showSection('rechargeHistory')">儲值紀錄</a>
         <a onclick="showSection('renewPage')">會員續期</a>
         <a onclick="showSection('support')">聯繫客服</a>
         <a onclick="logout()">登出</a>
@@ -926,9 +935,11 @@
                     <tr><td colspan="5" class="empty">目前沒有購買紀錄</td></tr>
                 </tbody>
             </table>
-            <div class="record-mobile-note">手機版可左右滑動上方選單；購買紀錄已改成卡片式顯示，聊天室按鈕會在每筆訂單下方完整顯示。</div>
+            <div class="record-mobile-note">手機版可左右滑動上方選單；購買紀錄已改成卡片式顯示，聊天室會直接展開在該筆訂單下方。</div>
 
-            <div id="memberOrderChatPanel" style="margin-top:20px; display:none;">
+            <div id="memberOrderChatDock" style="display:none;"></div>
+
+            <div id="memberOrderChatPanel" style="margin-top:0; display:none;">
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
                     <div class="card-title" style="font-size:18px; margin-bottom:15px;">會員 / 陪玩共同聊天室</div>
                     <button class="btn" style="background:#444; margin-bottom:15px;" type="button" onclick="toggleMemberOrderChatBody(this)" data-open-text="收起聊天室" data-close-text="展開聊天室">收起聊天室</button>
@@ -1035,11 +1046,18 @@
 
         <div class="card">
             <div class="card-title">儲值紀錄</div>
-            <table id="rechargeTable">
+            <div class="rule-box">儲值紀錄已移到獨立頁面，請點上方導覽列的「儲值紀錄」查看全部紀錄。</div>
+        </div>
+    </div>
+
+    <div class="section" id="rechargeHistory">
+        <div class="card">
+            <div class="card-title">儲值紀錄</div>
+            <table id="rechargeHistoryTable">
                 <thead>
                     <tr><th>儲值時間</th><th>儲值金額</th><th>獲得短陌</th></tr>
                 </thead>
-                <tbody id="rechargeBody">
+                <tbody id="rechargeHistoryBody">
                     <tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>
                 </tbody>
             </table>
@@ -1577,6 +1595,7 @@ function renderRecords(records) {
     const list = Array.isArray(records) ? records : [];
     if (!list.length) {
         tbody.innerHTML = '<tr><td colspan="5" class="empty">目前沒有購買紀錄</td></tr>';
+        attachMemberOrderChatPanelInline();
         return;
     }
 
@@ -1621,9 +1640,8 @@ function renderRecords(records) {
         }
 
         const canOpenChat = orderId > 0 && !['completed', 'returned_to_member'].includes(status);
-
-        return `
-            <tr>
+        const mainRow = `
+            <tr data-order-id="${orderId}">
                 <td data-label="購買時間">${formatMinute(item.time)}</td>
                 <td data-label="商品名稱">${item.name || ''}</td>
                 <td data-label="消耗短陌">${item.cost || 0}</td>
@@ -1635,11 +1653,23 @@ function renderRecords(records) {
                 </td>
             </tr>
         `;
+
+        const chatRow = state.currentRecordChatOrderId === orderId ? `
+            <tr class="record-inline-chat-row" data-chat-host-for="${orderId}">
+                <td colspan="5">
+                    <div class="record-inline-chat-host"></div>
+                </td>
+            </tr>
+        ` : '';
+
+        return mainRow + chatRow;
     }).join('');
+
+    attachMemberOrderChatPanelInline();
 }
 
 function renderRecharges(records) {
-    const tbody = document.getElementById('rechargeBody');
+    const tbody = document.getElementById('rechargeHistoryBody');
     if (!tbody) return;
 
     const list = Array.isArray(records) ? records : [];
@@ -2035,6 +2065,24 @@ function escapeHtml(str) {
 }
 
 
+function attachMemberOrderChatPanelInline() {
+    const panel = document.getElementById('memberOrderChatPanel');
+    if (!panel) return;
+
+    const dock = document.getElementById('memberOrderChatDock');
+    const host = state.currentRecordChatOrderId
+        ? document.querySelector(`[data-chat-host-for="${state.currentRecordChatOrderId}"] .record-inline-chat-host`)
+        : null;
+
+    if (host) {
+        host.appendChild(panel);
+        panel.style.display = 'block';
+    } else if (dock) {
+        dock.appendChild(panel);
+        panel.style.display = 'none';
+    }
+}
+
 function toggleMemberOrderChatBody(btn) {
     const body = document.getElementById('memberOrderChatBody');
     if (!body || !btn) return;
@@ -2078,10 +2126,9 @@ function renderMemberOrderChatMessages(messages) {
 async function openMemberOrderChat(orderId) {
     state.currentRecordChatOrderId = Number(orderId || 0);
     state.currentRecordChatTitle = '';
-    const panel = document.getElementById('memberOrderChatPanel');
     const info = document.getElementById('memberOrderChatInfo');
-    if (panel) panel.style.display = 'block';
     if (info) info.innerText = `目前聊天室：訂單 #${state.currentRecordChatOrderId}`;
+    renderRecords(state.user?.buy_records || []);
     setMessage('memberOrderChatMsg', '載入聊天室中...');
     await loadMemberOrderChatMessages();
 }
@@ -2089,10 +2136,9 @@ async function openMemberOrderChat(orderId) {
 function closeMemberOrderChat() {
     state.currentRecordChatOrderId = null;
     state.currentRecordChatTitle = '';
-    const panel = document.getElementById('memberOrderChatPanel');
-    if (panel) panel.style.display = 'none';
     document.getElementById('memberOrderChatText').value = '';
     setMessage('memberOrderChatMsg', '');
+    renderRecords(state.user?.buy_records || []);
 }
 
 async function loadMemberOrderChatMessages() {
@@ -2117,6 +2163,7 @@ async function loadMemberOrderChatMessages() {
     renderMemberOrderChatMessages(res.messages || []);
     setMessage('memberOrderChatMsg', '');
     await loadOrderUnreadSummary();
+    renderRecords(state.user?.buy_records || []);
 }
 
 async function sendMemberOrderChatMessage() {
