@@ -1123,7 +1123,9 @@ const state = {
     rechargeRequestRecords: [],
     giftRecords: [],
     shopLoaded: false,
-    backgroundRefreshTimer: null
+    backgroundRefreshTimer: null,
+    chatPollTimer: null,
+    chatLastMessageId: 0
 };
 
 const RECHARGE_PRESETS = [200, 500, 1000, 2000, 3000, 5000, 8000, 10000, 12000, 15000, 20000, 30000];
@@ -1910,6 +1912,7 @@ function updateUserUI(user) {
 }
 
 function renderLoggedOut() {
+    stopMemberOrderChatPolling();
     state.user = null;
     try { sessionStorage.removeItem('member_session_live'); } catch (e) {}
 
@@ -2265,6 +2268,7 @@ function attachMemberOrderChatPanelInline() {
     if (!panel) return;
 
     panel.style.width = '100%';
+    panel.style.maxWidth = '100%';
 
     const dock = document.getElementById('memberOrderChatDock');
     const host = state.currentRecordChatOrderId
@@ -2286,6 +2290,26 @@ function toggleMemberOrderChatBody(btn) {
     const collapsed = body.style.display === 'none';
     body.style.display = collapsed ? 'block' : 'none';
     btn.innerText = collapsed ? (btn.dataset.openText || '收起聊天室') : (btn.dataset.closeText || '展開聊天室');
+}
+
+
+function startMemberOrderChatPolling() {
+    stopMemberOrderChatPolling();
+    if (!state.currentRecordChatOrderId) return;
+
+    state.chatPollTimer = setInterval(async () => {
+        if (!state.currentRecordChatOrderId) return;
+        const panel = document.getElementById('memberOrderChatPanel');
+        if (!panel || panel.style.display === 'none') return;
+        await loadMemberOrderChatMessages();
+    }, 3000);
+}
+
+function stopMemberOrderChatPolling() {
+    if (state.chatPollTimer) {
+        clearInterval(state.chatPollTimer);
+        state.chatPollTimer = null;
+    }
 }
 
 function renderMemberOrderChatMessages(messages) {
@@ -2326,15 +2350,18 @@ async function openMemberOrderChat(orderId) {
     const body = document.getElementById('memberOrderChatBody');
     const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
     const sameOrder = state.currentRecordChatOrderId === nextOrderId;
-    const panelVisible = panel && panel.style.display !== 'none';
+    const panelVisible = !!panel && panel.style.display !== 'none';
 
     if (sameOrder && panelVisible) {
         closeMemberOrderChat();
         return;
     }
 
+    stopMemberOrderChatPolling();
+
     state.currentRecordChatOrderId = nextOrderId;
     state.currentRecordChatTitle = '';
+    state.chatLastMessageId = 0;
 
     const info = document.getElementById('memberOrderChatInfo');
     const box = document.getElementById('memberOrderChatBox');
@@ -2355,18 +2382,21 @@ async function openMemberOrderChat(orderId) {
     if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
     const host = document.querySelector(`[data-chat-host-for="${state.currentRecordChatOrderId}"]`);
-    if (host) {
-        host.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    if (host) host.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     setMessage('memberOrderChatMsg', '載入聊天室中...');
-    await loadMemberOrderChatMessages();
+    await loadMemberOrderChatMessages({ forceOpen: true });
+    startMemberOrderChatPolling();
 }
 
 function closeMemberOrderChat() {
+    stopMemberOrderChatPolling();
+
     state.currentRecordChatOrderId = null;
     state.currentRecordChatTitle = '';
+    state.chatLastMessageId = 0;
 
+    const panel = document.getElementById('memberOrderChatPanel');
     const textInput = document.getElementById('memberOrderChatText');
     const box = document.getElementById('memberOrderChatBox');
     const info = document.getElementById('memberOrderChatInfo');
@@ -2379,38 +2409,54 @@ function closeMemberOrderChat() {
     if (body) body.style.display = 'block';
     if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
+    if (panel) {
+        panel.style.display = 'none';
+        panel.style.width = '100%';
+    }
+
     setMessage('memberOrderChatMsg', '');
     renderRecords(state.user?.buy_records || []);
     attachMemberOrderChatPanelInline();
 }
 
-async function loadMemberOrderChatMessages() {
+async function loadMemberOrderChatMessages(options = {}) {
     if (!state.currentRecordChatOrderId) {
-        setMessage('memberOrderChatMsg', '請先選擇一筆訂單');
+        setMessage('memberOrderChatMsg', '請先開啟聊天室');
         return;
     }
 
-    const res = await api('companion_order_chat_messages', {
-        order_id: state.currentRecordChatOrderId
-    });
+    const forceOpen = !!options.forceOpen;
+    const panel = document.getElementById('memberOrderChatPanel');
+    const body = document.getElementById('memberOrderChatBody');
+    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
+
+    if (panel) {
+        panel.style.display = 'block';
+        panel.style.width = '100%';
+    }
+    if (forceOpen && body) body.style.display = 'block';
+    if (forceOpen && toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
+
+    const res = await api('member_order_chat_messages', { order_id: state.currentRecordChatOrderId });
 
     if (!res.ok) {
         const box = document.getElementById('memberOrderChatBox');
         if (box) {
             box.innerHTML = `<div class="empty">${res.message || '聊天室載入失敗'}</div>`;
         }
-        if ((res.message || '').includes('聊天室已關閉')) {
-            document.getElementById('memberOrderChatText').value = '';
-        }
         setMessage('memberOrderChatMsg', res.message || '聊天室載入失敗');
-        attachMemberOrderChatPanelInline();
         return;
     }
 
-    renderMemberOrderChatMessages(res.messages || []);
+    const messages = Array.isArray(res.messages) ? res.messages : [];
+    if (messages.length > 0) {
+        const last = messages[messages.length - 1];
+        state.chatLastMessageId = Number(last?.id || state.chatLastMessageId || 0);
+    }
+
+    renderMemberOrderChatMessages(messages);
     setMessage('memberOrderChatMsg', '');
     await loadOrderUnreadSummary();
-    attachMemberOrderChatPanelInline();
 }
 
 async function sendMemberOrderChatMessage() {
@@ -2537,6 +2583,7 @@ async function handleEmailVerifyFromUrl() {
 }
 
 async function logout() {
+    stopMemberOrderChatPolling();
     try { sessionStorage.removeItem('member_session_live'); } catch (e) {}
     const res = await api('logout');
     if (res && res.message) {
