@@ -1302,10 +1302,27 @@ function clearRechargeForm() {
 function toggleRechargeMethodHint() {
     const method = document.getElementById('recharge_method')?.value || '一般銀行轉帳';
     const hint = document.getElementById('rechargeMethodHint');
-    if (!hint) return;
-    hint.innerText = method === '無卡匯款'
-        ? '無卡匯款不需要填帳號末 5 碼，但仍必須填寫匯款人姓名、匯款時間，並附上匯款截圖或交易明細。'
-        : '一般銀行轉帳請填寫匯款人姓名、匯款時間，並附上匯款截圖或交易明細。';
+    const last5Wrap = document.getElementById('rechargeLast5Wrap');
+    const last5Input = document.getElementById('recharge_last5');
+
+    if (hint) {
+        hint.innerText = method === '無卡匯款'
+            ? '無卡匯款不需要填帳號末 5 碼，但仍必須填寫匯款人姓名、匯款時間，並附上匯款截圖或交易明細。'
+            : '一般銀行轉帳請填寫匯款人姓名、匯款時間，並附上匯款截圖或交易明細。';
+    }
+
+    if (last5Wrap) {
+        last5Wrap.style.display = method === '無卡匯款' ? 'none' : 'block';
+    }
+
+    if (last5Input) {
+        if (method === '無卡匯款') {
+            last5Input.value = '';
+            last5Input.removeAttribute('required');
+        } else {
+            last5Input.setAttribute('required', 'required');
+        }
+    }
 }
 
 async function uploadRechargeProof(file) {
@@ -1354,6 +1371,10 @@ async function submitRechargeRequest() {
     }
     if (!transferTime) {
         setMessage('rechargeApplyMsg', '請填寫匯款時間');
+        return;
+    }
+    if (method !== '無卡匯款' && !last5) {
+        setMessage('rechargeApplyMsg', '請填寫匯款帳號末 5 碼');
         return;
     }
     if (!proofFile) {
