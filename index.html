@@ -1121,7 +1121,9 @@ const state = {
     orderUnreadMap: {},
     totalOrderUnread: 0,
     rechargeRequestRecords: [],
-    giftRecords: []
+    giftRecords: [],
+    shopLoaded: false,
+    backgroundRefreshTimer: null
 };
 
 const RECHARGE_PRESETS = [200, 500, 1000, 2000, 3000, 5000, 8000, 10000, 12000, 15000, 20000, 30000];
@@ -1192,12 +1194,17 @@ function showSection(id) {
         loadSupportMessages();
     }
 
+    if (id === 'shop' && !state.shopLoaded) {
+        loadShop();
+    }
+
     if (id === 'record' && state.user) {
         markRecordUnreadSeen();
     }
 
     if (id === 'rechargeHistory' && state.user) {
         loadRechargeRequestHistory();
+        loadGiftHistory();
     }
 }
 
@@ -1483,6 +1490,22 @@ async function loadRechargeRequestHistory() {
 
     state.rechargeRequestRecords = Array.isArray(res.records) ? res.records : [];
     renderRecharges(state.rechargeRequestRecords);
+}
+
+async function loadGiftHistory() {
+    if (!state.user) {
+        state.giftRecords = [];
+        renderGiftHistory([]);
+        return;
+    }
+
+    const res = await api('gift_history');
+    if (!res.ok) {
+        return;
+    }
+
+    state.giftRecords = Array.isArray(res.records) ? res.records : [];
+    renderGiftHistory(state.giftRecords);
 }
 
 function getOrderUnreadDot(orderId) {
@@ -1953,14 +1976,18 @@ async function userLogin() {
     if (res.user) {
         updateUserUI(res.user);
         showSection('home');
-        await loadShop();
+        if (!state.shopLoaded) {
+            loadShop();
+        }
         return;
     }
 
     const loggedIn = await refreshSession();
     if (loggedIn) {
         showSection('home');
-        await loadShop();
+        if (!state.shopLoaded) {
+            loadShop();
+        }
     }
 }
 
@@ -2163,6 +2190,7 @@ async function loadShop() {
         desc: item.desc ?? item.description ?? ''
     }));
 
+    state.shopLoaded = true;
     renderShop();
 }
 
@@ -2288,20 +2316,33 @@ function renderMemberOrderChatMessages(messages) {
 }
 
 async function openMemberOrderChat(orderId) {
-    state.currentRecordChatOrderId = Number(orderId || 0);
+    const nextOrderId = Number(orderId || 0);
+    const panel = document.getElementById('memberOrderChatPanel');
+    const body = document.getElementById('memberOrderChatBody');
+    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
+    const sameOrder = state.currentRecordChatOrderId === nextOrderId;
+    const panelVisible = panel && panel.style.display !== 'none';
+
+    if (sameOrder && panelVisible) {
+        closeMemberOrderChat();
+        return;
+    }
+
+    state.currentRecordChatOrderId = nextOrderId;
     state.currentRecordChatTitle = '';
     const info = document.getElementById('memberOrderChatInfo');
     if (info) info.innerText = `目前聊天室：訂單 #${state.currentRecordChatOrderId}`;
     renderRecords(state.user?.buy_records || []);
     attachMemberOrderChatPanelInline();
+
     const host = document.querySelector(`[data-chat-host-for="${state.currentRecordChatOrderId}"]`);
     if (host) {
         host.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    const body = document.getElementById('memberOrderChatBody');
-    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
+
     if (body) body.style.display = 'block';
     if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
+
     setMessage('memberOrderChatMsg', '載入聊天室中...');
     await loadMemberOrderChatMessages();
 }
@@ -2309,9 +2350,22 @@ async function openMemberOrderChat(orderId) {
 function closeMemberOrderChat() {
     state.currentRecordChatOrderId = null;
     state.currentRecordChatTitle = '';
-    document.getElementById('memberOrderChatText').value = '';
+
+    const textInput = document.getElementById('memberOrderChatText');
+    const box = document.getElementById('memberOrderChatBox');
+    const info = document.getElementById('memberOrderChatInfo');
+    const body = document.getElementById('memberOrderChatBody');
+    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
+
+    if (textInput) textInput.value = '';
+    if (box) box.innerHTML = '<div class="empty">尚未開啟聊天室</div>';
+    if (info) info.innerText = '請先從上方訂單開啟聊天室';
+    if (body) body.style.display = 'block';
+    if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
+
     setMessage('memberOrderChatMsg', '');
     renderRecords(state.user?.buy_records || []);
+    attachMemberOrderChatPanelInline();
 }
 
 async function loadMemberOrderChatMessages() {
@@ -2476,27 +2530,33 @@ async function logout() {
 
 window.onload = async function () {
     await handleEmailVerifyFromUrl();
-    await loadShop();
-    await refreshSession();
-    await loadCompanionStats();
-    switchShop('全部');
-    await loadOrderUnreadSummary();
     renderRechargePresets();
     document.getElementById('recharge_amount')?.addEventListener('input', renderRechargePresets);
+    switchShop('全部');
 
-    setInterval(async () => {
-        await loadCompanionStats();
+    const sessionLoggedIn = await refreshSession();
+    loadCompanionStats();
+
+    if (sessionLoggedIn) {
+        loadOrderUnreadSummary();
+    }
+
+    if (state.backgroundRefreshTimer) {
+        clearInterval(state.backgroundRefreshTimer);
+    }
+
+    state.backgroundRefreshTimer = setInterval(async () => {
+        loadCompanionStats();
+
         if (state.user) {
             await loadOrderUnreadSummary();
-    renderRechargePresets();
 
             const supportSection = document.getElementById('support');
             if (supportSection && supportSection.classList.contains('active')) {
                 await loadSupportMessages();
             }
         }
-    }, 5000);
-
+    }, 15000);
 };
 </script>
 
