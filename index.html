@@ -1193,8 +1193,26 @@ function renderRecords(records) {
     }).join('');
 }
 
+function renderRecharges(records) {
+    const tbody = document.getElementById('rechargeBody');
+    if (!tbody) return;
+
+    const list = Array.isArray(records) ? records : [];
+    if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = list.map(item => `
+        <tr>
+            <td>${formatMinute(item.time)}</td>
+            <td>${item.money || 0}</td>
+            <td>${item.coin || 0}</td>
+        </tr>
+    `).join('');
+}
+
 function updateUserUI(user) {
-    state.user = user;
 
     document.getElementById('show_userid').innerText = user.id ?? '';
     document.getElementById('show_username').innerText = user.username ?? '未登入';
