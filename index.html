@@ -62,6 +62,29 @@
         .shop-item p { margin: 8px 0; }
         .btn { padding: 8px 16px; background: #ff69b4; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
         .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+        .btn.btn-secondary { background:#444; }
+        .nav-alert-dot, .inline-alert-dot { display:inline-flex; align-items:center; justify-content:center; width:10px; height:10px; border-radius:50%; background:#ff4d6d; box-shadow:0 0 0 2px rgba(255,77,109,0.2); flex:0 0 auto; }
+        .nav-link-with-dot, .chat-entry-wrap { display:inline-flex; align-items:center; gap:8px; }
+        .notice-image-list { display:grid; grid-template-columns:1fr; gap:18px; margin-top:22px; }
+        .notice-image-card { background:#181818; border:1px solid #333; border-radius:14px; padding:14px; }
+        .notice-image-card img { width:100%; height:auto; display:block; border-radius:10px; }
+        .notice-image-title { color:#ff69b4; font-size:16px; margin-bottom:10px; font-weight:bold; }
+        .recharge-layout { display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px; }
+        .recharge-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-top:18px; }
+        .recharge-card { background:#252525; border:1px solid #333; border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition:0.2s; }
+        .recharge-card.active { border-color:#ff69b4; box-shadow:0 0 0 1px #ff69b4 inset; }
+        .recharge-card-coin { color:#ff69b4; font-size:18px; font-weight:bold; }
+        .recharge-card-nt { color:#ddd; font-size:14px; margin-top:6px; }
+        .recharge-form, .transfer-box { background:#252525; border:1px solid #333; border-radius:12px; padding:18px; }
+        .recharge-form h3, .transfer-box h3 { color:#ff69b4; margin-bottom:14px; font-size:18px; }
+        .recharge-form label { display:block; margin:14px 0 6px; color:#ffb3d9; font-size:14px; }
+        .recharge-form input, .recharge-form select, .recharge-form textarea { width:100%; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:8px; }
+        .recharge-form textarea { min-height:100px; resize:vertical; }
+        .recharge-hint { color:#bfbfbf; font-size:13px; line-height:1.8; margin-top:8px; }
+        .transfer-info-row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid #333; }
+        .transfer-info-row:last-child { border-bottom:none; }
+        .transfer-label { color:#bbb; }
+        .transfer-value { color:#fff; font-weight:bold; text-align:right; word-break:break-all; }
         .user-info p { margin: 14px 0; font-size: 16px; }
         .user-info span { color: #ff69b4; font-weight: bold; }
         .login-box { max-width: 400px; margin: 60px auto; padding: 30px; }
@@ -521,7 +544,55 @@
         font-size: 14px;
         padding: 30px 0;
     }
+
+    .nav {
+        gap: 8px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .nav a {
+        flex: 0 0 auto;
+        background: #252525;
+        border: 1px solid #333;
+        border-radius: 999px;
+        padding: 8px 12px;
+        white-space: nowrap;
+    }
+
+    .recharge-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .recharge-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .recharge-card {
+        padding: 14px 10px;
+    }
+
+    .recharge-card-coin {
+        font-size: 16px;
+    }
+
+    .recharge-card-nt {
+        font-size: 13px;
+    }
+
+    .transfer-info-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .transfer-value {
+        text-align: left;
+    }
 }
+
     </style>
 </head>
 <body>
@@ -532,10 +603,10 @@
         <a onclick="showSection('ranking')">VIP排行榜</a>
         <a onclick="showSection('vip')">VIP說明</a>
         <a onclick="showSection('shop')">市集兌換</a>
-        <a onclick="showSection('record')">購買紀錄</a>
-        <a onclick="showSection('recharge')">儲值紀錄</a>
+        <a onclick="showSection('record')"><span class="nav-link-with-dot">購買紀錄 <span id="recordNavDot" class="nav-alert-dot" style="display:none;"></span></span></a>
+        <a onclick="showSection('recharge')">儲值中心</a>
         <a onclick="showSection('renewPage')">會員續期</a>
-        <a onclick="showSection('support')">聯繫客服 <span id="supportBadge" style="display:none;color:#ff8080;">●</span></a>
+        <a onclick="showSection('support')">聯繫客服</a>
         <a onclick="logout()">登出</a>
     </div>
 </div>
@@ -607,7 +678,7 @@
     <input type="file" id="avatarInput" class="avatar-upload-input" accept=".jpg,.jpeg,.png,.webp">
     <button class="btn" style="margin-top:10px;" onclick="uploadAvatar()">上傳大頭照</button>
     <button class="btn" style="margin-top:10px;" onclick="enablePushNotifications()">啟用手機推播</button>
-    <div class="msg" id="avatarMsg"></div>
+        <div class="msg" id="avatarMsg"></div>
 </div>
 
                     <p>會員ID：<span id="show_userid">00000000</span></p>
@@ -773,6 +844,16 @@
 <div class="shop-tab" data-tab="限時單" onclick="switchShop('限時單')">限時單</div>
             </div>
             <div id="shopList" class="shop-cat active"></div>
+            <div class="notice-image-list">
+                <div class="notice-image-card">
+                    <div class="notice-image-title">訂單須知 1</div>
+                    <img src="夢競陪玩價目表.jpg" alt="訂單須知 1">
+                </div>
+                <div class="notice-image-card">
+                    <div class="notice-image-title">訂單須知 2</div>
+                    <img src="下單須知.jpg" alt="訂單須知 2">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -836,6 +917,55 @@
 
     <div class="section" id="recharge">
         <div class="card">
+            <div class="card-title">儲值中心</div>
+            <div class="recharge-layout">
+                <div class="recharge-form">
+                    <h3>選擇儲值面額</h3>
+                    <div class="recharge-hint">短陌 : NT$ = 1 : 1。固定面額如下，點一下即可帶入。</div>
+                    <div id="rechargePresetGrid" class="recharge-grid"></div>
+
+                    <label for="recharge_amount">自訂儲值金額</label>
+                    <input id="recharge_amount" type="number" min="500" step="100" placeholder="最低 500，且需以 100 為單位輸入">
+                    <div class="recharge-hint">除固定面額外，會員也可自訂金額。最低儲值金額 500，自訂金額需以 100 為單位。</div>
+
+                    <label for="recharge_method">付款方式</label>
+                    <select id="recharge_method">
+                        <option value="一般銀行轉帳">一般銀行轉帳</option>
+                        <option value="無卡匯款">無卡匯款</option>
+                    </select>
+
+                    <label for="recharge_name">匯款人姓名</label>
+                    <input id="recharge_name" placeholder="請輸入匯款人姓名">
+
+                    <label for="recharge_last5">匯款帳號末 5 碼</label>
+                    <input id="recharge_last5" maxlength="5" placeholder="方便客服核對">
+
+                    <label for="recharge_time">匯款時間</label>
+                    <input id="recharge_time" type="datetime-local">
+
+                    <label for="recharge_note">備註</label>
+                    <textarea id="recharge_note" placeholder="可填寫無卡匯款說明、金額確認、其他補充"></textarea>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+                        <button class="btn" type="button" onclick="submitRechargeRequest()">送出儲值申請</button>
+                        <button class="btn btn-secondary" type="button" onclick="clearRechargeForm()">清空</button>
+                    </div>
+                    <div id="rechargeApplyMsg" class="msg"></div>
+                </div>
+
+                <div class="transfer-box">
+                    <h3>會員付款資料</h3>
+                    <div class="transfer-info-row"><div class="transfer-label">銀行名稱</div><div class="transfer-value">中國信託</div></div>
+                    <div class="transfer-info-row"><div class="transfer-label">銀行代碼</div><div class="transfer-value">822</div></div>
+                    <div class="transfer-info-row"><div class="transfer-label">戶名</div><div class="transfer-value">林x翰</div></div>
+                    <div class="transfer-info-row"><div class="transfer-label">帳號</div><div class="transfer-value">901560800917</div></div>
+                    <div class="recharge-hint">送出申請後，系統會自動把儲值資料送到客服，待人工確認入帳後補入短陌。</div>
+                    <div class="recharge-hint">超過一定金額時會跳出再次確認，避免輸入錯誤。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
             <div class="card-title">儲值紀錄</div>
             <table id="rechargeTable">
                 <thead>
@@ -861,8 +991,12 @@ const state = {
     ranking: [],
     currentBuyItemId: null,
     currentRecordChatOrderId: null,
-    currentRecordChatTitle: ''
+    currentRecordChatTitle: '',
+    orderUnreadMap: {},
+    totalOrderUnread: 0
 };
+
+const RECHARGE_PRESETS = [200, 500, 1000, 2000, 3000, 5000, 8000, 10000, 12000, 15000, 20000, 30000];
 
 function formatMinute(value) {
     const raw = String(value ?? '').trim();
@@ -977,6 +1111,7 @@ async function api(action, extra = {}) {
     }
 }
 
+
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -1039,6 +1174,132 @@ async function enablePushNotifications() {
         console.error('enablePushNotifications error:', error);
         alert('啟用推播失敗：' + (error?.message || '未知錯誤'));
     }
+}
+
+function renderRechargePresets() {
+    const box = document.getElementById('rechargePresetGrid');
+    if (!box) return;
+    const current = Number(document.getElementById('recharge_amount')?.value || 0);
+    box.innerHTML = RECHARGE_PRESETS.map(amount => `
+        <button type="button" class="recharge-card ${current === amount ? 'active' : ''}" onclick="selectRechargePreset(${amount})">
+            <div class="recharge-card-coin">${amount} 短陌</div>
+            <div class="recharge-card-nt">NT$ ${amount}</div>
+        </button>
+    `).join('');
+}
+
+function selectRechargePreset(amount) {
+    const input = document.getElementById('recharge_amount');
+    if (input) input.value = String(amount);
+    renderRechargePresets();
+}
+
+function clearRechargeForm() {
+    ['recharge_amount','recharge_name','recharge_last5','recharge_time','recharge_note'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    const method = document.getElementById('recharge_method');
+    if (method) method.value = '一般銀行轉帳';
+    setMessage('rechargeApplyMsg', '');
+    renderRechargePresets();
+}
+
+async function submitRechargeRequest() {
+    if (!state.user) {
+        setMessage('rechargeApplyMsg', '請先登入');
+        return;
+    }
+
+    const amount = Number(document.getElementById('recharge_amount')?.value || 0);
+    const method = document.getElementById('recharge_method')?.value || '一般銀行轉帳';
+    const payerName = document.getElementById('recharge_name')?.value.trim() || '';
+    const last5 = document.getElementById('recharge_last5')?.value.trim() || '';
+    const transferTime = document.getElementById('recharge_time')?.value || '';
+    const note = document.getElementById('recharge_note')?.value.trim() || '';
+
+    if (amount < 500) {
+        setMessage('rechargeApplyMsg', '最低儲值金額為 500');
+        return;
+    }
+    if (amount % 100 !== 0) {
+        setMessage('rechargeApplyMsg', '自訂金額需以 100 為單位輸入');
+        return;
+    }
+    if (!payerName) {
+        setMessage('rechargeApplyMsg', '請填寫匯款人姓名');
+        return;
+    }
+    if (!last5) {
+        setMessage('rechargeApplyMsg', '請填寫匯款帳號末 5 碼');
+        return;
+    }
+    if (!transferTime) {
+        setMessage('rechargeApplyMsg', '請填寫匯款時間');
+        return;
+    }
+
+    if (amount >= 10000) {
+        const ok = window.confirm(`你本次申請儲值 NT$ ${amount}，請再次確認金額是否正確。`);
+        if (!ok) return;
+    }
+
+    const messageText = [
+        '【儲值申請】',
+        `會員帳號：${state.user?.username || ''}`,
+        `申請金額：NT$ ${amount} / ${amount} 短陌`,
+        `付款方式：${method}`,
+        `匯款人姓名：${payerName}`,
+        `匯款帳號末5碼：${last5}`,
+        `匯款時間：${transferTime.replace('T', ' ')}`,
+        `備註：${note || '無'}`
+    ].join('\n');
+
+    setMessage('rechargeApplyMsg', '送出中...');
+    const res = await api('support_send', { message_text: messageText, image_url: '' });
+    setMessage('rechargeApplyMsg', res.message || '');
+
+    if (res.ok) {
+        clearRechargeForm();
+        setMessage('rechargeApplyMsg', '儲值申請已送出，請等待人工確認入帳。');
+    }
+}
+
+function getOrderUnreadDot(orderId) {
+    const count = Number(state.orderUnreadMap?.[String(orderId)] || 0);
+    return count > 0 ? `<span class="inline-alert-dot" title="有新訊息"></span>` : '';
+}
+
+function refreshRecordNavDot() {
+    const dot = document.getElementById('recordNavDot');
+    if (!dot) return;
+    dot.style.display = Number(state.totalOrderUnread || 0) > 0 ? 'inline-flex' : 'none';
+}
+
+async function loadOrderUnreadSummary() {
+    if (!state.user) {
+        state.orderUnreadMap = {};
+        state.totalOrderUnread = 0;
+        refreshRecordNavDot();
+        return;
+    }
+
+    const res = await api('companion_order_unread_summary');
+    if (!res.ok) return;
+
+    const map = {};
+    for (const row of (res.orders || [])) {
+        const orderId = Number(row.order_id || 0);
+        const unread = Number(row.unread_count || 0);
+        if (orderId > 0 && unread > 0) {
+            map[String(orderId)] = unread;
+        }
+    }
+
+    state.orderUnreadMap = map;
+    state.totalOrderUnread = Number(res.total_unread || 0);
+    refreshRecordNavDot();
+    if (state.user) renderRecords(state.user.buy_records || []);
 }
 
 function renderTopPodium(ranking) {
@@ -1250,7 +1511,7 @@ function renderRecords(records) {
                 <td>${statusHtml}</td>
                 <td>
                     ${canOpenChat
-                        ? `<button class="btn" onclick="openMemberOrderChat(${orderId})">查看聊天室</button>`
+                        ? `<span class="chat-entry-wrap"><button class="btn" onclick="openMemberOrderChat(${orderId})">查看聊天室</button>${getOrderUnreadDot(orderId)}</span>`
                         : '<span style="color:#999;">聊天室已關閉</span>'}
                 </td>
             </tr>
@@ -1304,6 +1565,8 @@ function updateUserUI(user) {
 
     renderRecords(user.buy_records || []);
     renderRecharges(user.recharge_records || []);
+    renderRechargePresets();
+    loadOrderUnreadSummary();
 
     document.getElementById('mainHeader').style.display = 'flex';
     showSection('home');
@@ -1337,6 +1600,10 @@ function renderLoggedOut() {
 
     renderRecords([]);
     renderRecharges([]);
+    renderRechargePresets();
+    state.orderUnreadMap = {};
+    state.totalOrderUnread = 0;
+    refreshRecordNavDot();
     renderTopPodium([]);
     loadCompanionStats();
     showSection('loginPage');
@@ -1730,6 +1997,7 @@ async function loadMemberOrderChatMessages() {
 
     renderMemberOrderChatMessages(res.messages || []);
     setMessage('memberOrderChatMsg', '');
+    await loadOrderUnreadSummary();
 }
 
 async function sendMemberOrderChatMessage() {
@@ -1792,7 +2060,6 @@ async function loadSupportMessages() {
     box.scrollTop = box.scrollHeight;
 
     await api('support_mark_read');
-    await loadSupportUnreadBadge();
 }
 
 async function sendSupportMessage() {
@@ -1841,17 +2108,6 @@ async function sendSupportMessage() {
     }
 }
 
-async function loadSupportUnreadBadge() {
-    if (!state.user) return;
-
-    const res = await api('support_unread_count');
-    const badge = document.getElementById('supportBadge');
-    if (!badge) return;
-
-    const count = Number(res.count || 0);
-    badge.style.display = count > 0 ? 'inline' : 'none';
-}
-
 async function handleEmailVerifyFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const token = (params.get('verify_email') || '').trim();
@@ -1882,12 +2138,15 @@ window.onload = async function () {
     await refreshSession();
     await loadCompanionStats();
     switchShop('全部');
-    await loadSupportUnreadBadge();
+    await loadOrderUnreadSummary();
+    renderRechargePresets();
+    document.getElementById('recharge_amount')?.addEventListener('input', renderRechargePresets);
 
     setInterval(async () => {
         await loadCompanionStats();
         if (state.user) {
-            await loadSupportUnreadBadge();
+            await loadOrderUnreadSummary();
+    renderRechargePresets();
 
             const supportSection = document.getElementById('support');
             if (supportSection && supportSection.classList.contains('active')) {
