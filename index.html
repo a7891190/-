@@ -249,6 +249,12 @@
         .recharge-proof-box input[type="file"] { width:100%; color:#fff; margin-top:8px; }
         .transfer-box.compact-top { margin-bottom:0; }
         .recharge-main .recharge-form { width:100%; }
+        .history-section-card { padding:24px; }
+        .history-toggle-row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+        .history-toggle-btn { background:#333; }
+        .history-panel { display:block; }
+        .history-subtitle { color:#ffb3d9; font-size:16px; margin:0; }
+
 
         @media (max-width: 900px) {
     .header {
@@ -1057,18 +1063,46 @@
     </div>
 
     <div class="section" id="rechargeHistory">
-        <div class="card">
-            <div class="card-title">儲值紀錄</div>
-            <table id="rechargeHistoryTable">
-                <thead>
-                    <tr><th>申請時間</th><th>申請金額</th><th>申請短陌</th><th>審核狀態</th></tr>
-                </thead>
-                <tbody id="rechargeHistoryBody">
-                    <tr><td colspan="3" class="empty">目前沒有儲值紀錄</td></tr>
-                </tbody>
-            </table>
+        <div class="card history-section-card">
+            <div class="history-toggle-row">
+                <div>
+                    <div class="card-title" style="margin-bottom:8px;">儲值紀錄</div>
+                    <div class="history-subtitle">會員自行送出的儲值申請與目前審核狀態</div>
+                </div>
+                <button type="button" class="btn history-toggle-btn" id="rechargeHistoryToggleBtn" onclick="toggleHistoryPanel('rechargeHistoryPanel','rechargeHistoryToggleBtn','收合儲值紀錄','展開儲值紀錄')">收合儲值紀錄</button>
+            </div>
+            <div id="rechargeHistoryPanel" class="history-panel">
+                <table id="rechargeHistoryTable">
+                    <thead>
+                        <tr><th>申請時間</th><th>申請金額</th><th>申請短陌</th><th>審核狀態</th></tr>
+                    </thead>
+                    <tbody id="rechargeHistoryBody">
+                        <tr><td colspan="4" class="empty">目前沒有儲值紀錄</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+
+        <div class="card history-section-card">
+            <div class="history-toggle-row">
+                <div>
+                    <div class="card-title" style="margin-bottom:8px;">贈送紀錄</div>
+                    <div class="history-subtitle">後台儲值管理送出的贈送 / 扣除紀錄</div>
+                </div>
+                <button type="button" class="btn history-toggle-btn" id="giftHistoryToggleBtn" onclick="toggleHistoryPanel('giftHistoryPanel','giftHistoryToggleBtn','收合贈送紀錄','展開贈送紀錄')">收合贈送紀錄</button>
+            </div>
+            <div id="giftHistoryPanel" class="history-panel">
+                <table id="giftHistoryTable">
+                    <thead>
+                        <tr><th>時間</th><th>項目</th><th>異動內容</th><th>說明</th></tr>
+                    </thead>
+                    <tbody id="giftHistoryBody">
+                        <tr><td colspan="4" class="empty">目前沒有贈送紀錄</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div></div>
 </div>
 
 <script>
@@ -1086,7 +1120,8 @@ const state = {
     currentRecordChatTitle: '',
     orderUnreadMap: {},
     totalOrderUnread: 0,
-    rechargeRequestRecords: []
+    rechargeRequestRecords: [],
+    giftRecords: []
 };
 
 const RECHARGE_PRESETS = [200, 500, 1000, 2000, 3000, 5000, 8000, 10000, 12000, 15000, 20000, 30000];
@@ -1491,7 +1526,7 @@ async function loadOrderUnreadSummary() {
     state.orderUnreadMap = map;
     state.totalOrderUnread = Number(res.total_unread || 0);
     refreshRecordNavDot();
-    if (state.user) renderRecords(state.user.buy_records || []);
+    if (state.user && !state.currentRecordChatOrderId) renderRecords(state.user.buy_records || []);
 }
 
 function renderTopPodium(ranking) {
@@ -1727,6 +1762,69 @@ function rechargeStatusText(status) {
     if (status === 'approved') return '該筆已入賬';
     if (status === 'returned') return '申請退回';
     return '尚未審核';
+}
+
+
+function toggleHistoryPanel(panelId, buttonId, openText, closeText) {
+    const panel = document.getElementById(panelId);
+    const button = document.getElementById(buttonId);
+    if (!panel || !button) return;
+    const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    button.innerText = isHidden ? openText : closeText;
+}
+
+function giftModeText(mode) {
+    switch (String(mode || '')) {
+        case 'add_coin_and_exp': return '增加短陌+增加經驗值';
+        case 'add_coin_only': return '增加短陌不增加經驗值';
+        case 'add_exp_only': return '增加經驗值';
+        case 'deduct_coin': return '扣短陌';
+        case 'deduct_exp': return '扣經驗值';
+        default: return '後台異動';
+    }
+}
+
+function giftDetailText(item) {
+    const amount = Number(item.amount || 0);
+    const coinDelta = Number(item.coin_delta || 0);
+    const expDelta = Number(item.exp_delta || 0);
+    const parts = [];
+    if (coinDelta !== 0) parts.push(`短陌 ${coinDelta > 0 ? '+' : ''}${coinDelta}`);
+    if (expDelta !== 0) parts.push(`經驗值 ${expDelta > 0 ? '+' : ''}${expDelta}`);
+    if (!parts.length && amount > 0) parts.push(`金額 ${amount}`);
+    return parts.join(' / ') || '-';
+}
+
+function renderGiftRecords(records) {
+    const tbody = document.getElementById('giftHistoryBody');
+    if (!tbody) return;
+    const list = Array.isArray(records) ? records : [];
+    if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">目前沒有贈送紀錄</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = list.map(item => `
+        <tr>
+            <td data-label="時間">${formatMinute(item.created_at || item.time)}</td>
+            <td data-label="項目">${giftModeText(item.mode || '')}</td>
+            <td data-label="異動內容">${giftDetailText(item)}</td>
+            <td data-label="說明">${item.note || '後台儲值管理送出'}</td>
+        </tr>
+    `).join('');
+}
+
+async function loadGiftHistory() {
+    if (!state.user) {
+        state.giftRecords = [];
+        renderGiftRecords([]);
+        return;
+    }
+    const res = await api('gift_history');
+    if (!res.ok) return;
+    state.giftRecords = Array.isArray(res.records) ? res.records : [];
+    renderGiftRecords(state.giftRecords);
 }
 
 function renderRecharges(records) {
@@ -2200,6 +2298,10 @@ async function openMemberOrderChat(orderId) {
     if (host) {
         host.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    const body = document.getElementById('memberOrderChatBody');
+    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
+    if (body) body.style.display = 'block';
+    if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
     setMessage('memberOrderChatMsg', '載入聊天室中...');
     await loadMemberOrderChatMessages();
 }
@@ -2238,7 +2340,7 @@ async function loadMemberOrderChatMessages() {
     renderMemberOrderChatMessages(res.messages || []);
     setMessage('memberOrderChatMsg', '');
     await loadOrderUnreadSummary();
-    renderRecords(state.user?.buy_records || []);
+    attachMemberOrderChatPanelInline();
 }
 
 async function sendMemberOrderChatMessage() {
@@ -2373,7 +2475,6 @@ async function logout() {
 }
 
 window.onload = async function () {
-    document.body.style.visibility = 'hidden';
     await handleEmailVerifyFromUrl();
     await loadShop();
     await refreshSession();
@@ -2396,7 +2497,6 @@ window.onload = async function () {
         }
     }, 5000);
 
-    document.body.style.visibility = 'visible';
 };
 </script>
 
