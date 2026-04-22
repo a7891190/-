@@ -952,26 +952,7 @@
 
             <div id="memberOrderChatDock" style="display:none;"></div>
 
-            <div id="memberOrderChatPanel" style="margin-top:0; display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-                    <div class="card-title" style="font-size:18px; margin-bottom:15px;">會員 / 陪玩共同聊天室</div>
-                    <button class="btn" style="background:#444; margin-bottom:15px;" type="button" onclick="toggleMemberOrderChatBody(this)" data-open-text="收起聊天室" data-close-text="展開聊天室">收起聊天室</button>
-                </div>
-                <div id="memberOrderChatBody">
-                    <div id="memberOrderChatInfo" style="margin-bottom:10px; color:#999;">請先從上方訂單開啟聊天室</div>
-                    <div id="memberOrderChatBox" class="chat-box-common"><div class="empty">尚未開啟聊天室</div></div>
-                    <textarea id="memberOrderChatText" placeholder="輸入要傳給陪玩的訊息" style="width:100%; min-height:100px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical; margin-bottom:10px;"></textarea>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn" onclick="sendMemberOrderChatMessage()">送出訊息</button>
-                        <button class="btn" style="background:#555;" onclick="loadMemberOrderChatMessages()">重新整理</button>
-                        <button class="btn" style="background:#444;" onclick="closeMemberOrderChat()">關閉聊天室</button>
-                    </div>
-                    <div style="margin-top:10px; color:#999; font-size:13px;">聊天室訊息僅保留 24 小時，超過時間會自動刪除，訂單完成後會立即關閉。</div>
-                    <div id="memberOrderChatMsg" class="msg"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+            
 
 <div class="section" id="support">
     <div class="card">
@@ -1708,6 +1689,34 @@ function memberCanOpenChat(item) {
     return !!orderId && !['completed', 'returned_to_member'].includes(status);
 }
 
+
+function memberOrderChatPanelHtml() {
+    return `
+        <div id="memberOrderChatPanel" style="margin-top:0; display:block; width:100%; max-width:100%; min-width:100%;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+                <div class="card-title" style="font-size:18px; margin-bottom:15px;">會員 / 陪玩共同聊天室</div>
+                <button class="btn" style="background:#444; margin-bottom:15px;" type="button" onclick="toggleMemberOrderChatBody(this)" data-open-text="收起聊天室" data-close-text="展開聊天室">收起聊天室</button>
+            </div>
+            <div id="memberOrderChatBody">
+                <div id="memberOrderChatInfo" style="margin-bottom:10px; color:#999;">請先從上方訂單開啟聊天室</div>
+                <div id="memberOrderChatBox" class="chat-box-common"><div class="empty">尚未開啟聊天室</div></div>
+                <textarea id="memberOrderChatText" placeholder="輸入要傳給陪玩的訊息" style="width:100%; min-height:100px; padding:12px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:6px; resize:vertical; margin-bottom:10px;"></textarea>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn" onclick="sendMemberOrderChatMessage()">送出訊息</button>
+                    <button class="btn" style="background:#555;" onclick="loadMemberOrderChatMessages()">重新整理</button>
+                    <button class="btn" style="background:#444;" onclick="closeMemberOrderChat()">關閉聊天室</button>
+                </div>
+                <div style="margin-top:10px; color:#999; font-size:13px;">聊天室訊息僅保留 24 小時，超過時間會自動刪除，訂單完成後會立即關閉。</div>
+                <div id="memberOrderChatMsg" class="msg"></div>
+            </div>
+        </div>
+    `;
+}
+
+function attachMemberOrderChatPanelInline() {
+    // 改為直接在 renderRecords 內渲染聊天室，不再搬移單一 panel，避免黑框與失效。
+}
+
 function renderRecords(records) {
     const tbody = document.getElementById('recordBody');
     if (!tbody) return;
@@ -1774,10 +1783,10 @@ function renderRecords(records) {
             </tr>
         `;
 
-        const chatRow = state.currentRecordChatOrderId === orderId ? `
+        const chatRow = (state.currentRecordChatOrderId === orderId && state.chatPanelOpen) ? `
             <tr class="record-inline-chat-row" data-chat-host-for="${orderId}">
                 <td colspan="5">
-                    <div class="record-inline-chat-host"></div>
+                    ${memberOrderChatPanelHtml()}
                 </td>
             </tr>
         ` : '';
@@ -1785,8 +1794,8 @@ function renderRecords(records) {
         return mainRow + chatRow;
     }).join('');
 
-    attachMemberOrderChatPanelInline();
 }
+
 
 function rechargeStatusText(status) {
     if (status === 'approved') return '該筆已入賬';
@@ -2373,7 +2382,8 @@ async function openMemberOrderChat(orderId) {
     state.chatPanelOpen = true;
     state.chatRequestToken += 1;
 
-    const panel = document.getElementById('memberOrderChatPanel');
+    renderRecords(state.user?.buy_records || []);
+
     const body = document.getElementById('memberOrderChatBody');
     const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
     const info = document.getElementById('memberOrderChatInfo');
@@ -2383,16 +2393,6 @@ async function openMemberOrderChat(orderId) {
     if (info) info.innerText = `目前聊天室：訂單 #${state.currentRecordChatOrderId}`;
     if (box) box.innerHTML = '<div class="empty">載入聊天室中...</div>';
     if (textInput) textInput.value = '';
-
-    renderRecords(state.user?.buy_records || []);
-    attachMemberOrderChatPanelInline();
-
-    if (panel) {
-        panel.style.display = 'block';
-        panel.style.width = '100%';
-        panel.style.maxWidth = '100%';
-        panel.style.minWidth = '100%';
-    }
     if (body) body.style.display = 'block';
     if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
@@ -2402,6 +2402,7 @@ async function openMemberOrderChat(orderId) {
     setMessage('memberOrderChatMsg', '載入聊天室中...');
     const token = state.chatRequestToken;
     await loadMemberOrderChatMessages({ forceOpen: true, token });
+
     if (state.chatPanelOpen && state.currentRecordChatOrderId === nextOrderId) {
         startMemberOrderChatPolling();
     }
@@ -2409,58 +2410,31 @@ async function openMemberOrderChat(orderId) {
 
 function closeMemberOrderChat() {
     stopMemberOrderChatPolling();
-
     state.chatPanelOpen = false;
     state.chatRequestToken += 1;
     state.currentRecordChatOrderId = null;
     state.currentRecordChatTitle = '';
     state.chatLastMessageId = 0;
-
-    const panel = document.getElementById('memberOrderChatPanel');
-    const textInput = document.getElementById('memberOrderChatText');
-    const box = document.getElementById('memberOrderChatBox');
-    const info = document.getElementById('memberOrderChatInfo');
-    const body = document.getElementById('memberOrderChatBody');
-    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
-
-    if (textInput) textInput.value = '';
-    if (box) box.innerHTML = '<div class="empty">尚未開啟聊天室</div>';
-    if (info) info.innerText = '請先從上方訂單開啟聊天室';
-    if (body) body.style.display = 'block';
-    if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
-
-    if (panel) {
-        panel.style.display = 'none';
-        panel.style.width = '100%';
-        panel.style.maxWidth = '100%';
-        panel.style.minWidth = '100%';
-    }
-
     setMessage('memberOrderChatMsg', '');
     renderRecords(state.user?.buy_records || []);
-    attachMemberOrderChatPanelInline();
 }
 
 async function loadMemberOrderChatMessages(options = {}) {
     if (!state.currentRecordChatOrderId || !state.chatPanelOpen) {
-        setMessage('memberOrderChatMsg', '請先開啟聊天室');
         return;
     }
 
     const forceOpen = !!options.forceOpen;
     const token = Number(options.token || state.chatRequestToken || 0);
-    const panel = document.getElementById('memberOrderChatPanel');
     const body = document.getElementById('memberOrderChatBody');
     const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
+    const box = document.getElementById('memberOrderChatBox');
 
-    if (panel) {
-        panel.style.display = 'block';
-        panel.style.width = '100%';
-        panel.style.maxWidth = '100%';
-        panel.style.minWidth = '100%';
-    }
     if (forceOpen && body) body.style.display = 'block';
     if (forceOpen && toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
+    if (box && !box.innerHTML.trim()) {
+        box.innerHTML = '<div class="empty">載入聊天室中...</div>';
+    }
 
     const orderId = state.currentRecordChatOrderId;
     const res = await api('companion_order_chat_messages', { order_id: orderId });
@@ -2470,21 +2444,15 @@ async function loadMemberOrderChatMessages(options = {}) {
     }
 
     if (!res.ok) {
-        const box = document.getElementById('memberOrderChatBox');
-        if (box) {
-            box.innerHTML = `<div class="empty">${res.message || '聊天室載入失敗'}</div>`;
+        const errBox = document.getElementById('memberOrderChatBox');
+        if (errBox) {
+            errBox.innerHTML = `<div class="empty">${res.message || '聊天室載入失敗'}</div>`;
         }
         setMessage('memberOrderChatMsg', res.message || '聊天室載入失敗');
         return;
     }
 
-    const messages = Array.isArray(res.messages) ? res.messages : [];
-    if (messages.length > 0) {
-        const last = messages[messages.length - 1];
-        state.chatLastMessageId = Number(last?.id || state.chatLastMessageId || 0);
-    }
-
-    renderMemberOrderChatMessages(messages);
+    renderMemberOrderChatMessages(Array.isArray(res.messages) ? res.messages : []);
     setMessage('memberOrderChatMsg', '');
     await loadOrderUnreadSummary();
 }
