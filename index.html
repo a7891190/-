@@ -831,7 +831,17 @@
     <div class="section" id="shop">
         <div class="card">
             <div class="card-title">市集 - 短陌兌換</div>
-            <div class="search-box">
+
+            <div class="notice-image-list">
+                <div class="notice-image-card">
+                    <img src="夢競陪玩須知.jpg" alt="夢競陪玩須知 1">
+                </div>
+                <div class="notice-image-card">
+                    <img src="下單須知.jpg" alt="下單須知 2">
+                </div>
+            </div>
+            
+            <div class="search-box" style="margin-top:25px;">
                 <input type="text" id="searchInput" placeholder="搜尋商品名稱、類型..." oninput="renderShop()">
             </div>
             <div class="shop-tabs">
@@ -844,14 +854,7 @@
 <div class="shop-tab" data-tab="限時單" onclick="switchShop('限時單')">限時單</div>
             </div>
             <div id="shopList" class="shop-cat active"></div>
-            <div class="notice-image-list">
-                <div class="notice-image-card">
-                    <img src="夢競陪玩須知.jpg" alt="夢競陪玩須知 1">
-                </div>
-                <div class="notice-image-card">
-                    <img src="下單須知.jpg" alt="下單須知 2">
-                </div>
-            </div>
+            
         </div>
     </div>
 
