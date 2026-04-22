@@ -2614,6 +2614,9 @@ async function handleEmailVerifyFromUrl() {
 
 async function logout() {
     stopMemberOrderChatPolling();
+    state.chatPanelOpen = false;
+    state.currentRecordChatOrderId = null;
+    state.chatRequestToken += 1;
     try { sessionStorage.removeItem('member_session_live'); } catch (e) {}
     const res = await api('logout');
     if (res && res.message) {
