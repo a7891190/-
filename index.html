@@ -1363,11 +1363,19 @@ async function submitRechargeRequest() {
     const note = document.getElementById('recharge_note')?.value.trim() || '';
     const proofFile = document.getElementById('recharge_proof')?.files?.[0] || null;
 
-    if (amount < 500) {
-        setMessage('rechargeApplyMsg', '最低儲值金額為 500');
+    const isPresetAmount = RECHARGE_PRESETS.includes(amount);
+
+    if (amount <= 0) {
+        setMessage('rechargeApplyMsg', '請先選擇或輸入儲值金額');
         return;
     }
-    if (amount % 100 !== 0) {
+
+    if (!isPresetAmount && amount < 500) {
+        setMessage('rechargeApplyMsg', '自訂儲值金額最低為 500，固定面額 200 可直接使用');
+        return;
+    }
+
+    if (!isPresetAmount && amount % 100 !== 0) {
         setMessage('rechargeApplyMsg', '自訂金額需以 100 為單位輸入');
         return;
     }
