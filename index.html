@@ -1078,22 +1078,50 @@ function vipClass(level) {
 }
 
 function orderStatusText(item) {
-    const status = String(item.order_status || 'waiting_dispatch');
+    const orderId = Number(item.order_id || item.companion_order_id || 0);
+    const status = String(item.order_status || item.companion_order_status || 'waiting_dispatch');
     const accepted = Number(item.accepted_count || 0);
     const required = Number(item.required_companions || 0);
 
-    if (!item.order_id) return '<span class="record-status waiting">未建立陪玩訂單</span>';
-    if (status === 'completed') return '<span class="record-status completed">已完成</span>';
-    if (status === 'processing') return `<span class="record-status processing">進行中（${accepted}/${required} 已承接）</span>`;
-    if (status === 'partial') return `<span class="record-status partial">部分承接（${accepted}/${required}）</span>`;
-    if (status === 'returned_to_member') return '<span class="record-status returned">已退回會員</span>';
-    if (status === 'dispatched') return `<span class="record-status waiting">已派單（${accepted}/${required}）</span>`;
-    return '<span class="record-status waiting">等待派單</span>';
+    if (!orderId) {
+        return '<span class="record-status waiting">未建立陪玩訂單</span>';
+    }
+
+    if (status === 'returned_to_member') {
+        return '<span class="record-status returned">已退回</span>';
+    }
+
+    if (status === 'completed') {
+        return '<span class="record-status completed">已完成</span>';
+    }
+
+    if (status === 'processing') {
+        return '<span class="record-status processing">已承接</span>';
+    }
+
+    if (status === 'partial') {
+        return '<span class="record-status partial">部分承接</span>';
+    }
+
+    if (status === 'dispatched' || status === 'waiting_dispatch') {
+        return '<span class="record-status waiting">未承接</span>';
+    }
+
+    if (accepted >= Math.max(required, 1)) {
+        return '<span class="record-status processing">已承接</span>';
+    }
+
+    if (accepted > 0) {
+        return '<span class="record-status partial">部分承接</span>';
+    }
+
+    return '<span class="record-status waiting">未承接</span>';
 }
 
 function memberCanOpenChat(item) {
-    const status = String(item?.order_status || '');
-    return !!item?.order_id && !['completed', 'returned_to_member'].includes(status);
+    const orderId = Number(item.order_id || item.companion_order_id || 0);
+    const status = String(item.order_status || item.companion_order_status || '');
+    return !!orderId && !['completed', 'returned_to_member'].includes(status);
 }
 
 function renderRecords(records) {
@@ -1106,17 +1134,24 @@ function renderRecords(records) {
         return;
     }
 
-    tbody.innerHTML = list.map(item => `
-        <tr>
-            <td>${formatMinute(item.time)}</td>
-            <td>${item.name || ''}</td>
-            <td>${item.cost || 0}</td>
-            <td>${orderStatusText(item)}</td>
-            <td>
-                ${memberCanOpenChat(item) ? `<button class="btn" onclick="openMemberOrderChat(${Number(item.order_id)}, '${String(item.name || '').replaceAll("'", "\'")}')">查看聊天室</button>` : '<span style="color:#999;">聊天室已關閉</span>'}
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = list.map(item => {
+        const orderId = Number(item.order_id || item.companion_order_id || 0);
+        const safeName = String(item.name || '').replaceAll("'", "\\'");
+
+        return `
+            <tr>
+                <td>${formatMinute(item.time)}</td>
+                <td>${item.name || ''}</td>
+                <td>${item.cost || 0}</td>
+                <td>${orderStatusText(item)}</td>
+                <td>
+                    ${memberCanOpenChat(item)
+                        ? `<button class="btn" onclick="openMemberOrderChat(${orderId}, '${safeName}')">查看聊天室</button>`
+                        : '<span style="color:#999;">聊天室已關閉</span>'}
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 function renderRecharges(records) {
