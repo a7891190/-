@@ -1125,7 +1125,9 @@ const state = {
     shopLoaded: false,
     backgroundRefreshTimer: null,
     chatPollTimer: null,
-    chatLastMessageId: 0
+    chatLastMessageId: 0,
+    chatPanelOpen: false,
+    chatRequestToken: 0
 };
 
 const RECHARGE_PRESETS = [200, 500, 1000, 2000, 3000, 5000, 8000, 10000, 12000, 15000, 20000, 30000];
@@ -1916,6 +1918,9 @@ function updateUserUI(user) {
 
 function renderLoggedOut() {
     stopMemberOrderChatPolling();
+    state.chatPanelOpen = false;
+    state.currentRecordChatOrderId = null;
+    state.chatRequestToken += 1;
     state.user = null;
     try { sessionStorage.removeItem('member_session_live'); } catch (e) {}
 
@@ -2272,6 +2277,7 @@ function attachMemberOrderChatPanelInline() {
 
     panel.style.width = '100%';
     panel.style.maxWidth = '100%';
+    panel.style.minWidth = '100%';
 
     const dock = document.getElementById('memberOrderChatDock');
     const host = state.currentRecordChatOrderId
@@ -2279,9 +2285,11 @@ function attachMemberOrderChatPanelInline() {
         : null;
 
     if (host) {
+        host.innerHTML = '';
         host.appendChild(panel);
-        panel.style.display = 'block';
+        panel.style.display = state.chatPanelOpen ? 'block' : 'none';
     } else if (dock) {
+        dock.innerHTML = '';
         dock.appendChild(panel);
         panel.style.display = 'none';
     }
@@ -2298,13 +2306,14 @@ function toggleMemberOrderChatBody(btn) {
 
 function startMemberOrderChatPolling() {
     stopMemberOrderChatPolling();
-    if (!state.currentRecordChatOrderId) return;
+    if (!state.currentRecordChatOrderId || !state.chatPanelOpen) return;
 
     state.chatPollTimer = setInterval(async () => {
-        if (!state.currentRecordChatOrderId) return;
+        if (!state.currentRecordChatOrderId || !state.chatPanelOpen) return;
         const panel = document.getElementById('memberOrderChatPanel');
         if (!panel || panel.style.display === 'none') return;
-        await loadMemberOrderChatMessages();
+        const token = state.chatRequestToken;
+        await loadMemberOrderChatMessages({ token });
     }, 3000);
 }
 
@@ -2349,13 +2358,9 @@ function renderMemberOrderChatMessages(messages) {
 
 async function openMemberOrderChat(orderId) {
     const nextOrderId = Number(orderId || 0);
-    const panel = document.getElementById('memberOrderChatPanel');
-    const body = document.getElementById('memberOrderChatBody');
-    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
-    const sameOrder = state.currentRecordChatOrderId === nextOrderId;
-    const panelVisible = !!panel && panel.style.display !== 'none';
+    const sameOrderOpen = state.currentRecordChatOrderId === nextOrderId && state.chatPanelOpen;
 
-    if (sameOrder && panelVisible) {
+    if (sameOrderOpen) {
         closeMemberOrderChat();
         return;
     }
@@ -2365,7 +2370,12 @@ async function openMemberOrderChat(orderId) {
     state.currentRecordChatOrderId = nextOrderId;
     state.currentRecordChatTitle = '';
     state.chatLastMessageId = 0;
+    state.chatPanelOpen = true;
+    state.chatRequestToken += 1;
 
+    const panel = document.getElementById('memberOrderChatPanel');
+    const body = document.getElementById('memberOrderChatBody');
+    const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
     const info = document.getElementById('memberOrderChatInfo');
     const box = document.getElementById('memberOrderChatBox');
     const textInput = document.getElementById('memberOrderChatText');
@@ -2380,6 +2390,8 @@ async function openMemberOrderChat(orderId) {
     if (panel) {
         panel.style.display = 'block';
         panel.style.width = '100%';
+        panel.style.maxWidth = '100%';
+        panel.style.minWidth = '100%';
     }
     if (body) body.style.display = 'block';
     if (toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
@@ -2388,13 +2400,18 @@ async function openMemberOrderChat(orderId) {
     if (host) host.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     setMessage('memberOrderChatMsg', '載入聊天室中...');
-    await loadMemberOrderChatMessages({ forceOpen: true });
-    startMemberOrderChatPolling();
+    const token = state.chatRequestToken;
+    await loadMemberOrderChatMessages({ forceOpen: true, token });
+    if (state.chatPanelOpen && state.currentRecordChatOrderId === nextOrderId) {
+        startMemberOrderChatPolling();
+    }
 }
 
 function closeMemberOrderChat() {
     stopMemberOrderChatPolling();
 
+    state.chatPanelOpen = false;
+    state.chatRequestToken += 1;
     state.currentRecordChatOrderId = null;
     state.currentRecordChatTitle = '';
     state.chatLastMessageId = 0;
@@ -2415,6 +2432,8 @@ function closeMemberOrderChat() {
     if (panel) {
         panel.style.display = 'none';
         panel.style.width = '100%';
+        panel.style.maxWidth = '100%';
+        panel.style.minWidth = '100%';
     }
 
     setMessage('memberOrderChatMsg', '');
@@ -2423,12 +2442,13 @@ function closeMemberOrderChat() {
 }
 
 async function loadMemberOrderChatMessages(options = {}) {
-    if (!state.currentRecordChatOrderId) {
+    if (!state.currentRecordChatOrderId || !state.chatPanelOpen) {
         setMessage('memberOrderChatMsg', '請先開啟聊天室');
         return;
     }
 
     const forceOpen = !!options.forceOpen;
+    const token = Number(options.token || state.chatRequestToken || 0);
     const panel = document.getElementById('memberOrderChatPanel');
     const body = document.getElementById('memberOrderChatBody');
     const toggleBtn = document.querySelector('#memberOrderChatPanel button[data-open-text]');
@@ -2436,11 +2456,18 @@ async function loadMemberOrderChatMessages(options = {}) {
     if (panel) {
         panel.style.display = 'block';
         panel.style.width = '100%';
+        panel.style.maxWidth = '100%';
+        panel.style.minWidth = '100%';
     }
     if (forceOpen && body) body.style.display = 'block';
     if (forceOpen && toggleBtn) toggleBtn.innerText = toggleBtn.dataset.openText || '收起聊天室';
 
-    const res = await api('companion_order_chat_messages', { order_id: state.currentRecordChatOrderId });
+    const orderId = state.currentRecordChatOrderId;
+    const res = await api('companion_order_chat_messages', { order_id: orderId });
+
+    if (token !== state.chatRequestToken || orderId !== state.currentRecordChatOrderId || !state.chatPanelOpen) {
+        return;
+    }
 
     if (!res.ok) {
         const box = document.getElementById('memberOrderChatBox');
