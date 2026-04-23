@@ -23,10 +23,25 @@
 .logo {
     position: absolute;
     left: 30px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #ff69b4;
-    line-height: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    z-index: 2;
+}
+
+.logo a {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo img {
+    display: block;
+    height: 58px;
+    width: auto;
+    max-width: 340px;
+    object-fit: contain;
 }
 
 .nav {
@@ -257,28 +272,335 @@
 
 
         @media (max-width: 900px) {
+    @media (max-width: 900px) {
     .header {
-        padding: 12px 14px;
-        justify-content: space-between;
-        align-items: flex-start;
+        padding: 12px 12px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
     }
 
     .logo {
         position: static;
-        font-size: 22px;
-        text-align: left;
-        margin-top: 36px;
-        margin-bottom: 0;
-        line-height: 1.2;
-        white-space: nowrap;
-        align-self: flex-start;
+        transform: none;
+        left: auto;
+        top: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    .logo a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .logo img {
+        height: auto;
+        width: auto;
+        max-width: min(78vw, 280px);
+        max-height: 64px;
+        object-fit: contain;
     }
 
     .nav {
         width: 100%;
-        gap: 10px;
+        gap: 10px 14px;
         justify-content: center;
+        align-items: center;
     }
+
+    .nav a {
+        font-size: 14px;
+        padding: 4px 0;
+        line-height: 1.5;
+    }
+
+    .container {
+        margin: 18px auto;
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
+
+    .member-row {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .member-left,
+    .member-right {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    .user-info {
+        text-align: center;
+    }
+
+    .user-info p {
+        font-size: 14px;
+        margin: 10px 0;
+        line-height: 1.7;
+        text-align: center;
+    }
+
+    .rule-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+        text-align: center;
+        padding-left: 0;
+    }
+
+    .rule-box {
+        font-size: 14px;
+        line-height: 1.9;
+        padding-left: 0;
+        text-align: center;
+    }
+
+    .avatar-preview {
+        width: 90px;
+        height: 90px;
+    }
+
+    .avatar-upload-input {
+        font-size: 13px;
+    }
+
+    .podium-card-home {
+        padding: 14px 12px;
+        margin-bottom: 16px;
+    }
+
+    .podium-title {
+        font-size: 18px;
+        margin-bottom: 12px;
+        padding-left: 0;
+        text-align: center;
+    }
+
+    .podium {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 8px;
+        min-height: 165px;
+        flex-wrap: nowrap;
+    }
+
+    .podium-item {
+        width: 31%;
+        max-width: none;
+        margin: 0;
+    }
+
+    .podium-top {
+        padding: 8px 4px 8px;
+    }
+
+    .podium-avatar {
+        width: 46px;
+        height: 46px;
+    }
+
+    .podium-name {
+        font-size: 11px;
+        line-height: 1.2;
+    }
+
+    .podium-vip,
+    .podium-exp {
+        font-size: 10px;
+        line-height: 1.2;
+    }
+
+    .podium-first .podium-base {
+        height: 56px;
+        font-size: 16px;
+    }
+
+    .podium-second .podium-base {
+        height: 44px;
+        font-size: 14px;
+    }
+
+    .podium-third .podium-base {
+        height: 36px;
+        font-size: 13px;
+    }
+
+    #recordTable,
+    #rechargeTable {
+        table-layout: fixed;
+        width: 100%;
+        white-space: normal;
+        display: table;
+    }
+
+    #recordTable th,
+    #recordTable td,
+    #rechargeTable th,
+    #rechargeTable td {
+        font-size: 12px;
+        padding: 8px 6px;
+        text-align: center;
+        word-break: break-word;
+    }
+
+    #recordTable th:nth-child(1),
+    #recordTable td:nth-child(1),
+    #rechargeTable th:nth-child(1),
+    #rechargeTable td:nth-child(1) {
+        width: 34%;
+    }
+
+    #recordTable th:nth-child(2),
+    #recordTable td:nth-child(2),
+    #rechargeTable th:nth-child(2),
+    #rechargeTable td:nth-child(2) {
+        width: 33%;
+    }
+
+    #recordTable th:nth-child(3),
+    #recordTable td:nth-child(3),
+    #rechargeTable th:nth-child(3),
+    #rechargeTable td:nth-child(3) {
+        width: 33%;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        margin-top: 14px;
+    }
+
+    table th,
+    table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    #rankingList table {
+        table-layout: auto;
+        width: 100%;
+        white-space: normal;
+    }
+
+    #rankingList th,
+    #rankingList td {
+        text-align: center;
+        font-size: 12px;
+        padding: 8px 6px;
+    }
+
+    #rankingList th:nth-child(1),
+    #rankingList td:nth-child(1) {
+        width: 52px;
+    }
+
+    #rankingList th:nth-child(2),
+    #rankingList td:nth-child(2) {
+        width: 56px;
+    }
+
+    #rankingList th:nth-child(3),
+    #rankingList td:nth-child(3) {
+        width: 90px;
+    }
+
+    #rankingList th:nth-child(4),
+    #rankingList td:nth-child(4) {
+        width: 90px;
+    }
+
+    #rankingList th:nth-child(5),
+    #rankingList td:nth-child(5) {
+        width: 72px;
+    }
+
+    .ranking-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .shop-tabs {
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .shop-tab {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .search-box input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .shop-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .shop-item {
+        padding: 16px;
+    }
+
+    .shop-item h3 {
+        font-size: 17px;
+    }
+
+    .shop-item p {
+        font-size: 14px;
+    }
+
+    .login-box {
+        max-width: 100%;
+        margin: 24px auto;
+        padding: 22px;
+    }
+
+    .login-box input {
+        font-size: 14px;
+        padding: 11px;
+    }
+
+    .login-box .btn,
+    .btn {
+        font-size: 14px;
+    }
+
+    .brand-bottom {
+        font-size: 18px;
+        margin-top: 24px;
+    }
+
+    .empty {
+        font-size: 14px;
+        padding: 30px 0;
+    }
+}
 
     .nav a {
         font-size: 14px;
