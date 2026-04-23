@@ -272,7 +272,6 @@
 
 
         @media (max-width: 900px) {
-    @media (max-width: 900px) {
     .header {
         padding: 12px 12px 10px;
         display: flex;
@@ -311,14 +310,21 @@
 
     .nav {
         width: 100%;
-        gap: 10px 14px;
-        justify-content: center;
-        align-items: center;
+        gap: 8px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
     }
 
     .nav a {
+        flex: 0 0 auto;
+        background: #252525;
+        border: 1px solid #333;
+        border-radius: 999px;
+        padding: 8px 12px;
+        white-space: nowrap;
         font-size: 14px;
-        padding: 4px 0;
         line-height: 1.5;
     }
 
@@ -447,429 +453,84 @@
     }
 
     #recordTable,
-    #rechargeTable {
-        table-layout: fixed;
-        width: 100%;
-        white-space: normal;
-        display: table;
-    }
-
-    #recordTable th,
-    #recordTable td,
-    #rechargeTable th,
-    #rechargeTable td {
-        font-size: 12px;
-        padding: 8px 6px;
-        text-align: center;
-        word-break: break-word;
-    }
-
-    #recordTable th:nth-child(1),
-    #recordTable td:nth-child(1),
-    #rechargeTable th:nth-child(1),
-    #rechargeTable td:nth-child(1) {
-        width: 34%;
-    }
-
-    #recordTable th:nth-child(2),
-    #recordTable td:nth-child(2),
-    #rechargeTable th:nth-child(2),
-    #rechargeTable td:nth-child(2) {
-        width: 33%;
-    }
-
-    #recordTable th:nth-child(3),
-    #recordTable td:nth-child(3),
-    #rechargeTable th:nth-child(3),
-    #rechargeTable td:nth-child(3) {
-        width: 33%;
-    }
-
-    table {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        white-space: nowrap;
-        margin-top: 14px;
-    }
-
-    table th,
-    table td {
-        padding: 10px 8px;
-        font-size: 13px;
-    }
-
-    #rankingList table {
-        table-layout: auto;
-        width: 100%;
-        white-space: normal;
-    }
-
-    #rankingList th,
-    #rankingList td {
-        text-align: center;
-        font-size: 12px;
-        padding: 8px 6px;
-    }
-
-    #rankingList th:nth-child(1),
-    #rankingList td:nth-child(1) {
-        width: 52px;
-    }
-
-    #rankingList th:nth-child(2),
-    #rankingList td:nth-child(2) {
-        width: 56px;
-    }
-
-    #rankingList th:nth-child(3),
-    #rankingList td:nth-child(3) {
-        width: 90px;
-    }
-
-    #rankingList th:nth-child(4),
-    #rankingList td:nth-child(4) {
-        width: 90px;
-    }
-
-    #rankingList th:nth-child(5),
-    #rankingList td:nth-child(5) {
-        width: 72px;
-    }
-
-    .ranking-avatar {
-        width: 32px;
-        height: 32px;
-    }
-
-    .shop-tabs {
-        gap: 8px;
-        margin-bottom: 18px;
-    }
-
-    .shop-tab {
-        font-size: 13px;
-        padding: 8px 12px;
-    }
-
-    .search-box input {
-        font-size: 14px;
-        padding: 10px 12px;
-    }
-
-    .shop-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-
-    .shop-item {
-        padding: 16px;
-    }
-
-    .shop-item h3 {
-        font-size: 17px;
-    }
-
-    .shop-item p {
-        font-size: 14px;
-    }
-
-    .login-box {
-        max-width: 100%;
-        margin: 24px auto;
-        padding: 22px;
-    }
-
-    .login-box input {
-        font-size: 14px;
-        padding: 11px;
-    }
-
-    .login-box .btn,
-    .btn {
-        font-size: 14px;
-    }
-
-    .brand-bottom {
-        font-size: 18px;
-        margin-top: 24px;
-    }
-
-    .empty {
-        font-size: 14px;
-        padding: 30px 0;
-    }
-}
-
-    .nav a {
-        font-size: 14px;
-        padding: 4px 0;
-    }
-
-    .container {
-        margin: 18px auto;
-        padding: 0 12px;
-    }
-
-    .card {
-        padding: 18px;
-        margin-bottom: 20px;
-    }
-
-    .card-title {
-        font-size: 18px;
-        margin-bottom: 18px;
-    }
-
-    .member-row {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-    }
-
-    .member-left,
-    .member-right {
-        min-width: 100%;
-        width: 100%;
-    }
-
-    .user-info {
-        text-align: center;
-    }
-
-    .user-info p {
-        font-size: 14px;
-        margin: 10px 0;
-        line-height: 1.7;
-        text-align: center;
-    }
-
-    .rule-title {
-        font-size: 18px;
-        margin-bottom: 10px;
-        text-align: center;
-        padding-left: 0;
-    }
-
-    .rule-box {
-        font-size: 14px;
-        line-height: 1.9;
-        padding-left: 0;
-        text-align: center;
-    }
-
-    .avatar-preview {
-        width: 90px;
-        height: 90px;
-    }
-
-    .avatar-upload-input {
-        font-size: 13px;
-    }
-
-    /* 手機版把前三名放到會員中心上方，縮小後三個並排 */
-   .podium-card-home {
-    padding: 14px 12px;
-    margin-bottom: 16px;
-}
-
-.podium-title {
-    font-size: 18px;
-    margin-bottom: 12px;
-    padding-left: 0;
-    text-align: center;
-}
-
-.podium {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 8px;
-    min-height: 165px;
-    flex-wrap: nowrap;
-}
-
-.podium-item {
-    width: 31%;
-    max-width: none;
-    margin: 0;
-}
-
-.podium-top {
-    padding: 8px 4px 8px;
-}
-
-.podium-avatar {
-    width: 46px;
-    height: 46px;
-}
-
-.podium-name {
-    font-size: 11px;
-    line-height: 1.2;
-}
-
-.podium-vip,
-.podium-exp {
-    font-size: 10px;
-    line-height: 1.2;
-}
-
-.podium-first .podium-base {
-    height: 56px;
-    font-size: 16px;
-}
-
-.podium-second .podium-base {
-    height: 44px;
-    font-size: 14px;
-}
-
-.podium-third .podium-base {
-    height: 36px;
-    font-size: 13px;
-}
-
-    /* 手機版購買紀錄 / 儲值紀錄 / 贈送紀錄改成卡片式更好讀 */
-    #recordTable,
     #rechargeHistoryTable,
     #giftHistoryTable {
-        display:block;
-        width:100%;
-        overflow:visible;
-        white-space:normal;
-        margin-top:14px;
-        background:transparent;
-        border-collapse:separate;
+        display: block;
+        width: 100%;
+        overflow: visible;
+        white-space: normal;
+        margin-top: 14px;
+        background: transparent;
+        border-collapse: separate;
     }
 
     #recordTable thead,
     #rechargeHistoryTable thead,
     #giftHistoryTable thead {
-        display:none;
+        display: none;
     }
 
     #recordTable tbody,
     #rechargeHistoryTable tbody,
     #giftHistoryTable tbody {
-        display:block;
-        width:100%;
+        display: block;
+        width: 100%;
     }
 
     #recordTable tr,
     #rechargeHistoryTable tr,
     #giftHistoryTable tr {
-        display:block;
-        width:100%;
-        background:#202020;
-        border:1px solid #333;
-        border-radius:16px;
-        padding:14px 14px 10px;
-        margin-bottom:14px;
-        box-shadow:0 0 0 1px rgba(255,105,180,0.03) inset;
+        display: block;
+        width: 100%;
+        background: #202020;
+        border: 1px solid #333;
+        border-radius: 16px;
+        padding: 14px 14px 10px;
+        margin-bottom: 14px;
+        box-shadow: 0 0 0 1px rgba(255,105,180,0.03) inset;
     }
 
     #recordTable td,
     #rechargeHistoryTable td,
     #giftHistoryTable td {
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap:12px;
-        width:100%;
-        padding:9px 0;
-        border-bottom:1px solid #2f2f2f;
-        font-size:13px;
-        text-align:left;
-        word-break:break-word;
-        white-space:normal;
-        line-height:1.7;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        padding: 9px 0;
+        border-bottom: 1px solid #2f2f2f;
+        font-size: 13px;
+        text-align: left;
+        word-break: break-word;
+        white-space: normal;
+        line-height: 1.7;
     }
 
     #recordTable td:last-child,
     #rechargeHistoryTable td:last-child,
     #giftHistoryTable td:last-child {
-        border-bottom:none;
-        padding-bottom:2px;
+        border-bottom: none;
+        padding-bottom: 2px;
     }
 
     #recordTable td::before,
     #rechargeHistoryTable td::before,
     #giftHistoryTable td::before {
         content: attr(data-label);
-        color:#ff69b4;
-        font-weight:bold;
-        min-width:76px;
-        max-width:76px;
-        text-align:left;
-        flex:0 0 76px;
-        line-height:1.6;
-    }
-
-    #recordTable .chat-entry-wrap {
-        width:100%;
-        justify-content:flex-end;
-        gap:10px;
-        flex-wrap:wrap;
-    }
-
-    #recordTable .chat-entry-wrap .btn {
-        min-width:120px;
-    }
-
-    #recordTable .record-status {
-        margin-left:auto;
-    }
-
-    #rechargeHistoryTable td:nth-child(2),
-    #rechargeHistoryTable td:nth-child(3),
-    #rechargeHistoryTable td:nth-child(4),
-    #giftHistoryTable td:nth-child(2),
-    #giftHistoryTable td:nth-child(3),
-    #giftHistoryTable td:nth-child(4) {
-        justify-content:flex-start;
-    }
-
-    #rechargeHistoryTable td > span,
-    #giftHistoryTable td > span {
-        display:inline-block;
-        max-width:100%;
-    }
-
-    .history-section-card {
-        padding:16px;
-        margin-bottom:16px;
-    }
-
-    .history-toggle-row {
-        align-items:flex-start;
-        gap:10px;
-        margin-bottom:12px;
-    }
-
-    .history-toggle-row .card-title {
-        font-size:18px;
-        margin-bottom:6px !important;
-    }
-
-    .history-subtitle {
-        font-size:13px;
-        line-height:1.7;
-    }
-
-    .history-toggle-btn {
-        width:100%;
-        justify-content:center;
-        padding:10px 14px;
+        color: #ff69b4;
+        font-weight: bold;
+        min-width: 76px;
+        max-width: 76px;
+        text-align: left;
+        flex: 0 0 76px;
+        line-height: 1.6;
     }
 
     .record-mobile-note {
-        display:block;
+        display: block;
     }
 
-    /* 手機版排行榜縮小 */
     table {
         display: block;
         width: 100%;
@@ -896,31 +557,6 @@
         text-align: center;
         font-size: 12px;
         padding: 8px 6px;
-    }
-
-    #rankingList th:nth-child(1),
-    #rankingList td:nth-child(1) {
-        width: 52px;
-    }
-
-    #rankingList th:nth-child(2),
-    #rankingList td:nth-child(2) {
-        width: 56px;
-    }
-
-    #rankingList th:nth-child(3),
-    #rankingList td:nth-child(3) {
-        width: 90px;
-    }
-
-    #rankingList th:nth-child(4),
-    #rankingList td:nth-child(4) {
-        width: 90px;
-    }
-
-    #rankingList th:nth-child(5),
-    #rankingList td:nth-child(5) {
-        width: 72px;
     }
 
     .ranking-avatar {
@@ -986,41 +622,24 @@
         padding: 30px 0;
     }
 
-    .nav {
-        gap: 8px;
-        justify-content: flex-start;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 4px;
-    }
-
-    .nav a {
-        flex: 0 0 auto;
-        background: #252525;
-        border: 1px solid #333;
-        border-radius: 999px;
-        padding: 8px 12px;
-        white-space: nowrap;
-    }
-
     .recharge-layout {
         grid-template-columns: 1fr;
-        gap:14px;
+        gap: 14px;
     }
 
     .recharge-side,
     .recharge-main {
-        gap:14px;
+        gap: 14px;
     }
 
     .transfer-box.compact-top {
-        order:0;
-        margin-bottom:0;
+        order: 0;
+        margin-bottom: 0;
     }
 
     .recharge-form,
     .transfer-box {
-        padding:14px;
+        padding: 14px;
     }
 
     .recharge-grid {
