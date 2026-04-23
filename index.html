@@ -410,72 +410,87 @@
     font-size: 13px;
 }
 
-    /* 手機版購買紀錄 / 儲值紀錄改成卡片式更好讀 */
+    /* 手機版購買紀錄 / 儲值紀錄 / 贈送紀錄改成卡片式更好讀 */
     #recordTable,
-    #rechargeHistoryTable {
+    #rechargeHistoryTable,
+    #giftHistoryTable {
         display:block;
         width:100%;
         overflow:visible;
         white-space:normal;
         margin-top:14px;
+        background:transparent;
+        border-collapse:separate;
     }
 
     #recordTable thead,
-    #rechargeTable thead {
+    #rechargeHistoryTable thead,
+    #giftHistoryTable thead {
         display:none;
     }
 
     #recordTable tbody,
-    #rechargeTable tbody {
+    #rechargeHistoryTable tbody,
+    #giftHistoryTable tbody {
         display:block;
         width:100%;
     }
 
     #recordTable tr,
-    #rechargeTable tr {
+    #rechargeHistoryTable tr,
+    #giftHistoryTable tr {
         display:block;
         width:100%;
         background:#202020;
         border:1px solid #333;
         border-radius:16px;
-        padding:12px;
-        margin-bottom:12px;
+        padding:14px 14px 10px;
+        margin-bottom:14px;
+        box-shadow:0 0 0 1px rgba(255,105,180,0.03) inset;
     }
 
     #recordTable td,
-    #rechargeTable td {
+    #rechargeHistoryTable td,
+    #giftHistoryTable td {
         display:flex;
         align-items:flex-start;
         justify-content:space-between;
         gap:12px;
         width:100%;
-        padding:8px 0;
+        padding:9px 0;
         border-bottom:1px solid #2f2f2f;
         font-size:13px;
         text-align:left;
         word-break:break-word;
         white-space:normal;
+        line-height:1.7;
     }
 
     #recordTable td:last-child,
-    #rechargeTable td:last-child {
+    #rechargeHistoryTable td:last-child,
+    #giftHistoryTable td:last-child {
         border-bottom:none;
+        padding-bottom:2px;
     }
 
     #recordTable td::before,
-    #rechargeTable td::before {
+    #rechargeHistoryTable td::before,
+    #giftHistoryTable td::before {
         content: attr(data-label);
         color:#ff69b4;
         font-weight:bold;
-        min-width:70px;
+        min-width:76px;
+        max-width:76px;
         text-align:left;
-        flex:0 0 70px;
+        flex:0 0 76px;
+        line-height:1.6;
     }
 
     #recordTable .chat-entry-wrap {
         width:100%;
         justify-content:flex-end;
         gap:10px;
+        flex-wrap:wrap;
     }
 
     #recordTable .chat-entry-wrap .btn {
@@ -484,6 +499,48 @@
 
     #recordTable .record-status {
         margin-left:auto;
+    }
+
+    #rechargeHistoryTable td:nth-child(2),
+    #rechargeHistoryTable td:nth-child(3),
+    #rechargeHistoryTable td:nth-child(4),
+    #giftHistoryTable td:nth-child(2),
+    #giftHistoryTable td:nth-child(3),
+    #giftHistoryTable td:nth-child(4) {
+        justify-content:flex-start;
+    }
+
+    #rechargeHistoryTable td > span,
+    #giftHistoryTable td > span {
+        display:inline-block;
+        max-width:100%;
+    }
+
+    .history-section-card {
+        padding:16px;
+        margin-bottom:16px;
+    }
+
+    .history-toggle-row {
+        align-items:flex-start;
+        gap:10px;
+        margin-bottom:12px;
+    }
+
+    .history-toggle-row .card-title {
+        font-size:18px;
+        margin-bottom:6px !important;
+    }
+
+    .history-subtitle {
+        font-size:13px;
+        line-height:1.7;
+    }
+
+    .history-toggle-btn {
+        width:100%;
+        justify-content:center;
+        padding:10px 14px;
     }
 
     .record-mobile-note {
