@@ -1171,6 +1171,10 @@ function showSection(id) {
     const target = document.getElementById(id);
     if (target) target.classList.add('active');
 
+    if (id !== 'record') {
+        stopMemberOrderChatPolling();
+    }
+
     if (id === 'ranking') {
         loadVipRanking();
     }
@@ -1185,6 +1189,9 @@ function showSection(id) {
 
     if (id === 'record' && state.user) {
         markRecordUnreadSeen();
+        if (state.currentRecordChatOrderId && state.chatPanelOpen) {
+            startMemberOrderChatPolling();
+        }
     }
 
     if (id === 'rechargeHistory' && state.user) {
@@ -2323,7 +2330,7 @@ function startMemberOrderChatPolling() {
         if (!panel || panel.style.display === 'none') return;
         const token = state.chatRequestToken;
         await loadMemberOrderChatMessages({ token });
-    }, 3000);
+    }, 4000);
 }
 
 function stopMemberOrderChatPolling() {
@@ -2615,11 +2622,9 @@ window.onload = async function () {
 
     loadCompanionStats();
 
-    if (state.backgroundRefreshTimer) {
-        clearInterval(state.backgroundRefreshTimer);
-    }
+    const runBackgroundRefresh = async () => {
+        if (document.hidden) return;
 
-    state.backgroundRefreshTimer = setInterval(async () => {
         loadCompanionStats();
 
         if (state.user) {
@@ -2630,7 +2635,24 @@ window.onload = async function () {
                 await loadSupportMessages();
             }
         }
-    }, 15000);
+    };
+
+    if (state.backgroundRefreshTimer) {
+        clearInterval(state.backgroundRefreshTimer);
+    }
+
+    state.backgroundRefreshTimer = setInterval(runBackgroundRefresh, 30000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            runBackgroundRefresh();
+            if (state.currentRecordChatOrderId && state.chatPanelOpen) {
+                startMemberOrderChatPolling();
+            }
+        } else {
+            stopMemberOrderChatPolling();
+        }
+    });
 };
 </script>
 
