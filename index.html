@@ -11,7 +11,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
         body {
             background-color: #0f0f14;
-            background-image: url("moonlit.png");
+            background-image: url("dark_guofeng_bg_3.png");
             background-size: cover;
             background-position: center top;
             background-repeat: no-repeat;
@@ -25,9 +25,9 @@
             position: fixed;
             inset: 0;
             background:
-                linear-gradient(180deg, rgba(7, 7, 10, 0.82) 0%, rgba(10, 10, 14, 0.74) 35%, rgba(8, 8, 12, 0.88) 100%),
-                radial-gradient(circle at top left, rgba(120, 20, 40, 0.18), transparent 34%),
-                radial-gradient(circle at top right, rgba(160, 120, 40, 0.10), transparent 28%);
+                linear-gradient(180deg, rgba(6, 6, 10, 0.55) 0%, rgba(8, 8, 12, 0.48) 38%, rgba(6, 6, 10, 0.62) 100%),
+                radial-gradient(circle at top left, rgba(255, 105, 180, 0.10), transparent 34%),
+                radial-gradient(circle at top right, rgba(255, 105, 180, 0.08), transparent 28%);
             pointer-events: none;
             z-index: 0;
         }
@@ -884,6 +884,141 @@
         text-align: left;
     }
 }
+
+
+        /* 暗黑古風背景版：移除各頁大型範圍框，避免遮住背景 */
+        .card,
+        .notice-image-card,
+        .shop-item,
+        .recharge-card,
+        .recharge-form,
+        .transfer-box,
+        .ranking-extra-card,
+        .podium-top,
+        .history-section-card,
+        #supportChatBox,
+        #memberOrderChatPanel,
+        #buyModal > div,
+        .chat-box-common,
+        .recharge-proof-box {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .card {
+            padding: 20px 0 28px;
+            margin-bottom: 34px;
+            border-radius: 0;
+        }
+
+        .login-box,
+        .history-section-card {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .podium-top,
+        .ranking-extra-card,
+        .shop-item,
+        .recharge-card,
+        .notice-image-card,
+        .recharge-form,
+        .transfer-box,
+        .history-section-card {
+            border-radius: 0 !important;
+        }
+
+        .ranking-extra-card,
+        .shop-item,
+        .recharge-card,
+        .podium-top {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        .ranking-extra-grid {
+            gap: 14px;
+        }
+
+        .shop-grid {
+            gap: 26px;
+        }
+
+        .recharge-grid {
+            gap: 20px;
+        }
+
+        table th {
+            background: rgba(0, 0, 0, 0.18);
+        }
+
+        #recordTable tr,
+        #rechargeHistoryTable tr,
+        #giftHistoryTable tr,
+        .record-inline-chat-row td {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        #recordTable td,
+        #rechargeHistoryTable td,
+        #giftHistoryTable td,
+        .transfer-info-row,
+        table th,
+        table td {
+            border-color: rgba(255,255,255,0.16) !important;
+        }
+
+        .card-title,
+        .rule-title,
+        .podium-title,
+        .brand-bottom,
+        .notice-image-title,
+        .recharge-form h3,
+        .transfer-box h3,
+        .history-subtitle,
+        .history-toggle-row,
+        .user-info,
+        .rule-box,
+        table,
+        .shop-item,
+        .ranking-extra-card,
+        .msg,
+        .empty,
+        .record-mobile-note {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.70);
+        }
+
+        @media (max-width: 900px) {
+            .card {
+                padding: 12px 0 20px;
+                margin-bottom: 18px;
+            }
+
+            .shop-grid {
+                gap: 14px;
+            }
+
+            .recharge-grid {
+                gap: 12px;
+            }
+
+            .ranking-extra-grid {
+                gap: 8px;
+            }
+
+            #recordTable tr,
+            #rechargeHistoryTable tr,
+            #giftHistoryTable tr {
+                padding: 10px 0 8px;
+                margin-bottom: 12px;
+                border-radius: 0;
+            }
+        }
 
     </style>
 </head>
