@@ -11,21 +11,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft JhengHei", sans-serif; }
         body {
             background-color: #050509;
-            background-image: url("moonlit.png");
-            background-size: 100% auto;
-            background-position: center top;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
             color: #fff;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
         body::before {
             content: "";
-            position: absolute;
+            position: fixed;
             inset: 0;
             background:
-                linear-gradient(180deg, rgba(4, 4, 8, 0.18) 0%, rgba(6, 6, 10, 0.10) 30%, rgba(4, 4, 8, 0.22) 100%),
+                linear-gradient(180deg, rgba(3, 3, 6, 0.78) 0%, rgba(5, 5, 9, 0.72) 38%, rgba(3, 3, 6, 0.82) 100%),
                 radial-gradient(circle at top left, rgba(255, 105, 180, 0.05), transparent 32%),
                 radial-gradient(circle at top right, rgba(255, 105, 180, 0.04), transparent 26%);
             pointer-events: none;
@@ -1021,13 +1017,8 @@
         }
 
 
-        /* 背景加強版：讓直式古風背景更明顯，並隨頁面上下捲動看到整張圖上下 */
         html, body {
             min-height: 100%;
-        }
-
-        body {
-            overflow-x: hidden;
         }
 
         .container,
@@ -1040,26 +1031,71 @@
             z-index: 1;
         }
 
+
+
+        /* 首頁專用背景：從導覽列下方開始，到首頁最底結束；捲動時可看到完整上下端 */
+        #home {
+            position: relative;
+            z-index: 1;
+            isolation: isolate;
+            overflow: hidden;
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        #home::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("moonlit.png");
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: 100% 100%;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        #home::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.64) 0%, rgba(0, 0, 0, 0.58) 35%, rgba(0, 0, 0, 0.70) 100%),
+                radial-gradient(circle at top center, rgba(255, 105, 180, 0.04), transparent 42%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        #home > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ranking-vip-note {
+            margin-top: 0;
+        }
+
         @media (min-width: 901px) {
-            body {
-                background-size: min(100vw, 1500px) auto;
-                background-position: center top;
-                background-attachment: scroll;
+            #home {
+                padding: 24px;
             }
         }
 
         @media (max-width: 900px) {
-            body {
-                background-size: 100% auto;
-                background-position: center top;
-                background-attachment: scroll;
+            #home {
+                padding: 12px 10px 16px;
+                border-radius: 14px;
             }
 
-            body::before {
+            #home::before {
+                background-size: 100% 100%;
+                background-position: center top;
+            }
+
+            #home::after {
                 background:
-                    linear-gradient(180deg, rgba(4, 4, 8, 0.12) 0%, rgba(6, 6, 10, 0.08) 34%, rgba(4, 4, 8, 0.16) 100%),
-                    radial-gradient(circle at top left, rgba(255, 105, 180, 0.04), transparent 30%),
-                    radial-gradient(circle at top right, rgba(255, 105, 180, 0.03), transparent 24%);
+                    linear-gradient(180deg, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.60) 34%, rgba(0, 0, 0, 0.74) 100%),
+                    radial-gradient(circle at top center, rgba(255, 105, 180, 0.03), transparent 38%);
             }
         }
 
@@ -1213,6 +1249,16 @@
         <div class="card">
             <div class="card-title">VIP經驗值排行榜</div>
             <div id="rankingList">載入中...</div>
+        </div>
+        <div class="card ranking-vip-note">
+            <div class="card-title">VIP說明</div>
+            <div class="rule-box">
+                VIP1～3：VIP經驗值減少30%<br>
+                VIP4～6：VIP經驗值減少20%（一個月未購買商品）<br>
+                VIP7～8：VIP經驗值減少8%<br>
+                VIP9～10：VIP經驗值減少5%（兩個禮拜未購買商品）<br><br>
+                ※ 以上為 VIP 經驗值減少規律說明，未開通會員時權益會顯示為鎖定，但內容仍可查看。
+            </div>
         </div>
     </div>
 
