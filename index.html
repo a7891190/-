@@ -310,6 +310,37 @@
             line-height:1.35;
             word-break:break-word;
         }
+        .home-ranking-extra {
+            margin-top:18px;
+        }
+        .home-ranking-extra .ranking-extra-title {
+            text-align:center;
+        }
+        .home-ranking-extra .ranking-extra-grid {
+            grid-auto-columns:minmax(92px, 92px);
+            gap:10px;
+        }
+        .home-ranking-extra .ranking-extra-card {
+            min-height:132px;
+            padding:10px 8px;
+            border-radius:12px;
+        }
+        .home-ranking-extra .ranking-extra-rank {
+            font-size:14px;
+            margin-bottom:8px;
+        }
+        .home-ranking-extra .ranking-extra-avatar {
+            width:44px;
+            height:44px;
+            margin-bottom:8px;
+        }
+        .home-ranking-extra .ranking-extra-name {
+            font-size:13px;
+            margin-bottom:4px;
+        }
+        .home-ranking-extra .ranking-extra-vip {
+            font-size:12px;
+        }
 
         .record-mobile-note { display:none; color:#999; font-size:12px; line-height:1.8; margin-top:10px; }
         .recharge-proof-note { color:#ffd6ea; font-size:13px; line-height:1.8; margin-top:8px; }
@@ -600,23 +631,27 @@
     }
 
     #rankingList .ranking-table-wrap {
-        margin: 0 -4px;
+        margin: 0;
+        width: 100%;
         padding-bottom: 2px;
+        overflow-x: hidden;
     }
 
     #rankingList table {
-        min-width: 560px;
-        width: 560px;
+        min-width: 0;
+        width: 100%;
         table-layout: fixed;
-        white-space: nowrap;
+        white-space: normal;
         margin-top: 6px;
     }
 
     #rankingList th,
     #rankingList td {
         text-align: center;
-        font-size: 13px;
-        padding: 10px 8px;
+        font-size: 12px;
+        padding: 9px 4px;
+        white-space: normal;
+        word-break: break-word;
     }
 
     .ranking-avatar {
@@ -661,6 +696,45 @@
 
     .ranking-extra-vip {
         font-size: 12px;
+    }
+
+    .home-ranking-extra {
+        margin-top: 14px;
+    }
+
+    .home-ranking-extra .ranking-extra-title {
+        font-size: 13px;
+        margin-bottom: 8px;
+        text-align: left;
+    }
+
+    .home-ranking-extra .ranking-extra-grid {
+        grid-auto-columns: minmax(82px, 82px);
+        gap: 8px;
+    }
+
+    .home-ranking-extra .ranking-extra-card {
+        min-height: 118px;
+        padding: 8px 6px;
+    }
+
+    .home-ranking-extra .ranking-extra-avatar {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 6px;
+    }
+
+    .home-ranking-extra .ranking-extra-rank {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .home-ranking-extra .ranking-extra-name {
+        font-size: 12px;
+    }
+
+    .home-ranking-extra .ranking-extra-vip {
+        font-size: 11px;
     }
 
     .shop-tabs {
@@ -846,6 +920,7 @@
         <div id="topPodium" class="podium">
             <div class="empty" style="padding:20px 0;">載入中...</div>
         </div>
+        <div id="homeRankingExtra" class="ranking-extra-wrap home-ranking-extra" style="display:none;"></div>
     </div>
 
     <div class="card">
@@ -1760,6 +1835,36 @@ function renderTopPodium(ranking) {
 `;
 }
 
+function renderHomeRankingExtra(ranking) {
+    const box = document.getElementById('homeRankingExtra');
+    if (!box) return;
+
+    const extraRanking = Array.isArray(ranking) ? ranking.slice(3, 10) : [];
+
+    if (!extraRanking.length) {
+        box.innerHTML = '';
+        box.style.display = 'none';
+        return;
+    }
+
+    box.style.display = 'block';
+    box.innerHTML = `
+        <div class="ranking-extra-title">第 4 名至第 10 名</div>
+        <div class="ranking-extra-scroll">
+            <div class="ranking-extra-grid">
+                ${extraRanking.map(item => `
+                    <div class="ranking-extra-card">
+                        <div class="ranking-extra-rank">第 ${item.display_rank} 名</div>
+                        <img class="ranking-extra-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar">
+                        <div class="ranking-extra-name">${maskUsername(item.username)}</div>
+                        <div class="ranking-extra-vip">${rankingVipHtml(item)}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
 async function loadVipRanking() {
     const box = document.getElementById('rankingList');
     if (!box) return;
@@ -1771,20 +1876,21 @@ async function loadVipRanking() {
     if (!res.ok) {
         box.innerHTML = '<div class="empty">排行榜載入失敗</div>';
         renderTopPodium([]);
+        renderHomeRankingExtra([]);
         return;
     }
 
     if (!Array.isArray(res.ranking) || res.ranking.length === 0) {
         box.innerHTML = '<div class="empty">目前沒有排行榜資料</div>';
         renderTopPodium([]);
+        renderHomeRankingExtra([]);
         return;
     }
 
     const ranking = normalizeRankingForDisplay(res.ranking);
     state.ranking = ranking;
     renderTopPodium(ranking);
-
-    const extraRanking = ranking.slice(3, 13);
+    renderHomeRankingExtra(ranking);
 
     box.innerHTML = `
         <div class="ranking-table-wrap">
@@ -1811,23 +1917,6 @@ async function loadVipRanking() {
                 </tbody>
             </table>
         </div>
-        ${extraRanking.length ? `
-            <div class="ranking-extra-wrap">
-                <div class="ranking-extra-title">第 4 名至第 13 名</div>
-                <div class="ranking-extra-scroll">
-                    <div class="ranking-extra-grid">
-                        ${extraRanking.map(item => `
-                            <div class="ranking-extra-card">
-                                <div class="ranking-extra-rank">第 ${item.display_rank} 名</div>
-                                <img class="ranking-extra-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar">
-                                <div class="ranking-extra-name">${maskUsername(item.username)}</div>
-                                <div class="ranking-extra-vip">${rankingVipHtml(item)}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        ` : ''}
     `;
 }
 
