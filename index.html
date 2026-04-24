@@ -128,9 +128,13 @@
         .transfer-value { color:#fff; font-weight:bold; text-align:right; word-break:break-all; }
         .user-info p { margin: 14px 0; font-size: 16px; }
         .user-info span { color: #ff69b4; font-weight: bold; }
-        .login-box { max-width: 400px; margin: 60px auto; padding: 30px; }
+        .login-box { max-width: 430px; margin: 60px auto; padding: 30px; text-align: center; }
+        .login-box .card-title { text-align: center; }
         .login-box input { width: 100%; padding: 12px; margin: 10px 0; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px; }
         .login-box .btn { width: 100%; margin-top: 15px; padding: 12px; }
+        .login-remember-row { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:6px; color:#ddd; font-size:14px; }
+        .login-remember-row input { width:auto; margin:0; accent-color:#ff69b4; }
+        .login-links { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:12px; }
         .link { color: #ff69b4; cursor: pointer; margin-top: 15px; display: inline-block; }
         .empty { text-align: center; padding: 60px 0; color: #999; font-size: 16px; }
         .record-status { display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid #444; }
@@ -217,28 +221,29 @@
         }
         .podium-title {
             color: #ff69b4;
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 22px;
+            margin-bottom: 22px;
             font-weight: bold;
-            padding-left: 10px;
+            padding-left: 0;
+            text-align: center;
         }
         .podium {
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            gap: 18px;
-            min-height: 340px;
-            flex-wrap: wrap;
+            gap: 22px;
+            min-height: 390px;
+            flex-wrap: nowrap;
         }
         .podium-item {
-            width: 170px;
+            width: 190px;
             text-align: center;
         }
         .podium-top {
             background: rgba(27, 27, 33, 0.92);
             border: 1px solid rgba(180, 140, 90, 0.18);
             border-radius: 14px 14px 0 0;
-            padding: 18px 12px 14px;
+            padding: 22px 14px 16px;
         }
         .podium-base {
             display: flex;
@@ -249,20 +254,20 @@
             border-radius: 0 0 14px 14px;
         }
         .podium-first .podium-base {
-            height: 120px;
+            height: 140px;
             background: linear-gradient(180deg, #ff69b4, #cc4f91);
         }
         .podium-second .podium-base {
-            height: 90px;
+            height: 108px;
             background: linear-gradient(180deg, #5e5e5e, #444);
         }
         .podium-third .podium-base {
-            height: 70px;
+            height: 86px;
             background: linear-gradient(180deg, #7a4b2c, #5c351c);
         }
         .podium-avatar {
-            width: 84px;
-            height: 84px;
+            width: 92px;
+            height: 92px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid #ff69b4;
@@ -334,35 +339,32 @@
             word-break:break-word;
         }
         .home-ranking-extra {
-            margin-top:18px;
-        }
-        .home-ranking-extra .ranking-extra-title {
-            text-align:center;
+            margin-top:16px;
         }
         .home-ranking-extra .ranking-extra-grid {
-            grid-auto-columns:minmax(92px, 92px);
-            gap:10px;
+            grid-auto-columns:minmax(78px, 78px);
+            gap:8px;
         }
         .home-ranking-extra .ranking-extra-card {
-            min-height:132px;
-            padding:10px 8px;
+            min-height:112px;
+            padding:8px 6px;
             border-radius:12px;
         }
         .home-ranking-extra .ranking-extra-rank {
-            font-size:14px;
-            margin-bottom:8px;
+            font-size:12px;
+            margin-bottom:6px;
         }
         .home-ranking-extra .ranking-extra-avatar {
-            width:44px;
-            height:44px;
-            margin-bottom:8px;
+            width:36px;
+            height:36px;
+            margin-bottom:6px;
         }
         .home-ranking-extra .ranking-extra-name {
-            font-size:13px;
-            margin-bottom:4px;
+            font-size:12px;
+            margin-bottom:2px;
         }
         .home-ranking-extra .ranking-extra-vip {
-            font-size:12px;
+            font-size:11px;
         }
 
         .record-mobile-note { display:none; color:#999; font-size:12px; line-height:1.8; margin-top:10px; }
@@ -501,13 +503,13 @@
     }
 
     .podium-card-home {
-        padding: 14px 12px;
+        padding: 16px 12px;
         margin-bottom: 16px;
     }
 
     .podium-title {
-        font-size: 18px;
-        margin-bottom: 12px;
+        font-size: 20px;
+        margin-bottom: 14px;
         padding-left: 0;
         text-align: center;
     }
@@ -517,50 +519,50 @@
         flex-direction: row;
         align-items: flex-end;
         justify-content: center;
-        gap: 8px;
-        min-height: 165px;
+        gap: 10px;
+        min-height: 190px;
         flex-wrap: nowrap;
     }
 
     .podium-item {
-        width: 31%;
+        width: 32%;
         max-width: none;
         margin: 0;
     }
 
     .podium-top {
-        padding: 8px 4px 8px;
+        padding: 10px 5px 9px;
     }
 
     .podium-avatar {
-        width: 46px;
-        height: 46px;
+        width: 54px;
+        height: 54px;
     }
 
     .podium-name {
-        font-size: 11px;
-        line-height: 1.2;
+        font-size: 12px;
+        line-height: 1.25;
     }
 
     .podium-vip,
     .podium-exp {
-        font-size: 10px;
-        line-height: 1.2;
+        font-size: 11px;
+        line-height: 1.25;
     }
 
     .podium-first .podium-base {
-        height: 56px;
-        font-size: 16px;
+        height: 66px;
+        font-size: 18px;
     }
 
     .podium-second .podium-base {
-        height: 44px;
-        font-size: 14px;
+        height: 52px;
+        font-size: 15px;
     }
 
     .podium-third .podium-base {
-        height: 36px;
-        font-size: 13px;
+        height: 42px;
+        font-size: 14px;
     }
 
     #recordTable,
@@ -665,6 +667,7 @@
     }
 
     #rankingList table {
+        display: table;
         min-width: 0;
         width: 100%;
         table-layout: fixed;
@@ -680,6 +683,16 @@
         white-space: normal;
         word-break: break-word;
     }
+    #rankingList th:nth-child(1),
+    #rankingList td:nth-child(1) { width: 12%; }
+    #rankingList th:nth-child(2),
+    #rankingList td:nth-child(2) { width: 18%; }
+    #rankingList th:nth-child(3),
+    #rankingList td:nth-child(3) { width: 23%; }
+    #rankingList th:nth-child(4),
+    #rankingList td:nth-child(4) { width: 25%; }
+    #rankingList th:nth-child(5),
+    #rankingList td:nth-child(5) { width: 22%; }
 
     .ranking-avatar {
         width: 38px;
@@ -726,42 +739,36 @@
     }
 
     .home-ranking-extra {
-        margin-top: 14px;
-    }
-
-    .home-ranking-extra .ranking-extra-title {
-        font-size: 13px;
-        margin-bottom: 8px;
-        text-align: left;
+        margin-top: 12px;
     }
 
     .home-ranking-extra .ranking-extra-grid {
-        grid-auto-columns: minmax(82px, 82px);
-        gap: 8px;
+        grid-auto-columns: minmax(70px, 70px);
+        gap: 6px;
     }
 
     .home-ranking-extra .ranking-extra-card {
-        min-height: 118px;
-        padding: 8px 6px;
+        min-height: 96px;
+        padding: 6px 4px;
     }
 
     .home-ranking-extra .ranking-extra-avatar {
-        width: 40px;
-        height: 40px;
-        margin-bottom: 6px;
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
     }
 
     .home-ranking-extra .ranking-extra-rank {
-        font-size: 13px;
-        margin-bottom: 6px;
+        font-size: 11px;
+        margin-bottom: 4px;
     }
 
     .home-ranking-extra .ranking-extra-name {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .home-ranking-extra .ranking-extra-vip {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     .shop-tabs {
@@ -800,11 +807,20 @@
         max-width: 100%;
         margin: 24px auto;
         padding: 22px;
+        text-align: center;
     }
 
     .login-box input {
         font-size: 14px;
         padding: 11px;
+    }
+
+    .login-remember-row {
+        font-size: 13px;
+    }
+
+    .login-links {
+        gap: 8px;
     }
 
     .login-box .btn,
@@ -898,9 +914,12 @@
             <div class="card-title">會員登入</div>
             <input id="login_user" placeholder="請輸入帳號">
             <input id="login_pwd" type="password" placeholder="請輸入密碼">
+            <label class="login-remember-row"><input id="remember_username" type="checkbox"> 記住帳號</label>
             <button class="btn" onclick="userLogin()">登入</button>
-            <div class="link" onclick="showSection('registerPage')">沒有帳號？註冊會員</div>
-            <div class="link" onclick="showSection('forgetPage')" style="margin-left:10px;">忘記密碼？</div>
+            <div class="login-links">
+                <div class="link" onclick="showSection('registerPage')">沒有帳號？註冊會員</div>
+                <div class="link" onclick="showSection('forgetPage')">忘記密碼？</div>
+            </div>
             <div class="msg" id="loginMsg"></div>
         </div>
         <div class="brand-bottom"><a href="https://linkgoods.com/131rwjuh" target="_blank" rel="noopener">夢競娛樂</a></div>
@@ -1362,10 +1381,36 @@ document.addEventListener('DOMContentLoaded', function () {
     const header = document.getElementById('mainHeader');
     if (header) header.style.display = 'none';
     toggleRechargeMethodHint();
+    loadRememberedUsername();
 });
 
 function show(id) {
     showSection(id);
+}
+
+function loadRememberedUsername() {
+    try {
+        const saved = localStorage.getItem('remembered_username') || '';
+        const checked = localStorage.getItem('remember_username_checked') === '1';
+        const userInput = document.getElementById('login_user');
+        const rememberBox = document.getElementById('remember_username');
+        if (rememberBox) rememberBox.checked = checked;
+        if (userInput && checked && saved) userInput.value = saved;
+    } catch (e) {}
+}
+
+function persistRememberedUsername() {
+    try {
+        const userInput = document.getElementById('login_user');
+        const rememberBox = document.getElementById('remember_username');
+        const checked = !!rememberBox?.checked;
+        localStorage.setItem('remember_username_checked', checked ? '1' : '0');
+        if (checked) {
+            localStorage.setItem('remembered_username', String(userInput?.value || '').trim());
+        } else {
+            localStorage.removeItem('remembered_username');
+        }
+    } catch (e) {}
 }
 
 function showSection(id) {
@@ -1876,12 +1921,11 @@ function renderHomeRankingExtra(ranking) {
 
     box.style.display = 'block';
     box.innerHTML = `
-        <div class="ranking-extra-title">第 4 名至第 10 名</div>
         <div class="ranking-extra-scroll">
             <div class="ranking-extra-grid">
                 ${extraRanking.map(item => `
                     <div class="ranking-extra-card">
-                        <div class="ranking-extra-rank">第 ${item.display_rank} 名</div>
+                        <div class="ranking-extra-rank">${item.display_rank}</div>
                         <img class="ranking-extra-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar">
                         <div class="ranking-extra-name">${maskUsername(item.username)}</div>
                         <div class="ranking-extra-vip">${rankingVipHtml(item)}</div>
@@ -2297,6 +2341,7 @@ async function refreshSession() {
 async function userLogin() {
     const username = document.getElementById('login_user').value.trim();
     const password = document.getElementById('login_pwd').value;
+    persistRememberedUsername();
 
     setMessage('loginMsg', '登入中...');
 
@@ -2307,6 +2352,7 @@ async function userLogin() {
 
     if (res.user) {
         try { sessionStorage.setItem('member_session_live', '1'); } catch (e) {}
+        persistRememberedUsername();
         updateUserUI(res.user);
         showSection('home');
         if (!state.shopLoaded) {
@@ -2907,20 +2953,13 @@ window.onload = async function () {
     await handleEmailVerifyFromUrl();
     renderRechargePresets();
     document.getElementById('recharge_amount')?.addEventListener('input', renderRechargePresets);
+    document.getElementById('remember_username')?.addEventListener('change', persistRememberedUsername);
+    document.getElementById('login_user')?.addEventListener('input', () => { if (document.getElementById('remember_username')?.checked) persistRememberedUsername(); });
     switchShop('全部');
 
-    const keepLoginInThisTab = (() => {
-        try { return sessionStorage.getItem('member_session_live') === '1'; } catch (e) { return false; }
-    })();
-
-    if (!keepLoginInThisTab) {
-        await api('logout');
-        renderLoggedOut();
-    } else {
-        const sessionLoggedIn = await refreshSession();
-        if (sessionLoggedIn) {
-            loadOrderUnreadSummary();
-        }
+    const sessionLoggedIn = await refreshSession();
+    if (sessionLoggedIn) {
+        loadOrderUnreadSummary();
     }
 
     loadCompanionStats();
