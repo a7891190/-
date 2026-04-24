@@ -259,6 +259,57 @@
             font-size: 14px;
             color: #ddd;
         }
+        .ranking-table-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .ranking-extra-wrap { margin-top: 22px; }
+        .ranking-extra-title { color:#ffb3d9; font-size:16px; margin-bottom:12px; }
+        .ranking-extra-scroll { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .ranking-extra-grid {
+            display:grid;
+            grid-auto-flow:column;
+            grid-auto-columns:minmax(122px, 1fr);
+            gap:12px;
+            min-width:max-content;
+            padding-bottom:4px;
+        }
+        .ranking-extra-card {
+            background:#252525;
+            border:1px solid #333;
+            border-radius:14px;
+            padding:14px 10px;
+            text-align:center;
+            min-height:164px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:flex-start;
+        }
+        .ranking-extra-rank {
+            color:#ff69b4;
+            font-weight:bold;
+            font-size:15px;
+            margin-bottom:10px;
+        }
+        .ranking-extra-avatar {
+            width:54px;
+            height:54px;
+            border-radius:50%;
+            object-fit:cover;
+            border:2px solid #ff69b4;
+            background:#2a2a2a;
+            margin-bottom:10px;
+        }
+        .ranking-extra-name {
+            font-weight:bold;
+            font-size:14px;
+            line-height:1.4;
+            margin-bottom:6px;
+            word-break:break-word;
+        }
+        .ranking-extra-vip {
+            font-size:13px;
+            line-height:1.35;
+            word-break:break-word;
+        }
 
         .record-mobile-note { display:none; color:#999; font-size:12px; line-height:1.8; margin-top:10px; }
         .recharge-proof-note { color:#ffd6ea; font-size:13px; line-height:1.8; margin-top:8px; }
@@ -548,22 +599,68 @@
         font-size: 13px;
     }
 
+    #rankingList .ranking-table-wrap {
+        margin: 0 -4px;
+        padding-bottom: 2px;
+    }
+
     #rankingList table {
-        table-layout: auto;
-        width: 100%;
-        white-space: normal;
+        min-width: 560px;
+        width: 560px;
+        table-layout: fixed;
+        white-space: nowrap;
+        margin-top: 6px;
     }
 
     #rankingList th,
     #rankingList td {
         text-align: center;
-        font-size: 12px;
-        padding: 8px 6px;
+        font-size: 13px;
+        padding: 10px 8px;
     }
 
     .ranking-avatar {
-        width: 32px;
-        height: 32px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .ranking-extra-wrap {
+        margin-top: 18px;
+    }
+
+    .ranking-extra-title {
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .ranking-extra-grid {
+        grid-auto-columns: minmax(112px, 112px);
+        gap: 10px;
+    }
+
+    .ranking-extra-card {
+        min-height: 152px;
+        padding: 12px 8px;
+    }
+
+    .ranking-extra-avatar {
+        width: 46px;
+        height: 46px;
+        margin-bottom: 8px;
+    }
+
+    .ranking-extra-rank {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .ranking-extra-name {
+        font-size: 13px;
+    }
+
+    .ranking-extra-vip {
+        font-size: 12px;
     }
 
     .shop-tabs {
@@ -582,8 +679,8 @@
     }
 
     .shop-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
     }
 
     .shop-item {
@@ -1550,6 +1647,71 @@ async function loadOrderUnreadSummary() {
     if (state.user && !state.currentRecordChatOrderId) renderRecords(state.user.buy_records || []);
 }
 
+function inferVipLevelFromName(vipName) {
+    const map = {
+        '客官': 0,
+        '雅客': 1,
+        '太學博士': 2,
+        '四征將軍': 3,
+        '中郎將': 4,
+        '驃騎將軍': 5,
+        '尚書令': 6,
+        '御史大夫': 7,
+        '太子太傅': 8,
+        '攝政王': 9,
+        '絕代風華': 10
+    };
+
+    return Object.prototype.hasOwnProperty.call(map, String(vipName || '').trim())
+        ? map[String(vipName || '').trim()]
+        : 0;
+}
+
+function rankingVipHtml(item) {
+    const level = Number.isFinite(Number(item?.vip_level))
+        ? Number(item.vip_level)
+        : inferVipLevelFromName(item?.vip_name);
+    const vipName = escapeHtml(item?.vip_name || '-');
+    return `<span class="${vipClass(level)}">${vipName}</span>`;
+}
+
+function getRankingSortTime(item) {
+    const candidates = [
+        item?.first_recharge_at,
+        item?.first_recharge_time,
+        item?.first_recharge_created_at,
+        item?.recharge_created_at,
+        item?.created_at,
+        item?.first_buy_at
+    ];
+
+    for (const value of candidates) {
+        if (!value) continue;
+        const time = new Date(String(value).replace(' ', 'T')).getTime();
+        if (!Number.isNaN(time)) return time;
+    }
+
+    return Number.POSITIVE_INFINITY;
+}
+
+function normalizeRankingForDisplay(ranking) {
+    if (!Array.isArray(ranking)) return [];
+
+    return [...ranking]
+        .sort((a, b) => {
+            const aTime = getRankingSortTime(a);
+            const bTime = getRankingSortTime(b);
+            if (aTime !== bTime) return aTime - bTime;
+
+            const aRank = Number(a?.rank || 0);
+            const bRank = Number(b?.rank || 0);
+            if (aRank !== bRank) return aRank - bRank;
+
+            return String(a?.username || '').localeCompare(String(b?.username || ''));
+        })
+        .map((item, index) => ({ ...item, display_rank: index + 1 }));
+}
+
 function renderTopPodium(ranking) {
     const box = document.getElementById('topPodium');
     if (!box) return;
@@ -1559,9 +1721,9 @@ function renderTopPodium(ranking) {
         return;
     }
 
-    const first = ranking.find(item => item.rank === 1);
-    const second = ranking.find(item => item.rank === 2);
-    const third = ranking.find(item => item.rank === 3);
+    const first = ranking[0] || null;
+    const second = ranking[1] || null;
+    const third = ranking[2] || null;
 
     const renderItem = (item, cls, rankText) => {
         if (!item) {
@@ -1583,7 +1745,7 @@ function renderTopPodium(ranking) {
                 <div class="podium-top">
                     <img class="podium-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar">
                     <div class="podium-name">${maskUsername(item.username)}</div>
-                    <div class="podium-vip">${item.vip_name}</div>
+                    <div class="podium-vip">${rankingVipHtml(item)}</div>
                     <div class="podium-exp">${item.exp}</div>
                 </div>
                 <div class="podium-base">${rankText}</div>
@@ -1618,32 +1780,54 @@ async function loadVipRanking() {
         return;
     }
 
-    state.ranking = res.ranking;
-    renderTopPodium(res.ranking);
+    const ranking = normalizeRankingForDisplay(res.ranking);
+    state.ranking = ranking;
+    renderTopPodium(ranking);
+
+    const extraRanking = ranking.slice(3, 13);
 
     box.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>大頭照</th>
-                    <th>會員帳號</th>
-                    <th>VIP稱號</th>
-                    <th>經驗值</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${res.ranking.map(item => `
+        <div class="ranking-table-wrap">
+            <table>
+                <thead>
                     <tr>
-                        <td>${item.rank}</td>
-                        <td><img class="ranking-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar"></td>
-                        <td>${maskUsername(item.username)}</td>
-                        <td>${item.vip_name}</td>
-                        <td>${item.exp}</td>
+                        <th>排名</th>
+                        <th>大頭照</th>
+                        <th>會員帳號</th>
+                        <th>VIP稱號</th>
+                        <th>經驗值</th>
                     </tr>
-                `).join('')}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    ${ranking.map(item => `
+                        <tr>
+                            <td>${item.display_rank}</td>
+                            <td><img class="ranking-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar"></td>
+                            <td>${maskUsername(item.username)}</td>
+                            <td>${rankingVipHtml(item)}</td>
+                            <td>${item.exp}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+        ${extraRanking.length ? `
+            <div class="ranking-extra-wrap">
+                <div class="ranking-extra-title">第 4 名至第 13 名</div>
+                <div class="ranking-extra-scroll">
+                    <div class="ranking-extra-grid">
+                        ${extraRanking.map(item => `
+                            <div class="ranking-extra-card">
+                                <div class="ranking-extra-rank">第 ${item.display_rank} 名</div>
+                                <img class="ranking-extra-avatar" src="${safeAvatar(item.avatar_url)}" alt="avatar">
+                                <div class="ranking-extra-name">${maskUsername(item.username)}</div>
+                                <div class="ranking-extra-vip">${rankingVipHtml(item)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        ` : ''}
     `;
 }
 
