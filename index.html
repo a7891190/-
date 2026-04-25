@@ -16,15 +16,7 @@
             position: relative;
         }
         body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background:
-                linear-gradient(180deg, rgba(4, 4, 8, 0.20) 0%, rgba(6, 6, 10, 0.14) 30%, rgba(4, 4, 8, 0.22) 100%),
-                radial-gradient(circle at top left, rgba(255, 105, 180, 0.03), transparent 32%),
-                radial-gradient(circle at top right, rgba(255, 105, 180, 0.02), transparent 26%);
-            pointer-events: none;
-            z-index: 0;
+            content: none;
         }
         .header {
     position: relative;
@@ -1034,34 +1026,22 @@
             z-index: 1;
         }
 
-        /* 只有登入相關頁面不顯示背景；其他每頁都共用同一張背景 */
+        
+        /* 已徹底移除所有背景圖（手機版 / 電腦版） */
         .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage) {
-            position: relative;
-            isolation: isolate;
-            overflow: hidden;
-            border-radius: 16px;
-            padding: 18px 18px 2px;
+            position: static;
+            isolation: auto;
+            overflow: visible;
+            border-radius: 0;
+            padding: 0;
         }
 
-        .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage)::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url("moonlit.png");
-            background-repeat: no-repeat;
-            background-position: center top;
-            background-size: contain;
-            pointer-events: none;
-            z-index: -2;
-        }
-
+        .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage)::before,
         .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage)::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(3,3,6,0.16) 0%, rgba(5,5,9,0.12) 42%, rgba(3,3,6,0.18) 100%);
-            pointer-events: none;
-            z-index: -1;
+            content: none !important;
+            background: none !important;
+            background-image: none !important;
+            display: none !important;
         }
 
         .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage) > * {
@@ -1069,32 +1049,6 @@
             z-index: 1;
         }
 
-        @media (min-width: 901px) {
-            .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage) {
-                padding: 22px 24px 6px;
-            }
-
-            .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage)::before {
-                background-size: auto 100%;
-                background-position: center center;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage) {
-                border-radius: 14px;
-                padding: 12px 10px 2px;
-            }
-
-            .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage)::before {
-                background-size: 100% auto;
-                background-position: center top;
-            }
-
-            .section:not(#loginPage):not(#registerPage):not(#renewPage):not(#forgetPage)::after {
-                background: linear-gradient(180deg, rgba(3,3,6,0.18) 0%, rgba(5,5,9,0.12) 42%, rgba(3,3,6,0.20) 100%);
-            }
-        }
 
     </style>
 </head>
