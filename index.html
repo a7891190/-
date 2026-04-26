@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>夢競娛樂 - 遊戲陪玩丨語音陪聊</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2">
     <link rel="shortcut icon" href="favicon.png?v=2">
@@ -1483,6 +1486,13 @@
 </div>
 
 <script>
+(function () {
+    const host = String(window.location.hostname || '').toLowerCase();
+    const isMainDomain = host === '131rwjuh.com' || host === 'www.131rwjuh.com';
+    if (isMainDomain && (window.location.protocol !== 'https:' || host === 'www.131rwjuh.com')) {
+        window.location.replace('https://131rwjuh.com' + window.location.pathname + window.location.search + window.location.hash);
+    }
+})();
 const DEFAULT_AVATAR = 'https://placehold.co/110x110/2a2a2a/ff69b4?text=VIP';
 const API_BASE = "https://api.131rwjuh.com/api.php";
 const AVATAR_UPLOAD_URL = "https://api.131rwjuh.com/upload_avatar.php";
@@ -1650,15 +1660,23 @@ function setMessage(id, text) {
 async function api(action, extra = {}) {
     try {
         const payload = JSON.stringify({ action, ...extra });
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 15000);
+        const apiUrl = API_BASE + (API_BASE.includes('?') ? '&' : '?') + '_=' + Date.now();
 
-        const response = await fetch(API_BASE, {
+        const response = await fetch(apiUrl, {
             method: 'POST',
+            mode: 'cors',
+            cache: 'no-store',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
-            body: payload
+            body: payload,
+            signal: controller.signal
         });
+        clearTimeout(timer);
 
         const text = await response.text();
 
@@ -1668,7 +1686,10 @@ async function api(action, extra = {}) {
             return { ok: false, message: '後端回傳格式錯誤：' + text };
         }
     } catch (error) {
-        return { ok: false, message: '連線失敗：' + error.message };
+        const msg = error && error.name === 'AbortError'
+            ? '連線逾時，請重新整理後再試'
+            : ('連線失敗：' + (error?.message || '請確認網路與後台 API 是否正常'));
+        return { ok: false, message: msg };
     }
 }
 
