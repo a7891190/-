@@ -2730,8 +2730,7 @@ async function submitBuy() {
     }
 
     if (isNightReserveTime(reserve_time)) {
-        const yes = confirm('夜單提醒：23:00～08:00 屬於夜單時段，將額外加收 +200 短陌。
-確認後再送出訂單。');
+        const yes = confirm('夜單提醒：23:00～08:00 屬於夜單時段，將額外加收 +200 短陌。\n確認後再送出訂單。');
         if (!yes) return;
     }
 
