@@ -1053,7 +1053,12 @@
         }
 
 
-    </style>
+    
+        .night-order-alert { margin-top: 12px; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.45); background: rgba(212,175,55,0.12); color: #ffe8a3; line-height: 1.8; font-size: 14px; display: none; }
+        .night-order-alert strong { color: #ffd86b; }
+        .night-order-badge { display:inline-block; margin-top:8px; padding:4px 10px; border-radius:999px; background:rgba(212,175,55,0.18); color:#ffd86b; font-weight:bold; font-size:13px; }
+
+</style>
 </head>
 <body>
 <div class="header" id="mainHeader" style="display:none;">
@@ -2692,6 +2697,22 @@ function closeBuyModal() {
     document.getElementById('buy_assign_type').value = '';
     document.getElementById('buy_note').value = '';
     document.getElementById('buyModalMsg').innerText = '';
+    updateNightOrderHint();
+}
+
+function isNightReserveTime(value) {
+    if (!value) return false;
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return false;
+    const hour = dt.getHours();
+    return hour >= 23 || hour < 8;
+}
+
+function updateNightOrderHint() {
+    const input = document.getElementById('buy_reserve_time');
+    const box = document.getElementById('nightOrderAlert');
+    if (!input || !box) return;
+    box.style.display = isNightReserveTime(input.value) ? 'block' : 'none';
 }
 
 async function submitBuy() {
@@ -2706,6 +2727,12 @@ async function submitBuy() {
     if (!game_name || !server_name || !role_name || !role_uid || !reserve_time) {
         document.getElementById('buyModalMsg').innerText = '請完整填寫必填資料';
         return;
+    }
+
+    if (isNightReserveTime(reserve_time)) {
+        const yes = confirm('夜單提醒：23:00～08:00 屬於夜單時段，將額外加收 +200 短陌。
+確認後再送出訂單。');
+        if (!yes) return;
     }
 
     const res = await api('buy', {
