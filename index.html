@@ -15541,11 +15541,341 @@ img[src*="rank_rewards/badges"]{
 })();
 </script>
 
+
+
+<style id="v298-official-test-open-features-css">
+/* v298 正式測試：僅開放入口與微調指定位置，不動首頁本期前三名座標與名字特效 */
+
+/* 1) 首頁搜索列右側「搜索」：再次往下修正 */
+#page-home .search-image-wrap button[data-home-search-btn],
+#page-home .search-image-wrap button{
+  top:58%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* 2) 專屬守護榜：第一名較高，第二/第三名較低，三者底部對齊，名稱放大 */
+#page-profile .profile-guardian-top3{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.18fr) minmax(0,1fr)!important;
+  align-items:end!important;
+  gap:10px!important;
+}
+#page-profile .profile-guardian-podium{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  transform:none!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+#page-profile .profile-guardian-podium.rank1{
+  order:2!important;
+  min-height:178px!important;
+  height:178px!important;
+  padding-top:18px!important;
+}
+#page-profile .profile-guardian-podium.rank2,
+#page-profile .profile-guardian-podium.rank3{
+  min-height:154px!important;
+  height:154px!important;
+  padding-top:14px!important;
+}
+#page-profile .profile-guardian-podium.rank2{order:1!important;}
+#page-profile .profile-guardian-podium.rank3{order:3!important;}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{width:64px!important;height:64px!important;}
+#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{width:50px!important;height:50px!important;}
+#page-profile .profile-guardian-podium .profile-guardian-name{
+  font-size:24px!important;
+  line-height:1.04!important;
+  min-height:38px!important;
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:29px!important;
+  min-height:46px!important;
+}
+#page-profile .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(128%,18em)!important;
+  max-width:none!important;
+  margin:-.78em auto -.66em!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(138%,19em)!important;
+  margin:-.84em auto -.72em!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-value{
+  margin-top:6px!important;
+  font-size:13px!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-crown{
+  margin-top:auto!important;
+  bottom:8px!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-top3{gap:7px!important;}
+  #page-profile .profile-guardian-podium.rank1{height:166px!important;min-height:166px!important;padding-left:6px!important;padding-right:6px!important;}
+  #page-profile .profile-guardian-podium.rank2,
+  #page-profile .profile-guardian-podium.rank3{height:144px!important;min-height:144px!important;padding-left:5px!important;padding-right:5px!important;}
+  #page-profile .profile-guardian-podium .profile-guardian-name{font-size:21px!important;min-height:34px!important;}
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{font-size:25px!important;min-height:40px!important;}
+}
+
+/* 3) 測試期：陪玩與功能服務入口全部開放觀看，不被身分樣式隱藏 */
+body.role-member [data-companion-only],
+body.role-member .companion-only-panel,
+body:not(.role-companion) [data-companion-only],
+body:not(.role-companion) .companion-only-panel{
+  display:block!important;
+}
+
+/* 4) 刪除會員/陪玩中心旁設定入口；新增成就徽章按鈕由 v298 腳本插入 */
+#page-member .setting-btn,
+#page-member [data-setting-menu="member"],
+#page-companion-home .setting-btn,
+#page-companion-home [data-setting-menu="companion"],
+#page-profile .profile-info-setting-wrap .mini-gear,
+#page-profile .profile-info-setting-menu,
+#page-profile .profile-feed-panel .mini-gear,
+.setting-btn#memberSettingBtn,
+.setting-menu#memberSettingMenu{
+  display:none!important;
+}
+#page-profile .profile-achievement-head{
+  gap:8px!important;
+  flex-wrap:wrap!important;
+}
+.v298-achievement-add-btn{
+  border:1px solid rgba(255,221,190,.38)!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,rgba(248,172,205,.98),rgba(220,103,151,.94))!important;
+  color:#fff!important;
+  font-weight:900!important;
+  font-size:12px!important;
+  padding:8px 11px!important;
+  cursor:pointer!important;
+}
+.v298-achievement-modal-mask{
+  position:fixed!important;
+  inset:0!important;
+  z-index:30000!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:18px!important;
+  background:rgba(8,3,8,.68)!important;
+  backdrop-filter:blur(6px)!important;
+}
+.v298-achievement-modal-mask.show{display:flex!important;}
+.v298-achievement-modal{
+  width:min(92vw,420px)!important;
+  max-height:min(78vh,620px)!important;
+  overflow:auto!important;
+  border-radius:22px!important;
+  border:1px solid rgba(255,221,190,.42)!important;
+  background:linear-gradient(180deg,rgba(86,34,58,.96),rgba(42,16,31,.98))!important;
+  box-shadow:0 24px 62px rgba(0,0,0,.58),inset 0 0 0 1px rgba(255,238,226,.08)!important;
+  padding:16px!important;
+  color:#fff2f6!important;
+}
+.v298-achievement-modal h3{margin:0 0 6px!important;font-size:19px!important;color:#fff7f9!important;}
+.v298-achievement-modal p{margin:0 0 12px!important;font-size:12px!important;color:rgba(255,238,244,.78)!important;line-height:1.55!important;}
+.v298-achievement-list{display:grid!important;gap:8px!important;margin:10px 0 14px!important;}
+.v298-achievement-choice{
+  display:grid!important;
+  grid-template-columns:auto 1fr!important;
+  gap:10px!important;
+  align-items:center!important;
+  min-height:48px!important;
+  padding:9px 10px!important;
+  border-radius:15px!important;
+  border:1px solid rgba(255,221,190,.24)!important;
+  background:rgba(255,255,255,.07)!important;
+  cursor:pointer!important;
+}
+.v298-achievement-choice input{width:20px!important;height:20px!important;accent-color:#ec74aa!important;}
+.v298-achievement-choice b{display:block!important;font-size:13px!important;color:#fff7f9!important;}
+.v298-achievement-choice span{display:block!important;margin-top:2px!important;font-size:11px!important;color:rgba(255,238,244,.68)!important;}
+.v298-achievement-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;}
+.v298-achievement-actions button{height:40px!important;border-radius:999px!important;border:1px solid rgba(255,221,190,.38)!important;font-weight:900!important;color:#fff!important;}
+.v298-achievement-save{background:linear-gradient(180deg,rgba(248,172,205,.98),rgba(220,103,151,.94))!important;}
+.v298-achievement-cancel{background:rgba(64,24,43,.62)!important;}
+</style>
+
+<script id="v298-official-test-open-features-script">
+(function(){
+  var STORE = 'dream_v298_profile_achievement_badges';
+  function esc(s){return String(s == null ? '' : s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});}
+  function toastMsg(msg){try{ if(typeof window.toast==='function') window.toast(msg); else if(typeof window.toast2==='function') window.toast2(msg); }catch(_){}}
+  function currentProfileId(){return localStorage.getItem('dream_active_profile_id') || 'member-self';}
+  function loadMap(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')||{};}catch(_){return {};}}
+  function saveMap(map){localStorage.setItem(STORE, JSON.stringify(map||{}));}
+  function allAchievements(){
+    var data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
+    if(!data.length){
+      return ['初入樂園','資料達人','VIP 啟程','送禮達人','收藏愛好者','人氣陪玩','穩定在線','高評陪玩'].map(function(name,i){return {name:name,type:i>4?'companion':'member',unlocked:true,progress:1,target:1};});
+    }
+    data.forEach(function(a){
+      if(!a) return;
+      a.unlocked = true;
+      a.progress = Number(a.target || a.goal || a.required || a.progress || 1);
+      a.target = Number(a.target || a.goal || a.required || 1);
+      a.hidden = false;
+      a.secret = false;
+      a.locked = false;
+    });
+    return data;
+  }
+  function selectedNames(){
+    var map=loadMap();
+    var arr=map[currentProfileId()] || [];
+    return Array.isArray(arr) ? arr.slice(0,5) : [];
+  }
+  function renderSelectedSlots(){
+    var host=document.querySelector('#page-profile [data-profile-bind="achievement-slots"]');
+    if(!host) return;
+    var selected=selectedNames();
+    if(!selected.length) return;
+    host.innerHTML = Array.from({length:5}).map(function(_,i){
+      var name=selected[i] || '空缺';
+      return '<div class="achievement-slot"><span class="icon">'+(selected[i]?'✦':'＋')+'</span><span>'+esc(name)+'</span></div>';
+    }).join('');
+  }
+  function ensureAchievementButton(){
+    var head=document.querySelector('#page-profile .profile-achievement-head');
+    if(!head || head.querySelector('[data-v298-open-achievement-badges]')) return;
+    var old=head.querySelector('h3');
+    if(old) old.textContent='新增成就徽章';
+    var hint=head.querySelector('.gift-count');
+    if(hint) hint.textContent='最多勾選 5 個已完成徽章';
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='v298-achievement-add-btn';
+    btn.setAttribute('data-v298-open-achievement-badges','1');
+    btn.textContent='新增成就徽章';
+    head.appendChild(btn);
+  }
+  function buildModal(){
+    var mask=document.querySelector('.v298-achievement-modal-mask');
+    if(!mask){
+      mask=document.createElement('div');
+      mask.className='v298-achievement-modal-mask';
+      mask.innerHTML='<div class="v298-achievement-modal" role="dialog" aria-modal="true"></div>';
+      document.body.appendChild(mask);
+      mask.addEventListener('click',function(e){if(e.target===mask) mask.classList.remove('show');});
+    }
+    return mask;
+  }
+  function openModal(){
+    allAchievements();
+    var mask=buildModal();
+    var modal=mask.querySelector('.v298-achievement-modal');
+    var current=new Set(selectedNames());
+    var list=allAchievements().map(function(a,i){
+      var name=a && a.name ? String(a.name) : ('成就徽章 '+(i+1));
+      var desc=a && (a.description || a.condition || a.type) ? String(a.description || a.condition || a.type) : '已完成，可展示';
+      return '<label class="v298-achievement-choice"><input type="checkbox" value="'+esc(name)+'" '+(current.has(name)?'checked':'')+'><span><b>'+esc(name)+'</b><span>'+esc(desc)+'</span></span></label>';
+    }).join('');
+    modal.innerHTML='<h3>新增成就徽章</h3><p>測試期已開放所有已完成成就；最多勾選 5 個，會顯示在會員/陪玩主頁。</p><div class="v298-achievement-list">'+list+'</div><div class="v298-achievement-actions"><button type="button" class="v298-achievement-cancel">取消</button><button type="button" class="v298-achievement-save">儲存</button></div>';
+    mask.classList.add('show');
+  }
+  function saveSelected(){
+    var mask=buildModal();
+    var checks=Array.from(mask.querySelectorAll('.v298-achievement-choice input:checked')).slice(0,5);
+    var names=checks.map(function(x){return x.value;});
+    var map=loadMap();
+    map[currentProfileId()] = names;
+    saveMap(map);
+    mask.classList.remove('show');
+    renderSelectedSlots();
+    toastMsg('已更新成就徽章展示，最多 5 個。');
+  }
+  function openAllTesting(){
+    allAchievements();
+    try{
+      if(window.DreamAccessV239){
+        window.DreamAccessV239.isLoggedIn=function(){return true;};
+        window.DreamAccessV239.requireLogin=function(){return true;};
+        window.DreamAccessV239.guardPageAccess=function(name){return name;};
+        window.DreamAccessV239.openViewMode=true;
+      }
+      window.isLoginRequiredPage=function(){return false;};
+      window.requireLogin=function(){return true;};
+      window.needLogin=function(){return true;};
+    }catch(_){ }
+  }
+  function boot(){
+    openAllTesting();
+    ensureAchievementButton();
+    renderSelectedSlots();
+    document.body.classList.add('role-companion');
+  }
+  document.addEventListener('click',function(e){
+    var badgeBtn=e.target.closest('[data-v298-open-achievement-badges]');
+    if(badgeBtn){e.preventDefault();e.stopPropagation();openModal();return;}
+    if(e.target.closest('.v298-achievement-cancel')){e.preventDefault();buildModal().classList.remove('show');return;}
+    if(e.target.closest('.v298-achievement-save')){e.preventDefault();saveSelected();return;}
+    var checked=e.target.closest('.v298-achievement-choice input');
+    if(checked){
+      var mask=buildModal();
+      var all=Array.from(mask.querySelectorAll('.v298-achievement-choice input:checked'));
+      if(all.length>5){checked.checked=false;toastMsg('最多只能勾選 5 個成就徽章。');}
+    }
+  },true);
+  document.addEventListener('click',function(e){
+    var go=e.target.closest('[data-go]');
+    if(go && typeof window.showPage==='function'){
+      var page=go.getAttribute('data-go');
+      if(page && page!=='login'){
+        e.preventDefault();
+        e.stopPropagation();
+        window.showPage(page);
+        setTimeout(boot,80);
+        return;
+      }
+    }
+    var profile=e.target.closest('[data-open-profile]');
+    if(profile && typeof window.showPage==='function'){
+      e.preventDefault();
+      e.stopPropagation();
+      window.showPage('profile');
+      setTimeout(boot,80);
+      return;
+    }
+  },true);
+  var oldRender=window.renderDreamAchievements;
+  if(typeof oldRender==='function' && !oldRender.__v298OpenAll){
+    window.renderDreamAchievements=function(){allAchievements(); return oldRender.apply(this,arguments);};
+    window.renderDreamAchievements.__v298OpenAll=true;
+  }
+  var oldProfile=window.renderProfile;
+  if(typeof oldProfile==='function' && !oldProfile.__v298BadgeSlots){
+    window.renderProfile=function(){var out=oldProfile.apply(this,arguments); setTimeout(function(){ensureAchievementButton();renderSelectedSlots();},0); return out;};
+    window.renderProfile.__v298BadgeSlots=true;
+  }
+  window.addEventListener('hashchange',function(){setTimeout(boot,120);});
+  window.addEventListener('dream-auth-updated',function(){setTimeout(boot,80);});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,80);});
+  else setTimeout(boot,80);
+})();
+</script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=297', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=298', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });

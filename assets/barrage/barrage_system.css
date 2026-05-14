@@ -597,3 +597,12 @@
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
   transform:translateX(18px)!important;
 }
+
+
+/* v298：1號彈幕 v297 仍偏右，整體再往左回修 */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
+  transform:translateX(0px)!important;
+}
+.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+  transform:translateX(0px)!important;
+}
