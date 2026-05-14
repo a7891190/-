@@ -6025,7 +6025,7 @@ main.app{padding-bottom:0 !important;}
               <button class="review-arrow" type="button" data-action="open-profile-reviews">›</button>
             </div>
             <div class="review-help">點擊星星右側箭頭，可查看此人完成訂單後收到的公開評價。</div>
-            <div class="profile-level" data-profile-bind="level">VIP等級：VIP1 星耀會員</div>
+            <div class="profile-level" data-profile-bind="level">VIP等級：無VIP會員</div>
           </div>
         </div>
         <div class="profile-stat-row">
@@ -6151,7 +6151,7 @@ main.app{padding-bottom:0 !important;}
     <section class="panel" style="margin-bottom:12px">
       <div class="section-title"><h2>功能服務</h2></div>
       <div class="service-grid">
-        <a class="service-item" data-companion-profile-self><div class="service-icon classic">人</div><div class="service-name">陪玩資料</div></a>
+        <a class="service-item" data-open-profile="self"><div class="service-icon classic">人</div><div class="service-name">陪玩資料</div></a>
         <a class="service-item" data-go="backpack"><div class="service-icon classic">包</div><div class="service-name">我的背包</div></a>
         <a class="service-item" data-go="vip-rank"><div class="service-icon classic">榜</div><div class="service-name">排行榜</div></a>
         <a class="service-item" data-transfer-open><div class="service-icon classic">轉</div><div class="service-name">轉單</div></a>
@@ -8355,7 +8355,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     return "VIP等級：" + code + (cleaned ? " " + cleaned : "");
   }
   function vipDisplay(user){
-    if(!user) return "VIP等級：VIP1 星耀會員";
+    if(!user) return "VIP等級：無VIP會員";
     if(user.svip || String(user.vip_level || user.vip_rank || "").toUpperCase()==="SVIP") return formatVipDisplay("SVIP", user.vip_title || user.vip_name || "客官");
     const raw = user.vip_level ?? user.vip_rank ?? user.vip ?? user.member_vip_level ?? 0;
     const str = String(raw).toUpperCase();
@@ -8377,6 +8377,12 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
         rating:0,recommend:0,orders:0,status:"在線",level:memberLevel,fixedTag:fixedVipTag(memberLevel),
         bio:"這位會員還沒有填寫個人簡介。",achievementSlots:["初入樂園","資料達人","VIP 啟程","按讚之交","收藏愛好者"],tags:["佛系娛樂","守時不鴿"],games:["三角洲行動"],
         reviews:[],posts:["今天想找人一起放鬆玩幾場。"],litGifts:[]
+      },
+      "companion-self":{
+        id:"companion-self",type:"companion",name:"夢競陪玩",avatar:"陪",gender:"female",
+        rating:0,recommend:0,orders:0,status:"空閒",level:memberLevel,fixedTag:fixedVipTag(memberLevel),
+        bio:"這位陪玩還沒有填寫個人簡介。",achievementSlots:["初次登場","人氣陪玩","穩定在線","成就徽章","高評陪玩"],tags:["陪玩人員"],games:["三角洲行動"],
+        reviews:[],posts:["目前開放測試陪玩主頁。"],litGifts:[]
       },
       "companion-cangcen":{
         id:"companion-cangcen",type:"companion",name:"蒼岑",avatar:"蒼",gender:"female",
@@ -8548,19 +8554,19 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
   window.DreamRankV249={sortLeaderboardEntries:sortLeaderboardNoTieJumpV249,formatGuardianValue:formatGuardianValueV249,buildProfileGuardianRanking:buildProfileGuardianRankingV249};
   function renderProfile(){
     const p = getProfile();
-    if(p.type==="member" && window.__dreamFrontAuth?.user){
+    if((p.type==="member" || p.type==="companion") && window.__dreamFrontAuth?.user){
       const u = window.__dreamFrontAuth.user;
       p.name = u.display_name || u.username || u.name || p.name;
       p.level = vipDisplay(u);
       p.fixedTag = fixedVipTag(p.level);
     }
-    bind("title",p.type==="companion"?"陪玩中心":"會員主頁");
+    bind("title",p.type==="companion"?"陪玩主頁":"會員主頁");
     bind("name",esc(p.name));
     bind("avatar",String(p.avatar||"").startsWith("http")?`<img src="${esc(p.avatar)}" alt="">`:esc((p.avatar||p.name||"夢").slice(0,1)));
     bind("gender",p.gender==="male"?"♂":(p.gender==="female"?"♀":""));
     bind("rating",Number(p.rating||0).toFixed(1));
     bind("stars",stars(p.rating));
-    bind("level", vipDisplayHtml(p.level || (p.type==="member"?"VIP等級：無VIP會員":"等級：Lv1")));
+    bind("level", vipDisplayHtml(p.level || "VIP等級：無VIP會員"));
     bind("recommend",Number(p.recommend||0));
     bind("orders",Number(p.orders||0));
     bind("status",esc(p.status || (p.type==="companion"?"空閒":"在線")));
@@ -15849,7 +15855,12 @@ body:not(.role-companion) .companion-only-panel{
     if(profile && typeof window.showPage==='function'){
       e.preventDefault();
       e.stopPropagation();
-      window.showPage('profile');
+      var role = (typeof getDreamLoginRole==='function' ? getDreamLoginRole() : 'member');
+      var inCompanionHome = !!profile.closest('#page-companion-home');
+      var targetId = (inCompanionHome || role === 'companion' || document.body.classList.contains('role-companion')) ? 'companion-self' : 'member-self';
+      try{ localStorage.setItem('dream_active_profile_id', targetId); }catch(_){}
+      if(typeof goProfile === 'function') goProfile(targetId);
+      else { window.showPage('profile'); if(typeof window.renderProfile==='function') setTimeout(window.renderProfile,0); }
       setTimeout(boot,80);
       return;
     }
@@ -15872,685 +15883,135 @@ body:not(.role-companion) .companion-only-panel{
 </script>
 
 
-
-<style id="v299-guardian-search-precision-css">
-/* v299：依正式測試截圖精準微調，只動搜尋文字與專屬守護榜，不動其他框架/本期前三名 */
-
-/* 首頁搜尋列右側「搜索」：v298 已接近，這版只再往下少量 */
+<style id="v303-companion-vip-guardian-barrage-css">
+/* v303：精準修正陪玩主頁、VIP顯示、守護榜高度、搜尋文字與 1 號彈幕 */
 #page-home .search-image-wrap button[data-home-search-btn],
 #page-home .search-image-wrap button{
-  top:62.5%!important;
+  top:50.5%!important;
   transform:translateX(-4px) translateY(-50%)!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  line-height:1!important;
-  padding:0!important;
-}
-
-/* 專屬守護榜：三張卡底部齊平；第一名明確高大；第二/第三較低；名稱放大 */
-#page-profile .profile-guardian-board{
-  overflow:visible!important;
-}
-#page-profile .profile-guardian-top3{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.18fr) minmax(0,1fr)!important;
-  align-items:end!important;
-  gap:10px!important;
-  min-height:214px!important;
-  margin-bottom:12px!important;
-}
-#page-profile .profile-guardian-podium{
-  align-self:end!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:flex-start!important;
-  box-sizing:border-box!important;
-  overflow:visible!important;
-  transform:none!important;
-}
-#page-profile .profile-guardian-podium.rank2{
-  order:1!important;
-  height:162px!important;
-  min-height:162px!important;
-  padding:13px 6px 10px!important;
 }
 #page-profile .profile-guardian-podium.rank1{
-  order:2!important;
-  height:198px!important;
-  min-height:198px!important;
-  padding:18px 7px 12px!important;
-  border-color:rgba(255,224,149,.48)!important;
-}
-#page-profile .profile-guardian-podium.rank3{
-  order:3!important;
-  height:162px!important;
-  min-height:162px!important;
-  padding:13px 6px 10px!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{
-  width:70px!important;
-  height:70px!important;
-  margin-bottom:7px!important;
-}
-#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
-#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
-  width:54px!important;
-  height:54px!important;
-  margin-bottom:7px!important;
-}
-#page-profile .profile-guardian-podium .profile-guardian-name{
-  position:relative!important;
-  z-index:5!important;
-  width:100%!important;
-  min-height:42px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  text-align:center!important;
-  overflow:visible!important;
-  white-space:nowrap!important;
-  font-size:26px!important;
-  line-height:1!important;
-  font-weight:950!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
-  font-size:32px!important;
-  min-height:52px!important;
-}
-#page-profile .profile-guardian-name .rank-top3-gufeng-name{
-  width:155%!important;
-  max-width:none!important;
-  min-width:104px!important;
-  margin:-0.78em auto -0.62em!important;
-  transform:scale(1.18)!important;
-  transform-origin:center center!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
-  width:170%!important;
-  min-width:128px!important;
-  transform:scale(1.26)!important;
-  margin:-0.84em auto -0.68em!important;
-}
-#page-profile .profile-guardian-podium .profile-guardian-value{
-  margin-top:8px!important;
-  font-size:14px!important;
-  line-height:1.12!important;
-  white-space:nowrap!important;
-}
-#page-profile .profile-guardian-podium .profile-guardian-crown{
-  margin-top:auto!important;
-  width:auto!important;
-  min-width:70px!important;
-}
-
-@media(max-width:480px){
-  #page-profile .profile-guardian-top3{
-    gap:8px!important;
-    min-height:202px!important;
-  }
-  #page-profile .profile-guardian-podium.rank1{
-    height:188px!important;
-    min-height:188px!important;
-    padding-left:6px!important;
-    padding-right:6px!important;
-  }
-  #page-profile .profile-guardian-podium.rank2,
-  #page-profile .profile-guardian-podium.rank3{
-    height:154px!important;
-    min-height:154px!important;
-    padding-left:5px!important;
-    padding-right:5px!important;
-  }
-  #page-profile .profile-guardian-podium .profile-guardian-name{
-    font-size:25px!important;
-    min-height:40px!important;
-  }
-  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
-    font-size:31px!important;
-    min-height:50px!important;
-  }
-  #page-profile .profile-guardian-name .rank-top3-gufeng-name{
-    width:160%!important;
-    transform:scale(1.18)!important;
-  }
-  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
-    width:176%!important;
-    transform:scale(1.25)!important;
-  }
-}
-</style>
-
-
-<style id="v300-open-service-search-guardian-fix-css">
-/* v300：只做本輪微調；不再動專屬守護榜三個框架高度/底部對齊 */
-
-/* 搜索兩字：v299 往下過頭，這版只往上回一點 */
-#page-home .search-image-wrap button[data-home-search-btn],
-#page-home .search-image-wrap button{
-  top:60.6%!important;
-  transform:translateX(-4px) translateY(-50%)!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  line-height:1!important;
-  padding:0!important;
-}
-
-/* 專屬守護榜：框架不動，只修大頭照不被壓扁，並再次放大框內名稱 */
-#page-profile .profile-guardian-podium .profile-guardian-avatar{
-  flex:0 0 auto!important;
-  aspect-ratio:1/1!important;
-  min-width:unset!important;
-  max-width:none!important;
-  border-radius:50%!important;
-  display:grid!important;
-  place-items:center!important;
-  line-height:1!important;
-  overflow:hidden!important;
-  transform:none!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{
-  width:70px!important;
-  height:70px!important;
-  flex-basis:70px!important;
-}
-#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
-#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
-  width:56px!important;
-  height:56px!important;
-  flex-basis:56px!important;
-}
-#page-profile .profile-guardian-podium .profile-guardian-avatar img{
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  border-radius:50%!important;
-}
-#page-profile .profile-guardian-podium .profile-guardian-name{
-  font-size:30px!important;
-  min-height:48px!important;
-  height:auto!important;
-  line-height:1!important;
-  overflow:visible!important;
-  white-space:nowrap!important;
-  transform:none!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
-  font-size:36px!important;
-  min-height:58px!important;
-}
-#page-profile .profile-guardian-name .rank-top3-gufeng-name{
-  width:188%!important;
-  min-width:132px!important;
-  max-width:none!important;
-  transform:scale(1.36)!important;
-  transform-origin:center center!important;
-  margin:-0.88em auto -0.72em!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
-  width:210%!important;
-  min-width:160px!important;
-  transform:scale(1.46)!important;
-  margin:-0.94em auto -0.78em!important;
-}
-@media(max-width:480px){
-  #page-profile .profile-guardian-podium .profile-guardian-name{font-size:29px!important;min-height:46px!important;}
-  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{font-size:35px!important;min-height:56px!important;}
-  #page-profile .profile-guardian-name .rank-top3-gufeng-name{width:192%!important;transform:scale(1.36)!important;}
-  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{width:216%!important;transform:scale(1.46)!important;}
-}
-</style>
-
-<script id="v300-open-all-service-pages-script">
-(function(){
-  /* 測試期：功能服務與陪玩/會員相關入口全部直接開放看頁面，不跳登入 */
-  function openAccess(){
-    try{
-      if(window.DreamAccessV239){
-        window.DreamAccessV239.isLoggedIn=function(){return true;};
-        window.DreamAccessV239.requireLogin=function(){return true;};
-        window.DreamAccessV239.guardPageAccess=function(name){return name;};
-        window.DreamAccessV239.openViewMode=true;
-      }
-      window.isLoginRequiredPage=function(){return false;};
-      window.requireLogin=function(){return true;};
-      window.needLogin=function(){return true;};
-      window.guardDreamPageByRole=function(name){return name;};
-    }catch(_){ }
-  }
-  openAccess();
-  window.addEventListener('dream-auth-updated',openAccess);
-  document.addEventListener('DOMContentLoaded',openAccess);
-  document.addEventListener('click',function(e){
-    var go=e.target.closest && e.target.closest('[data-go]');
-    if(!go) return;
-    var page=go.getAttribute('data-go');
-    if(!page || page==='login') return;
-    if(window.pageMap && !window.pageMap[page]) return;
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    openAccess();
-    if(typeof window.showPage==='function') window.showPage(page);
-  },true);
-})();
-</script>
-
-
-
-<style id="v301-official-test-final-adjust-css">
-/* v301：依正式測試回饋微調；不動專屬守護榜框架高度與底部對齊 */
-
-/* 1) 搜索兩字：v300 仍偏下，往上回調一點 */
-#page-home .search-image-wrap button[data-home-search-btn],
-#page-home .search-image-wrap button{
-  top:56.8%!important;
-  transform:translateX(-4px) translateY(-50%)!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  line-height:1!important;
-  padding:0!important;
-}
-
-/* 2) 首頁本期前三名：第一名名稱下方數值往上，避免壓到第 1 名徽標 */
-#page-home .v35-top3 .top3-text.first .value{
-  margin-top:-1px!important;
-  transform:translateY(-4px) scaleX(.92)!important;
-  transform-origin:center!important;
-  line-height:1!important;
-}
-
-/* 3) 專屬守護榜：框架不動，只修第二/三名大頭照被擠壓，保持正圓 */
-#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
-#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
-  width:56px!important;
-  height:56px!important;
-  min-width:56px!important;
-  min-height:56px!important;
-  max-width:56px!important;
-  max-height:56px!important;
-  flex:0 0 56px!important;
-  aspect-ratio:1/1!important;
-  border-radius:50%!important;
-  display:grid!important;
-  place-items:center!important;
-  padding:0!important;
-  line-height:56px!important;
-  overflow:hidden!important;
-  transform:none!important;
-  box-sizing:border-box!important;
-}
-#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar img,
-#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar img{
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  border-radius:50%!important;
-  display:block!important;
-}
-
-/* 4) 專屬守護榜：數值稍微往上，避免壓到底部名次標籤 */
-#page-profile .profile-guardian-podium .profile-guardian-value{
-  margin-top:2px!important;
-  transform:translateY(-4px)!important;
-  line-height:1.05!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-value{
-  transform:translateY(-6px)!important;
-}
-
-/* 5) 陪玩中心卡片點擊區域：任何個人資料區都可進陪玩主頁；預約按鈕仍保留預約 */
-#page-companion .companion-card,
-.companion-grid .companion-card{
-  cursor:pointer!important;
-}
-#page-companion .companion-card button,
-.companion-grid .companion-card button{
-  cursor:pointer!important;
-}
-
-/* 6) 新增成就徽章：顯示成就圖示、確認按鈕，選完才套用 */
-.v298-achievement-choice.v301-achievement-choice{
-  grid-template-columns:auto 46px 1fr!important;
-  min-height:62px!important;
-}
-.v301-achievement-icon{
-  width:42px!important;
-  height:42px!important;
-  border-radius:12px!important;
-  display:grid!important;
-  place-items:center!important;
-  overflow:hidden!important;
-  background:radial-gradient(circle at 35% 25%,rgba(255,226,188,.35),rgba(255,154,199,.16) 55%,rgba(64,24,43,.58))!important;
-  border:1px solid rgba(255,221,190,.34)!important;
-  color:#ffe0a9!important;
-  font-weight:900!important;
-  font-size:18px!important;
-  flex:0 0 auto!important;
-}
-.v301-achievement-icon img{
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  display:block!important;
-}
-#page-profile .achievement-slot.v301-selected-achievement{
-  min-height:58px!important;
-  gap:7px!important;
-}
-#page-profile .achievement-slot.v301-selected-achievement .icon{
-  width:30px!important;
-  height:30px!important;
-  border-radius:10px!important;
-  overflow:hidden!important;
-  display:grid!important;
-  place-items:center!important;
-  background:rgba(255,226,188,.16)!important;
-  border:1px solid rgba(255,221,190,.26)!important;
-}
-#page-profile .achievement-slot.v301-selected-achievement .icon img{
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-}
-.v301-achievement-confirm{
-  background:linear-gradient(180deg,rgba(248,172,205,.98),rgba(220,103,151,.94))!important;
-}
-.v301-achievement-note{
-  color:#ffe0a9!important;
-  font-size:12px!important;
-  margin-top:-4px!important;
-}
-</style>
-
-<script id="v301-official-test-final-adjust-script">
-(function(){
-  var STORE='dream_v298_profile_achievement_badges';
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});}
-  function toastMsg(msg){try{ if(typeof window.toast==='function') window.toast(msg); else if(typeof window.toast2==='function') window.toast2(msg); }catch(_){}}
-  function activeProfileId(){return localStorage.getItem('dream_active_profile_id') || 'member-self';}
-  function loadMap(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')||{};}catch(_){return {};}}
-  function saveMap(m){try{localStorage.setItem(STORE, JSON.stringify(m||{}));}catch(_){}}
-  function achievements(){
-    var data=Array.isArray(window.DREAM_ACHIEVEMENT_DATA)?window.DREAM_ACHIEVEMENT_DATA:[];
-    if(!data.length){
-      return ['初入樂園','資料達人','VIP 啟程','送禮達人','收藏愛好者','人氣陪玩','穩定在線','高評陪玩'].map(function(name,i){return {name:name,description:'已完成，可展示',icon128:'',icon512:'',type:i>4?'companion':'member',unlocked:true};});
-    }
-    data.forEach(function(a){if(!a)return; a.unlocked=true; a.hidden=false; a.secret=false; a.locked=false;});
-    return data.filter(Boolean);
-  }
-  function selected(){var m=loadMap(); var a=m[activeProfileId()]||[]; return Array.isArray(a)?a.slice(0,5):[];}
-  function byName(){var map={}; achievements().forEach(function(a){if(a&&a.name)map[String(a.name)]=a;}); return map;}
-  function iconHtml(a,name){
-    var src=a && (a.icon128 || a.icon || a.image || a.badge || a.icon512);
-    if(src) return '<img src="'+esc(src)+'" alt="">';
-    return esc(String(name||'成').slice(0,1));
-  }
-  function renderSelectedSlots(){
-    var host=document.querySelector('#page-profile [data-profile-bind="achievement-slots"]');
-    if(!host) return;
-    var sel=selected();
-    if(!sel.length) return;
-    var lookup=byName();
-    host.innerHTML=Array.from({length:5}).map(function(_,i){
-      var name=sel[i]||'空缺';
-      var a=lookup[name];
-      return '<div class="achievement-slot v301-selected-achievement"><span class="icon">'+(sel[i]?iconHtml(a,name):'＋')+'</span><span>'+esc(name)+'</span></div>';
-    }).join('');
-  }
-  function ensureButton(){
-    var head=document.querySelector('#page-profile .profile-achievement-head');
-    if(!head) return;
-    var title=head.querySelector('h3'); if(title) title.textContent='新增成就徽章';
-    var hint=head.querySelector('.gift-count'); if(hint) hint.textContent='最多勾選 5 個已完成成就圖示';
-  }
-  function buildMask(){
-    var mask=document.querySelector('.v298-achievement-modal-mask');
-    if(!mask){
-      mask=document.createElement('div');
-      mask.className='v298-achievement-modal-mask';
-      mask.innerHTML='<div class="v298-achievement-modal" role="dialog" aria-modal="true"></div>';
-      document.body.appendChild(mask);
-      mask.addEventListener('click',function(e){if(e.target===mask) mask.classList.remove('show');});
-    }
-    return mask;
-  }
-  function openEnhancedModal(){
-    var mask=buildMask();
-    var modal=mask.querySelector('.v298-achievement-modal');
-    var current=new Set(selected());
-    var list=achievements().map(function(a,i){
-      var name=String(a.name||('成就徽章 '+(i+1)));
-      var desc=String(a.description||a.condition||a.type||'已完成，可展示');
-      return '<label class="v298-achievement-choice v301-achievement-choice"><input type="checkbox" value="'+esc(name)+'" '+(current.has(name)?'checked':'')+'><span class="v301-achievement-icon">'+iconHtml(a,name)+'</span><span><b>'+esc(name)+'</b><span>'+esc(desc)+'</span></span></label>';
-    }).join('');
-    modal.innerHTML='<h3>新增成就徽章</h3><p>徽章就是各個成就的圖示。勾選後請按「確定套用」，最多顯示 5 個。</p><div class="v301-achievement-note">測試期所有已完成成就圖示皆開放預覽。</div><div class="v298-achievement-list">'+list+'</div><div class="v298-achievement-actions"><button type="button" class="v298-achievement-cancel">取消</button><button type="button" class="v301-achievement-confirm">確定套用</button></div>';
-    mask.classList.add('show');
-  }
-  function confirmSelection(){
-    var mask=buildMask();
-    var checks=Array.from(mask.querySelectorAll('.v298-achievement-choice input:checked'));
-    if(checks.length>5){checks=checks.slice(0,5); toastMsg('最多只能勾選 5 個成就徽章。');}
-    var names=checks.map(function(x){return x.value;});
-    var m=loadMap(); m[activeProfileId()]=names; saveMap(m);
-    mask.classList.remove('show');
-    renderSelectedSlots();
-    toastMsg('已套用成就徽章圖示。');
-  }
-  function openCompanionProfileFromCard(card){
-    if(!card || typeof window.openDreamProfile!=='function') return false;
-    var name=(card.dataset.name || card.querySelector('h3')?.textContent || '').trim() || '夢競陪玩';
-    var role=(card.dataset.role || card.querySelector('.meta-row span:last-child')?.textContent || '陪玩人員').trim();
-    var id=name.includes('夜')?'companion-yeli':(name.includes('蒼')?'companion-cangcen':'companion-'+encodeURIComponent(name).replace(/%/g,'').toLowerCase());
-    try{
-      var all=JSON.parse(localStorage.getItem('dream_profiles_v58')||'{}')||{};
-      if(!all[id]){
-        all[id]={id:id,type:'companion',name:name,avatar:name.slice(0,1),gender:'female',rating:4.8,recommend:0,orders:0,status:'空閒',level:'等級：Lv1',fixedTag:'陪玩人員',bio:'這位陪玩尚未填寫個人簡介。',achievementSlots:['初次登場','穩定在線'],tags:[role],games:['三角洲行動'],reviews:[],posts:[],litGifts:[]};
-        localStorage.setItem('dream_profiles_v58',JSON.stringify(all));
-      }
-    }catch(_){ }
-    window.openDreamProfile(id);
-    return true;
-  }
-  document.addEventListener('click',function(e){
-    var btn=e.target.closest && e.target.closest('[data-v298-open-achievement-badges]');
-    if(btn){e.preventDefault(); e.stopPropagation(); setTimeout(openEnhancedModal,0); return;}
-    if(e.target.closest && e.target.closest('.v301-achievement-confirm')){e.preventDefault(); e.stopPropagation(); confirmSelection(); return;}
-    var input=e.target.closest && e.target.closest('.v301-achievement-choice input');
-    if(input){setTimeout(function(){var mask=buildMask(); var all=Array.from(mask.querySelectorAll('.v301-achievement-choice input:checked')); if(all.length>5){input.checked=false; toastMsg('最多只能勾選 5 個成就徽章。');}},0);}
-    var card=e.target.closest && e.target.closest('#page-companion .companion-card, .companion-grid .companion-card');
-    if(card && !e.target.closest('button,a,input,select,textarea')){
-      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); openCompanionProfileFromCard(card); return;
-    }
-  },true);
-  function boot(){ensureButton(); renderSelectedSlots();}
-  var old=window.renderProfile;
-  if(typeof old==='function' && !old.__v301AchievementIcons){
-    window.renderProfile=function(){var out=old.apply(this,arguments); setTimeout(boot,0); return out;};
-    window.renderProfile.__v301AchievementIcons=true;
-  }
-  window.addEventListener('hashchange',function(){setTimeout(boot,120);});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,80);}); else setTimeout(boot,80);
-})();
-</script>
-
-
-<style id="v302-search-guardian-companion-fix-css">
-/* v302：依正式站回饋微調，不動已確認的主要框架樣式 */
-
-/* 首頁搜尋列右側「搜索」：再往上約一個滑鼠游標長度 */
-#page-home .search-image-wrap button[data-home-search-btn],
-#page-home .search-image-wrap button{
-  top:53.2%!important;
-  transform:translateX(-4px) translateY(-50%)!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  line-height:1!important;
-  padding:0!important;
-}
-
-/* 專屬守護榜：保持 1/2/3 名框架底部對齊，整體加長高度，讓 XXX守護值 不再壓到第幾名文字 */
-#page-profile .profile-guardian-top3{
-  min-height:238px!important;
-  align-items:end!important;
-}
-#page-profile .profile-guardian-podium.rank1{
-  height:222px!important;
-  min-height:222px!important;
+  height:202px!important;
+  min-height:202px!important;
   padding-top:18px!important;
   padding-bottom:18px!important;
 }
 #page-profile .profile-guardian-podium.rank2,
 #page-profile .profile-guardian-podium.rank3{
-  height:184px!important;
-  min-height:184px!important;
+  height:176px!important;
+  min-height:176px!important;
   padding-top:14px!important;
-  padding-bottom:16px!important;
+  padding-bottom:18px!important;
 }
 #page-profile .profile-guardian-podium .profile-guardian-value{
-  margin-top:5px!important;
+  margin-top:8px!important;
   margin-bottom:10px!important;
-  transform:translateY(-8px)!important;
-  line-height:1.05!important;
-  white-space:nowrap!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-value{
-  margin-bottom:12px!important;
-  transform:translateY(-10px)!important;
+  line-height:1.1!important;
 }
 #page-profile .profile-guardian-podium .profile-guardian-crown{
   margin-top:auto!important;
+  padding-top:8px!important;
+  line-height:1.15!important;
+  flex:0 0 auto!important;
 }
-
-/* 專屬守護榜頭像：再次強制正圓與正常裁切，避免第二/三名被擠壓 */
-#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
-#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
-  width:56px!important;
-  height:56px!important;
-  min-width:56px!important;
-  min-height:56px!important;
-  max-width:56px!important;
-  max-height:56px!important;
-  flex:0 0 56px!important;
+#page-profile .profile-guardian-avatar{
+  flex:0 0 auto!important;
   aspect-ratio:1/1!important;
   border-radius:50%!important;
-  overflow:hidden!important;
   display:grid!important;
   place-items:center!important;
-  padding:0!important;
-  line-height:1!important;
 }
-#page-profile .profile-guardian-podium .profile-guardian-avatar img{
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  border-radius:50%!important;
-  display:block!important;
-}
-
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{width:64px!important;height:64px!important;}
+#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{width:50px!important;height:50px!important;}
 @media(max-width:480px){
-  #page-profile .profile-guardian-top3{min-height:228px!important;}
-  #page-profile .profile-guardian-podium.rank1{height:212px!important;min-height:212px!important;}
+  #page-profile .profile-guardian-podium.rank1{height:192px!important;min-height:192px!important;}
   #page-profile .profile-guardian-podium.rank2,
-  #page-profile .profile-guardian-podium.rank3{height:176px!important;min-height:176px!important;}
+  #page-profile .profile-guardian-podium.rank3{height:168px!important;min-height:168px!important;}
 }
 </style>
-
-<script id="v302-companion-profile-route-fix-script">
+<script id="v303-companion-vip-profile-fix">
 (function(){
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});}
-  var DEFAULT_COMPANION_AVATAR='assets/default_avatars/companion_default.webp';
-  function ensureCompanionSelfProfile(){
-    var id='companion-self';
-    try{
-      var all=JSON.parse(localStorage.getItem('dream_profiles_v58')||'{}')||{};
-      var p=all[id]||{};
-      all[id]=Object.assign({
-        id:id,
-        type:'companion',
-        name:'夢競陪玩',
-        avatar:'',
-        gender:'female',
-        rating:5.0,
-        recommend:0,
-        orders:0,
-        status:'空閒',
-        level:'等級：Lv1',
-        fixedTag:'陪玩人員',
-        bio:'夢競陪玩官方陪玩主頁。',
-        achievementSlots:['初次登場','穩定在線','人氣陪玩','高評陪玩','成就徽章'],
-        tags:['陪玩方','官方測試'],
-        games:['三角洲行動','聲音陪伴'],
-        reviews:[],
-        posts:[],
-        litGifts:[]
-      }, p, {id:id,type:'companion',name:'夢競陪玩'});
-      localStorage.setItem('dream_profiles_v58',JSON.stringify(all));
-    }catch(_){}
-    return id;
+  function safeParse(key, fallback){try{return JSON.parse(localStorage.getItem(key)||'null') || fallback;}catch(_){return fallback;}}
+  function safeSave(key, val){try{localStorage.setItem(key, JSON.stringify(val));}catch(_){}}
+  function cleanTitle(title, code){
+    return String(title||'').replace('VIP等級：','').replace(/[（）()]/g,' ').replace(/\bSVIP\b/ig,' ').replace(/\bVIP\s*(10|[1-9])\b/ig,' ').replace(String(code||''),' ').replace(/\s+/g,' ').trim();
   }
-  function polishCompanionProfile(){
-    var page=document.getElementById('page-profile');
-    if(!page || !page.classList.contains('active')) return;
-    var title=page.querySelector('[data-profile-bind="title"]');
-    var name=page.querySelector('[data-profile-bind="name"]');
-    var avatar=page.querySelector('[data-profile-bind="avatar"]');
-    var currentName=(name&&name.textContent||'').trim();
-    if(page.classList.contains('profile-companion') || currentName==='夢競陪玩'){
-      page.classList.add('profile-companion');
-      page.classList.remove('profile-member');
-      if(title) title.textContent='陪玩主頁';
-      if(name && currentName!=='夢競陪玩') name.textContent='夢競陪玩';
-      if(avatar && !avatar.querySelector('img')){
-        avatar.innerHTML='<img src="'+esc(DEFAULT_COMPANION_AVATAR)+'" alt="陪玩預設大頭像" loading="lazy">';
-        avatar.dataset.defaultAvatarRole='companion';
-      }
-      var back=page.querySelector('.profile-back');
-      if(back) back.setAttribute('data-go','companion-home');
+  function formatVip(user, fallback){
+    user = user || {};
+    var raw = user.vip_level ?? user.vip_rank ?? user.vip ?? user.member_vip_level ?? user.companion_vip_level ?? user.level;
+    var title = user.vip_title || user.vip_name || user.member_vip_title || user.companion_vip_title || user.title || '';
+    var s = String(raw == null ? '' : raw).toUpperCase();
+    if(user.svip || s === 'SVIP') return 'VIP等級：SVIP' + (cleanTitle(title,'SVIP') ? ' ' + cleanTitle(title,'SVIP') : '');
+    var m = s.match(/VIP\s*(10|[1-9])/);
+    var code = m ? 'VIP' + m[1] : '';
+    var n = Number(raw);
+    if(!code && n >= 1 && n <= 10) code = 'VIP' + n;
+    if(code) return 'VIP等級：' + code + (cleanTitle(title,code) ? ' ' + cleanTitle(title,code) : '');
+    return fallback || 'VIP等級：無VIP會員';
+  }
+  function authUser(){
+    var auth=window.__dreamFrontAuth||{};
+    var u=auth.user||{};
+    if(!u || !Object.keys(u).length){u=safeParse('dream_persist_user', {}) || {};}
+    return u||{};
+  }
+  function ensureSelfProfiles(){
+    var map=safeParse('dream_profiles_v58', {}) || {};
+    var u=authUser();
+    var vip=formatVip(u, null);
+    var role=(typeof getDreamLoginRole==='function'?getDreamLoginRole():'member');
+    map['member-self']=Object.assign({id:'member-self',type:'member',name:'夢競會員',avatar:'夢',gender:'',rating:0,recommend:0,orders:0,status:'在線'}, map['member-self']||{});
+    map['companion-self']=Object.assign({id:'companion-self',type:'companion',name:'夢競陪玩',avatar:'陪',gender:'female',rating:0,recommend:0,orders:0,status:'空閒',bio:'這位陪玩還沒有填寫個人簡介。',achievementSlots:['初次登場','人氣陪玩','穩定在線','成就徽章','高評陪玩'],tags:['陪玩人員'],games:['三角洲行動'],reviews:[],posts:['目前開放測試陪玩主頁。'],litGifts:[]}, map['companion-self']||{});
+    if(u.display_name || u.username || u.name){
+      if(role==='companion') map['companion-self'].name = u.display_name || u.username || u.name;
+      else map['member-self'].name = u.display_name || u.username || u.name;
     }
+    if(u.avatar || u.avatar_url || u.photo || u.photo_url){
+      var av = u.avatar || u.avatar_url || u.photo || u.photo_url;
+      if(role==='companion') map['companion-self'].avatar = av;
+      else map['member-self'].avatar = av;
+    }
+    if(vip){
+      map['member-self'].level=vip;
+      map['companion-self'].level=vip;
+      map['member-self'].fixedTag=vip.replace('VIP等級：','').trim();
+      map['companion-self'].fixedTag=vip.replace('VIP等級：','').trim();
+    }else{
+      if(!map['member-self'].level || /星耀會員/.test(map['member-self'].level)) map['member-self'].level='VIP等級：無VIP會員';
+      if(!map['companion-self'].level || /等級：Lv1|星耀會員/.test(map['companion-self'].level)) map['companion-self'].level='VIP等級：無VIP會員';
+    }
+    safeSave('dream_profiles_v58', map);
   }
-  function openCompanionSelf(){
-    var id=ensureCompanionSelfProfile();
-    try{localStorage.setItem('dream_active_profile_id',id);}catch(_){}
-    if(typeof window.openDreamProfile==='function') window.openDreamProfile(id);
-    else if(typeof window.showPage==='function') window.showPage('profile');
-    setTimeout(polishCompanionProfile,0);
-    setTimeout(polishCompanionProfile,80);
-    setTimeout(polishCompanionProfile,220);
+  function openOwnProfile(){
+    ensureSelfProfiles();
+    var role=(typeof getDreamLoginRole==='function'?getDreamLoginRole():'member');
+    var id=(role==='companion' || document.body.classList.contains('role-companion')) ? 'companion-self' : 'member-self';
+    try{localStorage.setItem('dream_active_profile_id', id);}catch(_){}
+    if(typeof goProfile==='function') goProfile(id);
+    else if(typeof showPage==='function'){showPage('profile'); if(typeof window.renderProfile==='function') setTimeout(window.renderProfile,0);}
+    setTimeout(function(){
+      var title=document.querySelector('#page-profile [data-profile-bind="title"]');
+      if(title && id==='companion-self') title.textContent='陪玩主頁';
+    },80);
   }
   document.addEventListener('click',function(e){
-    var item=e.target.closest && e.target.closest('#page-companion-home [data-companion-profile-self], #page-companion-home .service-item');
-    if(item){
-      var label=(item.querySelector('.service-name')?.textContent||'').trim();
-      if(item.hasAttribute('data-companion-profile-self') || label==='陪玩資料'){
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        openCompanionSelf();
-        return;
-      }
-    }
+    var btn=e.target.closest('#page-companion-home [data-open-profile="self"], #page-companion-home .member-name.profile-click-name');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openOwnProfile();
   },true);
-  var old=window.renderDreamProfilePage || window.renderProfile;
-  if(typeof old==='function' && !old.__v302CompanionPolish){
-    var wrapped=function(){var r=old.apply(this,arguments); setTimeout(polishCompanionProfile,0); return r;};
-    wrapped.__v302CompanionPolish=true;
-    if(window.renderDreamProfilePage===old) window.renderDreamProfilePage=wrapped;
-    if(window.renderProfile===old) window.renderProfile=wrapped;
-  }
-  window.addEventListener('hashchange',function(){setTimeout(polishCompanionProfile,120);});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(polishCompanionProfile,80);});
-  else setTimeout(polishCompanionProfile,80);
+  window.addEventListener('dream-auth-updated',ensureSelfProfiles);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ensureSelfProfiles); else ensureSelfProfiles();
 })();
 </script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=302', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=303', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });

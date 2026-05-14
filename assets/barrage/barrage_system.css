@@ -624,3 +624,12 @@
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
   transform:translateX(4px)!important;
 }
+
+
+/* v303：1號彈幕依測試要求，從 v302 位置往右調整約兩個滑鼠游標長度 */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
+  transform:translateX(36px)!important;
+}
+.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+  transform:translateX(36px)!important;
+}
