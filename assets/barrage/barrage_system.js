@@ -451,8 +451,8 @@
           rw: 180,
           rh: 180,
           /* v312：依正式測試回饋，1號彈幕整組往左微調半個滑鼠長度 */
-          avatar: { x: 71, y: 42, size: 58 },
-          text: { x: 52, y: 106, w: 96, h: 42 },
+          avatar: { x: 77, y: 42, size: 58 },
+          text: { x: 49, y: 106, w: 108, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"

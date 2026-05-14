@@ -4672,7 +4672,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=319">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=321">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -10570,7 +10570,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=319"></script>
+<script src="assets/barrage/barrage_system.js?v=321"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -16349,7 +16349,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=319', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=321', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -16393,12 +16393,17 @@ body:not(.role-companion) .companion-only-panel{
 
 
 <style id="v312-guardian-name-force-final-css">
+#page-profile .profile-guardian-top3 .profile-guardian-podium,
+.profile-guardian-top3 .profile-guardian-podium{
+  align-items:center!important;
+  text-align:center!important;
+}
 /* v312：只針對專屬守護榜前三名「用戶名稱」做可視放大；守護值、名次文字、框架不調整 */
 #page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name,
 .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name{
   position:relative!important;
   z-index:50!important;
-  font-size:26px!important;
+  font-size:27.5px!important;
   line-height:1!important;
   font-weight:950!important;
   transform:scale(1)!important;
@@ -16406,8 +16411,11 @@ body:not(.role-companion) .companion-only-panel{
   overflow:visible!important;
   white-space:nowrap!important;
   text-overflow:clip!important;
-  max-width:none!important;
+  max-width:100%!important;
   pointer-events:none!important;
+  box-sizing:border-box!important;
+  padding-left:8px!important;
+  padding-right:8px!important;
   width:100%!important;
   left:0!important;
   right:0!important;
@@ -16420,15 +16428,15 @@ body:not(.role-companion) .companion-only-panel{
 }
 #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name,
 .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name{
-  font-size:29px!important;
+  font-size:30px!important;
   transform:scale(1.01)!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name,
 .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name{
   width:100%!important;
-  max-width:none!important;
-  margin-left:0!important;
-  margin-right:0!important;
+  max-width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
   transform:scale(1)!important;
   transform-origin:center center!important;
   overflow:visible!important;
@@ -16441,8 +16449,8 @@ body:not(.role-companion) .companion-only-panel{
 #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name,
 .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
   width:100%!important;
-  margin-left:0!important;
-  margin-right:0!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
   transform:scale(1)!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-name canvas,
@@ -16451,7 +16459,10 @@ body:not(.role-companion) .companion-only-panel{
 .profile-guardian-top3 .profile-guardian-name img{
   transform:scale(1)!important;
   transform-origin:center center!important;
-  max-width:none!important;
+  max-width:100%!important;
+  display:block!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
 }
 /* 明確鎖住其他文字，不讓 v312 影響守護值與名次 */
 #page-profile .profile-guardian-top3 .profile-guardian-value,
@@ -16476,7 +16487,7 @@ body:not(.role-companion) .companion-only-panel{
   function forceGuardianNameSize(){
     document.querySelectorAll('.profile-guardian-top3 .profile-guardian-podium .profile-guardian-name').forEach(function(el){
       var isRank1 = !!el.closest('.profile-guardian-podium.rank1');
-      el.style.setProperty('font-size', isRank1 ? '29px' : '26px', 'important');
+      el.style.setProperty('font-size', isRank1 ? '30px' : '27.5px', 'important');
       el.style.setProperty('line-height', '1', 'important');
       el.style.setProperty('font-weight', '950', 'important');
       el.style.setProperty('transform', isRank1 ? 'scale(1.01)' : 'scale(1)', 'important');
@@ -16485,6 +16496,9 @@ body:not(.role-companion) .companion-only-panel{
       el.style.setProperty('white-space', 'nowrap', 'important');
       el.style.setProperty('text-overflow', 'clip', 'important');
       el.style.setProperty('z-index', '50', 'important');
+      el.style.setProperty('box-sizing', 'border-box', 'important');
+      el.style.setProperty('padding-left', '8px', 'important');
+      el.style.setProperty('padding-right', '8px', 'important');
       el.style.setProperty('width', '100%', 'important');
       el.style.setProperty('left', '0', 'important');
       el.style.setProperty('right', '0', 'important');
@@ -16496,9 +16510,9 @@ body:not(.role-companion) .companion-only-panel{
       el.style.setProperty('justify-content', 'center', 'important');
       el.querySelectorAll('.rank-top3-gufeng-name').forEach(function(box){
         box.style.setProperty('width', '100%', 'important');
-        box.style.setProperty('max-width', 'none', 'important');
-        box.style.setProperty('margin-left', '0', 'important');
-        box.style.setProperty('margin-right', '0', 'important');
+        box.style.setProperty('max-width', '100%', 'important');
+        box.style.setProperty('margin-left', 'auto', 'important');
+        box.style.setProperty('margin-right', 'auto', 'important');
         box.style.setProperty('transform', 'scale(1)', 'important');
         box.style.setProperty('transform-origin', 'center center', 'important');
         box.style.setProperty('overflow', 'visible', 'important');
@@ -16511,7 +16525,10 @@ body:not(.role-companion) .companion-only-panel{
       el.querySelectorAll('canvas,img').forEach(function(node){
         node.style.setProperty('transform', 'scale(1)', 'important');
         node.style.setProperty('transform-origin', 'center center', 'important');
-        node.style.setProperty('max-width', 'none', 'important');
+        node.style.setProperty('max-width', '100%', 'important');
+        node.style.setProperty('display', 'block', 'important');
+        node.style.setProperty('margin-left', 'auto', 'important');
+        node.style.setProperty('margin-right', 'auto', 'important');
       });
     });
   }
@@ -16529,5 +16546,13 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
+<script id="v320-cache-purge">
+(function(){
+  if(!('caches' in window)) return;
+  caches.keys().then(function(keys){
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v321'; }).map(function(k){ return caches.delete(k); }));
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dream-playmate-v319';
+const CACHE_NAME = 'dream-playmate-v321';
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,10 +30,18 @@ self.addEventListener('fetch', event => {
     }).catch(()=>caches.match('./index.html').then(res => res || caches.match('./offline.html'))));
     return;
   }
-  if(/\.(?:webp|png|jpg|jpeg|gif|svg|js|css|json|html)$/i.test(url.pathname)){
+  if(/\.(?:js|css|json|html)$/i.test(url.pathname)){
+    event.respondWith(fetch(req, {cache:'reload'}).then(res => {
+      if(res && res.ok){ const copy=res.clone(); caches.open(CACHE_NAME).then(cache=>cache.put(req,copy)); }
+      return res;
+    }).catch(()=>caches.match(req)));
+    return;
+  }
+  if(/\.(?:webp|png|jpg|jpeg|gif|svg)$/i.test(url.pathname)){
     event.respondWith(caches.match(req).then(cached => {
       const network = fetch(req).then(res => { if(res && res.ok){ const copy=res.clone(); caches.open(CACHE_NAME).then(cache=>cache.put(req,copy)); } return res; }).catch(()=>cached);
       return cached || network;
     }));
+    return;
   }
 });

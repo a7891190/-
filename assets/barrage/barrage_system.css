@@ -588,57 +588,8 @@
   100%{transform:translate3d(var(--drift),220px,0) rotate(var(--spin, 180deg));opacity:0;}
 }
 
-
-
-/* v296：1號彈幕大頭照與文字整體往右修正 */
-.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
-  transform:translateX(18px)!important;
-}
+/* v320: idx-1 final center; no legacy horizontal offsets. */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot,
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:translateX(18px)!important;
-}
-
-
-/* v298：1號彈幕 v297 仍偏右，整體再往左回修 */
-.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
-  transform:translateX(0px)!important;
-}
-.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:translateX(0px)!important;
-}
-
-
-/* v301：1號彈幕仍偏右，再往左微調 */
-.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
-  transform:translateX(-14px)!important;
-}
-.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:translateX(-14px)!important;
-}
-
-
-/* v302：1號彈幕 v301 往左過頭，整體往右回調約一個滑鼠游標長度 */
-.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
-  transform:translateX(4px)!important;
-}
-.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:translateX(4px)!important;
-}
-
-
-/* v303：1號彈幕依測試要求，從 v302 位置往右調整約兩個滑鼠游標長度 */
-.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
-  transform:translateX(36px)!important;
-}
-.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:translateX(36px)!important;
-}
-
-
-/* v305：1號彈幕依目前實測，從 v304/v303 位置往左半個滑鼠長度 */
-.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
-  transform:translateX(0px)!important;
-}
-.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:translateX(0px)!important;
+  transform:translateX(0)!important;
 }
