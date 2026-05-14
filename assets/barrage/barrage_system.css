@@ -615,3 +615,12 @@
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
   transform:translateX(-14px)!important;
 }
+
+
+/* v302：1號彈幕 v301 往左過頭，整體往右回調約一個滑鼠游標長度 */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
+  transform:translateX(4px)!important;
+}
+.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+  transform:translateX(4px)!important;
+}
