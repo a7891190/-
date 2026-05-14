@@ -89,6 +89,12 @@
     lane: null,
     basePath: DEFAULT_BASE,
     slotCounter: 0,
+    queue: [],
+    activeSlides: 0,
+    launchTimer: null,
+    lastLaunchAt: 0,
+    maxConcurrent: 3,
+    launchGap: 5000,
 
     nextTop(h) {
       const safeTop = 96;
@@ -436,7 +442,7 @@
       }
     },
 
-    async play(event) {
+    async render(event) {
       if (!this.root) await this.init({ basePath: this.basePath || DEFAULT_BASE });
 
       const lv = Math.max(0, this.level(event));
@@ -451,8 +457,8 @@
           rw: 180,
           rh: 180,
           /* v312：依正式測試回饋，1號彈幕整組往左微調半個滑鼠長度 */
-          avatar: { x: 77, y: 42, size: 58 },
-          text: { x: 49, y: 106, w: 108, h: 42 },
+          avatar: { x: 95, y: 42, size: 58 },
+          text: { x: 67, y: 106, w: 108, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
@@ -538,7 +544,35 @@
       fitOneLine(sub, 7);
       this.runEffects(plan, item, seconds);
 
-      setTimeout(() => item.remove(), seconds * 1000 + 500);
+      setTimeout(() => {
+        item.remove();
+        this.activeSlides = Math.max(0, this.activeSlides - 1);
+        this.scheduleQueue();
+      }, seconds * 1000 + 500);
+      return true;
+    },
+
+    scheduleQueue() {
+      if (this.launchTimer || !this.queue.length) return;
+      if (this.activeSlides >= this.maxConcurrent) return;
+      const wait = Math.max(0, this.launchGap - (Date.now() - this.lastLaunchAt));
+      this.launchTimer = setTimeout(() => {
+        this.launchTimer = null;
+        if (!this.queue.length) return;
+        if (this.activeSlides >= this.maxConcurrent) return;
+        const next = this.queue.shift();
+        this.activeSlides += 1;
+        this.lastLaunchAt = Date.now();
+        Promise.resolve(this.render(next)).catch(() => {
+          this.activeSlides = Math.max(0, this.activeSlides - 1);
+        }).finally(() => this.scheduleQueue());
+        this.scheduleQueue();
+      }, wait);
+    },
+
+    play(event) {
+      this.queue.push(event || {});
+      this.scheduleQueue();
       return true;
     },
 

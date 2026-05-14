@@ -4672,7 +4672,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=321">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=322">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -10570,7 +10570,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=321"></script>
+<script src="assets/barrage/barrage_system.js?v=322"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -10750,7 +10750,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <script id="v115-legal-consent-script">
 (function(){
   const KEY = 'dream_legal_consent_v115';
-  const REQUIRED_PAGES = new Set(['member','companion-home','profile','recharge','renew','gift','checkin','raffle']);
+  const REQUIRED_PAGES = new Set(['companion-home','profile','recharge','renew','gift','checkin','raffle']);
   function $(id){ return document.getElementById(id); }
   function hasConsent(){ return localStorage.getItem(KEY) === 'accepted'; }
   function updateConsentStatus(){
@@ -16349,7 +16349,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=321', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=322', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -16403,7 +16403,7 @@ body:not(.role-companion) .companion-only-panel{
 .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name{
   position:relative!important;
   z-index:50!important;
-  font-size:27.5px!important;
+  font-size:55px!important;
   line-height:1!important;
   font-weight:950!important;
   transform:scale(1)!important;
@@ -16411,7 +16411,7 @@ body:not(.role-companion) .companion-only-panel{
   overflow:visible!important;
   white-space:nowrap!important;
   text-overflow:clip!important;
-  max-width:100%!important;
+  max-width:none!important;
   pointer-events:none!important;
   box-sizing:border-box!important;
   padding-left:8px!important;
@@ -16428,13 +16428,13 @@ body:not(.role-companion) .companion-only-panel{
 }
 #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name,
 .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name{
-  font-size:30px!important;
+  font-size:60px!important;
   transform:scale(1.01)!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name,
 .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name{
   width:100%!important;
-  max-width:100%!important;
+  max-width:none!important;
   margin-left:auto!important;
   margin-right:auto!important;
   transform:scale(1)!important;
@@ -16459,17 +16459,32 @@ body:not(.role-companion) .companion-only-panel{
 .profile-guardian-top3 .profile-guardian-name img{
   transform:scale(1)!important;
   transform-origin:center center!important;
-  max-width:100%!important;
+  max-width:none!important;
   display:block!important;
   margin-left:auto!important;
   margin-right:auto!important;
 }
 /* 明確鎖住其他文字，不讓 v312 影響守護值與名次 */
 #page-profile .profile-guardian-top3 .profile-guardian-value,
-#page-profile .profile-guardian-top3 .profile-guardian-crown,
-.profile-guardian-top3 .profile-guardian-value,
-.profile-guardian-top3 .profile-guardian-crown{
+.profile-guardian-top3 .profile-guardian-value{
   transform:none!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-crown,
+.profile-guardian-top3 .profile-guardian-crown{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:7px!important;
+  width:100%!important;
+  margin:0!important;
+  transform:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  box-sizing:border-box!important;
+  padding:2px 7px!important;
+  white-space:nowrap!important;
 }
 
 #page-profile .profile-guardian-list .profile-guardian-mini-name,
@@ -16487,7 +16502,7 @@ body:not(.role-companion) .companion-only-panel{
   function forceGuardianNameSize(){
     document.querySelectorAll('.profile-guardian-top3 .profile-guardian-podium .profile-guardian-name').forEach(function(el){
       var isRank1 = !!el.closest('.profile-guardian-podium.rank1');
-      el.style.setProperty('font-size', isRank1 ? '30px' : '27.5px', 'important');
+      el.style.setProperty('font-size', isRank1 ? '60px' : '55px', 'important');
       el.style.setProperty('line-height', '1', 'important');
       el.style.setProperty('font-weight', '950', 'important');
       el.style.setProperty('transform', isRank1 ? 'scale(1.01)' : 'scale(1)', 'important');
@@ -16510,7 +16525,7 @@ body:not(.role-companion) .companion-only-panel{
       el.style.setProperty('justify-content', 'center', 'important');
       el.querySelectorAll('.rank-top3-gufeng-name').forEach(function(box){
         box.style.setProperty('width', '100%', 'important');
-        box.style.setProperty('max-width', '100%', 'important');
+        box.style.setProperty('max-width', 'none', 'important');
         box.style.setProperty('margin-left', 'auto', 'important');
         box.style.setProperty('margin-right', 'auto', 'important');
         box.style.setProperty('transform', 'scale(1)', 'important');
@@ -16525,14 +16540,29 @@ body:not(.role-companion) .companion-only-panel{
       el.querySelectorAll('canvas,img').forEach(function(node){
         node.style.setProperty('transform', 'scale(1)', 'important');
         node.style.setProperty('transform-origin', 'center center', 'important');
-        node.style.setProperty('max-width', '100%', 'important');
+        node.style.setProperty('max-width', 'none', 'important');
         node.style.setProperty('display', 'block', 'important');
         node.style.setProperty('margin-left', 'auto', 'important');
         node.style.setProperty('margin-right', 'auto', 'important');
       });
     });
   }
-  window.DREAM_FORCE_GUARDIAN_NAME_SIZE_V312 = forceGuardianNameSize;
+    document.querySelectorAll('.profile-guardian-top3 .profile-guardian-podium .profile-guardian-crown').forEach(function(crown){
+      crown.style.setProperty('position', 'absolute', 'important');
+      crown.style.setProperty('left', '0', 'important');
+      crown.style.setProperty('right', '0', 'important');
+      crown.style.setProperty('bottom', '7px', 'important');
+      crown.style.setProperty('width', '100%', 'important');
+      crown.style.setProperty('margin', '0', 'important');
+      crown.style.setProperty('transform', 'none', 'important');
+      crown.style.setProperty('display', 'flex', 'important');
+      crown.style.setProperty('align-items', 'center', 'important');
+      crown.style.setProperty('justify-content', 'center', 'important');
+      crown.style.setProperty('text-align', 'center', 'important');
+      crown.style.setProperty('box-sizing', 'border-box', 'important');
+      crown.style.setProperty('padding', '2px 7px', 'important');
+      crown.style.setProperty('white-space', 'nowrap', 'important');
+    });  window.DREAM_FORCE_GUARDIAN_NAME_SIZE_V312 = forceGuardianNameSize;
   document.addEventListener('DOMContentLoaded', function(){
     forceGuardianNameSize();
     setTimeout(forceGuardianNameSize, 80);
@@ -16550,7 +16580,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v321'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v322'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
