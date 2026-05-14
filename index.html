@@ -16355,5 +16355,41 @@ body:not(.role-companion) .companion-only-panel{
   });
 })();
 </script>
+
+
+<style id="v307-guardian-name-only-barrage-left-css">
+/* v307：只放大專屬守護榜前三名用戶名稱；其他框架文字、守護值、名次文字不動 */
+.profile-guardian-podium .profile-guardian-name{
+  font-size:26px!important;
+  line-height:1.04!important;
+  min-height:39px!important;
+  transform:translateZ(0) scale(1.08)!important;
+  transform-origin:center center!important;
+}
+.profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:30px!important;
+  min-height:45px!important;
+  transform:translateZ(0) scale(1.10)!important;
+}
+.profile-guardian-name .rank-top3-gufeng-name{
+  width:min(100%,18em)!important;
+}
+.profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(100%,18.8em)!important;
+}
+@media(max-width:480px){
+  .profile-guardian-podium .profile-guardian-name{
+    font-size:23px!important;
+    min-height:36px!important;
+    transform:translateZ(0) scale(1.07)!important;
+  }
+  .profile-guardian-podium.rank1 .profile-guardian-name{
+    font-size:27px!important;
+    min-height:42px!important;
+    transform:translateZ(0) scale(1.09)!important;
+  }
+}
+</style>
+
 </body>
 </html>
