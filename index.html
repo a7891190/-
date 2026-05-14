@@ -16162,11 +16162,102 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
+
+
+<style id="v305-guardian-name-companion-return-css">
+/* v305：只放大專屬守護榜用戶名稱；不動守護值與名次文字 */
+#page-profile .profile-guardian-podium .profile-guardian-name{
+  font-size:28px!important;
+  line-height:1.02!important;
+  min-height:40px!important;
+  transform:translateZ(0)!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:32px!important;
+  min-height:46px!important;
+}
+#page-profile .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(100%,17.6em)!important;
+  max-width:none!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(100%,18.6em)!important;
+  max-width:none!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-podium .profile-guardian-name{font-size:24px!important;min-height:36px!important;}
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{font-size:27px!important;min-height:41px!important;}
+}
+</style>
+<script id="v305-companion-profile-route-fix">
+(function(){
+  function ensureCompanionProfile(){
+    try{localStorage.setItem('dream_active_profile_id','companion-self');}catch(_){}
+    if(typeof window.goProfile==='function') window.goProfile('companion-self');
+    else if(typeof window.showPage==='function'){window.showPage('profile'); if(typeof window.renderProfile==='function') setTimeout(window.renderProfile,0);}
+    setTimeout(function(){
+      var page=document.getElementById('page-profile');
+      if(page){page.classList.add('profile-companion');page.classList.remove('profile-member');}
+      var title=document.querySelector('#page-profile [data-profile-bind="title"]');
+      if(title) title.textContent='陪玩主頁';
+      var back=document.querySelector('#page-profile .profile-back');
+      if(back) back.dataset.go='companion-home';
+      if(typeof window.renderProfile==='function') setTimeout(function(){
+        var back2=document.querySelector('#page-profile .profile-back');
+        if(back2) back2.dataset.go='companion-home';
+      },0);
+    },80);
+  }
+  document.addEventListener('click',function(e){
+    var inCompanionCenter=e.target.closest('#page-companion-home');
+    var serviceName=e.target.closest('.service-item')?.querySelector?.('.service-name')?.textContent || '';
+    var btn=e.target.closest('[data-open-companion-self]');
+    if(btn || (inCompanionCenter && serviceName.trim()==='陪玩資料')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      ensureCompanionProfile();
+      return false;
+    }
+  },true);
+  document.addEventListener('click',function(e){
+    var back=e.target.closest('#page-profile .profile-back');
+    if(!back) return;
+    var active='';
+    try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+    if(active==='companion-self' || document.getElementById('page-profile')?.classList.contains('profile-companion')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(typeof window.showPage==='function') window.showPage('companion-home');
+      else location.hash='#companion-home';
+      return false;
+    }
+  },true);
+  var oldRender=window.renderProfile;
+  if(typeof oldRender==='function' && !oldRender.__v305CompanionReturn){
+    window.renderProfile=function(){
+      var out=oldRender.apply(this, arguments);
+      setTimeout(function(){
+        var active='';
+        try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+        if(active==='companion-self'){
+          var title=document.querySelector('#page-profile [data-profile-bind="title"]');
+          if(title) title.textContent='陪玩主頁';
+          var back=document.querySelector('#page-profile .profile-back');
+          if(back) back.dataset.go='companion-home';
+        }
+      },0);
+      return out;
+    };
+    window.renderProfile.__v305CompanionReturn=true;
+  }
+})();
+</script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=304', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=305', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });

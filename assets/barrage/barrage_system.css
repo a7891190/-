@@ -633,3 +633,12 @@
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
   transform:translateX(36px)!important;
 }
+
+
+/* v305：1號彈幕依目前實測，從 v304/v303 位置往左半個滑鼠長度 */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
+  transform:translateX(28px)!important;
+}
+.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+  transform:translateX(28px)!important;
+}
