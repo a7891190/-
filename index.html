@@ -4672,7 +4672,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=313">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=314">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -10570,7 +10570,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=313"></script>
+<script src="assets/barrage/barrage_system.js?v=314"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -16349,7 +16349,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=313', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=314', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -16401,7 +16401,7 @@ body:not(.role-companion) .companion-only-panel{
   font-size:40px!important;
   line-height:1!important;
   font-weight:950!important;
-  transform:scale(1.30)!important;
+  transform:scale(2.60)!important;
   transform-origin:center center!important;
   overflow:visible!important;
   white-space:nowrap!important;
@@ -16412,23 +16412,23 @@ body:not(.role-companion) .companion-only-panel{
 #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name,
 .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name{
   font-size:45px!important;
-  transform:scale(1.34)!important;
+  transform:scale(2.68)!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name,
 .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name{
-  width:190%!important;
+  width:380%!important;
   max-width:none!important;
-  margin-left:-45%!important;
-  margin-right:-45%!important;
+  margin-left:-140%!important;
+  margin-right:-140%!important;
   transform:scale(1.24)!important;
   transform-origin:center center!important;
   overflow:visible!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name,
 .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
-  width:210%!important;
-  margin-left:-55%!important;
-  margin-right:-55%!important;
+  width:420%!important;
+  margin-left:-160%!important;
+  margin-right:-160%!important;
   transform:scale(1.28)!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-name canvas,
@@ -16465,17 +16465,17 @@ body:not(.role-companion) .companion-only-panel{
       el.style.setProperty('font-size', isRank1 ? '45px' : '40px', 'important');
       el.style.setProperty('line-height', '1', 'important');
       el.style.setProperty('font-weight', '950', 'important');
-      el.style.setProperty('transform', isRank1 ? 'scale(1.34)' : 'scale(1.30)', 'important');
+      el.style.setProperty('transform', isRank1 ? 'scale(2.68)' : 'scale(2.60)', 'important');
       el.style.setProperty('transform-origin', 'center center', 'important');
       el.style.setProperty('overflow', 'visible', 'important');
       el.style.setProperty('white-space', 'nowrap', 'important');
       el.style.setProperty('text-overflow', 'clip', 'important');
       el.style.setProperty('z-index', '50', 'important');
       el.querySelectorAll('.rank-top3-gufeng-name').forEach(function(box){
-        box.style.setProperty('width', isRank1 ? '210%' : '190%', 'important');
+        box.style.setProperty('width', isRank1 ? '420%' : '380%', 'important');
         box.style.setProperty('max-width', 'none', 'important');
-        box.style.setProperty('margin-left', isRank1 ? '-55%' : '-45%', 'important');
-        box.style.setProperty('margin-right', isRank1 ? '-55%' : '-45%', 'important');
+        box.style.setProperty('margin-left', isRank1 ? '-160%' : '-140%', 'important');
+        box.style.setProperty('margin-right', isRank1 ? '-160%' : '-140%', 'important');
         box.style.setProperty('transform', isRank1 ? 'scale(1.28)' : 'scale(1.24)', 'important');
         box.style.setProperty('transform-origin', 'center center', 'important');
         box.style.setProperty('overflow', 'visible', 'important');
