@@ -1,0 +1,294 @@
+{
+  "version": "v253-rank-rewards-switch-badge-map-fixed",
+  "rule": "所有排行榜切換時直接看到該排行榜專屬框、徽章與名字流光；徽章已依圖中文字重新對應所屬榜單。",
+  "boards": [
+    {
+      "key": "vip_rank",
+      "slug": "vip",
+      "title": "VIP排行榜",
+      "name_glow": "effect_name_vip",
+      "rule": "佔有該排行名次時持有，掉出名次即失去；同分不超車，較早達成者在前。",
+      "rewards": [
+        {
+          "id": "rank_badge_vip_01",
+          "leaderboard": "vip_rank",
+          "leaderboard_title": "VIP排行榜",
+          "rank": 1,
+          "title": "瓊筵貴客",
+          "full": "assets/rank_rewards/badges/rank_badge_vip_01_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_vip_01_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_vip_01_preview.webp",
+          "rank_frame": "assets/top3_gold_frame_v35.webp",
+          "frame_label": "VIP排行榜第 1 名專屬框",
+          "name_glow": "effect_name_vip"
+        },
+        {
+          "id": "rank_badge_vip_02",
+          "leaderboard": "vip_rank",
+          "leaderboard_title": "VIP排行榜",
+          "rank": 2,
+          "title": "錦衣玉客",
+          "full": "assets/rank_rewards/badges/rank_badge_vip_02_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_vip_02_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_vip_02_preview.webp",
+          "rank_frame": "assets/top3_silver_frame_v35.webp",
+          "frame_label": "VIP排行榜第 2 名專屬框",
+          "name_glow": "effect_name_vip"
+        },
+        {
+          "id": "rank_badge_vip_03",
+          "leaderboard": "vip_rank",
+          "leaderboard_title": "VIP排行榜",
+          "rank": 3,
+          "title": "流光龍冕",
+          "full": "assets/rank_rewards/badges/rank_badge_vip_03_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_vip_03_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_vip_03_preview.webp",
+          "rank_frame": "assets/top3_bronze_frame_v35.webp",
+          "frame_label": "VIP排行榜第 3 名專屬框",
+          "name_glow": "effect_name_vip"
+        }
+      ]
+    },
+    {
+      "key": "weekly_charm",
+      "slug": "charm",
+      "title": "本月魅力榜",
+      "name_glow": "effect_name_charm",
+      "rule": "佔有該排行名次時持有，掉出名次即失去；同分不超車，較早達成者在前。",
+      "rewards": [
+        {
+          "id": "rank_badge_charm_01",
+          "leaderboard": "weekly_charm",
+          "leaderboard_title": "本月魅力榜",
+          "rank": 1,
+          "title": "鳳華冠世",
+          "full": "assets/rank_rewards/badges/rank_badge_charm_01_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_charm_01_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_charm_01_preview.webp",
+          "rank_frame": "assets/top3_gold_frame_v35.webp",
+          "frame_label": "本月魅力榜第 1 名專屬框",
+          "name_glow": "effect_name_charm"
+        },
+        {
+          "id": "rank_badge_charm_02",
+          "leaderboard": "weekly_charm",
+          "leaderboard_title": "本月魅力榜",
+          "rank": 2,
+          "title": "玉客傾城",
+          "full": "assets/rank_rewards/badges/rank_badge_charm_02_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_charm_02_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_charm_02_preview.webp",
+          "rank_frame": "assets/top3_silver_frame_v35.webp",
+          "frame_label": "本月魅力榜第 2 名專屬框",
+          "name_glow": "effect_name_charm"
+        },
+        {
+          "id": "rank_badge_charm_03",
+          "leaderboard": "weekly_charm",
+          "leaderboard_title": "本月魅力榜",
+          "rank": 3,
+          "title": "流光雅韻",
+          "full": "assets/rank_rewards/badges/rank_badge_charm_03_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_charm_03_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_charm_03_preview.webp",
+          "rank_frame": "assets/top3_bronze_frame_v35.webp",
+          "frame_label": "本月魅力榜第 3 名專屬框",
+          "name_glow": "effect_name_charm"
+        }
+      ]
+    },
+    {
+      "key": "monthly_guardian",
+      "slug": "guard",
+      "title": "本月守護榜",
+      "name_glow": "effect_name_guard",
+      "rule": "佔有該排行名次時持有，掉出名次即失去；同分不超車，較早達成者在前。",
+      "rewards": [
+        {
+          "id": "rank_badge_guard_01",
+          "leaderboard": "monthly_guardian",
+          "leaderboard_title": "本月守護榜",
+          "rank": 1,
+          "title": "首席守護",
+          "full": "assets/rank_rewards/badges/rank_badge_guard_01_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_guard_01_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_guard_01_preview.webp",
+          "rank_frame": "assets/top3_gold_frame_v35.webp",
+          "frame_label": "本月守護榜第 1 名專屬框",
+          "name_glow": "effect_name_guard"
+        },
+        {
+          "id": "rank_badge_guard_02",
+          "leaderboard": "monthly_guardian",
+          "leaderboard_title": "本月守護榜",
+          "rank": 2,
+          "title": "長明守客",
+          "full": "assets/rank_rewards/badges/rank_badge_guard_02_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_guard_02_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_guard_02_preview.webp",
+          "rank_frame": "assets/top3_silver_frame_v35.webp",
+          "frame_label": "本月守護榜第 2 名專屬框",
+          "name_glow": "effect_name_guard"
+        },
+        {
+          "id": "rank_badge_guard_03",
+          "leaderboard": "monthly_guardian",
+          "leaderboard_title": "本月守護榜",
+          "rank": 3,
+          "title": "玉階守心",
+          "full": "assets/rank_rewards/badges/rank_badge_guard_03_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_guard_03_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_guard_03_preview.webp",
+          "rank_frame": "assets/top3_bronze_frame_v35.webp",
+          "frame_label": "本月守護榜第 3 名專屬框",
+          "name_glow": "effect_name_guard"
+        }
+      ]
+    },
+    {
+      "key": "companion_gift",
+      "slug": "companion_gift",
+      "title": "陪玩收禮榜",
+      "name_glow": "effect_name_companion_gift",
+      "rule": "佔有該排行名次時持有，掉出名次即失去；同分不超車，較早達成者在前。",
+      "rewards": [
+        {
+          "id": "rank_badge_companion_gift_01",
+          "leaderboard": "companion_gift",
+          "leaderboard_title": "陪玩收禮榜",
+          "rank": 1,
+          "title": "龍冠御方",
+          "full": "assets/rank_rewards/badges/rank_badge_companion_gift_01_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_companion_gift_01_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_companion_gift_01_preview.webp",
+          "rank_frame": "assets/top3_gold_frame_v35.webp",
+          "frame_label": "陪玩收禮榜第 1 名專屬框",
+          "name_glow": "effect_name_companion_gift"
+        },
+        {
+          "id": "rank_badge_companion_gift_02",
+          "leaderboard": "companion_gift",
+          "leaderboard_title": "陪玩收禮榜",
+          "rank": 2,
+          "title": "星蓮紅人",
+          "full": "assets/rank_rewards/badges/rank_badge_companion_gift_02_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_companion_gift_02_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_companion_gift_02_preview.webp",
+          "rank_frame": "assets/top3_silver_frame_v35.webp",
+          "frame_label": "陪玩收禮榜第 2 名專屬框",
+          "name_glow": "effect_name_companion_gift"
+        },
+        {
+          "id": "rank_badge_companion_gift_03",
+          "leaderboard": "companion_gift",
+          "leaderboard_title": "陪玩收禮榜",
+          "rank": 3,
+          "title": "錦堂雅客",
+          "full": "assets/rank_rewards/badges/rank_badge_companion_gift_03_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_companion_gift_03_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_companion_gift_03_preview.webp",
+          "rank_frame": "assets/top3_bronze_frame_v35.webp",
+          "frame_label": "陪玩收禮榜第 3 名專屬框",
+          "name_glow": "effect_name_companion_gift"
+        }
+      ]
+    },
+    {
+      "key": "member_gift",
+      "slug": "member_gift",
+      "title": "會員送禮榜",
+      "name_glow": "effect_name_member_gift",
+      "rule": "佔有該排行名次時持有，掉出名次即失去；同分不超車，較早達成者在前。",
+      "rewards": [
+        {
+          "id": "rank_badge_member_gift_01",
+          "leaderboard": "member_gift",
+          "leaderboard_title": "會員送禮榜",
+          "rank": 1,
+          "title": "金闕護君",
+          "full": "assets/rank_rewards/badges/rank_badge_member_gift_01_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_member_gift_01_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_member_gift_01_preview.webp",
+          "rank_frame": "assets/top3_gold_frame_v35.webp",
+          "frame_label": "會員送禮榜第 1 名專屬框",
+          "name_glow": "effect_name_member_gift"
+        },
+        {
+          "id": "rank_badge_member_gift_02",
+          "leaderboard": "member_gift",
+          "leaderboard_title": "會員送禮榜",
+          "rank": 2,
+          "title": "長明龍主",
+          "full": "assets/rank_rewards/badges/rank_badge_member_gift_02_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_member_gift_02_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_member_gift_02_preview.webp",
+          "rank_frame": "assets/top3_silver_frame_v35.webp",
+          "frame_label": "會員送禮榜第 2 名專屬框",
+          "name_glow": "effect_name_member_gift"
+        },
+        {
+          "id": "rank_badge_member_gift_03",
+          "leaderboard": "member_gift",
+          "leaderboard_title": "會員送禮榜",
+          "rank": 3,
+          "title": "月下護卿",
+          "full": "assets/rank_rewards/badges/rank_badge_member_gift_03_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_member_gift_03_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_member_gift_03_preview.webp",
+          "rank_frame": "assets/top3_bronze_frame_v35.webp",
+          "frame_label": "會員送禮榜第 3 名專屬框",
+          "name_glow": "effect_name_member_gift"
+        }
+      ]
+    },
+    {
+      "key": "total_recharge",
+      "slug": "recharge",
+      "title": "累計儲值榜",
+      "name_glow": "effect_name_recharge",
+      "rule": "佔有該排行名次時持有，掉出名次即失去；同分不超車，較早達成者在前。",
+      "rewards": [
+        {
+          "id": "rank_badge_recharge_01",
+          "leaderboard": "total_recharge",
+          "leaderboard_title": "累計儲值榜",
+          "rank": 1,
+          "title": "金殿貴主",
+          "full": "assets/rank_rewards/badges/rank_badge_recharge_01_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_recharge_01_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_recharge_01_preview.webp",
+          "rank_frame": "assets/top3_gold_frame_v35.webp",
+          "frame_label": "累計儲值榜第 1 名專屬框",
+          "name_glow": "effect_name_recharge"
+        },
+        {
+          "id": "rank_badge_recharge_02",
+          "leaderboard": "total_recharge",
+          "leaderboard_title": "累計儲值榜",
+          "rank": 2,
+          "title": "玉京上賓",
+          "full": "assets/rank_rewards/badges/rank_badge_recharge_02_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_recharge_02_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_recharge_02_preview.webp",
+          "rank_frame": "assets/top3_silver_frame_v35.webp",
+          "frame_label": "累計儲值榜第 2 名專屬框",
+          "name_glow": "effect_name_recharge"
+        },
+        {
+          "id": "rank_badge_recharge_03",
+          "leaderboard": "total_recharge",
+          "leaderboard_title": "累計儲值榜",
+          "rank": 3,
+          "title": "蘭臺貴客",
+          "full": "assets/rank_rewards/badges/rank_badge_recharge_03_full.webp",
+          "name": "assets/rank_rewards/badges/rank_badge_recharge_03_name.webp",
+          "preview": "assets/rank_rewards/badges/rank_badge_recharge_03_preview.webp",
+          "rank_frame": "assets/top3_bronze_frame_v35.webp",
+          "frame_label": "累計儲值榜第 3 名專屬框",
+          "name_glow": "effect_name_recharge"
+        }
+      ]
+    }
+  ]
+}

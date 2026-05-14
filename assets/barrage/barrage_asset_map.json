@@ -1,0 +1,103 @@
+{
+  "common": [
+    "assets/barrage/common/common_01_pink_gold_fantasy.webp",
+    "assets/barrage/common/common_02_pastel.webp",
+    "assets/barrage/common/common_03_ornamental.webp",
+    "assets/barrage/common/common_04_koi_cloud.webp",
+    "assets/barrage/common/common_05_fantasy_banner.webp",
+    "assets/barrage/common/common_06_rose_gold.webp"
+  ],
+  "gift": {
+    "fan": [
+      "assets/barrage/gift/fan/gift_fan_01_floral_round.webp",
+      "assets/barrage/gift/fan/gift_fan_02_floral_banner.webp",
+      "assets/barrage/gift/fan/gift_fan_03_floral_stage.webp"
+    ],
+    "lantern": [
+      "assets/barrage/gift/lantern/gift_lantern_01_pink_gold.webp",
+      "assets/barrage/gift/lantern/gift_lantern_02_starlight.webp",
+      "assets/barrage/gift/lantern/gift_lantern_03_celestial.webp"
+    ],
+    "music": [
+      "assets/barrage/gift/music/gift_music_01_floral_notes.webp",
+      "assets/barrage/gift/music/gift_music_02_bamboo_flute.webp",
+      "assets/barrage/gift/music/gift_music_03_bamboo_blossom.webp"
+    ],
+    "special": [
+      "assets/barrage/gift/special/gift_special_01_koi.webp",
+      "assets/barrage/gift/special/gift_special_02_crane.webp",
+      "assets/barrage/gift/special/gift_special_03_rabbit.webp"
+    ],
+    "token": [
+      "assets/barrage/gift/token/gift_token_01_lotus_pearl.webp",
+      "assets/barrage/gift/token/gift_token_02_sakura_jade.webp",
+      "assets/barrage/gift/token/gift_token_03_butterfly_ribbon.webp",
+      "assets/barrage/gift/token/gift_token_04_rose_ribbon.webp"
+    ],
+    "byGiftName": {
+      "翠竹簫": "assets/barrage/gift/music/gift_music_02_bamboo_flute.webp",
+      "瑞鶴笛": "assets/barrage/gift/music/gift_music_03_bamboo_blossom.webp",
+      "朝露琴": "assets/barrage/gift/music/gift_music_01_floral_notes.webp",
+      "星河燈": "assets/barrage/gift/lantern/gift_lantern_02_starlight.webp",
+      "結夢燈": "assets/barrage/gift/lantern/gift_lantern_03_celestial.webp",
+      "如意結": "assets/barrage/gift/token/gift_token_02_sakura_jade.webp",
+      "合歡簪": "assets/barrage/gift/token/gift_token_04_rose_ribbon.webp",
+      "流蘇結": "assets/barrage/gift/token/gift_token_03_butterfly_ribbon.webp",
+      "祥雲佩": "assets/barrage/gift/token/gift_token_01_lotus_pearl.webp",
+      "牡丹扇": "assets/barrage/gift/fan/gift_fan_01_floral_round.webp",
+      "竹影扇": "assets/barrage/gift/fan/gift_fan_02_floral_banner.webp"
+    }
+  },
+  "order": {
+    "lv1": [
+      "assets/barrage/order/lv1/order_lv1_01_pink_banner.webp",
+      "assets/barrage/order/lv1/order_lv1_02_simple_frame.webp"
+    ],
+    "lv2": [
+      "assets/barrage/order/lv2/order_lv2_01_tassel_gold.webp",
+      "assets/barrage/order/lv2/order_lv2_02_ui_banner.webp"
+    ],
+    "lv3": [
+      "assets/barrage/order/lv3/order_lv3_01_sakura_scroll.webp",
+      "assets/barrage/order/lv3/order_lv3_02_decorative_scroll.webp"
+    ],
+    "lv4": [
+      "assets/barrage/order/lv4/order_lv4_01_luxury_scroll.webp",
+      "assets/barrage/order/lv4/order_lv4_02_east_asian_banner.webp"
+    ]
+  },
+  "recharge": {
+    "lv1": [
+      "assets/barrage/recharge/lv1/recharge_lv1_01_simple.webp",
+      "assets/barrage/recharge/lv1/recharge_lv1_02_regal.webp"
+    ],
+    "lv2": [
+      "assets/barrage/recharge/lv2/recharge_lv2_01_gold_pink.webp",
+      "assets/barrage/recharge/lv2/recharge_lv2_02_game.webp"
+    ],
+    "lv3": [
+      "assets/barrage/recharge/lv3/recharge_lv3_01_treasure_glow.webp",
+      "assets/barrage/recharge/lv3/recharge_lv3_02_medallion.webp"
+    ],
+    "lv4": [
+      "assets/barrage/recharge/lv4/recharge_lv4_01_treasure_frame.webp",
+      "assets/barrage/recharge/lv4/recharge_lv4_02_lavish.webp"
+    ]
+  },
+  "ranking": {
+    "rank_1": [
+      "assets/barrage/ranking/rank_1/ranking_rank1_01_crown.webp",
+      "assets/barrage/ranking/rank_1/ranking_rank1_02_black_gold.webp"
+    ],
+    "rank_2": [
+      "assets/barrage/ranking/rank_2/ranking_rank2_01_crown_banner.webp"
+    ],
+    "rank_3": [
+      "assets/barrage/ranking/rank_3/ranking_rank3_01_crest.webp"
+    ],
+    "rank_4_10": [
+      "assets/barrage/ranking/rank_4_10/ranking_rank4_10_01_emblem.webp",
+      "assets/barrage/ranking/rank_4_10/ranking_rank4_10_02_regal_banner.webp"
+    ]
+  }
+}
