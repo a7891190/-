@@ -606,3 +606,12 @@
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
   transform:translateX(0px)!important;
 }
+
+
+/* v301：1號彈幕仍偏右，再往左微調 */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
+  transform:translateX(-14px)!important;
+}
+.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+  transform:translateX(-14px)!important;
+}
