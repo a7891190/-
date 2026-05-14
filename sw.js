@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dream-playmate-v312';
+const CACHE_NAME = 'dream-playmate-v313';
 const APP_SHELL = [
   './',
   './index.html',
