@@ -15478,11 +15478,74 @@ img[src*="rank_rewards/badges"]{
 }
 </style>
 
+
+
+<style id="v297-official-test-fixes-css">
+/* v297 正式測試微調：只修本次測試指出的位置與觀看限制，不動首頁本期前三名座標 */
+
+/* 1) 搜尋列右側「搜索」：v296 過高，往下微調半段高度 */
+#page-home .search-image-wrap button[data-home-search-btn]{
+  top:45.5%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+}
+
+/* 2) 會員/陪玩主頁底部：關注、推薦固定置中於目前底部框架 */
+#page-profile.active .profile-bottom-actions{
+  justify-content:center!important;
+  justify-items:center!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+}
+#page-profile.profile-member.active .profile-bottom-actions{
+  grid-template-columns:112px 112px!important;
+}
+#page-profile.profile-companion.active .profile-bottom-actions{
+  grid-template-columns:84px 84px minmax(96px,1fr) minmax(96px,1fr)!important;
+}
+#page-profile.active .profile-bottom-actions button[data-action="follow-profile"],
+#page-profile.active .profile-bottom-actions button[data-action="recommend-profile"]{
+  width:100%!important;
+  max-width:112px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+@media(max-width:380px){
+  #page-profile.profile-member.active .profile-bottom-actions{grid-template-columns:96px 96px!important;}
+  #page-profile.profile-companion.active .profile-bottom-actions{grid-template-columns:62px 62px minmax(86px,1fr) minmax(86px,1fr)!important;}
+}
+</style>
+
+<script id="v297-companion-view-open">
+(function(){
+  /* 3) 先把陪玩觀看入口的登入限制關掉：只開放觀看/進入，不改下單與後台權限邏輯 */
+  var openPages = {
+    companion:true,
+    'companion-home':true,
+    'companion-booking':true,
+    profile:true
+  };
+  try{
+    if(window.DreamAccessV239){
+      window.DreamAccessV239.requireLogin = function(){ return true; };
+      window.DreamAccessV239.guardPageAccess = function(pageName){ return pageName; };
+      window.DreamAccessV239.openViewMode = true;
+    }
+    var oldGuard = window.guardDreamPageByRole;
+    window.guardDreamPageByRole = function(name){
+      if(openPages[name]) return name;
+      return typeof oldGuard === 'function' ? oldGuard(name) : name;
+    };
+    window.isLoginRequiredPage = function(){ return false; };
+    window.requireLogin = function(){ return true; };
+  }catch(_){}
+})();
+</script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=296', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=297', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });

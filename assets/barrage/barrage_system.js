@@ -450,9 +450,9 @@
           mode: "round",
           rw: 180,
           rh: 180,
-          /* v296：1號彈幕的大頭照與文字整體往右，避免貼到左邊框 */
-          avatar: { x: 107, y: 42, size: 58 },
-          text: { x: 82, y: 106, w: 96, h: 42 },
+          /* v297：1號彈幕 v296 往右過頭，整體往左微調 */
+          avatar: { x: 99, y: 42, size: 58 },
+          text: { x: 74, y: 106, w: 96, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
