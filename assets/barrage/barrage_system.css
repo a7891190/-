@@ -1,4 +1,4 @@
-﻿
+
 .dream-barrage-root{
   position:fixed !important;
   inset:0 !important;
@@ -588,3 +588,12 @@
   100%{transform:translate3d(var(--drift),220px,0) rotate(var(--spin, 180deg));opacity:0;}
 }
 
+
+
+/* v296：1號彈幕大頭照與文字整體往右修正 */
+.dream-barrage-slide.idx-1 .dream-barrage-avatar-slot{
+  transform:translateX(18px)!important;
+}
+.dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+  transform:translateX(18px)!important;
+}

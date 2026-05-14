@@ -4672,7 +4672,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=296">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -10564,7 +10564,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js"></script>
+<script src="assets/barrage/barrage_system.js?v=296"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -15340,11 +15340,149 @@ img[src*="rank_rewards/badges"]{
 
 
 
+
+
+<style id="v296-official-test-fixes-css">
+/* v296 正式測試修正：只修位置/顯示問題，不動既有框架圖與首頁本期前三名座標 */
+
+/* 1) 首頁搜尋列：只把右側「搜索」文字往上放回按鈕正中偏上位置 */
+#page-home .search-image-wrap button[data-home-search-btn]{
+  top:34.5%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+  height:56%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+  padding:0!important;
+  z-index:9!important;
+  white-space:nowrap!important;
+}
+
+/* 2) 專屬守護榜/專屬陪玩榜：放大用戶名稱；不動第一名框架，二三名比第一名略低但底部對齊 */
+.profile-guardian-top3{
+  align-items:end!important;
+  grid-template-columns:1fr 1.16fr 1fr!important;
+}
+.profile-guardian-podium{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  overflow:visible!important;
+}
+.profile-guardian-podium.rank1{
+  min-height:138px!important;
+}
+.profile-guardian-podium.rank2,
+.profile-guardian-podium.rank3{
+  min-height:124px!important;
+  transform:translateY(0)!important;
+}
+.profile-guardian-podium .profile-guardian-name{
+  font-size:18px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  width:100%!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:20px!important;
+}
+.profile-guardian-podium.rank2 .profile-guardian-name,
+.profile-guardian-podium.rank3 .profile-guardian-name{
+  font-size:18px!important;
+}
+.profile-guardian-podium .profile-guardian-value{
+  font-size:12.5px!important;
+  line-height:1.15!important;
+}
+@media(max-width:480px){
+  .profile-guardian-podium .profile-guardian-name{font-size:16.5px!important;}
+  .profile-guardian-podium.rank1 .profile-guardian-name{font-size:18px!important;}
+}
+
+/* 3) 會員/陪玩主頁底部動作列：恢復關注、讚圖、推薦，避免電腦縮放時消失 */
+#page-profile.active{
+  padding-bottom:calc(112px + env(safe-area-inset-bottom))!important;
+}
+#page-profile.active .profile-bottom-actions{
+  position:fixed!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:0!important;
+  transform:translateX(-50%)!important;
+  width:min(100vw,var(--shell-width,720px))!important;
+  min-height:84px!important;
+  z-index:2147483000!important;
+  display:grid!important;
+  align-items:center!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  overflow:visible!important;
+  gap:10px!important;
+}
+#page-profile.profile-member.active .profile-bottom-actions{
+  grid-template-columns:1fr 1fr!important;
+}
+#page-profile.profile-companion.active .profile-bottom-actions{
+  grid-template-columns:70px 70px 1fr 1fr!important;
+}
+#page-profile.active .profile-bottom-actions button[data-action="follow-profile"],
+#page-profile.active .profile-bottom-actions button[data-action="recommend-profile"]{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-width:0!important;
+  height:58px!important;
+  color:#fff!important;
+}
+#page-profile.active .profile-bottom-actions button[data-action="recommend-profile"] .profile-action-icon.like{
+  display:inline-grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  place-items:center!important;
+  width:28px!important;
+  height:28px!important;
+  margin:0 auto 3px!important;
+  font-size:13px!important;
+  line-height:1!important;
+}
+#page-profile.active .profile-bottom-actions button[data-action="recommend-profile"] .profile-action-icon.like::before{
+  content:"讚"!important;
+}
+#page-profile.active .profile-bottom-actions button[data-action="recommend-profile"] span,
+#page-profile.active .profile-bottom-actions button[data-action="follow-profile"] span{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  font-size:15px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+#page-profile.profile-member.active .profile-bottom-actions .reserve-main,
+#page-profile.profile-member.active .profile-bottom-actions .service-main{
+  display:none!important;
+}
+@media(max-width:380px){
+  #page-profile.profile-companion.active .profile-bottom-actions{grid-template-columns:58px 58px 1fr 1fr!important;gap:8px!important;}
+  #page-profile.active .profile-bottom-actions button[data-action="follow-profile"],
+  #page-profile.active .profile-bottom-actions button[data-action="recommend-profile"]{height:54px!important;}
+}
+</style>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=295', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=296', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
