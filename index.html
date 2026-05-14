@@ -16022,6 +16022,121 @@ body:not(.role-companion) .companion-only-panel{
 }
 </style>
 
+
+<style id="v300-open-service-search-guardian-fix-css">
+/* v300：只做本輪微調；不再動專屬守護榜三個框架高度/底部對齊 */
+
+/* 搜索兩字：v299 往下過頭，這版只往上回一點 */
+#page-home .search-image-wrap button[data-home-search-btn],
+#page-home .search-image-wrap button{
+  top:60.6%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+  padding:0!important;
+}
+
+/* 專屬守護榜：框架不動，只修大頭照不被壓扁，並再次放大框內名稱 */
+#page-profile .profile-guardian-podium .profile-guardian-avatar{
+  flex:0 0 auto!important;
+  aspect-ratio:1/1!important;
+  min-width:unset!important;
+  max-width:none!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  line-height:1!important;
+  overflow:hidden!important;
+  transform:none!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{
+  width:70px!important;
+  height:70px!important;
+  flex-basis:70px!important;
+}
+#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
+  width:56px!important;
+  height:56px!important;
+  flex-basis:56px!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-avatar img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  border-radius:50%!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-name{
+  font-size:30px!important;
+  min-height:48px!important;
+  height:auto!important;
+  line-height:1!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+  transform:none!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:36px!important;
+  min-height:58px!important;
+}
+#page-profile .profile-guardian-name .rank-top3-gufeng-name{
+  width:188%!important;
+  min-width:132px!important;
+  max-width:none!important;
+  transform:scale(1.36)!important;
+  transform-origin:center center!important;
+  margin:-0.88em auto -0.72em!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
+  width:210%!important;
+  min-width:160px!important;
+  transform:scale(1.46)!important;
+  margin:-0.94em auto -0.78em!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-podium .profile-guardian-name{font-size:29px!important;min-height:46px!important;}
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{font-size:35px!important;min-height:56px!important;}
+  #page-profile .profile-guardian-name .rank-top3-gufeng-name{width:192%!important;transform:scale(1.36)!important;}
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{width:216%!important;transform:scale(1.46)!important;}
+}
+</style>
+
+<script id="v300-open-all-service-pages-script">
+(function(){
+  /* 測試期：功能服務與陪玩/會員相關入口全部直接開放看頁面，不跳登入 */
+  function openAccess(){
+    try{
+      if(window.DreamAccessV239){
+        window.DreamAccessV239.isLoggedIn=function(){return true;};
+        window.DreamAccessV239.requireLogin=function(){return true;};
+        window.DreamAccessV239.guardPageAccess=function(name){return name;};
+        window.DreamAccessV239.openViewMode=true;
+      }
+      window.isLoginRequiredPage=function(){return false;};
+      window.requireLogin=function(){return true;};
+      window.needLogin=function(){return true;};
+      window.guardDreamPageByRole=function(name){return name;};
+    }catch(_){ }
+  }
+  openAccess();
+  window.addEventListener('dream-auth-updated',openAccess);
+  document.addEventListener('DOMContentLoaded',openAccess);
+  document.addEventListener('click',function(e){
+    var go=e.target.closest && e.target.closest('[data-go]');
+    if(!go) return;
+    var page=go.getAttribute('data-go');
+    if(!page || page==='login') return;
+    if(window.pageMap && !window.pageMap[page]) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openAccess();
+    if(typeof window.showPage==='function') window.showPage(page);
+  },true);
+})();
+</script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;

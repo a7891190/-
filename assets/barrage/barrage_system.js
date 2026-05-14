@@ -450,9 +450,9 @@
           mode: "round",
           rw: 180,
           rh: 180,
-          /* v298：1號彈幕再次往左修正 */
-          avatar: { x: 86, y: 42, size: 58 },
-          text: { x: 61, y: 106, w: 96, h: 42 },
+          /* v300：1號彈幕仍偏右，整體再次往左調整 */
+          avatar: { x: 76, y: 42, size: 58 },
+          text: { x: 49, y: 106, w: 96, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
