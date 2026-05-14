@@ -6151,7 +6151,7 @@ main.app{padding-bottom:0 !important;}
     <section class="panel" style="margin-bottom:12px">
       <div class="section-title"><h2>功能服務</h2></div>
       <div class="service-grid">
-        <a class="service-item" data-open-profile="self"><div class="service-icon classic">人</div><div class="service-name">陪玩資料</div></a>
+        <a class="service-item" data-open-companion-self="1"><div class="service-icon classic">人</div><div class="service-name">陪玩資料</div></a>
         <a class="service-item" data-go="backpack"><div class="service-icon classic">包</div><div class="service-name">我的背包</div></a>
         <a class="service-item" data-go="vip-rank"><div class="service-icon classic">榜</div><div class="service-name">排行榜</div></a>
         <a class="service-item" data-transfer-open><div class="service-icon classic">轉</div><div class="service-name">轉單</div></a>
@@ -16007,11 +16007,166 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
+
+
+<style id="v304-profile-guardian-barrage-restore-css">
+/* v304：修正專屬守護榜高度、恢復個人簡介設定齒輪 */
+#page-profile .profile-guardian-podium.rank1{
+  height:222px!important;
+  min-height:222px!important;
+  padding-top:18px!important;
+  padding-bottom:26px!important;
+}
+#page-profile .profile-guardian-podium.rank2,
+#page-profile .profile-guardian-podium.rank3{
+  height:196px!important;
+  min-height:196px!important;
+  padding-top:14px!important;
+  padding-bottom:26px!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-value{
+  margin-top:7px!important;
+  margin-bottom:18px!important;
+  line-height:1.1!important;
+}
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-value{
+  margin-top:7px!important;
+  margin-bottom:18px!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-crown{
+  bottom:8px!important;
+  line-height:1.15!important;
+}
+#page-profile .profile-info-setting-wrap .mini-gear{
+  display:inline-grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+#page-profile .profile-info-setting-menu{
+  visibility:visible!important;
+  opacity:1;
+  pointer-events:auto!important;
+}
+#page-profile .profile-info-setting-menu.open,
+#page-profile .profile-info-setting-menu[style*="display: block"]{
+  display:block!important;
+}
+#page-profile .profile-info-setting-menu:not(.open){
+  display:none!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-podium.rank1{height:210px!important;min-height:210px!important;padding-bottom:25px!important;}
+  #page-profile .profile-guardian-podium.rank2,
+  #page-profile .profile-guardian-podium.rank3{height:186px!important;min-height:186px!important;padding-bottom:25px!important;}
+}
+</style>
+<script id="v304-companion-profile-gear-fix">
+(function(){
+  function safeParse(key, fallback){try{return JSON.parse(localStorage.getItem(key)||'null') || fallback;}catch(_){return fallback;}}
+  function safeSave(key, val){try{localStorage.setItem(key, JSON.stringify(val));}catch(_){}}
+  function currentRole(){
+    var id='';
+    try{id=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+    if(id==='companion-self') return 'companion';
+    if(id==='member-self') return 'member';
+    if(document.getElementById('page-profile')?.classList.contains('profile-companion')) return 'companion';
+    return 'member';
+  }
+  function normalizeVip(u){
+    u=u||{};
+    var raw = u.vip_level ?? u.vip_rank ?? u.vip ?? u.member_vip_level ?? u.companion_vip_level ?? u.level;
+    var title = u.vip_title || u.vip_name || u.member_vip_title || u.companion_vip_title || u.title || '';
+    var txt = String(raw==null?'':raw).toUpperCase();
+    var code='';
+    if(u.svip || txt==='SVIP') code='SVIP';
+    var m=txt.match(/VIP\s*(10|[1-9])/);
+    if(!code && m) code='VIP'+m[1];
+    var n=Number(raw);
+    if(!code && n>=1 && n<=10) code='VIP'+n;
+    title=String(title||'').replace(/VIP等級：/g,'').replace(/星耀會員/g,'').replace(code,'').replace(/^[\s｜|:：-]+|[\s｜|:：-]+$/g,'').trim();
+    return code ? ('VIP等級：'+code+(title?' '+title:'')) : 'VIP等級：無VIP會員';
+  }
+  function authUser(){
+    var u=(window.__dreamFrontAuth&&window.__dreamFrontAuth.user)||{};
+    if(!u || !Object.keys(u).length) u=safeParse('dream_persist_user', {})||{};
+    return u||{};
+  }
+  function ensureProfiles(){
+    var map=safeParse('dream_profiles_v58', {})||{};
+    var u=authUser();
+    var vip=normalizeVip(u);
+    map['member-self']=Object.assign({id:'member-self',type:'member',name:'夢競會員',avatar:'夢',status:'在線'}, map['member-self']||{});
+    map['companion-self']=Object.assign({id:'companion-self',type:'companion',name:'夢競陪玩',avatar:'陪',gender:'female',status:'空閒',bio:'這位陪玩還沒有填寫個人簡介。',tags:['陪玩人員'],games:['三角洲行動'],reviews:[],posts:['目前開放測試陪玩主頁。'],litGifts:[]}, map['companion-self']||{});
+    map['member-self'].level=vip;
+    map['companion-self'].level=vip;
+    map['member-self'].fixedTag=vip.replace('VIP等級：','').trim();
+    map['companion-self'].fixedTag=vip.replace('VIP等級：','').trim();
+    safeSave('dream_profiles_v58', map);
+  }
+  function openCompanionProfile(){
+    ensureProfiles();
+    try{localStorage.setItem('dream_active_profile_id','companion-self');}catch(_){}
+    if(typeof window.goProfile==='function') window.goProfile('companion-self');
+    else if(typeof window.showPage==='function'){window.showPage('profile'); if(typeof window.renderProfile==='function') setTimeout(window.renderProfile,0);}
+    setTimeout(function(){
+      var t=document.querySelector('#page-profile [data-profile-bind="title"]');
+      if(t) t.textContent='陪玩主頁';
+      var back=document.querySelector('#page-profile .profile-back');
+      if(back) back.dataset.go='companion-home';
+      syncProfileGear();
+    },80);
+  }
+  function syncProfileGear(){
+    var role=currentRole();
+    var title=document.querySelector('#page-profile [data-profile-bind="title"]');
+    if(title) title.textContent = role==='companion' ? '陪玩主頁' : '會員主頁';
+    var back=document.querySelector('#page-profile .profile-back');
+    if(back) back.dataset.go = role==='companion' ? 'companion-home' : 'member';
+    var menu=document.querySelector('#page-profile .profile-info-setting-menu');
+    if(menu){
+      menu.setAttribute('data-setting-menu', role);
+      menu.querySelectorAll('[data-setting-scope]').forEach(function(btn){btn.setAttribute('data-setting-scope', role);});
+      var ach=menu.querySelector('[data-setting-action="edit-bio-achievements"]');
+      if(ach) ach.textContent='新增成就徽章';
+      if(!menu.querySelector('[data-setting-action="edit-name"]')){
+        menu.insertAdjacentHTML('afterbegin','<button type="button" data-setting-action="edit-name" data-setting-scope="'+role+'">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="'+role+'">編輯大頭照</button>');
+      }
+    }
+    var gear=document.querySelector('#page-profile .profile-info-setting-wrap .mini-gear');
+    if(gear){
+      gear.setAttribute('data-setting-toggle', role);
+      gear.style.display='inline-grid';
+    }
+  }
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest('[data-open-companion-self]');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openCompanionProfile();
+  },true);
+  var oldRender=window.renderProfile;
+  if(typeof oldRender==='function' && !oldRender.__v304GearRestore){
+    window.renderProfile=function(){
+      ensureProfiles();
+      var out=oldRender.apply(this, arguments);
+      setTimeout(syncProfileGear,0);
+      return out;
+    };
+    window.renderProfile.__v304GearRestore=true;
+  }
+  window.addEventListener('dream-auth-updated',function(){ensureProfiles();setTimeout(syncProfileGear,80);});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ensureProfiles();setTimeout(syncProfileGear,120);});
+  else {ensureProfiles();setTimeout(syncProfileGear,120);}
+})();
+</script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=303', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=304', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
