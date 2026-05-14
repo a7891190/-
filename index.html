@@ -16349,7 +16349,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=310', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=311', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -16392,47 +16392,44 @@ body:not(.role-companion) .companion-only-panel{
 </style>
 
 
-
-<style id="v310-guardian-name-barrage-half-left-css">
-/* v310：只放大專屬守護榜前三名用戶名稱；守護值與第1/2/3名文字不動 */
-#page-profile .profile-guardian-podium .profile-guardian-name,
-.profile-guardian-podium .profile-guardian-name{
-  font-size:31px!important;
-  line-height:1.03!important;
-  min-height:46px!important;
-  transform:translateZ(0) scale(1.13)!important;
-  transform-origin:center center!important;
-  max-width:100%!important;
-  white-space:nowrap!important;
-}
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-name,
-.profile-guardian-podium.rank1 .profile-guardian-name{
-  font-size:36px!important;
+<style id="v311-guardian-name-barrage-final-css">
+/* v311：最後覆蓋，只放大專屬守護榜前三名用戶名稱；守護值與第1/2/3名文字完全不動 */
+#page-profile .profile-guardian-podium .profile-guardian-name{
+  font-size:34px!important;
   line-height:1.02!important;
-  min-height:52px!important;
-  transform:translateZ(0) scale(1.15)!important;
+  min-height:50px!important;
+  transform:translateZ(0) scale(1.16)!important;
+  transform-origin:center center!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
 }
-#page-profile .profile-guardian-name .rank-top3-gufeng-name,
-.profile-guardian-name .rank-top3-gufeng-name{
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:39px!important;
+  min-height:56px!important;
+  transform:translateZ(0) scale(1.18)!important;
+}
+#page-profile .profile-guardian-name .rank-top3-gufeng-name{
   width:min(100%,22em)!important;
-  max-width:100%!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  transform:scale(1.12)!important;
+  transform-origin:center center!important;
 }
-#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name,
-.profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
   width:min(100%,23em)!important;
+  transform:scale(1.14)!important;
 }
 @media(max-width:480px){
-  #page-profile .profile-guardian-podium .profile-guardian-name,
-  .profile-guardian-podium .profile-guardian-name{
-    font-size:28px!important;
-    min-height:42px!important;
-    transform:translateZ(0) scale(1.12)!important;
-  }
-  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name,
-  .profile-guardian-podium.rank1 .profile-guardian-name{
-    font-size:32px!important;
-    min-height:48px!important;
+  #page-profile .profile-guardian-podium .profile-guardian-name{
+    font-size:30px!important;
+    min-height:45px!important;
     transform:translateZ(0) scale(1.14)!important;
+  }
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
+    font-size:35px!important;
+    min-height:52px!important;
+    transform:translateZ(0) scale(1.16)!important;
   }
 }
 </style>
