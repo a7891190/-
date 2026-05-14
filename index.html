@@ -16253,11 +16253,103 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
+
+
+<style id="v306-guardian-name-only-companion-route-css">
+/* v306：只放大專屬守護榜前三名用戶名稱；其他守護值與名次文字不動 */
+#page-profile .profile-guardian-podium .profile-guardian-name{
+  font-size:32px!important;
+  line-height:1.02!important;
+  min-height:44px!important;
+  transform:translateZ(0)!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name{
+  font-size:36px!important;
+  min-height:50px!important;
+}
+#page-profile .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(100%,19.4em)!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{
+  width:min(100%,20.4em)!important;
+  max-width:none!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-podium .profile-guardian-name{font-size:27px!important;min-height:40px!important;}
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-name{font-size:31px!important;min-height:46px!important;}
+}
+</style>
+<script id="v306-companion-profile-route-hard-fix">
+(function(){
+  function safeSet(k,v){try{localStorage.setItem(k,v);}catch(_){}}
+  function markCompanionProfile(){
+    safeSet('dream_active_profile_id','companion-self');
+    var page=document.getElementById('page-profile');
+    if(page){page.classList.add('profile-companion');page.classList.remove('profile-member');}
+    var title=document.querySelector('#page-profile [data-profile-bind="title"]');
+    if(title) title.textContent='陪玩主頁';
+    var back=document.querySelector('#page-profile .profile-back,.profile-back,[data-profile-back]');
+    if(back){back.dataset.go='companion-home';back.setAttribute('data-go','companion-home');}
+  }
+  function openCompanionSelfProfile(){
+    safeSet('dream_active_profile_id','companion-self');
+    if(typeof window.goProfile==='function'){
+      window.goProfile('companion-self');
+    }else if(typeof window.openDreamProfile==='function'){
+      window.openDreamProfile('companion-self');
+    }else if(typeof window.showPage==='function'){
+      window.showPage('profile');
+      if(typeof window.renderProfile==='function') setTimeout(window.renderProfile,0);
+    }else{
+      location.hash='#profile';
+    }
+    [0,60,160,360].forEach(function(ms){setTimeout(markCompanionProfile,ms);});
+  }
+  document.addEventListener('click',function(e){
+    var item=e.target.closest('#page-companion-home .service-item,#page-companion-home [data-open-companion-self],#page-companion-home [data-open-profile],#page-companion-home [data-go]');
+    if(!item) return;
+    var txt=(item.textContent||'').replace(/\s+/g,'').trim();
+    var isCompanionData=item.hasAttribute('data-open-companion-self') || txt.indexOf('陪玩資料')>-1;
+    if(!isCompanionData) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openCompanionSelfProfile();
+    return false;
+  },true);
+  document.addEventListener('click',function(e){
+    var back=e.target.closest('#page-profile .profile-back,#page-profile [data-profile-back],#page-profile [data-go="member"],#page-profile [data-go="profile"]');
+    if(!back) return;
+    var active='';try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+    if(active==='companion-self' || document.getElementById('page-profile')?.classList.contains('profile-companion')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(typeof window.showPage==='function') window.showPage('companion-home'); else location.hash='#companion-home';
+      return false;
+    }
+  },true);
+  var oldRender=window.renderProfile;
+  if(typeof oldRender==='function' && !oldRender.__v306CompanionRoute){
+    window.renderProfile=function(){
+      var out=oldRender.apply(this,arguments);
+      var active='';try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+      if(active==='companion-self') [0,80,180].forEach(function(ms){setTimeout(markCompanionProfile,ms);});
+      return out;
+    };
+    window.renderProfile.__v306CompanionRoute=true;
+  }
+})();
+</script>
+
 <script id="dream-pwa-register-v295">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=305', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=306', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
