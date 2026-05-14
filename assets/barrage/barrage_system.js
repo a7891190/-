@@ -450,9 +450,9 @@
           mode: "round",
           rw: 180,
           rh: 180,
-          /* v307：依正式測試回饋，1號彈幕整組往左調整一個滑鼠長度 */
-          avatar: { x: 81, y: 42, size: 58 },
-          text: { x: 54, y: 106, w: 96, h: 42 },
+          /* v312：依正式測試回饋，1號彈幕整組往左微調半個滑鼠長度 */
+          avatar: { x: 75, y: 42, size: 58 },
+          text: { x: 48, y: 106, w: 96, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
