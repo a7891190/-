@@ -1,3 +1,5 @@
+/* v348-registered-login-combined-fix */
+/* v347-private-records-401-fix */
 /* v346-api-missing-actions-guard-fix */
 /* login-connect-compat-front */
 
@@ -65,7 +67,12 @@
     let data;
     try{ data = JSON.parse(text); }
     catch(e){ throw new Error("API 回傳不是 JSON：" + text.slice(0,120)); }
-    if(!data.ok && data.message) console.warn("[DreamAPI]", action, data.message);
+    if(!data.ok && data.message){
+      const guestPrivateActions = ["recharge_request_history","gift_history"];
+      if(!(data.message === "請先登入" && guestPrivateActions.includes(action))){
+        console.warn("[DreamAPI]", action, data.message);
+      }
+    }
     return data;
   }
 
@@ -401,6 +408,11 @@
   }
 
   async function loadRechargeRecords(){
+    // v347：未登入或 session 尚未確認前，不呼叫私人紀錄 API，避免 401。
+    if(!authUser && authType !== "companion"){
+      return;
+    }
+
     try{
       const a = await api("recharge_request_history");
       let gifts = [];
@@ -959,6 +971,11 @@
     }).join("");
   }
   async function loadRecords(){
+    // v347：未登入或 session 尚未確認前，不呼叫私人禮物/購買紀錄 API，避免 401。
+    if(!authUser && authType !== "companion"){
+      return;
+    }
+
     const records = authUser?.buy_records || [];
     const host = $("#page-exchange-record .list");
     if(!host) return;
@@ -1050,7 +1067,7 @@
   }
 
   function loadProtectedData(){
-    // 未登入時只載入公開資料，避免 recharge_request_history / gift_history 一直回 401。
+    // v347：公開資料可載入；私人紀錄必須登入後才載入。
     loadShop();
     loadCompanions();
     if(!authUser && authType !== "companion") return;
