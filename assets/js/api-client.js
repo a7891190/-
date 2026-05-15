@@ -1,3 +1,20 @@
+/* v353-global-authuser-guard */
+var authUser = window.authUser || null;
+var authType = window.authType || null;
+window.__dreamAuthSafe = window.__dreamAuthSafe || {};
+window.__dreamAuthSafe.isLoggedIn = function(){
+  try{
+    if(window.__dreamFrontAuth && window.__dreamFrontAuth.user) return true;
+  }catch(e){}
+  try{
+    if(window.authUser || window.authType) return true;
+  }catch(e){}
+  try{
+    return document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest");
+  }catch(e){}
+  return false;
+};
+
 /* v352-loadall-no-authuser */
 /* v351-authuser-loadall-final-fix */
 /* v350-authuser-not-defined-fix */
@@ -900,6 +917,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
   function setMemberUI(user, type="member"){
     authUser = user || null;
     authType = user ? type : null;
+    window.authUser = authUser;
+    window.authType = authType;
     document.body.classList.toggle("dream-guest", !user);
     document.body.classList.toggle("dream-authenticated", !!user);
     const name = user ? (user.display_name || user.username || user.name || (type === "companion" ? "陪玩帳號" : "會員")) : "點擊登入";
@@ -1132,7 +1151,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     // v347：公開資料可載入；私人紀錄必須登入後才載入。
     loadShop();
     loadCompanions();
-    if(!authUser && authType !== "companion") return;
+    if(!window.__dreamAuthSafe.isLoggedIn()) return;
     loadRecords();
     loadRechargeRecords();
   }
@@ -1168,7 +1187,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     await refreshSession();
     loadRanking(); // 排行榜可公開顯示
     guardCurrentPage();
-    if(authUser || authType === "companion") loadProtectedData();
+    if(window.__dreamAuthSafe.isLoggedIn()) loadProtectedData();
   }
   window.DreamAuthGuard = {requireAuth, refreshSession, loadRanking, loadShop, loadCompanions};
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
