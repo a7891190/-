@@ -495,6 +495,29 @@
         };
       }
 
+
+      /*
+       * PATCH：只修「彈幕預覽 1-44」裡 #1 送禮扇類 gift_fan_01_floral_round.webp。
+       * 目標：電腦版大頭照與文字往右移；手機版不動。
+       */
+      const isPreview1FanDesktop = window.innerWidth >= 768 && (
+        Number(event.previewIndex || 0) === 1 ||
+        String(event.framePath || "").includes("gift_fan_01_floral_round.webp")
+      );
+      if (isPreview1FanDesktop) {
+        cfg = {
+          ...cfg,
+          mode: "round",
+          rw: 180,
+          rh: 180,
+          avatar: { x: 178, y: 42, size: 58 },
+          text: { x: 151, y: 106, w: 108, h: 42 },
+          titleSize: 10,
+          subSize: 7,
+          align: "center"
+        };
+      }
+
       const plan = this.effectPlan(event, lv, idx);
       const seconds = event.seconds || (((this.rules || LOCAL_RULES).display || {})["lv" + lv + "Seconds"] || 8);
 
