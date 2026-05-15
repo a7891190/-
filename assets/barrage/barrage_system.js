@@ -451,20 +451,19 @@
       const idx = Number(event.previewIndex || FRAME_INDEX[frame] || 0);
       let cfg = (this.layout || LOCAL_LAYOUT)[String(idx)] || (this.layout || LOCAL_LAYOUT)[idx] || LOCAL_LAYOUT["3"];
       if (idx === 1) {
-        const isDesktopPreview = window.innerWidth >= 768;
-        cfg = {
-          ...cfg,
-          mode: "round",
-          rw: 180,
-          rh: 180,
-          /* v330：1-44 預覽第 1 個彈幕。手機版保持原座標；桌機版再向右校正，並搭配 index.html 更新 JS 版本避免快取讀到舊檔。 */
-          avatar: isDesktopPreview ? { x: 142, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
-          text: isDesktopPreview ? { x: 115, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
-          titleSize: 10,
-          subSize: 7,
-          align: "center"
-        };
-      }
+      /* v331：預覽 1-44 的 #1 彈幕，桌機版改用手機版同一組置中座標 */
+      cfg = {
+        ...cfg,
+        mode: "round",
+        rw: 180,
+        rh: 180,
+        avatar: { x: 84, y: 42, size: 58 },
+        text: { x: 57, y: 106, w: 108, h: 42 },
+        titleSize: 10,
+        subSize: 7,
+        align: "center"
+      };
+    }
       if (idx === 34 && window.innerWidth >= 768) {
         cfg = {
           ...cfg,

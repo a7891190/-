@@ -5650,6 +5650,21 @@ main.app{padding-bottom:0 !important;}
 .profile-guardian-podium.rank2 .profile-guardian-value{margin-bottom:20px!important;}
 </style>
 
+
+<style id="v331-home-search-button-fix">
+/* v331：首頁搜尋列右側「搜索」文字微上移，放最後避免被舊樣式覆蓋 */
+#page-home .search-image-wrap button[data-home-search-btn],
+#page-home .search-image-wrap button{
+  top:46%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -10510,7 +10525,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=330"></script>
+<script src="assets/barrage/barrage_system.js?v=331"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -10663,7 +10678,7 @@ window.addEventListener('DOMContentLoaded', () => {
         await window.DreamBarrage.init({basePath:'assets/barrage/'});
         return true;
       }
-      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js 是否存在。');
+      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=331 是否存在。');
       return false;
     }
 
