@@ -10510,7 +10510,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=328"></script>
+<script src="assets/barrage/barrage_system.js?v=330"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -16323,10 +16323,10 @@ body:not(.role-companion) .companion-only-panel{
 <style id="v329-final-barrage-guardian-search-css">
 /* v329：最終針對本次回報修正：#1 彈幕桌機座標由 JS 處理；此處鎖定守護榜與首頁搜索文字 */
 
-/* 首頁搜索列右側「搜索」文字：從 v298 的 58% 往上調一點 */
+/* 首頁搜索列右側「搜索」文字：v330 再往上微調，讓文字回到按鈕中心。 */
 #page-home .search-image-wrap button[data-home-search-btn],
 #page-home .search-image-wrap button{
-  top:54.5%!important;
+  top:49.5%!important;
   transform:translateX(-4px) translateY(-50%)!important;
   line-height:1!important;
   display:flex!important;
@@ -16483,6 +16483,114 @@ body:not(.role-companion) .companion-only-panel{
   document.addEventListener('click', function(){setTimeout(applyGuardianLayout,120);}, true);
   setTimeout(applyGuardianLayout,120);
   setTimeout(applyGuardianLayout,500);
+})();
+</script>
+
+
+<style id="v330-home-search-final-css">
+/* v330：首頁搜索按鈕文字再往上校正；只影響首頁搜索列右側「搜索」。 */
+#page-home .search-image-wrap button[data-home-search-btn],
+#page-home .search-image-wrap button{
+  top:49.5%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+}
+</style>
+
+<script id="v330-service-back-fix-script">
+/* v330：功能服務入口返回修正。守護榜已定版，本段不處理守護榜。 */
+(function(){
+  if(window.__dreamServiceBackV330) return;
+  window.__dreamServiceBackV330 = true;
+
+  var servicePages = new Set([
+    'backpack','vip-rank','vip-info','recharge','following','favorites','renew','review','about',
+    'exchange-record','recharge-record','forgot','achievements'
+  ]);
+
+  function pageFromHash(){ return (location.hash || '#home').replace(/^#/, '') || 'home'; }
+  function normalize(name){ return String(name || '').replace(/^#/, '') || 'home'; }
+  function currentCenter(){
+    var role = '';
+    try{ role = (window.__dreamFrontAuth && window.__dreamFrontAuth.user && window.__dreamFrontAuth.user.role) || localStorage.getItem('dream_login_preview_role') || localStorage.getItem('dream_persist_login_type') || ''; }catch(_){}
+    return role === 'companion' ? 'companion-home' : 'member';
+  }
+  function preferredBackFor(page){
+    page = normalize(page);
+    if(servicePages.has(page)){
+      try{
+        var saved = sessionStorage.getItem('dream_service_origin_' + page) || sessionStorage.getItem('dream_service_origin');
+        if(saved === 'member' || saved === 'companion-home') return saved;
+      }catch(_){}
+      return currentCenter();
+    }
+    return '';
+  }
+  function markOrigin(to, from){
+    to = normalize(to);
+    from = normalize(from);
+    if(!servicePages.has(to)) return;
+    var origin = (from === 'member' || from === 'companion-home') ? from : currentCenter();
+    try{
+      sessionStorage.setItem('dream_service_origin', origin);
+      sessionStorage.setItem('dream_service_origin_' + to, origin);
+      sessionStorage.setItem('dream_prev_page_for_' + to, origin);
+      sessionStorage.setItem('dream_last_entry_page', origin);
+    }catch(_){}
+  }
+  function patchBackButtons(){
+    var current = pageFromHash();
+    var target = preferredBackFor(current);
+    if(!target) return;
+    document.querySelectorAll('#page-' + CSS.escape(current) + ' .back-btn, #page-' + CSS.escape(current) + ' [data-back]').forEach(function(btn){
+      btn.setAttribute('data-go', target);
+      btn.dataset.go = target;
+      btn.dataset.v330BackTarget = target;
+    });
+  }
+
+  var original = window.showPage;
+  if(typeof original === 'function' && !original.__v330ServiceBackWrapped){
+    var wrapped = function(name, push){
+      var from = pageFromHash();
+      var to = normalize(name);
+      markOrigin(to, from);
+      var rv = original.apply(this, arguments);
+      setTimeout(patchBackButtons, 0);
+      setTimeout(patchBackButtons, 80);
+      return rv;
+    };
+    wrapped.__v330ServiceBackWrapped = true;
+    window.showPage = wrapped;
+  }
+
+  document.addEventListener('click', function(e){
+    var go = e.target.closest && e.target.closest('[data-go]');
+    if(go && !go.classList.contains('back-btn')){
+      markOrigin(go.dataset.go, pageFromHash());
+      return;
+    }
+
+    var btn = e.target.closest && e.target.closest('.back-btn,[data-back]');
+    if(!btn) return;
+    var current = pageFromHash();
+    var target = btn.dataset.v330BackTarget || preferredBackFor(current) || btn.dataset.go || 'home';
+    if(!target) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if(typeof window.showPage === 'function') window.showPage(target);
+    else location.hash = '#' + target;
+  }, true);
+
+  window.addEventListener('hashchange', function(){ setTimeout(patchBackButtons, 30); });
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(patchBackButtons, 30); });
+  setTimeout(patchBackButtons, 50);
+  setTimeout(patchBackButtons, 300);
 })();
 </script>
 
