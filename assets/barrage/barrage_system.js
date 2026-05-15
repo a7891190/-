@@ -474,6 +474,27 @@
           align: "center"
         };
       }
+
+      /*
+       * v336 真正修正目標：
+       * 電腦版「彈幕預覽 1-44」裡的 #1 送禮扇類。
+       * 目標圖：gift_fan_01_floral_round.webp。
+       * 這裡直接修改渲染用座標，不再靠 CSS、不再靠後置 observer。
+       */
+      const isPreview1FanFix = window.innerWidth >= 768 && (
+        Number(event.previewIndex || 0) === 1 ||
+        event.forcePreview1FanFix === true ||
+        String(event.framePath || "").includes("gift_fan_01_floral_round.webp")
+      );
+      if (isPreview1FanFix) {
+        const dx = Number(event.forceOverlayShiftX || 68);
+        cfg = {
+          ...cfg,
+          avatar: { ...(cfg.avatar || {}), x: Number((cfg.avatar || {}).x || 0) + dx },
+          text: { ...(cfg.text || {}), x: Number((cfg.text || {}).x || 0) + dx }
+        };
+      }
+
       const plan = this.effectPlan(event, lv, idx);
       const seconds = event.seconds || (((this.rules || LOCAL_RULES).display || {})["lv" + lv + "Seconds"] || 8);
 
@@ -524,11 +545,19 @@
       const avatarSlot = document.createElement("div");
       avatarSlot.className = "dream-barrage-avatar-slot";
       rect(avatarSlot, cfg.avatar);
+      if (isPreview1FanFix) {
+        avatarSlot.dataset.v336Preview1FanFixed = "1";
+        avatarSlot.style.setProperty("transform", "none", "important");
+      }
       avatarSlot.appendChild(avatarNode(event));
 
       const textSlot = document.createElement("div");
       textSlot.className = "dream-barrage-text-slot";
       rect(textSlot, cfg.text);
+      if (isPreview1FanFix) {
+        textSlot.dataset.v336Preview1FanFixed = "1";
+        textSlot.style.setProperty("transform", "none", "important");
+      }
       if (cfg.align) textSlot.style.textAlign = cfg.align;
       if (cfg.titleColor) textSlot.style.setProperty("--title-color", cfg.titleColor);
       if (cfg.subColor) textSlot.style.setProperty("--sub-color", cfg.subColor);
@@ -545,15 +574,6 @@
 
       textSlot.appendChild(title);
       textSlot.appendChild(sub);
-      /* v335：允許特定預覽事件直接指定大頭照/文字水平修正 */
-      if (event && event.forceOverlayShiftX && window.innerWidth >= 768) {
-        const dx = Number(event.forceOverlayShiftX || 0);
-        if (dx) {
-          avatarSlot.style.setProperty("transform", "translateX(" + dx + "px)", "important");
-          textSlot.style.setProperty("transform", "translateX(" + dx + "px)", "important");
-        }
-      }
-
       overlay.appendChild(avatarSlot);
       overlay.appendChild(textSlot);
       item.appendChild(overlay);

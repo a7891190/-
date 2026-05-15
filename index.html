@@ -1,3 +1,4 @@
+<!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -4672,7 +4673,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=335">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=336">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -5648,21 +5649,6 @@ main.app{padding-bottom:0 !important;}
 .profile-guardian-podium.rank3 .profile-guardian-name{margin-top:0!important;}
 .profile-guardian-podium.rank3 .profile-guardian-value{margin-top:auto!important;margin-bottom:20px!important;}
 .profile-guardian-podium.rank2 .profile-guardian-value{margin-bottom:20px!important;}
-</style>
-
-
-<style id="v335-home-search-button-fix">
-/* v335：首頁搜尋列右側「搜索」文字上移修正，放最後避免舊樣式覆蓋 */
-#page-home .search-image-wrap button[data-home-search-btn],
-#page-home .search-image-wrap button{
-  top:46%!important;
-  transform:translateX(-4px) translateY(-50%)!important;
-  line-height:1!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  padding:0!important;
-}
 </style>
 
 </head>
@@ -10525,7 +10511,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=335"></script>
+<script src="assets/barrage/barrage_system.js?v=336"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -10678,7 +10664,7 @@ window.addEventListener('DOMContentLoaded', () => {
         await window.DreamBarrage.init({basePath:'assets/barrage/'});
         return true;
       }
-      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=335 是否存在。');
+      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=336 是否存在。');
       return false;
     }
 
@@ -15002,7 +14988,10 @@ img[src*="rank_rewards/badges"]{
       seconds: 8,
       userName: "星眠",
       avatarText: "星",
-      sub: "彈幕預覽 " + item[0] + " / 44"
+      sub: "彈幕預覽 " + item[0] + " / 44",
+      /* v336：只針對 1-44 預覽 #1 送禮扇類，要求大頭照與文字往右移 */
+      forceOverlayShiftX: no === 1 ? 68 : 0,
+      forcePreview1FanFix: no === 1
     };
     if(kind === "order") return {...common, type:"order", title:"【下單彈幕預覽】星眠下單 52,000 短陌"};
     if(kind === "recharge") return {...common, type:"recharge", title:"【儲值彈幕預覽】星眠儲值 52,000 短陌"};
@@ -15020,25 +15009,6 @@ img[src*="rank_rewards/badges"]{
     }
     await window.DreamBarrage.init({basePath:"assets/barrage/"});
     window.DreamBarrage.play(payload(item));
-    // v335：依照實際截圖修正「電腦版 1-44 預覽 #1 禮物扇類」大頭照與文字偏左。
-    // 這裡直接在預覽播放後，用實際 frame 圖片路徑抓當次產生的彈幕 DOM；不再靠 idx class 猜。
-    if(Number(item[0]) === 1 && window.innerWidth >= 768){
-      const fixPreview1 = () => {
-        const img = Array.from(document.querySelectorAll('.dream-barrage-slide img.dream-barrage-frame'))
-          .reverse()
-          .find(el => String(el.getAttribute('src') || '').includes('gift_fan_01_floral_round.webp'));
-        const slide = img && img.closest('.dream-barrage-slide');
-        if(!slide) return;
-        const avatar = slide.querySelector('.dream-barrage-avatar-slot');
-        const text = slide.querySelector('.dream-barrage-text-slot');
-        [avatar, text].forEach(el => {
-          if(!el) return;
-          el.style.setProperty('transform', 'translateX(34px)', 'important');
-          el.style.setProperty('will-change', 'transform', 'important');
-        });
-      };
-      [0, 16, 50, 120, 240, 480].forEach(ms => setTimeout(fixPreview1, ms));
-    }
   }
 
   function ensurePanel(){
@@ -16625,37 +16595,6 @@ body:not(.role-companion) .companion-only-panel{
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(patchBackButtons, 30); });
   setTimeout(patchBackButtons, 50);
   setTimeout(patchBackButtons, 300);
-})();
-</script>
-
-
-<script id="v335-preview1-frame-src-force-fix">
-/* v335：最後保險。只在電腦版，且只針對 gift_fan_01_floral_round.webp 這張 #1 禮物彈幕。 */
-(function(){
-  const SRC_KEY = 'gift_fan_01_floral_round.webp';
-  const SHIFT = 34;
-  function apply(){
-    if(window.innerWidth < 768) return;
-    document.querySelectorAll('.dream-barrage-slide img.dream-barrage-frame').forEach(function(img){
-      if(!String(img.getAttribute('src') || '').includes(SRC_KEY)) return;
-      const slide = img.closest('.dream-barrage-slide');
-      if(!slide) return;
-      const avatar = slide.querySelector('.dream-barrage-avatar-slot');
-      const text = slide.querySelector('.dream-barrage-text-slot');
-      [avatar, text].forEach(function(el){
-        if(!el) return;
-        el.style.setProperty('transform', 'translateX(' + SHIFT + 'px)', 'important');
-        el.style.setProperty('will-change', 'transform', 'important');
-      });
-    });
-  }
-  const obs = new MutationObserver(apply);
-  function boot(){
-    apply();
-    obs.observe(document.documentElement || document.body, {childList:true, subtree:true});
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
 })();
 </script>
 
