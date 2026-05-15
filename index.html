@@ -1,3 +1,4 @@
+<!-- v345-member-login-direct-fix -->
 <!-- v344-member-login-force-fix -->
 <!-- v343-member-login-click-fix -->
 <!-- v342-return-gift-charm-login-guard -->
@@ -16721,6 +16722,131 @@ body:not(.role-companion) .companion-only-panel{
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", neutralizeMemberLoginCard);
   else neutralizeMemberLoginCard();
   window.addEventListener("hashchange", function(){ setTimeout(neutralizeMemberLoginCard, 80); });
+})();
+</script>
+
+
+<script id="v345-member-login-direct-fix-js">
+/*
+ * v345：會員中心「點擊登入」最終直接修正。
+ * 不再只判斷 class / data-open-profile。
+ * 只要目前在會員中心，點到任何文字含「點擊登入 / 尚未登入 / 登入」的會員卡區塊，
+ * 就直接切到登入頁。
+ */
+(function(){
+  function forceLoginPage(){
+    try {
+      location.hash = "#login";
+    } catch(e) {}
+    try {
+      if (typeof window.showPage === "function") {
+        window.showPage("login", false);
+        return;
+      }
+    } catch(e) {}
+    try {
+      document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+      const login = document.getElementById("page-login");
+      if (login) login.classList.add("active");
+    } catch(e) {}
+  }
+
+  function pageMember(){
+    return document.getElementById("page-member");
+  }
+
+  function isMemberVisible(){
+    const p = pageMember();
+    if(!p) return location.hash === "#member";
+    const st = getComputedStyle(p);
+    return location.hash === "#member" || p.classList.contains("active") || (st.display !== "none" && st.visibility !== "hidden");
+  }
+
+  function compactText(el){
+    return String((el && el.textContent) || "").replace(/\s+/g, "");
+  }
+
+  function findLoginArea(target){
+    const member = pageMember();
+    if(!member || !member.contains(target)) return null;
+
+    let node = target;
+    while(node && node !== member && node.nodeType === 1){
+      const txt = compactText(node);
+      if(
+        txt.includes("點擊登入") ||
+        txt.includes("尚未登入") ||
+        txt === "登入" ||
+        txt.includes("請先登入")
+      ){
+        return node;
+      }
+      node = node.parentElement;
+    }
+
+    const card = target.closest(".profile-card,.member-card,.user-card,.card,.panel,[data-open-profile],[data-go]");
+    if(card && member.contains(card)){
+      const txt = compactText(card);
+      if(txt.includes("點擊登入") || txt.includes("尚未登入") || txt.includes("請先登入")) return card;
+    }
+    return null;
+  }
+
+  function rewriteLoginAreas(){
+    const member = pageMember();
+    if(!member) return;
+    member.querySelectorAll("*").forEach(function(el){
+      const txt = compactText(el);
+      if(txt.includes("點擊登入") || txt.includes("尚未登入") || txt.includes("請先登入")){
+        el.setAttribute("data-go", "login");
+        el.removeAttribute("data-open-profile");
+        el.removeAttribute("data-action");
+        el.style.cursor = "pointer";
+        let p = el.parentElement;
+        let guard = 0;
+        while(p && p !== member && guard++ < 4){
+          p.setAttribute("data-go", "login");
+          p.removeAttribute("data-open-profile");
+          p.removeAttribute("data-action");
+          p.style.cursor = "pointer";
+          p = p.parentElement;
+        }
+      }
+    });
+  }
+
+  document.addEventListener("click", function(e){
+    if(!isMemberVisible()) return;
+    const area = findLoginArea(e.target);
+    if(!area) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    forceLoginPage();
+    return false;
+  }, true);
+
+  document.addEventListener("pointerdown", function(e){
+    if(!isMemberVisible()) return;
+    const area = findLoginArea(e.target);
+    if(!area) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    forceLoginPage();
+    return false;
+  }, true);
+
+  const mo = new MutationObserver(function(){
+    clearTimeout(rewriteLoginAreas._t);
+    rewriteLoginAreas._t = setTimeout(rewriteLoginAreas, 60);
+  });
+  if(document.documentElement) mo.observe(document.documentElement, {childList:true, subtree:true, attributes:true, characterData:true});
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(rewriteLoginAreas, 80); });
+  else setTimeout(rewriteLoginAreas, 80);
+  window.addEventListener("hashchange", function(){ setTimeout(rewriteLoginAreas, 120); });
 })();
 </script>
 
