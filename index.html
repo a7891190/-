@@ -12524,6 +12524,15 @@ window.addEventListener('DOMContentLoaded', () => {
   const money=n=>Number(n||0).toLocaleString('zh-TW');
   const KEYS=['vip_rank','weekly_charm','monthly_guardian','companion_gift','member_gift','total_recharge'];
   const META={vip_rank:{title:'VIP排行榜',unit:'VIP經驗值',suffix:'',limit:100,theme:'board-vip'},weekly_charm:{title:'本月魅力榜',unit:'魅力值',suffix:'分',limit:50,theme:'board-charm'},monthly_guardian:{title:'本月守護榜',unit:'',suffix:'守護值',limit:50,theme:'board-guardian'},companion_gift:{title:'陪玩收禮榜',unit:'收禮',suffix:'短陌',limit:50,theme:'board-companion'},member_gift:{title:'會員送禮榜',unit:'送禮',suffix:'短陌',limit:50,theme:'board-member'},total_recharge:{title:'累計儲值榜',unit:'累計儲值',suffix:'短陌',limit:50,theme:'board-recharge'}};
+  /* v327：各排行榜前三名假用戶，用來先確認首頁與排行榜頁位置；正式後台資料進來時會自動覆蓋。 */
+  const DEMO_RANK_BOARDS={
+    vip_rank:[{rank:1,name:'測試VIP一號',value:988888,avatar:'V1'},{rank:2,name:'測試VIP二號',value:866666,avatar:'V2'},{rank:3,name:'測試VIP三號',value:755555,avatar:'V3'}],
+    weekly_charm:[{rank:1,name:'測試魅力一號',value:388888,avatar:'魅1'},{rank:2,name:'測試魅力二號',value:266666,avatar:'魅2'},{rank:3,name:'測試魅力三號',value:155555,avatar:'魅3'}],
+    monthly_guardian:[{rank:1,name:'測試守護一號',value:588888,avatar:'守1'},{rank:2,name:'測試守護二號',value:466666,avatar:'守2'},{rank:3,name:'測試守護三號',value:355555,avatar:'守3'}],
+    companion_gift:[{rank:1,name:'測試陪玩一號',value:188888,avatar:'陪1'},{rank:2,name:'測試陪玩二號',value:166666,avatar:'陪2'},{rank:3,name:'測試陪玩三號',value:145555,avatar:'陪3'}],
+    member_gift:[{rank:1,name:'測試會員一號',value:288888,avatar:'會1'},{rank:2,name:'測試會員二號',value:226666,avatar:'會2'},{rank:3,name:'測試會員三號',value:195555,avatar:'會3'}],
+    total_recharge:[{rank:1,name:'測試儲值一號',value:9888888,avatar:'儲1'},{rank:2,name:'測試儲值二號',value:8666666,avatar:'儲2'},{rank:3,name:'測試儲值三號',value:7555555,avatar:'儲3'}]
+  };
   function aliases(k){return {vip_rank:['vip_rank','vip','vipRank'],weekly_charm:['weekly_charm','monthly_charm','charm'],monthly_guardian:['monthly_guardian','guardian','guard'],companion_gift:['companion_gift','companionGift'],member_gift:['member_gift','memberGift'],total_recharge:['total_recharge','recharge','totalRecharge']}[k]||[k];}
   function sourceList(src,k){
     if(!src) return [];
@@ -12544,6 +12553,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const sources=[window.DREAM_RANK_BOARDS,window.DREAM_LEADERBOARD_DATA,window.DREAM_RANK_DATA,window.DREAM_RANKINGS,window.DREAM_OFFICIAL_RANK_DATA];
     let list=[];
     for(const src of sources){ list=sourceList(src,k); if(list.length) break; }
+    if(!list.length) list=DEMO_RANK_BOARDS[k]||[];
     return list.map((x,i)=>normalize(x,i,k)).filter(Boolean).sort((a,b)=>a.rank-b.rank||b.value-a.value).slice(0,META[k].limit).map((x,i)=>Object.assign({},x,{rank:Number(x.rank)||i+1}));
   }
   function valueText(meta,item){return `${meta.unit?meta.unit+' ':''}${money(item?.value||0)}${meta.suffix?' '+meta.suffix:''}`.trim();}
