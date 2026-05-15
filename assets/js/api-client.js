@@ -1,3 +1,4 @@
+/* v349-live-data-private-api-guard */
 /* v348-registered-login-combined-fix */
 /* v347-private-records-401-fix */
 /* v346-api-missing-actions-guard-fix */
@@ -408,6 +409,14 @@
   }
 
   async function loadRechargeRecords(){
+    // v349：未登入 / session 尚未確認 / guest 狀態下，不呼叫私人紀錄 API。
+    if(!authUser && authType !== "companion"){
+      return;
+    }
+    if(document.body.classList.contains("dream-guest") && !document.body.classList.contains("dream-authenticated")){
+      return;
+    }
+
     // v347：未登入或 session 尚未確認前，不呼叫私人紀錄 API，避免 401。
     if(!authUser && authType !== "companion"){
       return;
@@ -649,11 +658,13 @@
   }
 
   async function loadAllLiveData(){
+    // v349：loadAllLiveData 只能載入公開資料；私人紀錄需登入後才載入。
+
     await refreshSession();
     loadVipRank();
     // v242：商城保留 index.html 本地商品，不讓 API 失敗覆蓋
     loadCompanions();
-    loadRechargeRecords();
+    if(authUser || authType === "companion") loadRechargeRecords();
     loadExchangeRecords();
   }
 
@@ -971,6 +982,14 @@
     }).join("");
   }
   async function loadRecords(){
+    // v349：未登入 / session 尚未確認 / guest 狀態下，不呼叫私人禮物/購買紀錄 API。
+    if(!authUser && authType !== "companion"){
+      return;
+    }
+    if(document.body.classList.contains("dream-guest") && !document.body.classList.contains("dream-authenticated")){
+      return;
+    }
+
     // v347：未登入或 session 尚未確認前，不呼叫私人禮物/購買紀錄 API，避免 401。
     if(!authUser && authType !== "companion"){
       return;
