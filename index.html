@@ -10510,7 +10510,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=325"></script>
+<script src="assets/barrage/barrage_system.js?v=326"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -16064,5 +16064,87 @@ body:not(.role-companion) .companion-only-panel{
 })();
 })();
 </script>
+
+
+<style id="v326-barrage-guardian-fix-css">
+/* v326：修正專屬守護榜前三名頭像被壓扁，並讓第三名守護值與第二名守護值平行 */
+#page-profile .profile-guardian-podium .profile-guardian-avatar{
+  flex:0 0 auto!important;
+  aspect-ratio:1 / 1!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  place-items:center!important;
+  line-height:1!important;
+}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{
+  width:64px!important;
+  height:64px!important;
+  min-width:64px!important;
+  min-height:64px!important;
+  max-width:64px!important;
+  max-height:64px!important;
+}
+#page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
+  width:50px!important;
+  height:50px!important;
+  min-width:50px!important;
+  min-height:50px!important;
+  max-width:50px!important;
+  max-height:50px!important;
+}
+#page-profile .profile-guardian-podium .profile-guardian-avatar img{
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:1 / 1!important;
+  object-fit:cover!important;
+  border-radius:50%!important;
+  display:block!important;
+}
+#page-profile .profile-guardian-podium.rank2 .profile-guardian-value,
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-value{
+  flex:0 0 auto!important;
+  align-self:center!important;
+  min-height:16px!important;
+  height:16px!important;
+  line-height:16px!important;
+  margin-top:4px!important;
+  margin-bottom:20px!important;
+  transform:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#page-profile .profile-guardian-podium.rank3 .profile-guardian-name{
+  margin-bottom:0!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-podium.rank1 .profile-guardian-avatar{
+    width:60px!important;
+    height:60px!important;
+    min-width:60px!important;
+    min-height:60px!important;
+    max-width:60px!important;
+    max-height:60px!important;
+  }
+  #page-profile .profile-guardian-podium.rank2 .profile-guardian-avatar,
+  #page-profile .profile-guardian-podium.rank3 .profile-guardian-avatar{
+    width:48px!important;
+    height:48px!important;
+    min-width:48px!important;
+    min-height:48px!important;
+    max-width:48px!important;
+    max-height:48px!important;
+  }
+  #page-profile .profile-guardian-podium.rank2 .profile-guardian-value,
+  #page-profile .profile-guardian-podium.rank3 .profile-guardian-value{
+    margin-top:3px!important;
+    margin-bottom:18px!important;
+  }
+}
+</style>
+
 </body>
 </html>

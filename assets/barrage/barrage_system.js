@@ -464,6 +464,15 @@
           align: "center"
         };
       }
+      if (idx === 34 && window.innerWidth >= 768) {
+        cfg = {
+          ...cfg,
+          /* v326：電腦版排行榜第 1 名黑金彈幕，大頭照與文字往主視覺中心校正；手機版沿用原本正確位置。 */
+          avatar: { x: 88, y: 68, size: 40 },
+          text: { x: 132, y: 58, w: 176, h: 52 },
+          align: "center"
+        };
+      }
       const plan = this.effectPlan(event, lv, idx);
       const seconds = event.seconds || (((this.rules || LOCAL_RULES).display || {})["lv" + lv + "Seconds"] || 8);
 
