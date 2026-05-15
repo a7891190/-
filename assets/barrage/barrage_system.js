@@ -457,9 +457,9 @@
           mode: "round",
           rw: 180,
           rh: 180,
-          /* v333：1-44 預覽 #1。手機版不動；電腦版先給較右的基準座標，後面再用 inline style 強制覆蓋。 */
-          avatar: isDesktopPreview ? { x: 172, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
-          text: isDesktopPreview ? { x: 145, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
+          /* v330：1-44 預覽第 1 個彈幕。手機版保持原座標；桌機版再向右校正，並搭配 index.html 更新 JS 版本避免快取讀到舊檔。 */
+          avatar: isDesktopPreview ? { x: 142, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
+          text: isDesktopPreview ? { x: 115, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
@@ -524,19 +524,11 @@
       const avatarSlot = document.createElement("div");
       avatarSlot.className = "dream-barrage-avatar-slot";
       rect(avatarSlot, cfg.avatar);
-      /* v333：電腦版 1-44 預覽 #1，直接覆蓋 inline left，避免 CSS 或舊座標失效 */
-      if (idx === 1 && window.innerWidth >= 768) {
-        avatarSlot.style.left = "172px";
-      }
       avatarSlot.appendChild(avatarNode(event));
 
       const textSlot = document.createElement("div");
       textSlot.className = "dream-barrage-text-slot";
       rect(textSlot, cfg.text);
-      /* v333：電腦版 1-44 預覽 #1，直接覆蓋 inline left，避免 CSS 或舊座標失效 */
-      if (idx === 1 && window.innerWidth >= 768) {
-        textSlot.style.left = "145px";
-      }
       if (cfg.align) textSlot.style.textAlign = cfg.align;
       if (cfg.titleColor) textSlot.style.setProperty("--title-color", cfg.titleColor);
       if (cfg.subColor) textSlot.style.setProperty("--sub-color", cfg.subColor);
@@ -553,6 +545,15 @@
 
       textSlot.appendChild(title);
       textSlot.appendChild(sub);
+      /* v335：允許特定預覽事件直接指定大頭照/文字水平修正 */
+      if (event && event.forceOverlayShiftX && window.innerWidth >= 768) {
+        const dx = Number(event.forceOverlayShiftX || 0);
+        if (dx) {
+          avatarSlot.style.setProperty("transform", "translateX(" + dx + "px)", "important");
+          textSlot.style.setProperty("transform", "translateX(" + dx + "px)", "important");
+        }
+      }
+
       overlay.appendChild(avatarSlot);
       overlay.appendChild(textSlot);
       item.appendChild(overlay);
