@@ -1,4 +1,4 @@
-<!-- preview1-fan-right-fix-applied -->
+<!-- preview1-stable-center-v2 -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -4674,7 +4674,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=preview1fix">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=preview1-stable-center-v2">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -10512,7 +10512,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=preview1fix"></script>
+<script src="assets/barrage/barrage_system.js?v=preview1-stable-center-v2"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -10665,7 +10665,7 @@ window.addEventListener('DOMContentLoaded', () => {
         await window.DreamBarrage.init({basePath:'assets/barrage/'});
         return true;
       }
-      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=preview1fix');
+      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=preview1-stable-center-v2');
       return false;
     }
 
@@ -14989,10 +14989,7 @@ img[src*="rank_rewards/badges"]{
       seconds: 8,
       userName: "星眠",
       avatarText: "星",
-      sub: "彈幕預覽 " + item[0] + " / 44",
-      /* v336：只針對 1-44 預覽 #1 送禮扇類，要求大頭照與文字往右移 */
-      forceOverlayShiftX: no === 1 ? 68 : 0,
-      forcePreview1FanFix: no === 1
+      sub: "彈幕預覽 " + item[0] + " / 44"
     };
     if(kind === "order") return {...common, type:"order", title:"【下單彈幕預覽】星眠下單 52,000 短陌"};
     if(kind === "recharge") return {...common, type:"recharge", title:"【儲值彈幕預覽】星眠儲值 52,000 短陌"};
