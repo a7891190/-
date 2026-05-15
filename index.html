@@ -1,3 +1,4 @@
+<!-- v344-member-login-force-fix -->
 <!-- v343-member-login-click-fix -->
 <!-- v342-return-gift-charm-login-guard -->
 <!-- v341-remove-demo-preview-role-plus-gender -->
@@ -16640,6 +16641,86 @@ body:not(.role-companion) .companion-only-panel{
     goLogin();
     return false;
   }, true);
+})();
+</script>
+
+
+<script id="v344-member-login-force-fix-js">
+/*
+ * v344：會員中心「點擊登入」強制修正。
+ * 不再依賴原本資料屬性判斷；只要會員中心卡片文字含「點擊登入 / 登入」，
+ * 點擊該卡片、大頭照、名稱、提示文字，都強制進登入頁。
+ */
+(function(){
+  function goLogin(){
+    try{
+      if(typeof showPage === "function"){
+        showPage("login");
+        return;
+      }
+    }catch(e){}
+    location.hash = "#login";
+  }
+
+  function currentPageIsMember(){
+    const p = document.getElementById("page-member");
+    if(!p) return false;
+    return p.classList.contains("active") || !p.classList.contains("hidden") || location.hash === "#member";
+  }
+
+  function isLoginCard(el){
+    if(!el) return false;
+    const card = el.closest("#page-member .profile-card, #page-member .member-card, #page-member .user-card, #page-member [data-open-profile='self']");
+    const text = ((card || el).textContent || "").replace(/\s+/g, "");
+    return text.includes("點擊登入") || text === "登入" || text.includes("尚未登入");
+  }
+
+  document.addEventListener("click", function(e){
+    if(!currentPageIsMember()) return;
+
+    const target = e.target.closest(
+      "#page-member .profile-card, " +
+      "#page-member .member-card, " +
+      "#page-member .user-card, " +
+      "#page-member .member-name, " +
+      "#page-member .avatar, " +
+      "#page-member [data-open-profile='self'], " +
+      "#page-member [data-action='open-profile'], " +
+      "#page-member .profile-login-tip, " +
+      "#page-member .member-login-tip"
+    );
+
+    if(!isLoginCard(target)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    goLogin();
+    return false;
+  }, true);
+
+  // 直接把卡片上的 data-open-profile 拿掉，避免原本事件再導去會員主頁
+  function neutralizeMemberLoginCard(){
+    document.querySelectorAll("#page-member .profile-card, #page-member [data-open-profile='self']").forEach(function(el){
+      const text = (el.textContent || "").replace(/\s+/g, "");
+      if(text.includes("點擊登入") || text.includes("尚未登入")){
+        el.dataset.go = "login";
+        el.removeAttribute("data-open-profile");
+        el.removeAttribute("data-action");
+        el.style.cursor = "pointer";
+      }
+    });
+  }
+
+  const mo = new MutationObserver(function(){
+    clearTimeout(neutralizeMemberLoginCard._t);
+    neutralizeMemberLoginCard._t = setTimeout(neutralizeMemberLoginCard, 50);
+  });
+
+  if(document.documentElement) mo.observe(document.documentElement, {childList:true, subtree:true, attributes:true});
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", neutralizeMemberLoginCard);
+  else neutralizeMemberLoginCard();
+  window.addEventListener("hashchange", function(){ setTimeout(neutralizeMemberLoginCard, 80); });
 })();
 </script>
 
