@@ -1,3 +1,4 @@
+<!-- v342-return-gift-charm-login-guard -->
 <!-- v341-remove-demo-preview-role-plus-gender -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
@@ -16442,6 +16443,155 @@ body:not(.role-companion) .companion-only-panel{
   else setTimeout(boot,80);
   window.addEventListener("hashchange",()=>setTimeout(boot,100));
   window.DreamCleanDemoV341={run:boot};
+})();
+</script>
+
+
+<script id="v342-return-home-gift-achievement-js">
+(function(){
+  function fixBackButtons(){
+    ["#page-achievements","#page-achievement","#page-gift","#page-gifts","#page-gift-zone","#page-giftzone"].forEach(function(sel){
+      document.querySelectorAll(sel + " .back-btn, " + sel + " [data-action='back'], " + sel + " [data-back]").forEach(function(btn){
+        btn.dataset.go = "home";
+        btn.removeAttribute("data-back");
+      });
+    });
+  }
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest("#page-achievements .back-btn,#page-achievement .back-btn,#page-gift .back-btn,#page-gifts .back-btn,#page-gift-zone .back-btn,#page-giftzone .back-btn");
+    if(btn){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(typeof showPage === "function") showPage("home");
+      else location.hash = "#home";
+      return false;
+    }
+  }, true);
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", fixBackButtons);
+  else fixBackButtons();
+  window.addEventListener("hashchange", function(){ setTimeout(fixBackButtons, 80); });
+})();
+</script>
+
+
+<script id="v342-gift-charm-12x-js">
+(function(){
+  function parseNum(text){
+    const m = String(text || "").replace(/,/g,"").match(/(\d+(?:\.\d+)?)/);
+    return m ? Number(m[1]) : 0;
+  }
+  function fmt(n){
+    n = Math.round(Number(n || 0));
+    return n.toLocaleString("zh-TW");
+  }
+  function findPrice(card){
+    const selectors = [".gift-price",".price",".product-price","[data-price]","[data-gift-price]","[data-product-price]"];
+    for(const s of selectors){
+      const el = card.querySelector(s);
+      if(el){
+        const attr = el.dataset.price || el.dataset.giftPrice || el.dataset.productPrice;
+        const n = parseNum(attr || el.textContent);
+        if(n) return n;
+      }
+    }
+    const dataPrice = card.dataset.price || card.dataset.giftPrice || card.dataset.productPrice || card.dataset.amount;
+    const n = parseNum(dataPrice);
+    if(n) return n;
+    return parseNum(card.textContent);
+  }
+  function applyGiftCharm(){
+    document.querySelectorAll(".gift-card,.product-card,[data-gift-id],[data-product-id]").forEach(function(card){
+      const price = findPrice(card);
+      if(!price) return;
+      const charm = fmt(price * 1.2);
+      let charmEl = card.querySelector(".gift-charm,.product-charm,[data-gift-charm],[data-charm-value]");
+      if(!charmEl){
+        const anchor = card.querySelector(".gift-price,.product-price,.price") || card;
+        charmEl = document.createElement("div");
+        charmEl.className = "gift-charm v342-gift-charm";
+        if(anchor === card) card.appendChild(charmEl);
+        else anchor.insertAdjacentElement("afterend", charmEl);
+      }
+      charmEl.textContent = "魅力值 " + charm;
+      charmEl.dataset.charmValue = String(Math.round(price * 1.2));
+    });
+  }
+  const mo = new MutationObserver(function(){ clearTimeout(applyGiftCharm._t); applyGiftCharm._t = setTimeout(applyGiftCharm, 80); });
+  if(document.documentElement) mo.observe(document.documentElement, {childList:true, subtree:true});
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(applyGiftCharm, 80); });
+  else setTimeout(applyGiftCharm, 80);
+  window.addEventListener("hashchange", function(){ setTimeout(applyGiftCharm, 120); });
+  window.DreamGiftCharmV342 = {apply:applyGiftCharm};
+})();
+</script>
+<style id="v342-gift-charm-css">
+.v342-gift-charm,.gift-charm,.product-charm,[data-gift-charm],[data-charm-value]{
+  margin-top:4px!important;
+  font-size:11px!important;
+  color:#ffe0a9!important;
+  font-weight:900!important;
+  text-align:center!important;
+}
+</style>
+
+
+<script id="v342-login-guard-js">
+(function(){
+  const PUBLIC_PAGES = new Set(["home","login","register","forgot","terms","privacy"]);
+  function isLoggedIn(){
+    const u = window.__dreamFrontAuth && window.__dreamFrontAuth.user;
+    if(u) return true;
+    try{
+      const raw = localStorage.getItem("dream_user") || localStorage.getItem("dream_auth_user") || "";
+      if(raw && raw !== "null" && raw !== "{}") return true;
+    }catch(e){}
+    return false;
+  }
+  function goLogin(){
+    if(typeof showPage === "function") showPage("login");
+    else location.hash = "#login";
+  }
+  function isBottomNav(el){
+    return !!el.closest(".bottom-nav,.tabbar,.bottom-tabs,.mobile-nav,.nav-bottom,.app-tabbar,#bottomNav,#mainTabbar,[data-bottom-nav]");
+  }
+  function targetPage(el){
+    const go = el.dataset && (el.dataset.go || el.dataset.page || el.dataset.targetPage);
+    if(go) return String(go).replace(/^#/,"");
+    const href = el.getAttribute && el.getAttribute("href");
+    if(href && href.startsWith("#")) return href.slice(1);
+    return "";
+  }
+  function isEntry(el){
+    if(!el) return false;
+    if(el.closest("form,.login-box,#page-login,#page-register,#page-forgot,.modal,.v340-gender-modal,.v298-achievement-modal")) return false;
+    if(el.matches("[data-go],[data-page-link],[data-open-page],a[href^='#'],.home-image-card,.shortcut-card,.entry-card,.feature-card,.menu-card,.profile-card,.service-card")) return true;
+    return false;
+  }
+  document.addEventListener("click", function(e){
+    if(isLoggedIn()) return;
+    const el = e.target.closest("[data-go],[data-page-link],[data-open-page],a[href^='#'],.home-image-card,.shortcut-card,.entry-card,.feature-card,.menu-card,.profile-card,.service-card");
+    if(!isEntry(el)) return;
+    if(isBottomNav(el)) return;
+    const page = targetPage(el);
+    if(PUBLIC_PAGES.has(page)) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    goLogin();
+    return false;
+  }, true);
+
+  // 會員中心「點擊登入」文字/區塊保險處理
+  document.addEventListener("click", function(e){
+    if(isLoggedIn()) return;
+    const txt = (e.target.textContent || "").trim();
+    const loginHint = e.target.closest("[data-action='login'],[data-go='login'],.login-entry,.profile-login-tip,.member-login-tip");
+    if(loginHint || txt.includes("點擊登入") || txt === "登入"){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      goLogin();
+      return false;
+    }
+  }, true);
 })();
 </script>
 
