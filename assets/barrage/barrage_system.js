@@ -451,15 +451,15 @@
       const idx = Number(event.previewIndex || FRAME_INDEX[frame] || 0);
       let cfg = (this.layout || LOCAL_LAYOUT)[String(idx)] || (this.layout || LOCAL_LAYOUT)[idx] || LOCAL_LAYOUT["3"];
       if (idx === 1) {
-        const isDesktopPreview = window.innerWidth >= 768;
+        const isDesktopPreview = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         cfg = {
           ...cfg,
           mode: "round",
           rw: 180,
           rh: 180,
-          /* stable fix：#1 送禮扇類，桌機版固定置中；手機版維持原本位置 */
-          avatar: isDesktopPreview ? { x: 61, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
-          text: isDesktopPreview ? { x: 36, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
+          /* preview1-true-center：#1 送禮扇類，桌機版改用真正水平置中，不吃固定 x 偏移 */
+          avatar: isDesktopPreview ? { x: 0, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
+          text: isDesktopPreview ? { x: 0, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
@@ -468,10 +468,34 @@
       if (idx === 34 && window.innerWidth >= 768) {
         cfg = {
           ...cfg,
-          /* v327：電腦版排行榜第 1 名黑金彈幕再往右校正；手機版沿用原本正確位置。 */
-          avatar: { x: 108, y: 68, size: 40 },
-          text: { x: 152, y: 58, w: 176, h: 52 },
-          align: "center"
+          /* #34：全屏時改回跟未全屏相同的位置，避免大頭照與文字往右偏 */
+          avatar: { x: 66, y: 68, size: 40 },
+          text: { x: 104, y: 58, w: 204, h: 52 },
+          titleSize: 11,
+          subSize: 8,
+          align: "left",
+          titleColor: "#fff2d8",
+          subColor: "#f5d8e7"
+        };
+      }
+
+      /*
+       * v336 真正修正目標：
+       * 電腦版「彈幕預覽 1-44」裡的 #1 送禮扇類。
+       * 目標圖：gift_fan_01_floral_round.webp。
+       * 這裡直接修改渲染用座標，不再靠 CSS、不再靠後置 observer。
+       */
+      const isPreview1FanFix = window.innerWidth >= 768 && (
+        Number(event.previewIndex || 0) === 1 ||
+        event.forcePreview1FanFix === true ||
+        String(event.framePath || "").includes("gift_fan_01_floral_round.webp")
+      );
+      if (isPreview1FanFix) {
+        const dx = Number(event.forceOverlayShiftX || 68);
+        cfg = {
+          ...cfg,
+          avatar: { ...(cfg.avatar || {}), x: Number((cfg.avatar || {}).x || 0) + dx },
+          text: { ...(cfg.text || {}), x: Number((cfg.text || {}).x || 0) + dx }
         };
       }
 
@@ -525,11 +549,19 @@
       const avatarSlot = document.createElement("div");
       avatarSlot.className = "dream-barrage-avatar-slot";
       rect(avatarSlot, cfg.avatar);
+      if (idx === 1 && !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        avatarSlot.style.left = "50%";
+        avatarSlot.style.transform = "translateX(calc(-50% + 2px))";
+      }
       avatarSlot.appendChild(avatarNode(event));
 
       const textSlot = document.createElement("div");
       textSlot.className = "dream-barrage-text-slot";
       rect(textSlot, cfg.text);
+      if (idx === 1 && !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        textSlot.style.left = "50%";
+        textSlot.style.transform = "translateX(calc(-50% + 2px))";
+      }
       if (cfg.align) textSlot.style.textAlign = cfg.align;
       if (cfg.titleColor) textSlot.style.setProperty("--title-color", cfg.titleColor);
       if (cfg.subColor) textSlot.style.setProperty("--sub-color", cfg.subColor);

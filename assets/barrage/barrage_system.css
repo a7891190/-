@@ -593,8 +593,8 @@
 
 
 
-/* stable fix：#1 送禮扇類不再用 CSS 水平位移，避免視窗大小改變時看起來偏左/偏右 */
+/* preview1-true-center：#1 送禮扇類不做額外水平偏移，真正置中由 JS 直接用 left:50% + translateX(-50%) 處理 */
 .dream-barrage-slide.idx-1 .dream-barrage-avatar-slot,
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
-  transform:none !important;
+  will-change: transform;
 }
