@@ -1,3 +1,4 @@
+<!-- v343-member-login-click-fix -->
 <!-- v342-return-gift-charm-login-guard -->
 <!-- v341-remove-demo-preview-role-plus-gender -->
 <!-- barrage34-same-as-window -->
@@ -16591,6 +16592,53 @@ body:not(.role-companion) .companion-only-panel{
       goLogin();
       return false;
     }
+  }, true);
+})();
+</script>
+
+
+<script id="v343-member-login-click-fix-js">
+/*
+ * v343：修正會員中心下方「點擊登入」。
+ * 未登入時點擊，不管原本綁到會員主頁或個人主頁，都強制前往登入頁。
+ */
+(function(){
+  function isLoggedIn(){
+    const u = window.__dreamFrontAuth && window.__dreamFrontAuth.user;
+    if(u) return true;
+    try{
+      const raw = localStorage.getItem("dream_user") || localStorage.getItem("dream_auth_user") || "";
+      if(raw && raw !== "null" && raw !== "{}") return true;
+    }catch(e){}
+    return false;
+  }
+
+  function goLogin(){
+    if(typeof showPage === "function") showPage("login");
+    else location.hash = "#login";
+  }
+
+  function looksLikeMemberLoginEntry(el){
+    if(!el) return false;
+    const text = (el.textContent || "").replace(/\s+/g, "").trim();
+    if(text.includes("點擊登入")) return true;
+    if(el.matches("[data-open-profile='self'],[data-action='open-profile'],[data-action='login'],[data-go='login']")) return true;
+    if(el.closest("#page-member") && (el.classList.contains("member-name") || el.classList.contains("avatar") || el.closest(".profile-card"))) {
+      const cardText = (el.closest(".profile-card")?.textContent || "").replace(/\s+/g, "");
+      return cardText.includes("點擊登入") || cardText.includes("登入");
+    }
+    return false;
+  }
+
+  document.addEventListener("click", function(e){
+    if(isLoggedIn()) return;
+    const el = e.target.closest("#page-member [data-open-profile='self'], #page-member [data-action='open-profile'], #page-member [data-action='login'], #page-member [data-go='login'], #page-member .member-name, #page-member .avatar, #page-member .profile-card, #page-member .profile-login-tip, #page-member .member-login-tip");
+    if(!looksLikeMemberLoginEntry(el)) return;
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    goLogin();
+    return false;
   }, true);
 })();
 </script>
