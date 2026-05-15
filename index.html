@@ -10510,7 +10510,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=326"></script>
+<script src="assets/barrage/barrage_system.js?v=328"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -16155,6 +16155,169 @@ body:not(.role-companion) .companion-only-panel{
   }
 }
 </style>
+
+
+
+<style id="v328-guardian-value-back-button-fix-css">
+/* v328：專屬守護榜前三名排版穩定化，避免守護值壓到「第 X 名」，並強制大頭照正圓形。 */
+.profile-guardian-podium{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  overflow:hidden!important;
+  padding:12px 8px 12px!important;
+  gap:5px!important;
+}
+.profile-guardian-podium.rank1{
+  padding-top:14px!important;
+  padding-bottom:14px!important;
+}
+.profile-guardian-podium .profile-guardian-crown{
+  order:1!important;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  margin:0 0 2px!important;
+  z-index:6!important;
+  display:block!important;
+  width:100%!important;
+  min-height:18px!important;
+  line-height:18px!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-size:12px!important;
+}
+.profile-guardian-podium .profile-guardian-avatar{
+  order:2!important;
+  flex:0 0 auto!important;
+  width:54px!important;
+  height:54px!important;
+  min-width:54px!important;
+  min-height:54px!important;
+  max-width:54px!important;
+  max-height:54px!important;
+  aspect-ratio:1 / 1!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  margin:0 auto 2px!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.profile-guardian-podium.rank1 .profile-guardian-avatar{
+  width:66px!important;
+  height:66px!important;
+  min-width:66px!important;
+  min-height:66px!important;
+  max-width:66px!important;
+  max-height:66px!important;
+}
+.profile-guardian-podium .profile-guardian-avatar img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  display:block!important;
+  border-radius:50%!important;
+}
+.profile-guardian-podium .profile-guardian-name{
+  order:3!important;
+  position:relative!important;
+  z-index:5!important;
+  width:100%!important;
+  height:40px!important;
+  min-height:40px!important;
+  margin:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+}
+.profile-guardian-podium.rank1 .profile-guardian-name{
+  height:46px!important;
+  min-height:46px!important;
+}
+.profile-guardian-podium .profile-guardian-value{
+  order:4!important;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  z-index:5!important;
+  display:block!important;
+  width:100%!important;
+  min-height:18px!important;
+  margin:0!important;
+  padding:0 3px!important;
+  color:#ffe1b1!important;
+  font-size:13px!important;
+  line-height:18px!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+@media(max-width:480px){
+  .profile-guardian-podium{padding-left:5px!important;padding-right:5px!important;gap:4px!important;}
+  .profile-guardian-podium .profile-guardian-avatar{width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;}
+  .profile-guardian-podium.rank1 .profile-guardian-avatar{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;}
+  .profile-guardian-podium .profile-guardian-value{font-size:12px!important;line-height:17px!important;min-height:17px!important;}
+}
+</style>
+<script id="v328-real-back-button-fix-script">
+/* v328：所有左上返回鍵優先回到實際上一頁；排行榜 data-back 也會生效。 */
+(function(){
+  if(window.__dreamBackButtonV328) return;
+  window.__dreamBackButtonV328 = true;
+  const fallbackMap = {
+    'vip-rank':'member', 'profile':'member', 'market-product':'market', 'companion-booking':'companion',
+    'market-rules':'market', 'checkin':'market', 'raffle':'market', 'renew':'member', 'review':'member',
+    'vip-info':'member', 'achievements':'member', 'recharge':'member', 'following':'member', 'favorites':'member',
+    'exchange-record':'member', 'recharge-record':'member', 'about':'member', 'forgot':'member', 'backpack':'member'
+  };
+  function pageFromHash(){ return (location.hash || '#home').slice(1) || 'home'; }
+  function safePageName(name){ return String(name || '').replace(/^#/, '') || 'home'; }
+  const originalShowPage = window.showPage;
+  if(typeof originalShowPage === 'function' && !originalShowPage.__v328BackWrapped){
+    const wrapped = function(name, push){
+      const to = safePageName(name);
+      const from = pageFromHash();
+      if(push !== false && to && from && to !== from){
+        try{
+          sessionStorage.setItem('dream_prev_page_for_' + to, from);
+          sessionStorage.setItem('dream_last_entry_page', from);
+        }catch(_){ }
+      }
+      return originalShowPage.apply(this, arguments);
+    };
+    wrapped.__v328BackWrapped = true;
+    window.showPage = wrapped;
+  }
+  function resolveBackTarget(btn){
+    const current = pageFromHash();
+    let target = '';
+    try{ target = sessionStorage.getItem('dream_prev_page_for_' + current) || ''; }catch(_){ }
+    if(!target || target === current){ try{ target = sessionStorage.getItem('dream_last_entry_page') || ''; }catch(_){ } }
+    if(!target || target === current){ target = btn?.dataset?.go || fallbackMap[current] || 'home'; }
+    return safePageName(target);
+  }
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest && e.target.closest('.back-btn,[data-back]');
+    if(!btn) return;
+    if(!btn.classList.contains('back-btn') && !btn.hasAttribute('data-back')) return;
+    const target = resolveBackTarget(btn);
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if(typeof window.showPage === 'function') window.showPage(target);
+    else location.hash = '#' + target;
+  }, true);
+})();
+</script>
 
 </body>
 </html>
