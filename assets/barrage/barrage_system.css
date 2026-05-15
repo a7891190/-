@@ -593,3 +593,13 @@
 .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
   transform:translateX(0)!important;
 }
+
+
+/* v332 hardfix：只針對電腦版 1-44 預覽 #1，強制大頭照與文字往右校正；手機版不動 */
+@media (min-width:768px){
+  .dream-barrage-slide.idx-1 .dream-barrage-avatar-slot,
+  .dream-barrage-slide.idx-1 .dream-barrage-text-slot{
+    transform:translateX(34px)!important;
+  }
+}
+

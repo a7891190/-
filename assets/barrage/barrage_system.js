@@ -451,19 +451,20 @@
       const idx = Number(event.previewIndex || FRAME_INDEX[frame] || 0);
       let cfg = (this.layout || LOCAL_LAYOUT)[String(idx)] || (this.layout || LOCAL_LAYOUT)[idx] || LOCAL_LAYOUT["3"];
       if (idx === 1) {
-      /* v331：預覽 1-44 的 #1 彈幕，桌機版改用手機版同一組置中座標 */
-      cfg = {
-        ...cfg,
-        mode: "round",
-        rw: 180,
-        rh: 180,
-        avatar: { x: 84, y: 42, size: 58 },
-        text: { x: 57, y: 106, w: 108, h: 42 },
-        titleSize: 10,
-        subSize: 7,
-        align: "center"
-      };
-    }
+        const isDesktopPreview = window.innerWidth >= 768;
+        cfg = {
+          ...cfg,
+          mode: "round",
+          rw: 180,
+          rh: 180,
+          /* v333：1-44 預覽 #1。手機版不動；電腦版先給較右的基準座標，後面再用 inline style 強制覆蓋。 */
+          avatar: isDesktopPreview ? { x: 172, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
+          text: isDesktopPreview ? { x: 145, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
+          titleSize: 10,
+          subSize: 7,
+          align: "center"
+        };
+      }
       if (idx === 34 && window.innerWidth >= 768) {
         cfg = {
           ...cfg,
@@ -523,11 +524,19 @@
       const avatarSlot = document.createElement("div");
       avatarSlot.className = "dream-barrage-avatar-slot";
       rect(avatarSlot, cfg.avatar);
+      /* v333：電腦版 1-44 預覽 #1，直接覆蓋 inline left，避免 CSS 或舊座標失效 */
+      if (idx === 1 && window.innerWidth >= 768) {
+        avatarSlot.style.left = "172px";
+      }
       avatarSlot.appendChild(avatarNode(event));
 
       const textSlot = document.createElement("div");
       textSlot.className = "dream-barrage-text-slot";
       rect(textSlot, cfg.text);
+      /* v333：電腦版 1-44 預覽 #1，直接覆蓋 inline left，避免 CSS 或舊座標失效 */
+      if (idx === 1 && window.innerWidth >= 768) {
+        textSlot.style.left = "145px";
+      }
       if (cfg.align) textSlot.style.textAlign = cfg.align;
       if (cfg.titleColor) textSlot.style.setProperty("--title-color", cfg.titleColor);
       if (cfg.subColor) textSlot.style.setProperty("--sub-color", cfg.subColor);
