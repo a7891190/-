@@ -1,3 +1,4 @@
+/* login-connect-compat-front */
 
 (function(){
   const cfg = window.DREAM_CONFIG || {};
@@ -991,11 +992,18 @@
     const username = $("#front_login_user")?.value.trim() || "";
     const password = $("#front_login_pwd")?.value || "";
     if(!username || !password) return toast("請輸入帳號與密碼");
-    const actions = loginType === "companion"
-      ? ["companion_login","login_companion","companion_backend_login"]
-      : ["login"];
-    const res = await apiTry(actions, {username, password, account:username});
-    if(!res.ok) return toast(res.message || "登入失敗");
+    const payload = {
+      username,
+      password,
+      account: username,
+      email: username
+    };
+    const action = loginType === "companion" ? "companion_login" : "login";
+    const res = await api(action, payload);
+    if(!res.ok) {
+      console.warn("[DreamLogin]", action, res);
+      return toast(res.message || "登入失敗");
+    }
     const user = res.user || res.companion || res.data || {username};
     setMemberUI(user, loginType);
     if($("#front_login_remember")?.checked){
