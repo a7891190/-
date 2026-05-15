@@ -16319,5 +16319,172 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
+
+<style id="v329-final-barrage-guardian-search-css">
+/* v329：最終針對本次回報修正：#1 彈幕桌機座標由 JS 處理；此處鎖定守護榜與首頁搜索文字 */
+
+/* 首頁搜索列右側「搜索」文字：從 v298 的 58% 往上調一點 */
+#page-home .search-image-wrap button[data-home-search-btn],
+#page-home .search-image-wrap button{
+  top:54.5%!important;
+  transform:translateX(-4px) translateY(-50%)!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* 專屬守護榜前三名：固定垂直順序為 大頭照 → 用戶名稱 → 守護值 → 第X名 */
+#page-profile .profile-guardian-top3{
+  align-items:end!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank1{
+  height:188px!important;
+  min-height:188px!important;
+  padding:14px 6px 46px!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank2,
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank3{
+  height:162px!important;
+  min-height:162px!important;
+  padding:12px 5px 42px!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-avatar{
+  order:1!important;
+  flex:0 0 auto!important;
+  margin:0 auto 6px!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  aspect-ratio:1 / 1!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-avatar{
+  width:64px!important;height:64px!important;min-width:64px!important;min-height:64px!important;max-width:64px!important;max-height:64px!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank2 .profile-guardian-avatar,
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank3 .profile-guardian-avatar{
+  width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;max-width:50px!important;max-height:50px!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-avatar img{
+  width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important;display:block!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name{
+  order:2!important;
+  flex:0 0 auto!important;
+  position:relative!important;
+  z-index:3!important;
+  width:100%!important;
+  min-height:26px!important;
+  height:26px!important;
+  margin:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name{
+  min-height:32px!important;
+  height:32px!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-value{
+  order:3!important;
+  flex:0 0 auto!important;
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:28px!important;
+  z-index:4!important;
+  width:100%!important;
+  min-height:16px!important;
+  height:16px!important;
+  margin:0!important;
+  padding:0 2px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:16px!important;
+  font-size:12px!important;
+  white-space:nowrap!important;
+  transform:none!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-value{
+  bottom:30px!important;
+}
+#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-crown{
+  order:4!important;
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:7px!important;
+  transform:translateX(-50%)!important;
+  z-index:3!important;
+  margin:0!important;
+  min-height:16px!important;
+  height:16px!important;
+  line-height:12px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  white-space:nowrap!important;
+}
+@media(max-width:480px){
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1{height:178px!important;min-height:178px!important;padding-bottom:44px!important;}
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank2,
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank3{height:154px!important;min-height:154px!important;padding-bottom:40px!important;}
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-avatar{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;max-width:60px!important;max-height:60px!important;}
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank2 .profile-guardian-avatar,
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank3 .profile-guardian-avatar{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;max-width:48px!important;max-height:48px!important;}
+  #page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-value{bottom:27px!important;font-size:11px!important;}
+  #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-value{bottom:29px!important;}
+}
+</style>
+
+<script id="v329-guardian-position-stabilizer-js">
+(function(){
+  function applyGuardianLayout(){
+    document.querySelectorAll('#page-profile .profile-guardian-top3 .profile-guardian-podium').forEach(function(card){
+      var value = card.querySelector('.profile-guardian-value');
+      var crown = card.querySelector('.profile-guardian-crown');
+      if(value){
+        value.style.setProperty('position','absolute','important');
+        value.style.setProperty('left','0','important');
+        value.style.setProperty('right','0','important');
+        value.style.setProperty('bottom',card.classList.contains('rank1')?'30px':'28px','important');
+        value.style.setProperty('margin','0','important');
+        value.style.setProperty('z-index','4','important');
+        value.style.setProperty('display','flex','important');
+        value.style.setProperty('align-items','center','important');
+        value.style.setProperty('justify-content','center','important');
+        value.style.setProperty('white-space','nowrap','important');
+      }
+      if(crown){
+        crown.style.setProperty('position','absolute','important');
+        crown.style.setProperty('left','50%','important');
+        crown.style.setProperty('bottom','7px','important');
+        crown.style.setProperty('transform','translateX(-50%)','important');
+        crown.style.setProperty('margin','0','important');
+        crown.style.setProperty('z-index','3','important');
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', applyGuardianLayout); else applyGuardianLayout();
+  window.addEventListener('hashchange', function(){setTimeout(applyGuardianLayout,80);});
+  document.addEventListener('click', function(){setTimeout(applyGuardianLayout,120);}, true);
+  setTimeout(applyGuardianLayout,120);
+  setTimeout(applyGuardianLayout,500);
+})();
+</script>
+
 </body>
 </html>

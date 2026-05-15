@@ -457,9 +457,9 @@
           mode: "round",
           rw: 180,
           rh: 180,
-          /* v328：1-44 預覽第 1 個彈幕，手機版維持原本正確位置；電腦版大頭照與文字同步往右校正。 */
-          avatar: isDesktopPreview ? { x: 98, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
-          text: isDesktopPreview ? { x: 71, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
+          /* v329：1-44 預覽第 1 個彈幕，手機版維持原本正確位置；電腦版大頭照與文字再明顯往右校正。 */
+          avatar: isDesktopPreview ? { x: 122, y: 42, size: 58 } : { x: 84, y: 42, size: 58 },
+          text: isDesktopPreview ? { x: 95, y: 106, w: 108, h: 42 } : { x: 57, y: 106, w: 108, h: 42 },
           titleSize: 10,
           subSize: 7,
           align: "center"
