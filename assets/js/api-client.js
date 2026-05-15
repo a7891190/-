@@ -1,3 +1,4 @@
+/* final-login-clean-fix api-client */
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
 var authType = window.authType || null;
@@ -444,6 +445,10 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
+    // final-login-clean-fix：未登入不呼叫儲值紀錄 API。
+    const loggedIn = (typeof authUser !== "undefined" && authUser) || (typeof authType !== "undefined" && authType);
+    if(!loggedIn) return;
+
     // v352：未登入不呼叫儲值紀錄 API，避免 401。
     if(!dreamIsLoggedInSafeV352()){
       return;
@@ -698,17 +703,18 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadAllLiveData(){
-    // v352：安全版 live data 載入；完全不直接讀 authUser/authType。
-    // 未登入：只載入公開資料。
-    // 已登入：再載入私人紀錄。
-    try{ await loadShop(); }catch(e){ console.warn("[loadShop]", e.message || e); }
+    // final-login-clean-fix：此區塊屬於舊版 v44 API。
+    // 只能呼叫本作用域存在的函式，不能呼叫新版 v45 的 loadShop/loadRecords。
+    try{ await loadVipRank(); }catch(e){ console.warn("[loadVipRank]", e.message || e); }
+    try{ await loadMarketItems(); }catch(e){ console.warn("[loadMarketItems]", e.message || e); }
     try{ await loadCompanions(); }catch(e){ console.warn("[loadCompanions]", e.message || e); }
 
-    if(!dreamIsLoggedInSafeV352()){
+    // 私人資料必須已登入才載入，避免未登入時噴 401。
+    if(!state.user){
       return;
     }
 
-    try{ await loadRecords(); }catch(e){ console.warn("[loadRecords]", e.message || e); }
+    try{ await loadExchangeRecords(); }catch(e){ console.warn("[loadExchangeRecords]", e.message || e); }
     try{ await loadRechargeRecords(); }catch(e){ console.warn("[loadRechargeRecords]", e.message || e); }
   }
 
@@ -1039,6 +1045,10 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }).join("");
   }
   async function loadRecords(){
+    // final-login-clean-fix：未登入不呼叫禮物/購買紀錄 API。
+    const loggedIn = (typeof authUser !== "undefined" && authUser) || (typeof authType !== "undefined" && authType);
+    if(!loggedIn) return;
+
     // v352：未登入不呼叫禮物/購買紀錄 API，避免 401。
     if(!dreamIsLoggedInSafeV352()){
       return;
@@ -1148,12 +1158,13 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   function loadProtectedData(){
-    // v347：公開資料可載入；私人紀錄必須登入後才載入。
-    loadShop();
-    loadCompanions();
-    if(!window.__dreamAuthSafe.isLoggedIn()) return;
-    loadRecords();
-    loadRechargeRecords();
+    // final-login-clean-fix：公開資料可載入；私人紀錄必須登入後才載入。
+    try{ loadShop(); }catch(e){ console.warn("[loadShop]", e.message || e); }
+    try{ loadCompanions(); }catch(e){ console.warn("[loadCompanions]", e.message || e); }
+    const loggedIn = (typeof authUser !== "undefined" && authUser) || (typeof authType !== "undefined" && authType);
+    if(!loggedIn) return;
+    try{ loadRecords(); }catch(e){ console.warn("[loadRecords]", e.message || e); }
+    try{ loadRechargeRecords(); }catch(e){ console.warn("[loadRechargeRecords]", e.message || e); }
   }
   function wire(){
     document.addEventListener("click", async e=>{
