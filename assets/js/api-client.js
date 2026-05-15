@@ -1,3 +1,6 @@
+/* v352-loadall-no-authuser */
+/* v351-authuser-loadall-final-fix */
+/* v350-authuser-not-defined-fix */
 /* v349-live-data-private-api-guard */
 /* v348-registered-login-combined-fix */
 /* v347-private-records-401-fix */
@@ -20,6 +23,21 @@
     currentBuyItem: null,
     initialized: false
   };
+
+
+  function dreamIsLoggedInSafeV352(){
+    try{
+      if(window.__dreamFrontAuth && window.__dreamFrontAuth.user) return true;
+    }catch(e){}
+    try{
+      if(document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest")) return true;
+    }catch(e){}
+    try{
+      const raw = localStorage.getItem("dream_persist_user") || localStorage.getItem("dream_user") || "";
+      if(raw && raw !== "null" && raw !== "{}") return true;
+    }catch(e){}
+    return false;
+  }
 
   function $(sel, root=document){ return root.querySelector(sel); }
   function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -409,8 +427,13 @@
   }
 
   async function loadRechargeRecords(){
+    // v352：未登入不呼叫儲值紀錄 API，避免 401。
+    if(!dreamIsLoggedInSafeV352()){
+      return;
+    }
+
     // v349：未登入 / session 尚未確認 / guest 狀態下，不呼叫私人紀錄 API。
-    if(!authUser && authType !== "companion"){
+    if(!isDreamLoggedInV351()){
       return;
     }
     if(document.body.classList.contains("dream-guest") && !document.body.classList.contains("dream-authenticated")){
@@ -418,7 +441,7 @@
     }
 
     // v347：未登入或 session 尚未確認前，不呼叫私人紀錄 API，避免 401。
-    if(!authUser && authType !== "companion"){
+    if(!isDreamLoggedInV351()){
       return;
     }
 
@@ -658,14 +681,18 @@
   }
 
   async function loadAllLiveData(){
-    // v349：loadAllLiveData 只能載入公開資料；私人紀錄需登入後才載入。
+    // v352：安全版 live data 載入；完全不直接讀 authUser/authType。
+    // 未登入：只載入公開資料。
+    // 已登入：再載入私人紀錄。
+    try{ await loadShop(); }catch(e){ console.warn("[loadShop]", e.message || e); }
+    try{ await loadCompanions(); }catch(e){ console.warn("[loadCompanions]", e.message || e); }
 
-    await refreshSession();
-    loadVipRank();
-    // v242：商城保留 index.html 本地商品，不讓 API 失敗覆蓋
-    loadCompanions();
-    if(authUser || authType === "companion") loadRechargeRecords();
-    loadExchangeRecords();
+    if(!dreamIsLoggedInSafeV352()){
+      return;
+    }
+
+    try{ await loadRecords(); }catch(e){ console.warn("[loadRecords]", e.message || e); }
+    try{ await loadRechargeRecords(); }catch(e){ console.warn("[loadRechargeRecords]", e.message || e); }
   }
 
   function wireEvents(){
@@ -763,7 +790,18 @@
   let authUser = null;
   let authType = null;
 
-  function $(sel, root=document){ return root.querySelector(sel); }
+  
+  function isDreamLoggedInV351(){
+    try{
+      if(typeof authUser !== "undefined" && authUser) return true;
+      if(typeof authType !== "undefined" && authType) return true;
+    }catch(e){}
+    try{
+      return document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest");
+    }catch(e){}
+    return false;
+  }
+function $(sel, root=document){ return root.querySelector(sel); }
   function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
   function money(n){ return Number(n || 0).toLocaleString("zh-TW"); }
   function htmlEscape(s){ return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
@@ -982,8 +1020,13 @@
     }).join("");
   }
   async function loadRecords(){
+    // v352：未登入不呼叫禮物/購買紀錄 API，避免 401。
+    if(!dreamIsLoggedInSafeV352()){
+      return;
+    }
+
     // v349：未登入 / session 尚未確認 / guest 狀態下，不呼叫私人禮物/購買紀錄 API。
-    if(!authUser && authType !== "companion"){
+    if(!isDreamLoggedInV351()){
       return;
     }
     if(document.body.classList.contains("dream-guest") && !document.body.classList.contains("dream-authenticated")){
@@ -991,7 +1034,7 @@
     }
 
     // v347：未登入或 session 尚未確認前，不呼叫私人禮物/購買紀錄 API，避免 401。
-    if(!authUser && authType !== "companion"){
+    if(!isDreamLoggedInV351()){
       return;
     }
 
