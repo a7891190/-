@@ -1,3 +1,4 @@
+<!-- v341-remove-demo-preview-role-plus-gender -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6041,7 +6042,7 @@ main.app{padding-bottom:0 !important;}
         <div class="section-title inline-title profile-info-setting-wrap">
           <h2>個人簡介</h2>
           <button class="mini-gear" type="button" data-setting-toggle="profile-companion" aria-label="個人簡介設定">⚙</button>
-          <div class="setting-menu profile-info-setting-menu" data-setting-menu="profile-companion"><button type="button" data-setting-action="edit-name" data-setting-scope="companion">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="companion">編輯大頭照</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="companion">簡介/成就展示</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="companion">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="companion">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="companion">開啟手機推播</button></div>
+          <div class="setting-menu profile-info-setting-menu" data-setting-menu="profile-companion"><button type="button" data-setting-action="edit-name" data-setting-scope="companion">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="companion">編輯大頭照</button><button type="button" data-setting-action="change-gender" data-setting-scope="companion">更換性別</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="companion">更換成就徽章</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="companion">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="companion">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="companion">開啟手機推播</button></div>
         </div>
         <p class="profile-bio" data-profile-bind="bio">這位使用者還沒有填寫個人簡介。</p>
         <div class="profile-achievement-showcase">
@@ -6094,7 +6095,7 @@ main.app{padding-bottom:0 !important;}
     <section class="page-head member-page-head">
       <h1>會員中心</h1>
       <button class="setting-btn" id="memberSettingBtn" type="button" aria-label="會員設定" data-setting-toggle="member">⚙</button>
-      <div class="setting-menu" id="memberSettingMenu" data-setting-menu="member"><button type="button" data-setting-action="edit-name" data-setting-scope="member">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="member">編輯大頭照</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="member">簡介/成就展示</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="member">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="member">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="member">開啟手機推播</button><button type="button" data-go="forgot">忘記密碼</button></div>
+      <div class="setting-menu" id="memberSettingMenu" data-setting-menu="member"><button type="button" data-setting-action="edit-name" data-setting-scope="member">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="member">編輯大頭照</button><button type="button" data-setting-action="change-gender" data-setting-scope="member">更換性別</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="member">更換成就徽章</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="member">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="member">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="member">開啟手機推播</button><button type="button" data-go="forgot">忘記密碼</button></div>
     </section>
     
     <section class="register-legal-consent-box" data-legal-consent-box>
@@ -12527,14 +12528,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const KEYS=['vip_rank','weekly_charm','monthly_guardian','companion_gift','member_gift','total_recharge'];
   const META={vip_rank:{title:'VIP排行榜',unit:'VIP經驗值',suffix:'',limit:100,theme:'board-vip'},weekly_charm:{title:'本月魅力榜',unit:'魅力值',suffix:'分',limit:50,theme:'board-charm'},monthly_guardian:{title:'本月守護榜',unit:'',suffix:'守護值',limit:50,theme:'board-guardian'},companion_gift:{title:'陪玩收禮榜',unit:'收禮',suffix:'短陌',limit:50,theme:'board-companion'},member_gift:{title:'會員送禮榜',unit:'送禮',suffix:'短陌',limit:50,theme:'board-member'},total_recharge:{title:'累計儲值榜',unit:'累計儲值',suffix:'短陌',limit:50,theme:'board-recharge'}};
   /* v327：各排行榜前三名假用戶，用來先確認首頁與排行榜頁位置；正式後台資料進來時會自動覆蓋。 */
-  const DEMO_RANK_BOARDS={
-    vip_rank:[{rank:1,name:'測試VIP一號',value:988888,avatar:'V1'},{rank:2,name:'測試VIP二號',value:866666,avatar:'V2'},{rank:3,name:'測試VIP三號',value:755555,avatar:'V3'}],
-    weekly_charm:[{rank:1,name:'測試魅力一號',value:388888,avatar:'魅1'},{rank:2,name:'測試魅力二號',value:266666,avatar:'魅2'},{rank:3,name:'測試魅力三號',value:155555,avatar:'魅3'}],
-    monthly_guardian:[{rank:1,name:'測試守護一號',value:588888,avatar:'守1'},{rank:2,name:'測試守護二號',value:466666,avatar:'守2'},{rank:3,name:'測試守護三號',value:355555,avatar:'守3'}],
-    companion_gift:[{rank:1,name:'測試陪玩一號',value:188888,avatar:'陪1'},{rank:2,name:'測試陪玩二號',value:166666,avatar:'陪2'},{rank:3,name:'測試陪玩三號',value:145555,avatar:'陪3'}],
-    member_gift:[{rank:1,name:'測試會員一號',value:288888,avatar:'會1'},{rank:2,name:'測試會員二號',value:226666,avatar:'會2'},{rank:3,name:'測試會員三號',value:195555,avatar:'會3'}],
-    total_recharge:[{rank:1,name:'測試儲值一號',value:9888888,avatar:'儲1'},{rank:2,name:'測試儲值二號',value:8666666,avatar:'儲2'},{rank:3,name:'測試儲值三號',value:7555555,avatar:'儲3'}]
-  };
+  const DEMO_RANK_BOARDS = {};
   function aliases(k){return {vip_rank:['vip_rank','vip','vipRank'],weekly_charm:['weekly_charm','monthly_charm','charm'],monthly_guardian:['monthly_guardian','guardian','guard'],companion_gift:['companion_gift','companionGift'],member_gift:['member_gift','memberGift'],total_recharge:['total_recharge','recharge','totalRecharge']}[k]||[k];}
   function sourceList(src,k){
     if(!src) return [];
@@ -14815,251 +14809,6 @@ img[src*="rank_rewards/badges"]{
 })();
 </script>
 
-<style id="v288-barrage-44-preview-css">
-#v288Barrage44Toggle{
-  position:fixed!important;
-  right:12px!important;
-  top:82px!important;
-  z-index:2147483647!important;
-  min-height:40px!important;
-  padding:0 14px!important;
-  border:1px solid rgba(255,214,160,.52)!important;
-  border-radius:999px!important;
-  background:linear-gradient(135deg,#fff8ee,#ffd6e8 54%,#ffe79d)!important;
-  color:#7a234e!important;
-  font-size:13px!important;
-  font-weight:950!important;
-  box-shadow:0 10px 28px rgba(70,20,45,.24),0 0 0 1px rgba(255,255,255,.55) inset!important;
-  cursor:pointer!important;
-}
-#v288Barrage44Panel{
-  position:fixed!important;
-  right:10px!important;
-  top:130px!important;
-  z-index:2147483646!important;
-  width:min(94vw,760px)!important;
-  max-height:72vh!important;
-  overflow:auto!important;
-  display:none;
-  padding:12px!important;
-  border-radius:18px!important;
-  border:1px solid rgba(255,214,160,.48)!important;
-  background:linear-gradient(160deg,rgba(42,18,34,.97),rgba(92,31,61,.96) 54%,rgba(34,18,28,.98))!important;
-  color:#fff7ef!important;
-  box-shadow:0 22px 62px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.08) inset!important;
-}
-#v288Barrage44Panel.show{display:block!important;}
-#v288Barrage44Panel .v288-barrage-head{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  gap:10px!important;
-  margin-bottom:10px!important;
-  font-weight:950!important;
-}
-#v288Barrage44Panel .v288-barrage-close{
-  width:30px!important;
-  height:30px!important;
-  border:0!important;
-  border-radius:999px!important;
-  background:rgba(255,255,255,.92)!important;
-  color:#8a315a!important;
-  font-size:18px!important;
-  font-weight:950!important;
-  cursor:pointer!important;
-}
-#v288Barrage44Panel .v288-barrage-grid{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:8px!important;
-}
-#v288Barrage44Panel .v288-barrage-item{
-  border:1px solid rgba(255,220,177,.26)!important;
-  border-radius:12px!important;
-  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.045))!important;
-  color:#fff7ef!important;
-  padding:6px!important;
-  cursor:pointer!important;
-  min-height:74px!important;
-  display:grid!important;
-  grid-template-columns:44px 1fr!important;
-  align-items:center!important;
-  gap:7px!important;
-  text-align:left!important;
-  overflow:hidden!important;
-}
-#v288Barrage44Panel .v288-barrage-item:hover,
-#v288Barrage44Panel .v288-barrage-item.active{
-  border-color:rgba(255,229,165,.72)!important;
-  box-shadow:0 0 18px rgba(255,196,111,.18)!important;
-  transform:translateY(-1px)!important;
-}
-#v288Barrage44Panel .v288-barrage-thumb{
-  width:44px!important;
-  height:44px!important;
-  object-fit:contain!important;
-  border-radius:10px!important;
-  background:rgba(255,255,255,.08)!important;
-}
-#v288Barrage44Panel .v288-barrage-no{
-  display:block!important;
-  font-size:13px!important;
-  font-weight:950!important;
-  color:#ffe3a3!important;
-}
-#v288Barrage44Panel .v288-barrage-kind{
-  display:block!important;
-  margin-top:2px!important;
-  font-size:11px!important;
-  color:rgba(255,247,239,.78)!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-}
-#v288Barrage44Panel .v288-barrage-note{
-  margin-top:9px!important;
-  font-size:12px!important;
-  color:rgba(255,247,239,.72)!important;
-}
-@media(max-width:700px){
-  #v288Barrage44Toggle{right:10px!important;top:74px!important;min-height:36px!important;padding:0 11px!important;font-size:12px!important;}
-  #v288Barrage44Panel{left:8px!important;right:8px!important;top:116px!important;width:auto!important;max-height:70vh!important;}
-  #v288Barrage44Panel .v288-barrage-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
-  #v288Barrage44Panel .v288-barrage-item{min-height:64px!important;grid-template-columns:38px 1fr!important;}
-  #v288Barrage44Panel .v288-barrage-thumb{width:38px!important;height:38px!important;}
-}
-</style>
-<script id="v288-barrage-44-preview-script">
-(function(){
-  const frames = [
-    ["1","送禮扇類","assets/barrage/gift/fan/gift_fan_01_floral_round.webp","gift","fan"],
-    ["2","送禮扇類","assets/barrage/gift/fan/gift_fan_02_floral_banner.webp","gift","fan"],
-    ["3","送禮扇類","assets/barrage/gift/fan/gift_fan_03_floral_stage.webp","gift","fan"],
-    ["4","送禮燈類","assets/barrage/gift/lantern/gift_lantern_01_pink_gold.webp","gift","lantern"],
-    ["5","送禮燈類","assets/barrage/gift/lantern/gift_lantern_02_starlight.webp","gift","lantern"],
-    ["6","送禮燈類","assets/barrage/gift/lantern/gift_lantern_03_celestial.webp","gift","lantern"],
-    ["7","送禮樂器","assets/barrage/gift/music/gift_music_01_floral_notes.webp","gift","music"],
-    ["8","送禮樂器","assets/barrage/gift/music/gift_music_02_bamboo_flute.webp","gift","music"],
-    ["9","送禮樂器","assets/barrage/gift/music/gift_music_03_bamboo_blossom.webp","gift","music"],
-    ["10","特殊送禮","assets/barrage/gift/special/gift_special_01_koi.webp","gift","special"],
-    ["11","特殊送禮","assets/barrage/gift/special/gift_special_02_crane.webp","gift","special"],
-    ["12","特殊送禮","assets/barrage/gift/special/gift_special_03_rabbit.webp","gift","special"],
-    ["13","信物送禮","assets/barrage/gift/token/gift_token_01_lotus_pearl.webp","gift","token"],
-    ["14","信物送禮","assets/barrage/gift/token/gift_token_02_sakura_jade.webp","gift","token"],
-    ["15","信物送禮","assets/barrage/gift/token/gift_token_03_butterfly_ribbon.webp","gift","token"],
-    ["16","信物送禮","assets/barrage/gift/token/gift_token_04_rose_ribbon.webp","gift","token"],
-    ["17","下單 Lv1","assets/barrage/order/lv1/order_lv1_01_pink_banner.webp","order",""],
-    ["18","下單 Lv1","assets/barrage/order/lv1/order_lv1_02_simple_frame.webp","order",""],
-    ["19","下單 Lv2","assets/barrage/order/lv2/order_lv2_01_tassel_gold.webp","order",""],
-    ["20","下單 Lv2","assets/barrage/order/lv2/order_lv2_02_ui_banner.webp","order",""],
-    ["21","下單 Lv3","assets/barrage/order/lv3/order_lv3_01_sakura_scroll.webp","order",""],
-    ["22","下單 Lv3","assets/barrage/order/lv3/order_lv3_02_decorative_scroll.webp","order",""],
-    ["23","下單 Lv4","assets/barrage/order/lv4/order_lv4_01_luxury_scroll.webp","order",""],
-    ["24","下單 Lv4","assets/barrage/order/lv4/order_lv4_02_east_asian_banner.webp","order",""],
-    ["25","儲值 Lv1","assets/barrage/recharge/lv1/recharge_lv1_01_simple.webp","recharge",""],
-    ["26","儲值 Lv1","assets/barrage/recharge/lv1/recharge_lv1_02_regal.webp","recharge",""],
-    ["27","儲值 Lv2","assets/barrage/recharge/lv2/recharge_lv2_01_gold_pink.webp","recharge",""],
-    ["28","儲值 Lv2","assets/barrage/recharge/lv2/recharge_lv2_02_game.webp","recharge",""],
-    ["29","儲值 Lv3","assets/barrage/recharge/lv3/recharge_lv3_01_treasure_glow.webp","recharge",""],
-    ["30","儲值 Lv3","assets/barrage/recharge/lv3/recharge_lv3_02_medallion.webp","recharge",""],
-    ["31","儲值 Lv4","assets/barrage/recharge/lv4/recharge_lv4_01_treasure_frame.webp","recharge",""],
-    ["32","儲值 Lv4","assets/barrage/recharge/lv4/recharge_lv4_02_lavish.webp","recharge",""],
-    ["33","排行榜第1名","assets/barrage/ranking/rank_1/ranking_rank1_01_crown.webp","ranking",""],
-    ["34","排行榜第1名","assets/barrage/ranking/rank_1/ranking_rank1_02_black_gold.webp","ranking",""],
-    ["35","排行榜第2名","assets/barrage/ranking/rank_2/ranking_rank2_01_crown_banner.webp","ranking",""],
-    ["36","排行榜第3名","assets/barrage/ranking/rank_3/ranking_rank3_01_crest.webp","ranking",""],
-    ["37","排行榜4-10名","assets/barrage/ranking/rank_4_10/ranking_rank4_10_01_emblem.webp","ranking",""],
-    ["38","排行榜4-10名","assets/barrage/ranking/rank_4_10/ranking_rank4_10_02_regal_banner.webp","ranking",""],
-    ["39","通用彈幕","assets/barrage/common/common_01_pink_gold_fantasy.webp","common",""],
-    ["40","通用彈幕","assets/barrage/common/common_02_pastel.webp","common",""],
-    ["41","通用彈幕","assets/barrage/common/common_03_ornamental.webp","common",""],
-    ["42","通用彈幕","assets/barrage/common/common_04_koi_cloud.webp","common",""],
-    ["43","通用彈幕","assets/barrage/common/common_05_fantasy_banner.webp","common",""],
-    ["44","通用彈幕","assets/barrage/common/common_06_rose_gold.webp","common",""]
-  ];
-
-  function payload(item){
-    const no = Number(item[0]);
-    const kind = item[3];
-    const common = {
-      level: 4,
-      amount: 52000,
-      framePath: item[2],
-      previewIndex: no,
-      seconds: 8,
-      userName: "星眠",
-      avatarText: "星",
-      sub: "彈幕預覽 " + item[0] + " / 44"
-    };
-    if(kind === "order") return {...common, type:"order", title:"【下單彈幕預覽】星眠下單 52,000 短陌"};
-    if(kind === "recharge") return {...common, type:"recharge", title:"【儲值彈幕預覽】星眠儲值 52,000 短陌"};
-    if(kind === "ranking"){
-      const rank = no >= 37 ? 6 : no === 36 ? 3 : no === 35 ? 2 : 1;
-      return {...common, type:"ranking", rank, title:"【排行榜彈幕預覽】星眠登上第 " + rank + " 名"};
-    }
-    return {...common, type:"gift", giftType:item[4] || "special", giftName:"古風贈禮", title:"【送禮彈幕預覽】星眠送出古風贈禮"};
-  }
-
-  async function play(item){
-    if(!window.DreamBarrage || !window.DreamBarrage.init || !window.DreamBarrage.play){
-      alert("彈幕系統尚未載入，請重新整理後再試。");
-      return;
-    }
-    await window.DreamBarrage.init({basePath:"assets/barrage/"});
-    window.DreamBarrage.play(payload(item));
-  }
-
-  function ensurePanel(){
-    if(document.getElementById("v288Barrage44Toggle")) return;
-    const btn = document.createElement("button");
-    btn.id = "v288Barrage44Toggle";
-    btn.type = "button";
-    btn.textContent = "彈幕預覽 1-44";
-
-    const panel = document.createElement("section");
-    panel.id = "v288Barrage44Panel";
-    panel.setAttribute("aria-label", "彈幕 1 到 44 預覽");
-    panel.innerHTML = `
-      <div class="v288-barrage-head">
-        <span>彈幕預覽 1-44</span>
-        <button class="v288-barrage-close" type="button" aria-label="關閉">×</button>
-      </div>
-      <div class="v288-barrage-grid"></div>
-      <div class="v288-barrage-note">點任一編號會直接在畫面上播放該彈幕效果。</div>
-    `;
-    const grid = panel.querySelector(".v288-barrage-grid");
-    frames.forEach((item, index) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "v288-barrage-item";
-      b.dataset.index = String(index);
-      b.innerHTML = `
-        <img class="v288-barrage-thumb" src="${item[2]}" alt="">
-        <span>
-          <span class="v288-barrage-no">#${item[0]}</span>
-          <span class="v288-barrage-kind">${item[1]}</span>
-        </span>
-      `;
-      grid.appendChild(b);
-    });
-    document.body.appendChild(btn);
-    document.body.appendChild(panel);
-
-    btn.addEventListener("click", () => panel.classList.toggle("show"));
-    panel.querySelector(".v288-barrage-close").addEventListener("click", () => panel.classList.remove("show"));
-    panel.addEventListener("click", e => {
-      const itemBtn = e.target.closest(".v288-barrage-item");
-      if(!itemBtn) return;
-      panel.querySelectorAll(".v288-barrage-item.active").forEach(el => el.classList.remove("active"));
-      itemBtn.classList.add("active");
-      play(frames[Number(itemBtn.dataset.index)]);
-    });
-  }
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", ensurePanel);
-  else ensurePanel();
-})();
-</script>
 
 <style id="v289-inn-name-left-and-home-effect-clarity-css">
 #page-inn .post-head{
@@ -16593,6 +16342,106 @@ body:not(.role-companion) .companion-only-panel{
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(patchBackButtons, 30); });
   setTimeout(patchBackButtons, 50);
   setTimeout(patchBackButtons, 300);
+})();
+</script>
+
+
+<style id="v340-gender-avatar-badge-fix-css">
+.gender-icon[data-profile-bind="gender"],
+.gender-icon.v340-gender-chip{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:34px!important;height:24px!important;padding:0 8px!important;border-radius:999px!important;border:1px solid rgba(255,220,235,.42)!important;background:rgba(255,255,255,.10)!important;color:#ffeaf3!important;font-size:13px!important;font-weight:950!important;line-height:1!important}
+.gender-icon.v340-gender-male{color:#9fe4ff!important;border-color:rgba(159,228,255,.55)!important}.gender-icon.v340-gender-female{color:#ff9dca!important;border-color:rgba(255,157,202,.58)!important}.gender-icon.v340-gender-none{color:#ffe4b7!important;border-color:rgba(255,228,183,.48)!important}
+.v340-gender-modal-mask{position:fixed!important;inset:0!important;z-index:2147483600!important;display:none;align-items:center!important;justify-content:center!important;padding:18px!important;background:rgba(12,4,10,.62)!important;backdrop-filter:blur(8px)!important}
+.v340-gender-modal-mask.show{display:flex!important}.v340-gender-modal{width:min(92vw,360px)!important;padding:20px!important;border-radius:22px!important;border:1px solid rgba(255,220,235,.36)!important;background:linear-gradient(180deg,rgba(65,24,46,.98),rgba(30,12,24,.98))!important;color:#fff4f8!important;box-shadow:0 22px 58px rgba(0,0,0,.42)!important}
+.v340-gender-modal h3{margin:0 0 8px!important;font-size:20px!important;color:#ffeaf3!important}.v340-gender-modal p{margin:0 0 14px!important;font-size:13px!important;color:rgba(255,238,246,.72)!important;line-height:1.5!important}
+.v340-gender-options{display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:8px!important;margin:10px 0 14px!important}.v340-gender-options button{min-height:42px!important;border-radius:14px!important;border:1px solid rgba(255,220,235,.32)!important;background:rgba(255,255,255,.08)!important;color:#fff4f8!important;font-weight:950!important}.v340-gender-options button.active{background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#6d2445!important}.v340-gender-close{width:100%!important;min-height:42px!important;border:0!important;border-radius:14px!important;background:rgba(255,255,255,.10)!important;color:#ffeaf3!important;font-weight:900!important}
+[data-setting-action="change-gender"],[data-setting-action="edit-bio-achievements"]{color:#ffe7b8!important}
+</style>
+
+
+<style id="v341-remove-demo-preview-role-css">
+/* v341：正式前台隱藏測試入口 */
+#v288Barrage44Toggle,
+#v288Barrage44Panel,
+[data-action="v288-barrage-preview"],
+[data-demo-barrage],
+[data-role-switch],
+.role-switch,
+.member-companion-switch,
+#roleSwitch,
+#memberCompanionSwitch,
+#demoRoleSwitch,
+[data-action="switch-role"],
+[data-action="switch-member-companion"]{
+  display:none!important;
+}
+</style>
+
+
+<script id="v340-gender-avatar-badge-fix-js">
+(function(){
+  const STORE="dream_profile_gender_v340";
+  const DEFAULT_AVATARS={customer:"assets/default_avatars/customer_service_default.webp",member:"assets/default_avatars/member_default.webp",companion:"assets/default_avatars/companion_default.webp"};
+  function readJson(k,f){try{return JSON.parse(localStorage.getItem(k)||"")||f}catch(e){return f}}
+  function writeJson(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function toastMsg(m){if(typeof window.toast==="function"){try{window.toast(m);return}catch(e){}} alert(m)}
+  function profileRole(){const p=document.getElementById("page-profile");if(p&&p.classList.contains("profile-companion"))return"companion";if(p&&p.classList.contains("profile-member"))return"member";const t=(document.querySelector("[data-profile-bind='title']")?.textContent||"").trim();const r=window.__dreamFrontAuth?.user?.role;if(r==="companion")return"companion";return t.includes("陪玩")?"companion":"member"}
+  function currentUserKey(scope){const u=window.__dreamFrontAuth&&window.__dreamFrontAuth.user;const id=u&&(u.id||u.user_id||u.member_id||u.companion_id||u.email||u.name);return(scope||profileRole())+":"+(id||"local")}
+  function norm(v){const s=String(v||"").trim().toLowerCase();if(["male","m","男","♂"].includes(s))return"male";if(["female","f","女","♀"].includes(s))return"female";return"none"}
+  function label(v){v=norm(v);return v==="male"?"♂ 男":v==="female"?"♀ 女":"無"} function cls(v){v=norm(v);return v==="male"?"v340-gender-male":v==="female"?"v340-gender-female":"v340-gender-none"}
+  function getGender(scope){const u=window.__dreamFrontAuth&&window.__dreamFrontAuth.user;const direct=u&&(u.gender||u.sex||u.profile_gender);const map=readJson(STORE,{});return norm(map[currentUserKey(scope)]||direct||"none")}
+  function setGender(scope,value){const map=readJson(STORE,{});map[currentUserKey(scope)]=norm(value);writeJson(STORE,map);applyGender();window.dispatchEvent(new CustomEvent("dream-profile-gender-updated",{detail:{scope,value:norm(value)}}))}
+  function applyGender(){const role=profileRole();document.querySelectorAll("[data-profile-bind='gender']").forEach(el=>{const g=getGender(role);el.textContent=label(g);el.classList.add("v340-gender-chip");el.classList.remove("v340-gender-male","v340-gender-female","v340-gender-none");el.classList.add(cls(g));el.title=g==="none"?"尚未設定性別":"性別："+label(g)})}
+  function ensureGenderModal(){let mask=document.querySelector(".v340-gender-modal-mask");if(mask)return mask;mask=document.createElement("div");mask.className="v340-gender-modal-mask";mask.innerHTML='<div class="v340-gender-modal" role="dialog" aria-modal="true"><h3>更換性別</h3><p>「無」表示尚未設定。這裡會顯示在會員/陪玩主頁名稱旁。</p><div class="v340-gender-options"><button type="button" data-v340-gender="none">無</button><button type="button" data-v340-gender="male">♂ 男</button><button type="button" data-v340-gender="female">♀ 女</button></div><button class="v340-gender-close" type="button">關閉</button></div>';document.body.appendChild(mask);mask.addEventListener("click",e=>{if(e.target===mask||e.target.closest(".v340-gender-close"))mask.classList.remove("show");const btn=e.target.closest("[data-v340-gender]");if(btn){const scope=mask.dataset.scope||profileRole();setGender(scope,btn.dataset.v340Gender);mask.classList.remove("show");toastMsg("已更新性別顯示。")}});return mask}
+  function openGenderModal(scope){const mask=ensureGenderModal();scope=scope||profileRole();mask.dataset.scope=scope;const current=getGender(scope);mask.querySelectorAll("[data-v340-gender]").forEach(btn=>btn.classList.toggle("active",norm(btn.dataset.v340Gender)===current));mask.classList.add("show")}
+  function ensureMenus(){document.querySelectorAll("[data-setting-menu]").forEach(menu=>{const scope=menu.dataset.settingMenu==="profile-companion"?"companion":(menu.dataset.settingMenu||"member");const editAvatar=menu.querySelector('[data-setting-action="edit-avatar"]');if(editAvatar&&!menu.querySelector('[data-setting-action="change-gender"]')){const btn=document.createElement("button");btn.type="button";btn.dataset.settingAction="change-gender";btn.dataset.settingScope=scope;btn.textContent="更換性別";editAvatar.insertAdjacentElement("afterend",btn)}const old=menu.querySelector('[data-setting-action="edit-bio-achievements"]');if(old)old.textContent="更換成就徽章";const badge=menu.querySelector('[data-setting-action="edit-achievement-badges"]');if(badge)badge.textContent="更換成就徽章"});document.querySelectorAll(".profile-achievement-head h3").forEach(h=>h.textContent="成就徽章")}
+  function inferRole(el){const txt=(el.textContent||"").trim();const page=el.closest("[data-page]");const all=((page&&page.textContent)||"")+" "+(el.getAttribute("aria-label")||"")+" "+(el.getAttribute("alt")||"");if(/客服|customer|support/i.test(all))return"customer";if(/陪玩|companion/i.test(all)||txt==="陪")return"companion";return"member"}
+  function hasRealAvatar(el){const img=el&&el.querySelector&&el.querySelector("img");if(!img)return false;const src=img.getAttribute("src")||"";return !!src&&!src.includes("assets/default_avatars/")}
+  function setDefaultAvatar(el,role){if(!el||hasRealAvatar(el))return;if(el.dataset.v340DefaultAvatarApplied==="1"&&el.querySelector("img"))return;const src=DEFAULT_AVATARS[role]||DEFAULT_AVATARS.member;const alt=role==="customer"?"客服預設大頭照":role==="companion"?"陪玩預設大頭照":"會員預設大頭照";el.dataset.v340DefaultAvatarApplied="1";el.dataset.defaultAvatarRole=role;el.innerHTML='<img src="'+src+'" alt="'+alt+'" loading="lazy">'}
+  function applyDefaultAvatars(){const selectors=["[data-profile-bind='avatar']","[data-bind='member-avatar']",".profile-avatar-lg",".avatar",".rank-avatar",".post-avatar",".inn-comment-avatar",".support-avatar",".chat-avatar",".companion-avatar",".member-avatar",".customer-avatar"].join(",");document.querySelectorAll(selectors).forEach(el=>{if(el.matches("img"))return;const role=el.classList.contains("customer-avatar")||el.classList.contains("support-avatar")?"customer":el.classList.contains("companion-avatar")?"companion":el.classList.contains("member-avatar")?"member":inferRole(el);setDefaultAvatar(el,role)})}
+  document.addEventListener("click",function(e){const btn=e.target.closest('[data-setting-action="change-gender"]');if(btn){e.preventDefault();e.stopImmediatePropagation();document.querySelectorAll("[data-setting-menu]").forEach(menu=>menu.classList.remove("open"));openGenderModal(btn.dataset.settingScope||profileRole());return false}const badge=e.target.closest('[data-setting-action="edit-bio-achievements"]');if(badge){e.preventDefault();e.stopImmediatePropagation();document.querySelectorAll("[data-setting-menu]").forEach(menu=>menu.classList.remove("open"));if(window.DreamProfileAchievementBadges&&typeof window.DreamProfileAchievementBadges.open==="function")window.DreamProfileAchievementBadges.open();else toastMsg("成就徽章功能載入中，請稍後再試。");return false}},true);
+  function boot(){ensureMenus();applyGender();applyDefaultAvatars()}
+  const oldRenderProfile=window.renderProfile;if(typeof oldRenderProfile==="function"&&!oldRenderProfile.__v340GenderAvatarWrapped){const wrapped=function(){const res=oldRenderProfile.apply(this,arguments);setTimeout(boot,0);setTimeout(boot,120);return res};wrapped.__v340GenderAvatarWrapped=true;window.renderProfile=wrapped}
+  const mo=new MutationObserver(()=>{clearTimeout(boot._t);boot._t=setTimeout(boot,80)});if(document.documentElement)mo.observe(document.documentElement,{childList:true,subtree:true});
+  window.addEventListener("dream-auth-updated",()=>setTimeout(boot,80));window.addEventListener("hashchange",()=>setTimeout(boot,120));if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(boot,80));else setTimeout(boot,80);
+})();
+</script>
+
+
+<script id="v341-remove-demo-preview-role-js">
+(function(){
+  const DEMO_NAME_RE=/測試|DEMO|Demo|demo|假資料|範例|小夢|小帥|小美|星眠|蒼岑|夜色客棧|測試VIP|測試魅力|測試守護|測試陪玩|測試會員|測試儲值/;
+  function removeBarragePreview(){
+    ["#v288Barrage44Toggle","#v288Barrage44Panel"].forEach(sel=>document.querySelectorAll(sel).forEach(el=>el.remove()));
+    document.querySelectorAll("button,a").forEach(el=>{
+      const txt=(el.textContent||"").trim();
+      if(txt.includes("彈幕預覽") || txt.includes("1-44")) el.remove();
+    });
+  }
+  function removeRoleSwitch(){
+    document.querySelectorAll("[data-role-switch],.role-switch,.member-companion-switch,#roleSwitch,#memberCompanionSwitch,#demoRoleSwitch,[data-action='switch-role'],[data-action='switch-member-companion']").forEach(el=>el.remove());
+    document.querySelectorAll("button,a").forEach(el=>{
+      const txt=(el.textContent||"").replace(/\s+/g,"").trim();
+      if(txt.includes("切換為會員") || txt.includes("切換為陪玩") || txt.includes("會員/陪玩") || txt.includes("陪玩/會員")) el.remove();
+    });
+  }
+  function cleanDemoRows(){
+    document.querySelectorAll("[data-demo-only],.demo-only,.fake-data,.mock-data").forEach(el=>el.remove());
+    document.querySelectorAll("li,.card,.rank-user,.full-rank-row,.profile-post-card,.v35-rank-row,.v35-top3-item,.product-card,.home-post-card").forEach(el=>{
+      const txt=(el.textContent||"").trim();
+      if(DEMO_NAME_RE.test(txt) && !el.closest(".achievement-card")) el.remove();
+    });
+  }
+  function boot(){
+    removeBarragePreview();
+    removeRoleSwitch();
+    cleanDemoRows();
+  }
+  const mo=new MutationObserver(()=>{clearTimeout(boot._t);boot._t=setTimeout(boot,80);});
+  if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(boot,80));
+  else setTimeout(boot,80);
+  window.addEventListener("hashchange",()=>setTimeout(boot,100));
+  window.DreamCleanDemoV341={run:boot};
 })();
 </script>
 
