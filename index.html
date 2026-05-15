@@ -4672,7 +4672,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=324">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=325">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -6302,10 +6302,6 @@ main.app{padding-bottom:0 !important;}
   <section id="page-renew" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>會員續期</h1></section><section class="panel sub-panel"><div class="text-block">請輸入會員帳號與會員碼，確認後 VIP 會員效期將開通 永久特效。</div><div class="form-stack"><input data-v26-input="renew-username" placeholder="請輸入會員帳號"><input data-v26-input="renew-code" placeholder="請輸入會員碼"><button class="btn" data-v26-action="renew-code" type="button">確定開通 VIP</button></div></section></section>
 
   <section id="page-review" class="page" data-page="review"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>訂單評價</h1></section><section class="panel sub-panel"><div class="review-tabs"><button type="button" class="review-tab-btn active" data-review-tab="pending">待評價</button><button type="button" class="review-tab-btn" data-review-tab="records">評價紀錄</button></div><div class="text-block" data-review-note>完成訂單後，會員可評價陪玩，陪玩可評價會員。每張完成訂單只能評一次。</div><div class="review-list" data-review-list><div class="companion-empty">正在載入評價資料...</div></div></section></section>
-
-  <section id="page-vip-rank" class="page" data-page="vip-rank"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>排行榜</h1></section><section class="full-rank-panel rank-page-panel" aria-label="完整排行榜"><div class="leaderboard-tab-row rank-page-tabs" role="tablist" aria-label="排行榜列表"><button class="leaderboard-tab active" type="button" data-rank-page-key="vip_rank">VIP排行榜</button>
-<button class="leaderboard-tab" type="button" data-rank-page-key="weekly_charm">本月魅力榜</button><button class="leaderboard-tab" type="button" data-rank-page-key="monthly_guardian">本月守護榜</button><button class="leaderboard-tab" type="button" data-rank-page-key="companion_gift">陪玩收禮榜</button><button class="leaderboard-tab" type="button" data-rank-page-key="member_gift">會員送禮榜</button>
-<button class="leaderboard-tab" type="button" data-rank-page-key="total_recharge">累計儲值榜</button></div><div class="full-rank-title"><strong data-full-rank-title>VIP排行榜</strong><span data-full-rank-limit>1～100 名</span></div><div class="full-rank-list" data-full-rank-list></div></section><section class="panel sub-panel" style="display:none"><div class="list" data-list="vip-rank"></div></section></section>
   <section id="page-vip-info" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>VIP說明</h1></section><section class="panel sub-panel"><div class="text-block">VIP1～3：VIP經驗值減少30%<br>
                 VIP4～6：VIP經驗值減少20%（一個月未購買商品）<br>
                 VIP7～8：VIP經驗值減少8%<br>
@@ -8711,58 +8707,6 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
   if(location.hash==="#profile"){ document.body.classList.add("profile-page-active"); setTimeout(renderProfile,100); }
 })();
 </script>
-
-
-
-<script>
-/* v121 首頁/排行榜頁切換：VIP榜回到第一位；首頁顯示前三名與第4～14名；完整排行移至排行榜頁 */
-(function(){
-  const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const money=n=>Number(n||0).toLocaleString('zh-TW');
-  const boardMeta={
-    vip_rank:{title:'VIP排行榜', unit:'VIP經驗值', suffix:'', limit:100},
-    weekly_charm:{title:'本月魅力榜', unit:'魅力值', suffix:'分', limit:50},
-    monthly_guardian:{title:'本月守護榜', unit:'', suffix:'守護值', limit:50},
-    companion_gift:{title:'陪玩收禮榜', unit:'收禮', suffix:'短陌', limit:50},
-    member_gift:{title:'會員送禮榜', unit:'送禮', suffix:'短陌', limit:50},
-    total_recharge:{title:'累計儲值榜', unit:'累計儲值', suffix:'短陌', limit:50}
-  };
-  const boardKeys=Object.keys(boardMeta);
-  const names=['花間醉','墨染','長歌','清歡','月璃','星河','霜華','雲歌','浮光','夜笙','南枝','初雪','長安','雲霓','聽雨','青鸞','白露','扶蘇','錦瑟','暮雪','南風','月白','流螢','千澈','蘇幕','玉衡','紅藥','若水','星眠','洛川','紫蘇','雲岫','鹿鳴','映雪','折枝','青衫','九璃','梨落','玄音','知夏','綰綰','明檀','霓裳','阿梨','半夏','時雨','寒酥','疏影','煙蘿','晚棠','一念','沐辰','凌霄','子衿','辰砂','天策','巡撫','提督','青羽','玉京','玄策','望舒','蘭舟','懷瑾','雲麓','昭華','修竹','流霜','鳳眠','知微','清宴','雲棲','星闌','檀心','靈犀','照夜','明河','青梧','無雙','扶光','瑤光','錦年','千秋','雲舒','鹿溪','聽瀾','朝顏','暮雲','山月','清辭','南星','白榆','溫玉','長寧','遲月','寒舟','折月','雲深','星辭','墨白','清越'];
-  function seedScore(key,i){const base={vip_rank:888888,daily_spend:62000,weekly_charm:98888,monthly_guardian:128000,companion_gift:88000,member_gift:76000,raffle_luck:36000,total_recharge:520000}[key]||50000;return Math.max(88, Math.floor(base/(1+i*.13) - i*97 + ((i*37)%900)));}
-  function sortRankNoTieJump(list){return list.slice().sort((a,b)=>{const dv=Number(b.value||0)-Number(a.value||0);if(dv!==0)return dv;const at=new Date(a.scoreReachedAt||a.firstReachedAt||0).getTime()||0;const bt=new Date(b.scoreReachedAt||b.firstReachedAt||0).getTime()||0;if(at!==bt)return at-bt;return String(a.name||'').localeCompare(String(b.name||''),'zh-Hant');}).map((x,i)=>Object.assign({},x,{rank:i+1}));}
-  function makeBoard(key){const meta=boardMeta[key];const shift=boardKeys.indexOf(key)*7;const monthBase=new Date();monthBase.setDate(1);monthBase.setHours(8,0,0,0);return sortRankNoTieJump(Array.from({length:meta.limit}).map((_,idx)=>{const name=names[(idx+shift)%names.length];const value=seedScore(key,idx);return {rank:idx+1,name,avatar:name.slice(-1),value,unit:meta.unit,suffix:meta.suffix,scoreReachedAt:new Date(monthBase.getTime()+(idx*19+shift)*60000).toISOString()};}));}
-  const boards=Object.fromEntries(boardKeys.map(k=>[k,makeBoard(k)]));
-  function valueText(meta,item){const prefix=meta.unit?`${meta.unit} `:'';const suffix=meta.suffix?` ${meta.suffix}`:'';return `${prefix}${money(item?.value)}${suffix}`.trim();}
-  function setTop3(list,meta){
-    const map={first:list[0],second:list[1],third:list[2]};
-    Object.entries(map).forEach(([cls,item])=>{
-      const av=document.querySelector(`.top3-avatar.${cls}`); const tx=document.querySelector(`.top3-text.${cls}`);
-      if(av) av.textContent=item?.avatar||'';
-      if(tx){ const n=tx.querySelector('.name'), v=tx.querySelector('.value'); if(n)n.textContent=item?.name||'-'; if(v)v.textContent=valueText(meta,item); }
-    });
-  }
-  function renderBoard(key){
-    if(!boardMeta[key]) key='vip_rank';
-    const meta=boardMeta[key], list=boards[key];
-    document.querySelectorAll('[data-board-key]').forEach(b=>b.classList.toggle('active',b.dataset.boardKey===key));
-    document.querySelectorAll('[data-current-leaderboard-title]').forEach(el=>el.textContent=meta.title);
-    document.querySelectorAll('[data-top3-board-label]').forEach(el=>el.textContent='');
-    document.querySelectorAll('[data-full-rank-title]').forEach(el=>el.textContent=meta.title);
-    document.querySelectorAll('[data-full-rank-limit]').forEach(el=>el.textContent=`1～${meta.limit} 名`);
-    setTop3(list,meta);
-    const scroll=document.querySelector('[data-rank-scroll]');
-    if(scroll) scroll.innerHTML=list.slice(3,14).map(x=>`<div class="rank-chip"><span class="rank-no">${x.rank}</span><span class="rank-title">${esc(x.name)}</span><span class="rank-value">${esc(valueText(meta,x))}</span></div>`).join('');
-    const full=document.querySelector('[data-full-rank-list]');
-    if(full) full.innerHTML=list.map(x=>`<div class="full-rank-row"><div class="full-rank-no">${x.rank}</div><div><div class="full-rank-name">${esc(x.name)}</div><div class="full-rank-sub">${esc(meta.title)}</div></div><div class="full-rank-value">${esc(valueText(meta,x))}</div></div>`).join('');
-    localStorage.setItem('dream_home_board_key',key);
-  }
-  document.addEventListener('click',e=>{const b=e.target.closest('[data-board-key]');if(!b)return;e.preventDefault();renderBoard(b.dataset.boardKey);},true);
-  document.addEventListener('DOMContentLoaded',()=>renderBoard(localStorage.getItem('dream_home_board_key')||'vip_rank'));
-  window.renderDreamHomeLeaderboard=renderBoard;
-})();
-</script>
-
 <script>
 /* v76 完整評價系統前台：待評價保留在「我的訂單」，評價紀錄放功能服務 */
 (function(){
@@ -8983,11 +8927,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     }
     const rooms=filteredRooms();
     if(!rooms.some(r=>sameRoom(r,activeRoom))) activeRoom=rooms[0]||{type:'activity'};
-    body.innerHTML=`<div class="ancient-chat-layout"><aside class="ancient-chat-sidebar"><div class="ancient-chat-room-list">${rooms.map(r=>roomHtml(r)).join('')||'<div class="ancient-chat-empty">沒有符合搜尋的聊天室</div>'}</div></aside><main class="ancient-chat-dialog"><div id="ancientChatDialogHead" class="ancient-chat-dialog-head"></div><div id="ancientChatMessages" class="ancient-chat-messages"></div><section id="page-vip-rank" class="page">
-  <div class="topbar"><button class="back-btn" data-back>‹</button><strong>排行榜</strong></div>
-  <section class="v267-rank-page-panel" data-v267-rank-page></section>
-</section>
-</main></div>`;
+    body.innerHTML=`<div class="ancient-chat-layout"><aside class="ancient-chat-sidebar"><div class="ancient-chat-room-list">${rooms.map(r=>roomHtml(r)).join('')||'<div class="ancient-chat-empty">沒有符合搜尋的聊天室</div>'}</div></aside><main class="ancient-chat-dialog"><div id="ancientChatDialogHead" class="ancient-chat-dialog-head"></div><div id="ancientChatMessages" class="ancient-chat-messages"></div></main></div>`;
     renderRoom(activeRoom);
   }
   function roomHtml(r){
@@ -10570,7 +10510,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=324"></script>
+<script src="assets/barrage/barrage_system.js?v=325"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -12460,159 +12400,6 @@ window.addEventListener('DOMContentLoaded', () => {
   },true);
 })();
 </script>
-
-
-<style id="v255-rank-page-home-and-waterline-fix-css">
-/* v255：首頁只保留本期前三名；功能服務排行榜才切換各排行榜；水流流光改為名字後方底層，只套前三名 */
-#page-home .home-leaderboard-tabs,
-#page-home [data-rank-scroll]{display:none!important;}
-#page-home .home-top3-card{margin-top:12px!important;}
-
-/* 專屬守護榜移到禮物牆上方，獨立框架 */
-.profile-guardian-panel{margin-bottom:16px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;}
-.profile-guardian-panel .profile-guardian-board{margin:0!important;}
-.profile-gift-panel .profile-guardian-board{display:none!important;}
-
-/* 預設關閉所有排行榜名字水流，避免第4名以下與一般列表全部發光 */
-.rank-name-wrap::before,
-.rank-name-text::before{display:none!important;}
-.rank-name-wrap{position:relative!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;vertical-align:middle!important;white-space:nowrap!important;line-height:1.1!important;pointer-events:none!important;}
-.rank-name-inline{position:relative!important;z-index:2!important;display:inline-flex!important;align-items:center!important;gap:4px!important;}
-.rank-name-text{position:relative!important;z-index:3!important;}
-
-/* 只有首頁本期前三名與排行榜完整列表前三名啟用：水流在名字後方，名字覆蓋在上面 */
-#page-vip-rank .full-rank-row:nth-child(-n+3) .full-rank-name .rank-name-wrap::before{
-  content:""!important;
-  display:block!important;
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  width:132%!important;
-  height:1.28em!important;
-  transform:translate(-50%,-50%) skewX(-12deg)!important;
-  border-radius:999px!important;
-  background:
-    radial-gradient(circle at 18% 50%,rgba(255,255,255,.72),transparent 22%),
-    linear-gradient(90deg,transparent 0%,var(--rank-waterline-main,rgba(151,226,255,.82)) 22%,var(--rank-waterline-sub,rgba(255,210,238,.62)) 48%,rgba(255,242,184,.78) 64%,var(--rank-waterline-main,rgba(151,226,255,.82)) 82%,transparent 100%)!important;
-  background-size:260% 100%!important;
-  filter:blur(.25px) drop-shadow(0 0 7px var(--rank-waterline-main,rgba(151,226,255,.72)))!important;
-  opacity:.78!important;
-  z-index:1!important;
-  pointer-events:none!important;
-  animation:rankNameBackWaterV255 3.6s linear infinite!important;
-}
-#page-vip-rank .full-rank-row:nth-child(-n+3) .full-rank-name .rank-name-wrap::after{
-  content:""!important;
-  position:absolute!important;
-  left:-12%!important;right:-12%!important;top:54%!important;height:2px!important;
-  border-radius:999px!important;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.82),transparent)!important;
-  opacity:.68!important;z-index:1!important;pointer-events:none!important;
-  animation:rankNameBackWaterPulseV255 2.8s ease-in-out infinite!important;
-}
-#page-vip-rank .full-rank-row:nth-child(n+4) .rank-name-wrap::before,
-#page-vip-rank .full-rank-row:nth-child(n+4) .rank-name-wrap::after,
-#page-vip-rank .full-rank-row:nth-child(n+4) .rank-name-text::before,
-.rank-scroll .rank-name-wrap::before,
-.rank-scroll .rank-name-wrap::after,
-.profile-guardian-board .rank-name-wrap::before,
-.profile-guardian-board .rank-name-wrap::after{display:none!important;}
-
-/* 首頁本期前三名只顯示名字，不顯示名字後方徽章 */
-#page-home .top3-text .rank-name-badges,
-#page-home .top3-text .rank-name-badge{display:none!important;}
-#page-home .top3-text .name{white-space:nowrap!important;overflow:visible!important;}
-#page-home .top3-text.third{transform:translateX(0)!important;}
-#page-home .top3-avatar.third{transform:translate(-50%,-50%)!important;}
-
-@keyframes rankNameBackWaterV255{0%{background-position:0% 50%;opacity:.56}45%{opacity:.86}100%{background-position:260% 50%;opacity:.58}}
-@keyframes rankNameBackWaterPulseV255{0%,100%{transform:translateX(-10%) scaleX(.72);opacity:.25}50%{transform:translateX(10%) scaleX(1);opacity:.78}}
-@media (prefers-reduced-motion: reduce){#page-vip-rank .full-rank-row:nth-child(-n+3) .full-rank-name .rank-name-wrap::before{animation:none!important}}
-</style>
-
-<script id="v255-rank-page-home-and-waterline-fix-script">
-/* v255：修正首頁不顯示排行榜切換、排行榜頁切換、前三名水流位置、首頁前三名徽章移除、專屬守護榜獨立於禮物牆 */
-(function(){
-  const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const waterClassMap={vip_rank:'rank-name-waterline--vip',weekly_charm:'rank-name-waterline--charm',monthly_guardian:'rank-name-waterline--guard',companion_gift:'rank-name-waterline--companion',member_gift:'rank-name-waterline--member',total_recharge:'rank-name-waterline--recharge'};
-  function activeBoard(){return document.querySelector('#page-vip-rank .leaderboard-tab.active[data-board-key]')?.dataset.boardKey || localStorage.getItem('dream_home_board_key') || 'vip_rank';}
-  function normalizeText(){
-    document.querySelectorAll('[data-current-leaderboard-title],[data-full-rank-title],.full-rank-sub,.rank-reward-head h3,.rank-reward-desc,.leaderboard-tab,.profile-guardian-head h3').forEach(el=>{
-      if(el && el.textContent && el.textContent.includes('本頁守護榜')) el.textContent=el.textContent.replaceAll('本頁守護榜','專屬守護榜');
-    });
-  }
-  function unwrapName(el){
-    if(!el) return '';
-    const clone=el.cloneNode(true);
-    clone.querySelectorAll('.rank-name-badges,.rank-name-badge').forEach(x=>x.remove());
-    return (clone.querySelector('.rank-name-text')?.textContent || clone.textContent || '').trim();
-  }
-  function wrapTopName(el,key){
-    const text=unwrapName(el); if(!text) return;
-    const cls=waterClassMap[key]||waterClassMap.vip_rank;
-    el.innerHTML=`<span class="rank-name-wrap ${cls}"><span class="rank-name-inline"><span class="rank-name-text rank-name-glow">${esc(text)}</span></span></span>`;
-  }
-  function wrapFullTop3(key){
-    document.querySelectorAll('#page-vip-rank .full-rank-row').forEach((row,idx)=>{
-      const name=row.querySelector('.full-rank-name'); if(!name) return;
-      const txt=unwrapName(name);
-      const badge=name.querySelector('.rank-name-badges')?.outerHTML || '';
-      if(idx<3){
-        const cls=waterClassMap[key]||waterClassMap.vip_rank;
-        name.innerHTML=`<span class="rank-name-wrap ${cls}"><span class="rank-name-inline"><span class="rank-name-text rank-name-glow">${esc(txt)}</span>${badge}</span></span>`;
-      }else{
-        name.innerHTML=esc(txt);
-      }
-    });
-  }
-  function cleanupHomeTop3(key=activeBoard()){
-    document.querySelectorAll('#page-home .top3-text .rank-name-badges,#page-home .top3-text .rank-name-badge,#page-home .top3-text .v267-badges').forEach(x=>x.remove());
-  }
-  function cleanupNonTop3Water(key=activeBoard()){
-    normalizeText();
-    cleanupHomeTop3(key);
-    wrapFullTop3(key);
-    document.querySelectorAll('.rank-scroll .rank-title .rank-name-wrap,.rank-chip .rank-title .rank-name-wrap').forEach(w=>{
-      const host=w.closest('.rank-title'); if(host) host.textContent=unwrapName(host);
-    });
-    document.querySelectorAll('.profile-guardian-name .rank-name-wrap,.profile-guardian-mini-name .rank-name-wrap').forEach(w=>{
-      const host=w.closest('.profile-guardian-name,.profile-guardian-mini-name'); if(host) host.textContent=unwrapName(host);
-    });
-  }
-  function switchRankPage(key){
-    if(!key) return;
-    try{ if(typeof window.renderDreamHomeLeaderboard==='function') window.renderDreamHomeLeaderboard(key); }catch(e){}
-    try{ if(typeof window.DREAM_SWITCH_RANK_BOARD==='function') window.DREAM_SWITCH_RANK_BOARD(key); }catch(e){}
-    try{ localStorage.setItem('dream_home_board_key',key); }catch(e){}
-    setTimeout(()=>cleanupNonTop3Water(key),30);
-    setTimeout(()=>cleanupNonTop3Water(key),180);
-    setTimeout(()=>cleanupNonTop3Water(key),500);
-  }
-  document.addEventListener('click',function(e){
-    const btn=e.target.closest && e.target.closest('#page-vip-rank .leaderboard-tab[data-board-key]');
-    if(!btn) return;
-    e.preventDefault();
-    switchRankPage(btn.dataset.boardKey);
-  },false);
-  const oldRender=window.renderDreamHomeLeaderboard;
-  if(typeof oldRender==='function' && !oldRender.__v255Wrapped){
-    const wrapped=function(key){const rv=oldRender.apply(this,arguments);setTimeout(()=>cleanupNonTop3Water(key||activeBoard()),40);return rv;};
-    wrapped.__v255Wrapped=true; window.renderDreamHomeLeaderboard=wrapped;
-  }
-  const oldApply=window.DREAM_APPLY_RANK_WATERLINE_V254;
-  window.DREAM_APPLY_RANK_WATERLINE_V255=cleanupNonTop3Water;
-  window.DREAM_APPLY_RANK_WATERLINE_V254=function(key){
-    try{ if(typeof oldApply==='function') oldApply(key); }catch(e){}
-    setTimeout(()=>cleanupNonTop3Water(key||activeBoard()),20);
-  };
-  document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>cleanupNonTop3Water(activeBoard()),180);setTimeout(()=>cleanupNonTop3Water(activeBoard()),700);});
-  window.addEventListener('hashchange',()=>setTimeout(()=>cleanupNonTop3Water(activeBoard()),180));
-})();
-</script>
-
-
-
-
 <style id="v267-restore-rank-page-css">
 /* v267：復原功能服務 > 排行榜：類別、特效預覽、排行榜列表 */
 
@@ -12710,38 +12497,6 @@ window.addEventListener('DOMContentLoaded', () => {
 @keyframes v267Pulse{0%{opacity:.62}100%{opacity:1}}
 @media(max-width:640px){.v267-preview-grid{grid-template-columns:1fr!important}.v267-rank-row{grid-template-columns:36px 1fr!important}.v267-rank-value{grid-column:2!important}.v267-badges img{height:18px!important;max-width:64px!important}}
 </style>
-<script id="v267-restore-rank-page-script">
-(function(){
- const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
- const money=n=>Number(n||0).toLocaleString('zh-TW');
- const KEYS=['vip_rank','weekly_charm','monthly_guardian','companion_gift','member_gift','total_recharge'];
- const META={vip_rank:{title:'VIP排行榜',unit:'VIP經驗值',suffix:'',limit:100,theme:'board-vip'},weekly_charm:{title:'本月魅力榜',unit:'魅力值',suffix:'分',limit:50,theme:'board-charm'},monthly_guardian:{title:'本月守護榜',unit:'',suffix:'守護值',limit:50,theme:'board-guardian'},companion_gift:{title:'陪玩收禮榜',unit:'收禮',suffix:'短陌',limit:50,theme:'board-companion'},member_gift:{title:'會員送禮榜',unit:'送禮',suffix:'短陌',limit:50,theme:'board-member'},total_recharge:{title:'累計儲值榜',unit:'累計儲值',suffix:'短陌',limit:50,theme:'board-recharge'}};
- const NAMES=['花間醉','墨染','長歌','清歡','月璃','星河','霜華','雲歌','浮光','夜笙','南枝','初雪','長安','雲霓','聽雨','青鸞','白露','扶蘇','錦瑟','暮雪','南風','月白','流螢','千澈','蘇幕','玉衡','紅藥','若水','星眠','洛川','紫蘇','雲岫','鹿鳴','映雪','折枝','青衫','九璃','梨落','玄音','知夏','綰綰','明檀','霓裳','阿梨','半夏','時雨','寒酥','疏影','煙蘿','晚棠','一念','沐辰','凌霄','子衿','辰砂','天策','巡撫','提督','青羽','玉京','玄策','望舒','蘭舟','懷瑾','雲麓','昭華','修竹','流霜','鳳眠','知微','清宴','雲棲','星闌','檀心','靈犀','照夜','明河','青梧','無雙','扶光','瑤光','錦年','千秋','雲舒','鹿溪','聽瀾','朝顏','暮雲','山月','清辭','南星','白榆','溫玉','長寧','遲月','寒舟','折月','雲深','星辭','墨白','清越'];
- function seed(k,i){const b={vip_rank:888888,weekly_charm:98888,monthly_guardian:128000,companion_gift:88000,member_gift:76000,total_recharge:520000}[k]||50000;return Math.max(88,Math.floor(b/(1+i*.13)-i*97+((i*37)%900)))}
- function board(k){const meta=META[k],shift=(KEYS.indexOf(k)+1)*7,base=new Date();base.setDate(1);base.setHours(8,0,0,0);return Array.from({length:meta.limit}).map((_,i)=>{const name=NAMES[(i+shift)%NAMES.length];return{rank:i+1,name,avatar:name.slice(-1),value:seed(k,i),scoreReachedAt:new Date(base.getTime()+(i*19+shift)*60000).toISOString()}}).sort((a,b)=>b.value-a.value||new Date(a.scoreReachedAt)-new Date(b.scoreReachedAt)).map((x,i)=>Object.assign({},x,{rank:i+1}))}
- const BOARDS=Object.fromEntries(KEYS.map(k=>[k,board(k)]));
- function slug(k){return {vip_rank:'vip',weekly_charm:'charm',monthly_guardian:'guard',companion_gift:'companion_gift',member_gift:'member_gift',total_recharge:'recharge'}[k]}
- function badge(k,r,type='name'){const s=slug(k);return s?`assets/rank_rewards/badges/rank_badge_${s}_${String(r).padStart(2,'0')}_${type}.webp`:''}
- function nameFx(name,k,r,showBadge=true){const b=showBadge?badge(k,r,'name'):'';return `<span class="v267-name ${META[k].theme} rank-${r}"><span class="v267-name-core"><span class="v267-name-text">${esc(name)}</span></span>${b?`<span class="v267-badges"><img src="${esc(b)}" alt="徽章" loading="lazy"></span>`:''}</span>`}
- function valueText(meta,item){return `${meta.unit?meta.unit+' ':''}${money(item.value)}${meta.suffix?' '+meta.suffix:''}`.trim()}
- function avatarHtml(item, cls='rank-avatar'){
-  const src=item?.avatarUrl||item?.avatar_url||item?.photoUrl||item?.photo_url||item?.headshot||item?.image||item?.img||'';
-  const fallback=String(item?.avatar||item?.name?.slice(0,1)||'夢');
-  const safeCls=esc(cls);
-  if(src && /^(https?:|data:image\/|\/|\.\/|uploads\/|assets\/)/i.test(String(src))){return `<span class="${safeCls}" aria-label="${esc(item?.name||'用戶')}大頭照"><img src="${esc(src)}" alt="${esc(item?.name||'用戶')}大頭照" loading="lazy" onerror="this.remove();this.parentNode.textContent='${esc(fallback)}';"></span>`;}
-  return `<span class="${safeCls}" aria-label="${esc(item?.name||'用戶')}大頭照">${esc(fallback)}</span>`;
- }
- function previewCard(k,r){const img=badge(k,r,'full');return `<article class="v267-preview-card rank-${r}"><div class="v267-preview-place">第 ${r} 名特效預覽</div><div class="v267-demo">${nameFx(META[k].title+'第'+r+'名',k,r,false)}</div><div class="v267-badge-demo">${img?`<img src="${esc(img)}" alt="徽章" loading="lazy">`:''}</div><div class="v267-preview-title">${esc(META[k].title)}第 ${r} 名</div><div class="v267-preview-desc">名字特效、徽章、排名獎勵預覽。</div></article>`}
- function renderHome(k){k=META[k]?k:'vip_rank';const list=BOARDS[k],meta=META[k];document.querySelectorAll('[data-board-key]').forEach(btn=>btn.classList.toggle('active',btn.dataset.boardKey===k));document.querySelectorAll('[data-current-leaderboard-title]').forEach(el=>el.textContent=meta.title);[['second',list[1],2],['first',list[0],1],['third',list[2],3]].forEach(([cls,item,r])=>{const tx=document.querySelector(`#page-home .top3-text.${cls}`);const av=document.querySelector(`#page-home .top3-avatar.${cls}`);if(av)av.textContent=item.avatar;if(tx){const n=tx.querySelector('.name'),v=tx.querySelector('.value');if(n){n.textContent=item.name;n.dataset.rankTop3Board=k;n.dataset.rankTop3Rank=String(r);n.dataset.rankTop3Name=item.name;}if(v)v.textContent=valueText(meta,item);setTimeout(()=>window.DREAM_APPLY_RANK_TOP3_GUFENG?.(),30);setTimeout(()=>window.DREAM_APPLY_RANK_TOP3_GUFENG?.(),160)}});const sc=document.querySelector('#page-home [data-rank-scroll]');if(sc)sc.innerHTML=list.slice(3,14).map(x=>`<div class="rank-chip"><span class="rank-no">${x.rank}</span><span class="rank-title">${esc(x.name)}</span><span class="rank-value">${esc(valueText(meta,x))}</span></div>`).join('');try{localStorage.setItem('dream_home_board_key',k)}catch(_){}}
- function renderRank(k){k=META[k]?k:'vip_rank';const panel=document.querySelector('[data-v267-rank-page]');if(!panel)return;const list=BOARDS[k],meta=META[k];panel.innerHTML=`<div class="v267-tabs">${KEYS.map(key=>`<button class="v267-tab ${key===k?'active':''}" type="button" data-v267-key="${key}">${esc(META[key].title)}</button>`).join('')}</div><div class="v267-effect-panel"><div class="v267-effect-head"><div><h3>${esc(meta.title)}｜前三名特效預覽</h3><p>功能服務排行榜預覽已復原。</p></div><span class="v267-effect-note">類別＋預覽＋排名</span></div><div class="v267-preview-grid">${[1,2,3].map(r=>previewCard(k,r)).join('')}</div></div><div class="v267-rank-title"><strong>${esc(meta.title)}</strong><span>1～${meta.limit} 名</span></div><div class="v267-rank-list">${list.map((x,i)=>`<div class="v267-rank-row ${i<3?'has-top3':''}"><div class="v267-rank-no">${avatarHtml(x,'v267-rank-avatar')}</div><div><div class="v267-rank-name">${i<3?nameFx(x.name,k,x.rank,true):esc(x.name)}</div><div class="v267-rank-sub">第 ${x.rank} 名｜${esc(meta.title)}</div></div><div class="v267-rank-value">${esc(valueText(meta,x))}</div></div>`).join('')}</div>`;panel.querySelectorAll('[data-v267-key]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();renderRank(btn.dataset.v267Key)},true));try{localStorage.setItem('dream_rank_page_key',k)}catch(_){}}
- function bindHome(){document.querySelectorAll('[data-board-key]').forEach(btn=>{if(btn.dataset.v267Bound)return;btn.dataset.v267Bound='1';btn.addEventListener('click',e=>{e.preventDefault();renderHome(btn.dataset.boardKey)},true)})}
- function init(){bindHome();renderHome(localStorage.getItem('dream_home_board_key')||'vip_rank');renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank');window.renderDreamHomeLeaderboard=renderHome;window.DREAM_RENDER_RANK_PAGE_V267=renderRank;document.addEventListener('click',e=>{if(e.target.closest('[data-go="vip-rank"]'))setTimeout(()=>renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank'),60)},true);window.addEventListener('hashchange',()=>setTimeout(()=>renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank'),100))}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
-</script>
-
-
-
 <style id="v268-home-rank-restore-and-all-reward-preview-css">
 /* v268：復原首頁排行榜類別切換、第 4～13 名；功能服務排行榜每個類別可預覽前三名獎勵 */
 #page-home .home-leaderboard-tabs{display:block!important;margin:14px 0 12px!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
@@ -12763,20 +12518,38 @@ window.addEventListener('DOMContentLoaded', () => {
 .v267-preview-card{min-height:188px!important;}
 </style>
 <script id="v268-home-rank-restore-and-all-reward-preview-script">
+(function v268CleanScript(REWARDS){
 (function(){
   const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
   const money=n=>Number(n||0).toLocaleString('zh-TW');
   const KEYS=['vip_rank','weekly_charm','monthly_guardian','companion_gift','member_gift','total_recharge'];
   const META={vip_rank:{title:'VIP排行榜',unit:'VIP經驗值',suffix:'',limit:100,theme:'board-vip'},weekly_charm:{title:'本月魅力榜',unit:'魅力值',suffix:'分',limit:50,theme:'board-charm'},monthly_guardian:{title:'本月守護榜',unit:'',suffix:'守護值',limit:50,theme:'board-guardian'},companion_gift:{title:'陪玩收禮榜',unit:'收禮',suffix:'短陌',limit:50,theme:'board-companion'},member_gift:{title:'會員送禮榜',unit:'送禮',suffix:'短陌',limit:50,theme:'board-member'},total_recharge:{title:'累計儲值榜',unit:'累計儲值',suffix:'短陌',limit:50,theme:'board-recharge'}};
-  const REWARDS={"vip_rank":{"1":{"title":"瓊筵貴客","full":"assets/rank_rewards/badges/rank_badge_vip_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_vip_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_vip_01_preview.webp","frame_label":"VIP排行榜第 1 名專屬框"},"2":{"title":"錦衣玉客","full":"assets/rank_rewards/badges/rank_badge_vip_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_vip_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_vip_02_preview.webp","frame_label":"VIP排行榜第 2 名專屬框"},"3":{"title":"琉光寵兒","full":"assets/rank_rewards/badges/rank_badge_vip_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_vip_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_vip_03_preview.webp","frame_label":"VIP排行榜第 3 名專屬框"}},"weekly_charm":{"1":{"title":"風華冠世","full":"assets/rank_rewards/badges/rank_badge_charm_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_charm_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_charm_01_preview.webp","frame_label":"本月魅力榜第 1 名專屬框"},"2":{"title":"玉客傾城","full":"assets/rank_rewards/badges/rank_badge_charm_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_charm_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_charm_02_preview.webp","frame_label":"本月魅力榜第 2 名專屬框"},"3":{"title":"流光雅韻","full":"assets/rank_rewards/badges/rank_badge_charm_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_charm_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_charm_03_preview.webp","frame_label":"本月魅力榜第 3 名專屬框"}},"monthly_guardian":{"1":{"title":"首席守護","full":"assets/rank_rewards/badges/rank_badge_guard_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_guard_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_guard_01_preview.webp","frame_label":"本月守護榜第 1 名專屬框"},"2":{"title":"長明守客","full":"assets/rank_rewards/badges/rank_badge_guard_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_guard_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_guard_02_preview.webp","frame_label":"本月守護榜第 2 名專屬框"},"3":{"title":"玉階守心","full":"assets/rank_rewards/badges/rank_badge_guard_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_guard_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_guard_03_preview.webp","frame_label":"本月守護榜第 3 名專屬框"}},"companion_gift":{"1":{"title":"寵冠群芳","full":"assets/rank_rewards/badges/rank_badge_companion_gift_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_companion_gift_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_companion_gift_01_preview.webp","frame_label":"陪玩收禮榜第 1 名專屬框"},"2":{"title":"星筵紅人","full":"assets/rank_rewards/badges/rank_badge_companion_gift_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_companion_gift_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_companion_gift_02_preview.webp","frame_label":"陪玩收禮榜第 2 名專屬框"},"3":{"title":"錦堂雅客","full":"assets/rank_rewards/badges/rank_badge_companion_gift_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_companion_gift_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_companion_gift_03_preview.webp","frame_label":"陪玩收禮榜第 3 名專屬框"}},"member_gift":{"1":{"title":"金闕護君","full":"assets/rank_rewards/badges/rank_badge_member_gift_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_member_gift_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_member_gift_01_preview.webp","frame_label":"會員送禮榜第 1 名專屬框"},"2":{"title":"長明護主","full":"assets/rank_rewards/badges/rank_badge_member_gift_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_member_gift_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_member_gift_02_preview.webp","frame_label":"會員送禮榜第 2 名專屬框"},"3":{"title":"月下護卿","full":"assets/rank_rewards/badges/rank_badge_member_gift_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_member_gift_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_member_gift_03_preview.webp","frame_label":"會員送禮榜第 3 名專屬框"}},"total_recharge":{"1":{"title":"金殿貴主","full":"assets/rank_rewards/badges/rank_badge_recharge_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_recharge_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_recharge_01_preview.webp","frame_label":"累計儲值榜第 1 名專屬框"},"2":{"title":"玉京上賓","full":"assets/rank_rewards/badges/rank_badge_recharge_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_recharge_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_recharge_02_preview.webp","frame_label":"累計儲值榜第 2 名專屬框"},"3":{"title":"蘭臺貴客","full":"assets/rank_rewards/badges/rank_badge_recharge_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_recharge_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_recharge_03_preview.webp","frame_label":"累計儲值榜第 3 名專屬框"}}};
-  const NAMES=['花間醉','墨染','長歌','清歡','月璃','星河','霜華','雲歌','浮光','夜笙','南枝','初雪','長安','雲霓','聽雨','青鸞','白露','扶蘇','錦瑟','暮雪','南風','月白','流螢','千澈','蘇幕','玉衡','紅藥','若水','星眠','洛川','紫蘇','雲岫','鹿鳴','映雪','折枝','青衫','九璃','梨落','玄音','知夏','綰綰','明檀','霓裳','阿梨','半夏','時雨','寒酥','疏影','煙蘿','晚棠','一念','沐辰','凌霄','子衿','辰砂','天策','巡撫','提督','青羽','玉京','玄策','望舒','蘭舟','懷瑾','雲麓','昭華','修竹','流霜','鳳眠','知微','清宴','雲棲','星闌','檀心','靈犀','照夜','明河','青梧','無雙','扶光','瑤光','錦年','千秋','雲舒','鹿溪','聽瀾','朝顏','暮雲','山月','清辭','南星','白榆','溫玉','長寧','遲月','寒舟','折月','雲深','星辭','墨白','清越'];
-  function seed(k,i){const b={vip_rank:888888,weekly_charm:98888,monthly_guardian:128000,companion_gift:88000,member_gift:76000,total_recharge:520000}[k]||50000;return Math.max(88,Math.floor(b/(1+i*.13)-i*97+((i*37)%900)));}
-  function board(k){const meta=META[k],shift=(KEYS.indexOf(k)+1)*7,base=new Date();base.setDate(1);base.setHours(8,0,0,0);return Array.from({length:meta.limit}).map((_,i)=>{const name=NAMES[(i+shift)%NAMES.length];return{rank:i+1,name,avatar:name.slice(-1),value:seed(k,i),scoreReachedAt:new Date(base.getTime()+(i*19+shift)*60000).toISOString()}}).sort((a,b)=>b.value-a.value||new Date(a.scoreReachedAt)-new Date(b.scoreReachedAt)).map((x,i)=>Object.assign({},x,{rank:i+1}));}
-  const BOARDS=Object.fromEntries(KEYS.map(k=>[k,board(k)]));
-  function valueText(meta,item){return `${meta.unit?meta.unit+' ':''}${money(item.value)}${meta.suffix?' '+meta.suffix:''}`.trim();}
+  function aliases(k){return {vip_rank:['vip_rank','vip','vipRank'],weekly_charm:['weekly_charm','monthly_charm','charm'],monthly_guardian:['monthly_guardian','guardian','guard'],companion_gift:['companion_gift','companionGift'],member_gift:['member_gift','memberGift'],total_recharge:['total_recharge','recharge','totalRecharge']}[k]||[k];}
+  function sourceList(src,k){
+    if(!src) return [];
+    if(Array.isArray(src)) return src.filter(x=>!x || !x.board || aliases(k).includes(String(x.board)) || aliases(k).includes(String(x.type)) || aliases(k).includes(String(x.key)));
+    for(const key of aliases(k)){ if(Array.isArray(src[key])) return src[key]; }
+    for(const box of ['boards','rankings','data','lists','leaderboards']){ if(src[box]){ const found=sourceList(src[box],k); if(found.length) return found; } }
+    return [];
+  }
+  function normalize(raw,i,k){
+    raw=raw||{};
+    const name=raw.name||raw.nickname||raw.username||raw.user_name||raw.member_name||raw.companion_name||raw.display_name||'';
+    if(!name) return null;
+    const value=Number(raw.value ?? raw.score ?? raw.points ?? raw.amount ?? raw.total ?? raw.vip_exp ?? raw.charm ?? raw.guardian_value ?? raw.gift_total ?? raw.recharge_total ?? 0);
+    const rank=Number(raw.rank ?? raw.place ?? raw.no ?? raw.position ?? (i+1));
+    return {rank:rank||i+1,name:String(name),avatar:String(raw.avatar||String(name).slice(0,1)||''),value,avatarUrl:raw.avatarUrl||raw.avatar_url||raw.photoUrl||raw.photo_url||raw.headshot||raw.image||raw.img||'',raw};
+  }
+  function board(k){
+    const sources=[window.DREAM_RANK_BOARDS,window.DREAM_LEADERBOARD_DATA,window.DREAM_RANK_DATA,window.DREAM_RANKINGS,window.DREAM_OFFICIAL_RANK_DATA];
+    let list=[];
+    for(const src of sources){ list=sourceList(src,k); if(list.length) break; }
+    return list.map((x,i)=>normalize(x,i,k)).filter(Boolean).sort((a,b)=>a.rank-b.rank||b.value-a.value).slice(0,META[k].limit).map((x,i)=>Object.assign({},x,{rank:Number(x.rank)||i+1}));
+  }
+  function valueText(meta,item){return `${meta.unit?meta.unit+' ':''}${money(item?.value||0)}${meta.suffix?' '+meta.suffix:''}`.trim();}
   function reward(k,r){return (REWARDS[k]&&REWARDS[k][String(r)])||{};}
   function avatarHtml(item, cls='rank-avatar'){
-    const src=item?.avatarUrl||item?.avatar_url||item?.photoUrl||item?.photo_url||item?.headshot||item?.image||item?.img||'';
+    const src=item?.avatarUrl||'';
     const fallback=String(item?.avatar||item?.name?.slice(0,1)||'夢');
     const safeCls=esc(cls);
     if(src && /^(https?:|data:image\/|\/|\.\/|uploads\/|assets\/)/i.test(String(src))){
@@ -12788,48 +12561,49 @@ window.addEventListener('DOMContentLoaded', () => {
   function previewCard(k,r){const rw=reward(k,r);const img=rw.full||rw.preview||'';return `<article class="v267-preview-card rank-${r}"><div class="v267-preview-place">第 ${r} 名獎勵預覽</div><div class="v267-demo">${nameFx((rw.title||META[k].title+'第'+r+'名'),k,r,false)}</div><div class="v267-badge-demo">${img?`<img src="${esc(img)}" alt="${esc(rw.title||'排行榜獎勵')}" loading="lazy">`:''}</div><div class="v267-preview-title">${esc(rw.title||META[k].title+'第 '+r+' 名')}</div><div class="v268-reward-label">${esc(rw.frame_label||META[k].title+'第 '+r+' 名專屬獎勵')}｜名字特效＋徽章</div></article>`;}
   function ensureRankPanels(){
     document.querySelectorAll('section#page-vip-rank').forEach(page=>{
-      const direct=Array.from(page.children).some(el=>el.matches&&el.matches('[data-v267-rank-page]'));
-      if(!direct){
-        const panel=document.createElement('section');panel.className='v267-rank-page-panel';panel.setAttribute('data-v267-rank-page','');
-        const top=Array.from(page.children).find(el=>el.classList&&el.classList.contains('topbar'));
-        if(top&&top.nextSibling) page.insertBefore(panel,top.nextSibling); else page.insertBefore(panel,page.firstChild);
-      }
+      if(Array.from(page.children).some(el=>el.matches&&el.matches('[data-v267-rank-page]'))) return;
+      const panel=document.createElement('section');panel.className='v267-rank-page-panel';panel.setAttribute('data-v267-rank-page','');
+      const top=Array.from(page.children).find(el=>el.classList&&el.classList.contains('topbar'));
+      if(top&&top.nextSibling) page.insertBefore(panel,top.nextSibling); else page.insertBefore(panel,page.firstChild);
+    });
+  }
+  function clearHomeTop3(k,meta){
+    [['second',2],['first',1],['third',3]].forEach(([cls,r])=>{
+      const tx=document.querySelector(`#page-home .top3-text.${cls}`);const av=document.querySelector(`#page-home .top3-avatar.${cls}`);
+      if(av) av.textContent='-';
+      if(tx){const n=tx.querySelector('.name'),v=tx.querySelector('.value'); if(n){n.textContent='尚無資料'; delete n.dataset.rankTop3Board; delete n.dataset.rankTop3Rank; delete n.dataset.rankTop3Name;} if(v)v.textContent='等待正式資料';}
     });
   }
   function renderHome(k){
-    k=META[k]?k:'vip_rank';const list=BOARDS[k],meta=META[k];
+    k=META[k]?k:'vip_rank';const list=board(k),meta=META[k];
     document.querySelectorAll('#page-home [data-board-key]').forEach(btn=>btn.classList.toggle('active',btn.dataset.boardKey===k));
     document.querySelectorAll('#page-home [data-current-leaderboard-title]').forEach(el=>el.textContent=meta.title);
-    [['second',list[1],2],['first',list[0],1],['third',list[2],3]].forEach(([cls,item,r])=>{
-      const tx=document.querySelector(`#page-home .top3-text.${cls}`);const av=document.querySelector(`#page-home .top3-avatar.${cls}`);
-      if(av)av.textContent=item.avatar;
-      if(tx){const n=tx.querySelector('.name'),v=tx.querySelector('.value');if(n){n.textContent=item.name;n.dataset.rankTop3Board=k;n.dataset.rankTop3Rank=String(r);n.dataset.rankTop3Name=item.name;}if(v)v.textContent=valueText(meta,item);setTimeout(()=>window.DREAM_APPLY_RANK_TOP3_GUFENG?.(),30);setTimeout(()=>window.DREAM_APPLY_RANK_TOP3_GUFENG?.(),160);}
-    });
+    if(list.length>=3){
+      [['second',list[1],2],['first',list[0],1],['third',list[2],3]].forEach(([cls,item,r])=>{
+        const tx=document.querySelector(`#page-home .top3-text.${cls}`);const av=document.querySelector(`#page-home .top3-avatar.${cls}`);
+        if(av)av.textContent=item.avatar;
+        if(tx){const n=tx.querySelector('.name'),v=tx.querySelector('.value');if(n){n.textContent=item.name;n.dataset.rankTop3Board=k;n.dataset.rankTop3Rank=String(r);n.dataset.rankTop3Name=item.name;}if(v)v.textContent=valueText(meta,item);}
+      });
+      setTimeout(()=>window.DREAM_APPLY_RANK_TOP3_GUFENG?.(),60);
+    }else clearHomeTop3(k,meta);
     const sc=document.querySelector('#page-home [data-rank-scroll]');
-    if(sc){sc.setAttribute('aria-label','第四名至第十三名排行榜');sc.innerHTML=list.slice(3,13).map(x=>`<div class="rank-chip"><span class="rank-no">${avatarHtml(x,'rank-avatar')}</span><span class="rank-title">${esc(x.name)}</span><span class="rank-value">第 ${x.rank} 名｜${esc(valueText(meta,x))}</span></div>`).join('');}
+    if(sc){sc.setAttribute('aria-label','第四名至第十三名排行榜');sc.innerHTML=list.length?list.slice(3,13).map(x=>`<div class="rank-chip"><span class="rank-no">${avatarHtml(x,'rank-avatar')}</span><span class="rank-title">${esc(x.name)}</span><span class="rank-value">第 ${x.rank} 名｜${esc(valueText(meta,x))}</span></div>`).join(''):'<div class="rank-chip rank-empty"><span class="rank-title">尚無排行榜資料</span><span class="rank-value">等待正式資料</span></div>';}
     try{localStorage.setItem('dream_home_board_key',k)}catch(_){}
   }
   function renderRank(k){
-    ensureRankPanels(); k=META[k]?k:'vip_rank';const list=BOARDS[k],meta=META[k];
-    const html=`<div class="v267-tabs">${KEYS.map(key=>`<button class="v267-tab ${key===k?'active':''}" type="button" data-v267-key="${key}">${esc(META[key].title)}</button>`).join('')}</div><div class="v267-effect-panel"><div class="v267-effect-head"><div><h3>${esc(meta.title)}｜前三名獎勵預覽</h3><p>切換任一排行榜，都會顯示該榜第 1～3 名的專屬名字特效、徽章與獎勵。</p></div><span class="v267-effect-note">前三名獎勵</span></div><div class="v267-preview-grid">${[1,2,3].map(r=>previewCard(k,r)).join('')}</div></div><div class="v267-rank-title"><strong>${esc(meta.title)}</strong><span>1～${meta.limit} 名</span></div><div class="v267-rank-list">${list.map((x,i)=>`<div class="v267-rank-row ${i<3?'has-top3':''}"><div class="v267-rank-no">${x.rank}</div><div><div class="v267-rank-name">${i<3?nameFx(x.name,k,x.rank,true):esc(x.name)}</div><div class="v267-rank-sub">${esc(meta.title)}</div></div><div class="v267-rank-value">${esc(valueText(meta,x))}</div></div>`).join('')}</div>`;
+    ensureRankPanels(); k=META[k]?k:'vip_rank';const list=board(k),meta=META[k];
+    const rows=list.length?list.map((x,i)=>`<div class="v267-rank-row ${i<3?'has-top3':''}"><div class="v267-rank-no">${x.rank}</div><div><div class="v267-rank-name">${i<3?nameFx(x.name,k,x.rank,true):esc(x.name)}</div><div class="v267-rank-sub">${esc(meta.title)}</div></div><div class="v267-rank-value">${esc(valueText(meta,x))}</div></div>`).join(''):'<div class="v267-rank-empty">正式排行榜資料尚未載入。</div>';
+    const html=`<div class="v267-tabs">${KEYS.map(key=>`<button class="v267-tab ${key===k?'active':''}" type="button" data-v267-key="${key}">${esc(META[key].title)}</button>`).join('')}</div><div class="v267-effect-panel"><div class="v267-effect-head"><div><h3>${esc(meta.title)}｜前三名獎勵預覽</h3><p>這裡只顯示正式獎勵素材；排行榜名次等待後台正式資料載入。</p></div><span class="v267-effect-note">前三名獎勵</span></div><div class="v267-preview-grid">${[1,2,3].map(r=>previewCard(k,r)).join('')}</div></div><div class="v267-rank-title"><strong>${esc(meta.title)}</strong><span>1～${meta.limit} 名</span></div><div class="v267-rank-list">${rows}</div>`;
     document.querySelectorAll('#page-vip-rank [data-v267-rank-page]').forEach(panel=>{panel.innerHTML=html;panel.querySelectorAll('[data-v267-key]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();renderRank(btn.dataset.v267Key);},true));});
     try{localStorage.setItem('dream_rank_page_key',k)}catch(_){}
   }
-  function init(){
-    ensureRankPanels();
-    renderHome(localStorage.getItem('dream_home_board_key')||'vip_rank');
-    renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank');
-    window.renderDreamHomeLeaderboard=renderHome;
-    window.DREAM_RENDER_RANK_PAGE_V267=renderRank;
-  }
-  document.addEventListener('click',function(e){
-    const h=e.target.closest&&e.target.closest('#page-home [data-board-key]');
-    if(h){setTimeout(()=>renderHome(h.dataset.boardKey),0);setTimeout(()=>renderHome(h.dataset.boardKey),80);return;}
-    if(e.target.closest&&e.target.closest('[data-go="vip-rank"]')){setTimeout(()=>renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank'),80);}
-  },true);
+  function refresh(){renderHome(localStorage.getItem('dream_home_board_key')||'vip_rank');renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank');}
+  function init(){ensureRankPanels();refresh();window.renderDreamHomeLeaderboard=renderHome;window.DREAM_RENDER_RANK_PAGE_V267=renderRank;window.DREAM_REFRESH_RANKINGS=refresh;window.DREAM_SET_RANK_BOARDS=function(data){window.DREAM_RANK_BOARDS=data||{};refresh();};}
+  document.addEventListener('click',function(e){const h=e.target.closest&&e.target.closest('#page-home [data-board-key]');if(h){setTimeout(()=>renderHome(h.dataset.boardKey),0);setTimeout(()=>renderHome(h.dataset.boardKey),80);return;}if(e.target.closest&&e.target.closest('[data-go="vip-rank"]')){setTimeout(()=>renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank'),80);}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-  window.addEventListener('hashchange',()=>{setTimeout(()=>{renderHome(localStorage.getItem('dream_home_board_key')||'vip_rank');renderRank(localStorage.getItem('dream_rank_page_key')||'vip_rank');},120);});
+  window.addEventListener('hashchange',()=>setTimeout(refresh,120));
 })();
+})({"vip_rank":{"1":{"title":"瓊筵貴客","full":"assets/rank_rewards/badges/rank_badge_vip_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_vip_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_vip_01_preview.webp","frame_label":"VIP排行榜第 1 名專屬框"},"2":{"title":"錦衣玉客","full":"assets/rank_rewards/badges/rank_badge_vip_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_vip_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_vip_02_preview.webp","frame_label":"VIP排行榜第 2 名專屬框"},"3":{"title":"琉光寵兒","full":"assets/rank_rewards/badges/rank_badge_vip_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_vip_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_vip_03_preview.webp","frame_label":"VIP排行榜第 3 名專屬框"}},"weekly_charm":{"1":{"title":"風華冠世","full":"assets/rank_rewards/badges/rank_badge_charm_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_charm_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_charm_01_preview.webp","frame_label":"本月魅力榜第 1 名專屬框"},"2":{"title":"玉客傾城","full":"assets/rank_rewards/badges/rank_badge_charm_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_charm_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_charm_02_preview.webp","frame_label":"本月魅力榜第 2 名專屬框"},"3":{"title":"流光雅韻","full":"assets/rank_rewards/badges/rank_badge_charm_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_charm_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_charm_03_preview.webp","frame_label":"本月魅力榜第 3 名專屬框"}},"monthly_guardian":{"1":{"title":"首席守護","full":"assets/rank_rewards/badges/rank_badge_guard_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_guard_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_guard_01_preview.webp","frame_label":"本月守護榜第 1 名專屬框"},"2":{"title":"長明守客","full":"assets/rank_rewards/badges/rank_badge_guard_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_guard_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_guard_02_preview.webp","frame_label":"本月守護榜第 2 名專屬框"},"3":{"title":"玉階守心","full":"assets/rank_rewards/badges/rank_badge_guard_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_guard_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_guard_03_preview.webp","frame_label":"本月守護榜第 3 名專屬框"}},"companion_gift":{"1":{"title":"寵冠群芳","full":"assets/rank_rewards/badges/rank_badge_companion_gift_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_companion_gift_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_companion_gift_01_preview.webp","frame_label":"陪玩收禮榜第 1 名專屬框"},"2":{"title":"星筵紅人","full":"assets/rank_rewards/badges/rank_badge_companion_gift_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_companion_gift_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_companion_gift_02_preview.webp","frame_label":"陪玩收禮榜第 2 名專屬框"},"3":{"title":"錦堂雅客","full":"assets/rank_rewards/badges/rank_badge_companion_gift_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_companion_gift_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_companion_gift_03_preview.webp","frame_label":"陪玩收禮榜第 3 名專屬框"}},"member_gift":{"1":{"title":"金闕護君","full":"assets/rank_rewards/badges/rank_badge_member_gift_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_member_gift_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_member_gift_01_preview.webp","frame_label":"會員送禮榜第 1 名專屬框"},"2":{"title":"長明護主","full":"assets/rank_rewards/badges/rank_badge_member_gift_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_member_gift_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_member_gift_02_preview.webp","frame_label":"會員送禮榜第 2 名專屬框"},"3":{"title":"月下護卿","full":"assets/rank_rewards/badges/rank_badge_member_gift_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_member_gift_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_member_gift_03_preview.webp","frame_label":"會員送禮榜第 3 名專屬框"}},"total_recharge":{"1":{"title":"金殿貴主","full":"assets/rank_rewards/badges/rank_badge_recharge_01_full.webp","name":"assets/rank_rewards/badges/rank_badge_recharge_01_name.webp","preview":"assets/rank_rewards/badges/rank_badge_recharge_01_preview.webp","frame_label":"累計儲值榜第 1 名專屬框"},"2":{"title":"玉京上賓","full":"assets/rank_rewards/badges/rank_badge_recharge_02_full.webp","name":"assets/rank_rewards/badges/rank_badge_recharge_02_name.webp","preview":"assets/rank_rewards/badges/rank_badge_recharge_02_preview.webp","frame_label":"累計儲值榜第 2 名專屬框"},"3":{"title":"蘭臺貴客","full":"assets/rank_rewards/badges/rank_badge_recharge_03_full.webp","name":"assets/rank_rewards/badges/rank_badge_recharge_03_name.webp","preview":"assets/rank_rewards/badges/rank_badge_recharge_03_preview.webp","frame_label":"累計儲值榜第 3 名專屬框"}}});
 </script>
 
 <script src="assets/rank_top3_effects/effects_config.js"></script>
@@ -15713,57 +15487,94 @@ body:not(.role-companion) .companion-only-panel{
 </style>
 
 <script id="v298-official-test-open-features-script">
+(function v298CleanScript(){
 (function(){
   var STORE = 'dream_v298_profile_achievement_badges';
+  var PROGRESS_STORE = 'dream_achievement_progress_state_v277';
   function esc(s){return String(s == null ? '' : s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});}
-  function toastMsg(msg){try{ if(typeof window.toast==='function') window.toast(msg); else if(typeof window.toast2==='function') window.toast2(msg); }catch(_){}}
-  function currentProfileId(){return localStorage.getItem('dream_active_profile_id') || 'member-self';}
-  function loadMap(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')||{};}catch(_){return {};}}
-  function saveMap(map){localStorage.setItem(STORE, JSON.stringify(map||{}));}
-  function allAchievements(){
-    var data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
-    if(!data.length){
-      return ['初入樂園','資料達人','VIP 啟程','送禮達人','收藏愛好者','人氣陪玩','穩定在線','高評陪玩'].map(function(name,i){return {name:name,type:i>4?'companion':'member',unlocked:true,progress:1,target:1};});
-    }
-    data.forEach(function(a){
-      if(!a) return;
-      a.unlocked = true;
-      a.progress = Number(a.target || a.goal || a.required || a.progress || 1);
-      a.target = Number(a.target || a.goal || a.required || 1);
-      a.hidden = false;
-      a.secret = false;
-      a.locked = false;
+  function readJson(key, fallback){try{return JSON.parse(localStorage.getItem(key)||'')||fallback;}catch(_){return fallback;}}
+  function writeJson(key, value){try{localStorage.setItem(key, JSON.stringify(value));}catch(_){}}
+  function toastMsg(msg){try{ if(typeof window.toast==='function') window.toast(msg); else if(typeof window.toast2==='function') window.toast2(msg); }catch(_){} }
+  function currentProfileId(){try{return localStorage.getItem('dream_active_profile_id') || 'member-self';}catch(_){return 'member-self';}}
+  function profileRole(){
+    var id=currentProfileId();
+    if(/^companion/.test(id)) return 'companion';
+    var page=document.getElementById('page-profile');
+    if(page && page.classList.contains('profile-companion')) return 'companion';
+    return 'member';
+  }
+  function syncAchievements(){try{window.DreamAchievementProgress && window.DreamAchievementProgress.sync && window.DreamAchievementProgress.sync();}catch(_){} }
+  function achievementData(){syncAchievements(); return Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];}
+  function iconOf(a){return String((a && (a.icon128 || a.icon512 || a.icon || a.image || a.img)) || '');}
+  function isCompleted(a){
+    if(!a) return false;
+    var state=readJson(PROGRESS_STORE, {});
+    var saved=state[a.id] || {};
+    var target=Math.max(1, Number(a.target || a.goal || a.required || saved.target || 1));
+    var progress=Math.max(Number(a.progress || 0), Number(saved.progress || 0));
+    return !!(a.unlocked || saved.unlocked || progress >= target);
+  }
+  function roleMatches(a){
+    var role=profileRole();
+    var type=String((a && a.type) || '').toLowerCase();
+    return !type || type === 'common' || type === role;
+  }
+  function completedAchievements(){
+    var seen={};
+    return achievementData().filter(function(a){return a && a.id && a.name && roleMatches(a) && isCompleted(a);}).filter(function(a){
+      if(seen[a.id]) return false;
+      seen[a.id]=true;
+      return true;
     });
-    return data;
   }
-  function selectedNames(){
-    var map=loadMap();
-    var arr=map[currentProfileId()] || [];
-    return Array.isArray(arr) ? arr.slice(0,5) : [];
+  function normalizeSelected(raw){
+    var list=completedAchievements();
+    var byId={}, byName={};
+    list.forEach(function(a){byId[String(a.id)]=a; byName[String(a.name)]=a;});
+    return (Array.isArray(raw)?raw:[]).map(function(v){
+      var key=String(v && v.id ? v.id : v || '');
+      return byId[key] || byName[key] || null;
+    }).filter(Boolean).filter(function(a,i,arr){return arr.findIndex(function(x){return x.id===a.id;})===i;}).slice(0,5);
   }
-  function renderSelectedSlots(){
+  function selectedAchievements(){
+    var map=readJson(STORE, {});
+    var selected=normalizeSelected(map[currentProfileId()] || []);
+    var normalized=selected.map(function(a){return a.id;});
+    if(JSON.stringify(map[currentProfileId()] || []) !== JSON.stringify(normalized)){
+      map[currentProfileId()] = normalized;
+      writeJson(STORE, map);
+    }
+    return selected;
+  }
+  function renderSlots(){
     var host=document.querySelector('#page-profile [data-profile-bind="achievement-slots"]');
     if(!host) return;
-    var selected=selectedNames();
-    if(!selected.length) return;
+    var selected=selectedAchievements();
     host.innerHTML = Array.from({length:5}).map(function(_,i){
-      var name=selected[i] || '空缺';
-      return '<div class="achievement-slot"><span class="icon">'+(selected[i]?'✦':'＋')+'</span><span>'+esc(name)+'</span></div>';
+      var a=selected[i];
+      if(!a) return '<div class="achievement-slot is-empty"><span class="v325-achievement-empty">空</span></div>';
+      var icon=iconOf(a);
+      return '<div class="achievement-slot has-badge" title="'+esc(a.name)+'">'+(icon?'<img class="v325-achievement-badge-img" src="'+esc(icon)+'" alt="'+esc(a.name)+'" loading="lazy">':'<span class="v325-achievement-badge-fallback">'+esc(String(a.name).slice(0,1))+'</span>')+'<span class="v325-achievement-badge-name">'+esc(a.name)+'</span></div>';
     }).join('');
   }
-  function ensureAchievementButton(){
+  function ensureAchievementMenu(){
+    document.querySelectorAll('#page-profile .profile-info-setting-menu').forEach(function(menu){
+      var old=menu.querySelector('[data-setting-action="edit-bio-achievements"]');
+      if(old) old.textContent='簡介/成就展示';
+      if(menu.querySelector('[data-setting-action="edit-achievement-badges"]')) return;
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.dataset.settingAction='edit-achievement-badges';
+      btn.dataset.settingScope=profileRole();
+      btn.textContent='新增成就徽章';
+      if(old && old.nextSibling) menu.insertBefore(btn, old.nextSibling); else menu.appendChild(btn);
+    });
     var head=document.querySelector('#page-profile .profile-achievement-head');
-    if(!head || head.querySelector('[data-v298-open-achievement-badges]')) return;
-    var old=head.querySelector('h3');
-    if(old) old.textContent='新增成就徽章';
-    var hint=head.querySelector('.gift-count');
-    if(hint) hint.textContent='最多勾選 5 個已完成徽章';
-    var btn=document.createElement('button');
-    btn.type='button';
-    btn.className='v298-achievement-add-btn';
-    btn.setAttribute('data-v298-open-achievement-badges','1');
-    btn.textContent='新增成就徽章';
-    head.appendChild(btn);
+    if(head){
+      var h=head.querySelector('h3'); if(h) h.textContent='成就展示';
+      var hint=head.querySelector('.gift-count'); if(hint) hint.textContent='最多展示 5 個';
+      head.querySelectorAll('[data-v298-open-achievement-badges]').forEach(function(btn){btn.remove();});
+    }
   }
   function buildModal(){
     var mask=document.querySelector('.v298-achievement-modal-mask');
@@ -15777,101 +15588,54 @@ body:not(.role-companion) .companion-only-panel{
     return mask;
   }
   function openModal(){
-    allAchievements();
     var mask=buildModal();
     var modal=mask.querySelector('.v298-achievement-modal');
-    var current=new Set(selectedNames());
-    var list=allAchievements().map(function(a,i){
-      var name=a && a.name ? String(a.name) : ('成就徽章 '+(i+1));
-      var desc=a && (a.description || a.condition || a.type) ? String(a.description || a.condition || a.type) : '已完成，可展示';
-      return '<label class="v298-achievement-choice"><input type="checkbox" value="'+esc(name)+'" '+(current.has(name)?'checked':'')+'><span><b>'+esc(name)+'</b><span>'+esc(desc)+'</span></span></label>';
-    }).join('');
-    modal.innerHTML='<h3>新增成就徽章</h3><p>測試期已開放所有已完成成就；最多勾選 5 個，會顯示在會員/陪玩主頁。</p><div class="v298-achievement-list">'+list+'</div><div class="v298-achievement-actions"><button type="button" class="v298-achievement-cancel">取消</button><button type="button" class="v298-achievement-save">儲存</button></div>';
+    var current=new Set(selectedAchievements().map(function(a){return String(a.id);}));
+    var completed=completedAchievements();
+    var list=completed.length ? completed.map(function(a){
+      var icon=iconOf(a);
+      var desc=String(a.description || a.condition || a.type || '已完成');
+      return '<label class="v298-achievement-choice"><input type="checkbox" value="'+esc(a.id)+'" '+(current.has(String(a.id))?'checked':'')+'>'+(icon?'<img class="v298-achievement-choice-icon" src="'+esc(icon)+'" alt="'+esc(a.name)+'" loading="lazy">':'<span class="v298-achievement-choice-fallback">'+esc(String(a.name).slice(0,1))+'</span>')+'<span><b>'+esc(a.name)+'</b><span>'+esc(desc)+'</span></span></label>';
+    }).join('') : '<div class="v298-achievement-empty">目前沒有已完成的成就徽章。請先完成成就後再新增徽章。</div>';
+    modal.innerHTML='<h3>新增成就徽章</h3><p>只可選擇已完成的成就，最多展示 5 個；未放置的位置會顯示「空」。</p><div class="v298-achievement-list">'+list+'</div><div class="v298-achievement-actions"><button type="button" class="v298-achievement-cancel">取消</button><button type="button" class="v298-achievement-save">儲存</button></div>';
     mask.classList.add('show');
   }
   function saveSelected(){
     var mask=buildModal();
-    var checks=Array.from(mask.querySelectorAll('.v298-achievement-choice input:checked')).slice(0,5);
-    var names=checks.map(function(x){return x.value;});
-    var map=loadMap();
-    map[currentProfileId()] = names;
-    saveMap(map);
+    var completed=completedAchievements();
+    var allowed=new Set(completed.map(function(a){return String(a.id);}));
+    var ids=Array.from(mask.querySelectorAll('.v298-achievement-choice input:checked')).map(function(x){return String(x.value);}).filter(function(id){return allowed.has(id);}).slice(0,5);
+    var map=readJson(STORE, {});
+    map[currentProfileId()] = ids;
+    writeJson(STORE, map);
     mask.classList.remove('show');
-    renderSelectedSlots();
+    renderSlots();
     toastMsg('已更新成就徽章展示，最多 5 個。');
   }
-  function openAllTesting(){
-    allAchievements();
-    try{
-      if(window.DreamAccessV239){
-        window.DreamAccessV239.isLoggedIn=function(){return true;};
-        window.DreamAccessV239.requireLogin=function(){return true;};
-        window.DreamAccessV239.guardPageAccess=function(name){return name;};
-        window.DreamAccessV239.openViewMode=true;
-      }
-      window.isLoginRequiredPage=function(){return false;};
-      window.requireLogin=function(){return true;};
-      window.needLogin=function(){return true;};
-    }catch(_){ }
-  }
-  function boot(){
-    openAllTesting();
-    ensureAchievementButton();
-    renderSelectedSlots();
-    document.body.classList.add('role-companion');
-  }
+  function boot(){ensureAchievementMenu(); renderSlots();}
   document.addEventListener('click',function(e){
-    var badgeBtn=e.target.closest('[data-v298-open-achievement-badges]');
-    if(badgeBtn){e.preventDefault();e.stopPropagation();openModal();return;}
-    if(e.target.closest('.v298-achievement-cancel')){e.preventDefault();buildModal().classList.remove('show');return;}
-    if(e.target.closest('.v298-achievement-save')){e.preventDefault();saveSelected();return;}
+    var action=e.target.closest('[data-setting-action="edit-achievement-badges"],[data-v298-open-achievement-badges]');
+    if(action){e.preventDefault();e.stopImmediatePropagation();openModal();return false;}
+    if(e.target.closest('.v298-achievement-cancel')){e.preventDefault();buildModal().classList.remove('show');return false;}
+    if(e.target.closest('.v298-achievement-save')){e.preventDefault();saveSelected();return false;}
     var checked=e.target.closest('.v298-achievement-choice input');
     if(checked){
       var mask=buildModal();
       var all=Array.from(mask.querySelectorAll('.v298-achievement-choice input:checked'));
-      if(all.length>5){checked.checked=false;toastMsg('最多只能勾選 5 個成就徽章。');}
+      if(all.length>5){checked.checked=false;toastMsg('最多只能展示 5 個成就徽章。');}
     }
   },true);
-  document.addEventListener('click',function(e){
-    var go=e.target.closest('[data-go]');
-    if(go && typeof window.showPage==='function'){
-      var page=go.getAttribute('data-go');
-      if(page && page!=='login'){
-        e.preventDefault();
-        e.stopPropagation();
-        window.showPage(page);
-        setTimeout(boot,80);
-        return;
-      }
-    }
-    var profile=e.target.closest('[data-open-profile]');
-    if(profile && typeof window.showPage==='function'){
-      e.preventDefault();
-      e.stopPropagation();
-      var role = (typeof getDreamLoginRole==='function' ? getDreamLoginRole() : 'member');
-      var inCompanionHome = !!profile.closest('#page-companion-home');
-      var targetId = (inCompanionHome || role === 'companion' || document.body.classList.contains('role-companion')) ? 'companion-self' : 'member-self';
-      try{ localStorage.setItem('dream_active_profile_id', targetId); }catch(_){}
-      if(typeof goProfile === 'function') goProfile(targetId);
-      else { window.showPage('profile'); if(typeof window.renderProfile==='function') setTimeout(window.renderProfile,0); }
-      setTimeout(boot,80);
-      return;
-    }
-  },true);
-  var oldRender=window.renderDreamAchievements;
-  if(typeof oldRender==='function' && !oldRender.__v298OpenAll){
-    window.renderDreamAchievements=function(){allAchievements(); return oldRender.apply(this,arguments);};
-    window.renderDreamAchievements.__v298OpenAll=true;
-  }
   var oldProfile=window.renderProfile;
-  if(typeof oldProfile==='function' && !oldProfile.__v298BadgeSlots){
-    window.renderProfile=function(){var out=oldProfile.apply(this,arguments); setTimeout(function(){ensureAchievementButton();renderSelectedSlots();},0); return out;};
-    window.renderProfile.__v298BadgeSlots=true;
+  if(typeof oldProfile==='function' && !oldProfile.__v325BadgeSlots){
+    window.renderProfile=function(){var out=oldProfile.apply(this,arguments); setTimeout(boot,0); setTimeout(boot,120); return out;};
+    window.renderProfile.__v325BadgeSlots=true;
   }
+  window.DreamProfileAchievementBadges={render:renderSlots,open:openModal,completed:completedAchievements};
   window.addEventListener('hashchange',function(){setTimeout(boot,120);});
   window.addEventListener('dream-auth-updated',function(){setTimeout(boot,80);});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,80);});
-  else setTimeout(boot,80);
+  document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,80);});
+  setTimeout(boot,80);
+})();
 })();
 </script>
 
@@ -15880,7 +15644,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=324', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=325', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15899,7 +15663,7 @@ body:not(.role-companion) .companion-only-panel{
 .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name{
   position:relative!important;
   z-index:50!important;
-  font-size:55px!important;
+  font-size:34px!important;
   line-height:1!important;
   font-weight:950!important;
   transform:scale(1)!important;
@@ -15924,7 +15688,7 @@ body:not(.role-companion) .companion-only-panel{
 }
 #page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name,
 .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name{
-  font-size:60px!important;
+  font-size:38px!important;
   transform:scale(1.01)!important;
 }
 #page-profile .profile-guardian-top3 .profile-guardian-name .rank-top3-gufeng-name,
@@ -15998,7 +15762,7 @@ body:not(.role-companion) .companion-only-panel{
   function forceGuardianNameSize(){
     document.querySelectorAll('.profile-guardian-top3 .profile-guardian-podium .profile-guardian-name').forEach(function(el){
       var isRank1 = !!el.closest('.profile-guardian-podium.rank1');
-      el.style.setProperty('font-size', isRank1 ? '60px' : '55px', 'important');
+      el.style.setProperty('font-size', isRank1 ? '38px' : '34px', 'important');
       el.style.setProperty('line-height', '1', 'important');
       el.style.setProperty('font-weight', '950', 'important');
       el.style.setProperty('transform', isRank1 ? 'scale(1.01)' : 'scale(1)', 'important');
@@ -16020,11 +15784,11 @@ body:not(.role-companion) .companion-only-panel{
       el.style.setProperty('align-items', 'center', 'important');
       el.style.setProperty('justify-content', 'center', 'important');
       el.querySelectorAll('.rank-top3-gufeng-name').forEach(function(box){
-        box.style.setProperty('width', '100%', 'important');
+        box.style.setProperty('width', isRank1 ? '300px' : '260px', 'important');
         box.style.setProperty('max-width', 'none', 'important');
         box.style.setProperty('margin-left', 'auto', 'important');
         box.style.setProperty('margin-right', 'auto', 'important');
-        box.style.setProperty('transform', 'scale(1)', 'important');
+        box.style.setProperty('transform', 'none', 'important');
         box.style.setProperty('transform-origin', 'center center', 'important');
         box.style.setProperty('overflow', 'visible', 'important');
         box.style.setProperty('display', 'flex', 'important');
@@ -16034,7 +15798,7 @@ body:not(.role-companion) .companion-only-panel{
         box.style.setProperty('box-sizing', 'border-box', 'important');
       });
       el.querySelectorAll('canvas,img').forEach(function(node){
-        node.style.setProperty('transform', 'scale(1)', 'important');
+        node.style.setProperty('transform', 'none', 'important');
         node.style.setProperty('transform-origin', 'center center', 'important');
         node.style.setProperty('max-width', 'none', 'important');
         node.style.setProperty('display', 'block', 'important');
@@ -16076,7 +15840,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v324'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v325'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16214,6 +15978,90 @@ body:not(.role-companion) .companion-only-panel{
   setTimeout(install,80);
   setTimeout(install,300);
   setInterval(closeLegalConsent,1000);
+})();
+</script>
+<style id="v325-launch-final-css">
+#legalConsentOverlay,.legal-consent-overlay,.register-legal-consent-box,[data-legal-consent-box]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;}
+#page-profile .profile-info-setting-wrap .mini-gear,#page-profile .profile-feed-panel .mini-gear{display:inline-grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
+#page-profile .profile-info-setting-menu{display:none!important;}
+#page-profile .profile-info-setting-menu.open{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
+#page-profile .profile-achievement-slots{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
+#page-profile .achievement-slot{min-height:70px!important;padding:6px 4px!important;grid-template-rows:38px auto!important;gap:3px!important;align-content:center!important;justify-items:center!important;}
+#page-profile .achievement-slot.is-empty{display:grid!important;place-items:center!important;color:rgba(255,238,246,.74)!important;font-size:13px!important;font-weight:900!important;}
+.v325-achievement-badge-img{width:38px!important;height:38px!important;object-fit:contain!important;display:block!important;filter:drop-shadow(0 4px 9px rgba(0,0,0,.28))!important;}
+.v325-achievement-badge-fallback{width:38px!important;height:38px!important;border-radius:14px!important;display:grid!important;place-items:center!important;background:linear-gradient(180deg,#ffe0a9,#ec74aa)!important;color:#5f1e3d!important;font-weight:950!important;}
+.v325-achievement-badge-name{max-width:100%!important;font-size:10px!important;line-height:1.15!important;font-weight:900!important;color:#fff1f7!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+.v298-achievement-choice{grid-template-columns:auto 40px minmax(0,1fr)!important;}
+.v298-achievement-choice-icon,.v298-achievement-choice-fallback{width:38px!important;height:38px!important;border-radius:12px!important;object-fit:contain!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.08)!important;color:#ffe0a9!important;font-weight:950!important;}
+.v298-achievement-empty{padding:18px 12px!important;text-align:center!important;color:rgba(255,238,246,.78)!important;border:1px dashed rgba(255,221,190,.28)!important;border-radius:15px!important;background:rgba(255,255,255,.055)!important;}
+.v267-rank-empty{padding:18px 12px!important;text-align:center!important;color:rgba(255,238,246,.76)!important;border:1px dashed rgba(255,221,190,.22)!important;border-radius:15px!important;background:rgba(255,255,255,.05)!important;}
+#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name{font-size:34px!important;line-height:1!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;overflow:visible!important;width:100%!important;max-width:none!important;}
+#page-profile .profile-guardian-top3 .profile-guardian-podium.rank1 .profile-guardian-name{font-size:38px!important;}
+#page-profile .profile-guardian-name .rank-top3-gufeng-name{width:260px!important;max-width:none!important;margin:-34px auto -28px!important;transform:none!important;transform-origin:center center!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;}
+#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{width:300px!important;margin:-38px auto -32px!important;}
+#page-profile .profile-guardian-name .rank-top3-gufeng-canvas{width:100%!important;height:100%!important;max-width:none!important;}
+@media(max-width:480px){#page-profile .profile-guardian-name .rank-top3-gufeng-name{width:230px!important;margin:-30px auto -25px!important;}#page-profile .profile-guardian-podium.rank1 .profile-guardian-name .rank-top3-gufeng-name{width:260px!important;margin:-34px auto -28px!important;}#page-profile .profile-achievement-slots{gap:6px!important;}#page-profile .achievement-slot{min-height:64px!important;}.v325-achievement-badge-img,.v325-achievement-badge-fallback{width:34px!important;height:34px!important;}.v325-achievement-badge-name{font-size:9px!important;}}
+</style>
+<script id="v325-launch-final-js">
+(function v325LaunchScript(){
+(function(){
+  function safeSet(key,value){try{localStorage.setItem(key,value);}catch(_){}}
+  function closeLegal(){
+    safeSet('dream_legal_consent_v115','accepted');
+    document.querySelectorAll('#legalConsentOverlay,.legal-consent-overlay').forEach(function(el){el.classList.remove('show');el.setAttribute('aria-hidden','true');el.style.setProperty('display','none','important');el.style.setProperty('visibility','hidden','important');el.style.setProperty('pointer-events','none','important');});
+    document.querySelectorAll('[data-legal-consent-box],.register-legal-consent-box').forEach(function(el){el.style.setProperty('display','none','important');});
+  }
+  window.openConsent=function(){closeLegal();return;};
+  window.maybeRequireConsent=function(){closeLegal();return;};
+  window.DreamLegalConsent={open:closeLegal,close:closeLegal,accepted:function(){return true;},reset:closeLegal};
+  function forceGuardianNames(){
+    document.querySelectorAll('#page-profile .profile-guardian-top3 .profile-guardian-podium .profile-guardian-name').forEach(function(el){
+      var isRank1=!!el.closest('.profile-guardian-podium.rank1');
+      el.style.setProperty('font-size',isRank1?'38px':'34px','important');
+      el.style.setProperty('line-height','1','important');
+      el.style.setProperty('width','100%','important');
+      el.style.setProperty('text-align','center','important');
+      el.style.setProperty('justify-content','center','important');
+      el.style.setProperty('align-items','center','important');
+      el.style.setProperty('overflow','visible','important');
+      el.querySelectorAll('.rank-top3-gufeng-name').forEach(function(box){
+        box.style.setProperty('width',isRank1?'300px':'260px','important');
+        box.style.setProperty('max-width','none','important');
+        box.style.setProperty('margin',isRank1?'-38px auto -32px':'-34px auto -28px','important');
+        box.style.setProperty('transform','none','important');
+        box.style.setProperty('transform-origin','center center','important');
+        box.style.setProperty('display','inline-flex','important');
+        box.style.setProperty('justify-content','center','important');
+      });
+      el.querySelectorAll('canvas,img').forEach(function(node){
+        node.style.setProperty('max-width','none','important');
+        node.style.setProperty('margin-left','auto','important');
+        node.style.setProperty('margin-right','auto','important');
+      });
+    });
+  }
+  function markBackTargets(){
+    var active='';try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+    var target=active==='companion-self'?'companion-home':'member';
+    document.querySelectorAll('#page-profile .profile-back,#page-profile [data-profile-back]').forEach(function(back){back.dataset.go=target;back.setAttribute('data-go',target);});
+  }
+  function boot(){closeLegal();forceGuardianNames();markBackTargets();window.DreamProfileAchievementBadges&&window.DreamProfileAchievementBadges.render&&window.DreamProfileAchievementBadges.render();}
+  document.addEventListener('click',function(e){
+    closeLegal();
+    var back=e.target.closest&&e.target.closest('#page-profile .profile-back,#page-profile [data-profile-back]');
+    if(back){
+      var active='';try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
+      var target=active==='companion-self'?'companion-home':'member';
+      e.preventDefault();e.stopImmediatePropagation();
+      if(typeof window.showPage==='function') window.showPage(target); else location.hash='#'+target;
+      return false;
+    }
+  },true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+  window.addEventListener('hashchange',function(){setTimeout(boot,80);});
+  window.addEventListener('dream-auth-updated',function(){setTimeout(boot,80);});
+  setTimeout(boot,80);setTimeout(boot,320);setInterval(boot,900);
+})();
 })();
 </script>
 </body>
