@@ -1,3 +1,4 @@
+/* v346-api-missing-actions-guard-fix */
 /* login-connect-compat-front */
 
 (function(){
@@ -1041,9 +1042,20 @@
     const res = await api("request_reset", {email});
     toast(res.message || (res.ok ? "已送出" : "送出失敗"));
   }
+
+  function normalizeCompanionListV346(res){
+    if(!res || !res.ok) return [];
+    const list = res.companions || res.list || res.data || res.items || [];
+    return Array.isArray(list) ? list : [];
+  }
+
   function loadProtectedData(){
+    // 未登入時只載入公開資料，避免 recharge_request_history / gift_history 一直回 401。
+    loadShop();
+    loadCompanions();
     if(!authUser && authType !== "companion") return;
-    loadShop(); loadCompanions(); loadRecords(); loadRechargeRecords();
+    loadRecords();
+    loadRechargeRecords();
   }
   function wire(){
     document.addEventListener("click", async e=>{

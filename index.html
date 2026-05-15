@@ -1,3 +1,4 @@
+<!-- v346-review-badge-safe-fix -->
 <!-- v345-member-login-direct-fix -->
 <!-- v344-member-login-force-fix -->
 <!-- v343-member-login-click-fix -->
@@ -5663,12 +5664,14 @@ main.app{padding-bottom:0 !important;}
 
   <section id="page-home" class="page active" data-page="home">
     <div class="logo-hero">
-      <img src="assets/logo.webp" alt="夢競娛樂精品"></div>
+      <img src="assets/logo.webp" alt="夢競娛樂精品">
+    </div>
 
     <div class="search-image-wrap">
       <img src="assets/search_bar.webp" alt="搜尋框">
       <input id="homeSearch" placeholder="請輸入陪玩、商品等關鍵字">
-      <button type="button" data-home-search-btn>搜索</button></div>
+      <button type="button" data-home-search-btn>搜索</button>
+    </div>
     <div class="home-search-results" id="homeSearchResults"></div>
 
     <div class="home-image-card home-banner-card hero-carousel" data-hero-carousel>
@@ -5680,7 +5683,8 @@ main.app{padding-bottom:0 !important;}
       </a>
       <div class="hero-dots" aria-label="首頁輪播圖切換">
         <button class="hero-dot active" type="button" data-hero-index="0" aria-label="第 1 張"></button>
-        <button class="hero-dot" type="button" data-hero-index="1" aria-label="第 2 張"></button></div>
+        <button class="hero-dot" type="button" data-hero-index="1" aria-label="第 2 張"></button>
+      </div>
     </div>
 
     <div class="home-shortcut-grid">
@@ -5695,7 +5699,8 @@ main.app{padding-bottom:0 !important;}
       </a>
       <a class="home-image-card" data-go="achievements">
         <img src="assets/achievement_norm.webp" alt="我的成就館">
-      </a></div>
+      </a>
+    </div>
 
     <section class="panel notice-line">
       <strong>最新公告</strong>
@@ -5705,21 +5710,24 @@ main.app{padding-bottom:0 !important;}
     <section class="recommend-companion-panel" aria-label="推薦陪玩">
       <div class="recommend-panel-label">推薦陪玩</div>
       <div class="recommend-list" id="homeRecommendCompanions">
-        <div class="companion-empty">正在計算推薦陪玩...</div></div>
+        <div class="companion-empty">正在計算推薦陪玩...</div>
+      </div>
     </section>
 
 
 
     <section class="home-leaderboard-tabs" aria-label="排行榜切換">
       <div class="home-leaderboard-head">
-        <h2 data-current-leaderboard-title>VIP排行榜</h2></div>
+        <h2 data-current-leaderboard-title>VIP排行榜</h2>
+      </div>
       <div class="leaderboard-tab-row" role="tablist" aria-label="排行榜列表">
         <button class="leaderboard-tab active" type="button" data-board-key="vip_rank">VIP排行榜</button>
         <button class="leaderboard-tab" type="button" data-board-key="weekly_charm">本月魅力榜</button>
         <button class="leaderboard-tab" type="button" data-board-key="monthly_guardian">本月守護榜</button>
         <button class="leaderboard-tab" type="button" data-board-key="companion_gift">陪玩收禮榜</button>
         <button class="leaderboard-tab" type="button" data-board-key="member_gift">會員送禮榜</button>
-        <button class="leaderboard-tab" type="button" data-board-key="total_recharge">累計儲值榜</button></div>
+        <button class="leaderboard-tab" type="button" data-board-key="total_recharge">累計儲值榜</button>
+      </div>
     </section>
 
     <div class="home-image-card home-top3-card top3-wrapper v35-top3">
@@ -5769,7 +5777,8 @@ main.app{padding-bottom:0 !important;}
           <input data-v26-input="inn-image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         </label>
         <span class="composer-file-name" data-v26-image-name>尚未選擇圖片</span>
-        <button class="btn" data-v26-action="inn-post" type="button">＋ 發布文章</button></div>
+        <button class="btn" data-v26-action="inn-post" type="button">＋ 發布文章</button>
+      </div>
     </section>
     <div id="innPostList">
       <article class="panel post-card" data-post-id="1" data-author="小白" data-time="1774284720000" data-likes="94" data-favorites="18">
@@ -5792,7 +5801,8 @@ main.app{padding-bottom:0 !important;}
         <div class="post-image"></div>
         <div class="post-actions"><button data-v26-action="favorite" data-post-id="3">☆ 收藏 <span data-fav-count>42</span></button><button data-v26-action="comment" data-post-id="3">留言</button><button data-v26-action="like" data-post-id="3">♡ <span data-like-count>76</span></button></div>
         <div style="display:flex;gap:8px;margin-top:10px"><input data-v26-comment-input="3" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-v26-action="comment" data-post-id="3" type="button">送出</button></div>
-      </article></div>
+      </article>
+    </div>
     <section class="panel inn-empty" id="innEmptyState">目前沒有符合條件的動態。</section>
   </section>
 
@@ -5810,7 +5820,8 @@ main.app{padding-bottom:0 !important;}
         <a class="game-img-card voice" data-market-mode="voice">
           <img src="assets/female_banner_norm2.webp" alt="聲優陪聊">
           <div class="game-card-text"><strong>聲優陪聊</strong><span>聲音陪伴・溫暖傾聽</span></div>
-        </a></div>
+        </a>
+      </div>
     </section>
     <div class="search-row"><input id="marketSearch" placeholder="搜尋商品名稱、關鍵詞"><button class="btn">🛒</button></div>
     <div class="category-row" id="marketCats"></div>
@@ -5834,12 +5845,14 @@ main.app{padding-bottom:0 !important;}
         <div class="market-detail-title" data-product-hero-title>夢競商品</div>
         <div class="market-detail-game"><span class="market-detail-game-mark" data-product-game-mark>△</span><span data-product-game>三角洲行動</span></div>
         <div class="market-detail-sub" data-product-hero-sub>專屬兌換內容</div>
-        <div class="market-detail-watermark" data-product-watermark>夢競</div></div>
+        <div class="market-detail-watermark" data-product-watermark>夢競</div>
+      </div>
     </section>
     <section class="market-detail-card">
       <div class="market-detail-head">
         <div class="market-detail-name" data-product-name>商品名稱</div>
-        <div class="market-detail-stock" data-product-stock>可兌換 0</div></div>
+        <div class="market-detail-stock" data-product-stock>可兌換 0</div>
+      </div>
       <section class="exchange-form-panel in-detail-card exchange-form-hidden" data-exchange-form="physical">
         <h3>收件資料</h3>
         <div class="exchange-form-grid">
@@ -5867,7 +5880,8 @@ main.app{padding-bottom:0 !important;}
           <div class="market-detail-price-label">商品價格</div>
           <div class="market-detail-price" data-product-price>0<span class="market-detail-price-unit">短陌</span></div>
         </div>
-        <div class="market-detail-kpi" data-product-kpi>已兌換 0</div></div>
+        <div class="market-detail-kpi" data-product-kpi>已兌換 0</div>
+      </div>
     </section>
     <section class="market-detail-option-card">
       <h3>兌換內容</h3>
@@ -5877,8 +5891,10 @@ main.app{padding-bottom:0 !important;}
       <div class="market-detail-bottom-inner">
         <div>
           <div class="market-detail-total-label">總價</div>
-          <div class="market-detail-total" data-product-bottom-price>0 短陌</div></div>
-        <button class="market-detail-buy" type="button" data-product-exchange>立即兌換</button></div>
+          <div class="market-detail-total" data-product-bottom-price>0 短陌</div>
+        </div>
+        <button class="market-detail-buy" type="button" data-product-exchange>立即兌換</button>
+      </div>
     </div>
   </section>
 
@@ -5919,7 +5935,8 @@ main.app{padding-bottom:0 !important;}
       <div class="checkin-calendar-grid" id="checkinCalendarGrid"></div>
       <div class="checkin-actions">
         <button class="checkin-today-btn" type="button" data-checkin-today>今日簽到領 10 限時短陌</button>
-        <div class="checkin-note" data-checkin-note>系統會自動偵測目前月份；會員與陪玩皆可於當日自行簽到。</div></div>
+        <div class="checkin-note" data-checkin-note>系統會自動偵測目前月份；會員與陪玩皆可於當日自行簽到。</div>
+      </div>
     </section>
   </section>
 
@@ -5947,10 +5964,12 @@ main.app{padding-bottom:0 !important;}
             <span class="wheel-label" style="--a:270deg">888<br>折抵</span>
             <span class="wheel-label" style="--a:300deg">1888<br>大獎</span>
             <span class="wheel-label" style="--a:330deg">必中<br>進度</span>
-            <div class="wheel-center">抽</div></div>
+            <div class="wheel-center">抽</div>
+          </div>
         </div>
         <div class="raffle-result-text" data-raffle-result>準備開抽</div>
-        <div class="gacha-base wheel-base">10 短陌 / 次</div></div>
+        <div class="gacha-base wheel-base">10 短陌 / 次</div>
+      </div>
       <div class="wallet wallet-split" style="margin-bottom:0"><div class="wallet-balance-line"><span><span class="wallet-balance-num">0</span>短陌餘額</span><span class="wallet-balance-divider">/</span><span class="wallet-balance-limited"><span class="wallet-balance-num">0</span>限時短陌</span><span class="wallet-balance-divider">/</span><span class="wallet-balance-ticket"><span class="wallet-balance-num" data-bind="raffle-ticket">0</span>抽獎券</span></div><button class="btn" data-go="market-rules">短陌規則</button></div>
       <div class="raffle-progress" aria-label="必中池進度">
         <div class="raffle-progress-head"><span>必中池進度</span><span data-raffle-progress-text>0/5</span></div>
@@ -5958,7 +5977,8 @@ main.app{padding-bottom:0 !important;}
       </div>
       <div class="raffle-actions">
         <button class="btn" type="button" data-action="raffle-single">立即抽獎</button>
-        <button class="btn" type="button" data-action="raffle-ten">十連抽獎</button></div>
+        <button class="btn" type="button" data-action="raffle-ten">十連抽獎</button>
+      </div>
       <div class="raffle-status" data-raffle-status>每 10 短陌可抽 1 次，消費優先扣限時短陌；抽獎獎勵短陌皆為限時短陌。</div>
       <div class="raffle-note">折抵券最高折抵訂單金額 20%，每單限用 1 張；每會員每日最多 10 抽、每月最多 100 抽；1888 折抵券每月限量 1 名；所有抽獎短陌獎勵皆為限時短陌，不可折現、不可轉讓、不可找零。</div>
     </section>
@@ -5986,7 +6006,8 @@ main.app{padding-bottom:0 !important;}
       <section class="panel gift-panel">
         <div class="gift-tabs" role="tablist" aria-label="禮物分類">
           <button class="gift-tab active" type="button" data-gift-tab="regular">常駐禮物</button>
-          <button class="gift-tab" type="button" data-gift-tab="exclusive">專屬禮物</button></div>
+          <button class="gift-tab" type="button" data-gift-tab="exclusive">專屬禮物</button>
+        </div>
         <div class="gift-hint" data-gift-hint>
           <strong>說明：</strong> 專屬禮物僅限 <strong>VIP 會員</strong> 或 <strong>陪玩</strong> 使用；一般會員可瀏覽但未開通時會顯示鎖定。
         </div>
@@ -6004,18 +6025,22 @@ main.app{padding-bottom:0 !important;}
           <div class="profile-head-info">
             <div class="profile-name-row">
               <h2 data-profile-bind="name">夢競會員</h2>
-              <span class="gender-icon" data-profile-bind="gender"></span></div>
+              <span class="gender-icon" data-profile-bind="gender"></span>
+            </div>
             <div class="rating-line">
               <span>評分：</span><b data-profile-bind="rating">0.0</b>
               <span class="stars-view" data-profile-bind="stars">☆☆☆☆☆</span>
-              <button class="review-arrow" type="button" data-action="open-profile-reviews">›</button></div>
+              <button class="review-arrow" type="button" data-action="open-profile-reviews">›</button>
+            </div>
             <div class="review-help">點擊星星右側箭頭，可查看此人完成訂單後收到的公開評價。</div>
-            <div class="profile-level" data-profile-bind="level">VIP等級：無VIP會員</div></div>
+            <div class="profile-level" data-profile-bind="level">VIP等級：無VIP會員</div>
+          </div>
         </div>
         <div class="profile-stat-row">
           <span class="status-pill" data-profile-bind="status">在線</span>
           <span><i class="profile-stat-icon like" aria-hidden="true"></i><b data-profile-bind="recommend">0</b> 人推薦</span>
-          <span><i class="profile-stat-icon order" aria-hidden="true"></i><b data-profile-bind="orders">0</b> 單</span></div>
+          <span><i class="profile-stat-icon order" aria-hidden="true"></i><b data-profile-bind="orders">0</b> 單</span>
+        </div>
       </section>
   
       <section class="panel profile-info-panel">
@@ -6043,12 +6068,14 @@ main.app{padding-bottom:0 !important;}
       <section class="panel profile-gift-panel">
         <div class="section-title">
           <h2>禮物牆</h2>
-          <span class="gift-count" data-profile-bind="gift-count">已點亮 0 / 50</span></div>
+          <span class="gift-count" data-profile-bind="gift-count">已點亮 0 / 50</span>
+        </div>
         <div class="profile-gift-wall" data-profile-bind="gift-wall"></div>
         <div class="profile-gift-collection-panel">
           <div class="profile-gift-collection-tabs" role="tablist" aria-label="禮物獲得狀態">
             <button class="active" type="button" data-profile-gift-filter="owned">已獲得禮物</button>
-            <button type="button" data-profile-gift-filter="missing">未獲得禮物</button></div>
+            <button type="button" data-profile-gift-filter="missing">未獲得禮物</button>
+          </div>
           <div class="profile-gift-collection-list" data-profile-bind="gift-collection"></div>
         </div>
       </section>
@@ -6056,7 +6083,8 @@ main.app{padding-bottom:0 !important;}
       <section class="panel profile-feed-panel">
         <div class="section-title inline-title">
           <h2>個人動態</h2>
-          <button class="mini-gear" type="button" data-action="edit-profile-posts">⚙</button></div>
+          <button class="mini-gear" type="button" data-action="edit-profile-posts">⚙</button>
+        </div>
         <div class="profile-post-list" data-profile-bind="posts"></div>
       </section>
   
@@ -6064,7 +6092,8 @@ main.app{padding-bottom:0 !important;}
         <button type="button" data-action="follow-profile">♡<span>關注</span></button>
         <button type="button" data-action="recommend-profile"><i class="profile-action-icon like" aria-hidden="true"></i><span>推薦</span></button>
         <button type="button" class="reserve-main" data-action="reserve-profile">預約下單</button>
-        <button type="button" class="service-main" data-action="service-order">客服下單</button></div>
+        <button type="button" class="service-main" data-action="service-order">客服下單</button>
+      </div>
     </section>
 
   <section id="page-member" class="page" data-page="member">
@@ -6108,7 +6137,8 @@ main.app{padding-bottom:0 !important;}
           <div class="member-card-extra"><span class="member-card-gender-icon" data-bind="member-gender-icon">◇</span><span data-bind="member-profile-tip">陪玩會員中心</span></div>
           <div class="profile-login-tip">點擊名稱或大頭照可前往帳密登入頁面。</div>
           <div class="test-role-switch-row"><button type="button" class="test-role-switch-btn" data-test-role-switch>已登錄的會員/陪玩</button></div>
-        </div></div>
+        </div>
+      </div>
     </section>
 
     <section class="panel assets">
@@ -6122,7 +6152,8 @@ main.app{padding-bottom:0 !important;}
       <div class="service-grid">
         <a class="service-item" data-go="exchange-record"><div class="service-icon classic">⇄</div><div class="service-name">兌換紀錄</div></a>
         <a class="service-item" data-go="recharge-record"><div class="service-icon classic">卡</div><div class="service-name">儲值紀錄</div></a>
-        <a class="service-item" data-go="review"><div class="service-icon classic">★</div><div class="service-name">待評價<span class="review-badge" data-review-pending-badge style="display:none">0</span></div></a></div>
+        <a class="service-item" data-go="review"><div class="service-icon classic">★</div><div class="service-name">待評價<span class="review-badge" data-review-pending-badge style="display:none">0</span></div></a>
+      </div>
     </section>
 
     <section class="panel" style="margin-bottom:12px">
@@ -6140,13 +6171,15 @@ main.app{padding-bottom:0 !important;}
         <a class="service-item" href="https://lin.ee/64EK1Iu"><div class="service-icon classic">客</div><div class="service-name">我的客服</div></a>
         <a class="service-item" data-go="about"><div class="service-icon classic">文</div><div class="service-name">關於我們</div></a>
         <a class="service-item" data-review-record data-companion-only><div class="service-icon classic">評</div><div class="service-name">評價紀錄</div></a>
-        <a class="service-item" data-companion-action="refresh"><div class="service-icon classic">整</div><div class="service-name">重新整理</div></a></div>
+        <a class="service-item" data-companion-action="refresh"><div class="service-icon classic">整</div><div class="service-name">重新整理</div></a>
+      </div>
     </section>
 
     
     <section class="panel companion-only-panel companion-front-panel" style="margin-bottom:12px" data-companion-only>
 <div class="section-title companion-front-title">
-        <h2>陪玩接單狀態</h2></div>
+        <h2>陪玩接單狀態</h2>
+      </div>
 
       <div class="companion-api-note" data-companion-bind="notice">正在連線陪玩後台資料...</div>
       <div class="companion-status-list">
@@ -6160,7 +6193,8 @@ main.app{padding-bottom:0 !important;}
       </div>
       <div class="companion-punch-row">
         <button class="btn" type="button" data-companion-action="check-in">上班打卡</button>
-        <button class="btn btn-ghost" type="button" data-companion-action="check-out">下班打卡</button></div>
+        <button class="btn btn-ghost" type="button" data-companion-action="check-out">下班打卡</button>
+      </div>
     </section>
 
     <section class="panel companion-only-panel companion-order-standalone-v161" style="margin-bottom:12px" data-companion-only>
@@ -6169,13 +6203,15 @@ main.app{padding-bottom:0 !important;}
         <section class="companion-order-block-v161 is-collapsed" data-order-block="pending">
           <div class="companion-order-block-head-v161">
             <div class="section-title"><h2>待承接訂單</h2></div>
-            <button class="companion-order-toggle-v161" type="button" data-toggle-order-block="pending">展開</button></div>
+            <button class="companion-order-toggle-v161" type="button" data-toggle-order-block="pending">展開</button>
+          </div>
           <div class="companion-order-toolbar-v161">
             <input type="text" class="input" placeholder="搜尋待承接訂單關鍵字" data-order-search="pending">
             <div class="companion-order-pager-v161">
               <button class="btn btn-ghost" type="button" data-page-prev="pending">上一頁</button>
               <span data-page-indicator="pending">1 / 1</span>
-              <button class="btn btn-ghost" type="button" data-page-next="pending">下一頁</button></div>
+              <button class="btn btn-ghost" type="button" data-page-next="pending">下一頁</button>
+            </div>
           </div>
           <div class="companion-order-grid-v161" data-order-grid="pending"></div>
         </section>
@@ -6183,13 +6219,15 @@ main.app{padding-bottom:0 !important;}
         <section class="companion-order-block-v161 is-collapsed" data-order-block="active">
           <div class="companion-order-block-head-v161">
             <div class="section-title"><h2>進行中訂單</h2></div>
-            <button class="companion-order-toggle-v161" type="button" data-toggle-order-block="active">展開</button></div>
+            <button class="companion-order-toggle-v161" type="button" data-toggle-order-block="active">展開</button>
+          </div>
           <div class="companion-order-toolbar-v161">
             <input type="text" class="input" placeholder="搜尋進行中訂單關鍵字" data-order-search="active">
             <div class="companion-order-pager-v161">
               <button class="btn btn-ghost" type="button" data-page-prev="active">上一頁</button>
               <span data-page-indicator="active">1 / 1</span>
-              <button class="btn btn-ghost" type="button" data-page-next="active">下一頁</button></div>
+              <button class="btn btn-ghost" type="button" data-page-next="active">下一頁</button>
+            </div>
           </div>
           <div class="companion-order-grid-v161" data-order-grid="active"></div>
         </section>
@@ -6197,16 +6235,19 @@ main.app{padding-bottom:0 !important;}
         <section class="companion-order-block-v161 is-collapsed" data-order-block="completed">
           <div class="companion-order-block-head-v161">
             <div class="section-title"><h2>已完成訂單</h2></div>
-            <button class="companion-order-toggle-v161" type="button" data-toggle-order-block="completed">展開</button></div>
+            <button class="companion-order-toggle-v161" type="button" data-toggle-order-block="completed">展開</button>
+          </div>
           <div class="companion-order-toolbar-v161">
             <input type="text" class="input" placeholder="搜尋已完成訂單關鍵字" data-order-search="completed">
             <div class="companion-order-pager-v161">
               <button class="btn btn-ghost" type="button" data-page-prev="completed">上一頁</button>
               <span data-page-indicator="completed">1 / 1</span>
-              <button class="btn btn-ghost" type="button" data-page-next="completed">下一頁</button></div>
+              <button class="btn btn-ghost" type="button" data-page-next="completed">下一頁</button>
+            </div>
           </div>
           <div class="companion-order-grid-v161" data-order-grid="completed"></div>
-        </section></div>
+        </section>
+      </div>
     </section>
 
 <section class="panel">
@@ -6240,7 +6281,8 @@ main.app{padding-bottom:0 !important;}
         <div class="achievement-tabs" data-achievement-tabs>
           <button class="achievement-tab active" type="button" data-ach-tab="member">會員成就</button>
           <button class="achievement-tab" type="button" data-ach-tab="companion">陪玩成就</button>
-          <button class="achievement-tab" type="button" data-ach-tab="all">全部</button></div>
+          <button class="achievement-tab" type="button" data-ach-tab="all">全部</button>
+        </div>
         <div class="achievement-filter-row">
           <input type="search" placeholder="搜尋成就名稱 / 條件" data-ach-search>
           <select data-ach-difficulty>
@@ -6251,11 +6293,14 @@ main.app{padding-bottom:0 !important;}
             <option value="地獄">地獄</option>
             <option value="修羅">修羅</option>
             <option value="隱藏">隱藏</option>
-          </select></div>
+          </select>
+          
+        </div>
         <div class="achievement-summary">
           <div class="achievement-stat"><b data-ach-stat="totalUnlocked">0 / 0</b><span>總成就 / 已完成</span></div>
           <div class="achievement-stat"><b data-ach-stat="score">0</b><span>成就分</span></div>
-        </div></div></div>
+        </div>
+        </div></div>
       <div class="achievement-list" data-achievement-list></div>
       <div class="achievement-empty" data-achievement-empty style="display:none">目前沒有符合條件的成就。之後把成就資料新增到 <strong>DREAM_ACHIEVEMENT_DATA</strong> 或改接 API 即可顯示。</div>
       <div class="achievement-lightbox" data-achievement-lightbox aria-hidden="true"><div class="achievement-lightbox-card"><button class="achievement-lightbox-close" type="button" data-ach-lightbox-close aria-label="關閉">×</button><div class="achievement-lightbox-img-wrap"><img data-ach-lightbox-img alt="成就放大圖"></div><div class="achievement-lightbox-title" data-ach-lightbox-title>成就圖示</div><div class="achievement-lightbox-secret-note" data-ach-lightbox-note style="display:none">隱藏成就：圖片與條件提示會保留部分模糊。</div></div></div>
@@ -6381,7 +6426,8 @@ main.app{padding-bottom:0 !important;}
         <div class="login-legal-v116"><label><input type="checkbox" id="front_reg_terms"><span>已閱讀並同意 <a href="terms.html" target="_blank" rel="noopener">《服務條款》</a></span></label><label><input type="checkbox" id="front_reg_privacy"><span>已閱讀並同意 <a href="privacy.html" target="_blank" rel="noopener">《隱私權政策》</a>，並同意夢競娛樂依隱私權政策蒐集、處理及利用我的個人資料。</span></label></div>
         <div class="login-actions-v116"><button class="login-main-btn-v116" id="front_reg_btn" type="button">註冊</button></div>
         <div class="login-sub-links-v116"><button type="button" data-login-form-switch="login">返回登入</button></div>
-      </div></div>
+      </div>
+    </div>
   </section>
 
 <section id="page-vip-rank" class="page">
@@ -6398,14 +6444,18 @@ main.app{padding-bottom:0 !important;}
     </div>
     <div class="legal-consent-links">
       <a href="terms.html" target="_blank" rel="noopener">查看服務條款</a>
-      <a href="privacy.html" target="_blank" rel="noopener">查看隱私權政策</a></div>
+      <a href="privacy.html" target="_blank" rel="noopener">查看隱私權政策</a>
+    </div>
     <div class="legal-consent-checks">
       <label class="legal-consent-check"><input type="checkbox" id="legalConsentTerms"><span>我已閱讀、了解並同意夢競娛樂 <a href="terms.html" target="_blank" rel="noopener">《服務條款》</a>。</span></label>
-      <label class="legal-consent-check"><input type="checkbox" id="legalConsentPrivacy"><span>我已閱讀、了解並同意夢競娛樂 <a href="privacy.html" target="_blank" rel="noopener">《隱私權政策》</a>，並同意夢競娛樂依隱私權政策蒐集、處理及利用我的個人資料。</span></label></div>
+      <label class="legal-consent-check"><input type="checkbox" id="legalConsentPrivacy"><span>我已閱讀、了解並同意夢競娛樂 <a href="privacy.html" target="_blank" rel="noopener">《隱私權政策》</a>，並同意夢競娛樂依隱私權政策蒐集、處理及利用我的個人資料。</span></label>
+    </div>
     <div class="legal-consent-actions">
       <button type="button" id="legalConsentLater">稍後再說</button>
-      <button type="button" id="legalConsentAccept" disabled>同意並繼續</button></div>
-  </div></div>
+      <button type="button" id="legalConsentAccept" disabled>同意並繼續</button>
+    </div>
+  </div>
+</div>
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
@@ -8057,7 +8107,8 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     const tagHtml = sampleTags.map(x=>`<span class="profile-tag">${esc(x)}</span>`).join('');
     if(stage) stage.innerHTML = `<div class="achievement-profile-real-preview profile-effect-frame role-${esc(role)} pfx-profile-active pfx-${esc(presetKey)} pfx-tier-${esc(tier)} family-${esc(particles.family)} ${esc(styleKey)} ${esc(effectClass)} ${esc(templateClass)}" style="${esc(inlineStyle)}">${previewRootLayer}
       <section class="profile-hero">${buildProfileFxLayer(presetKey, tier, "panel-overlay-pfx", effectConfig)}<button class="back-btn profile-back" type="button">‹</button><h1>${esc(sampleTitle)}</h1><div class="profile-top"><div class="profile-avatar-lg">${esc(avatarText)}</div><div class="profile-head-info"><div class="profile-name-row"><h2>${esc(sampleName)}</h2><span class="gender-icon">${role === 'companion' ? '♀' : ''}</span></div><div class="rating-line"><span>評分：</span><b>${esc(sampleRating)}</b><span class="stars-view">${esc(sampleStars)}</span><button class="review-arrow" type="button">›</button></div><div class="review-help">點擊星星右側箭頭，可查看此人完成訂單後收到的公開評價。</div><div class="profile-level">${esc(sampleLevel)}</div></div></div><div class="profile-stat-row"><span class="status-pill">${esc(sampleStatus)}</span><span><i class="profile-stat-icon like" aria-hidden="true"></i><b>${esc(sampleRecommend)}</b> 人推薦</span><span><i class="profile-stat-icon order" aria-hidden="true"></i><b>${esc(sampleOrders)}</b> 單</span></div></section>
-      <section class="panel profile-info-panel">${buildProfileFxLayer(presetKey, tier, "panel-overlay-pfx", effectConfig)}<div class="section-title inline-title profile-info-setting-wrap"><h2>個人簡介</h2><button class="mini-gear" type="button">⚙</button></div><p class="profile-bio">${esc(sampleBio)}</p><div class="profile-achievement-showcase"><div class="profile-achievement-head"><h3>成就展示</h3><span class="gift-count">最多展示 5 個</span></div><div class="profile-achievement-slots">${slotsHtml}</div></div><h3 class="profile-subtitle">個性標籤</h3><div class="tag-list">${tagHtml}</div><h3 class="profile-subtitle">遊戲類別</h3><div class="game-list"><span class="game-tag">${esc(sampleGame)}</span></div><div class="profile-preview-real-note">這裡使用正式主頁的版型預覽，所以會和實際會員主頁 / 陪玩主頁顯示效果一致；套用後同樣出現在主頁背景、頭像、名稱與卡片邊框。</div></section></div>`;
+      <section class="panel profile-info-panel">${buildProfileFxLayer(presetKey, tier, "panel-overlay-pfx", effectConfig)}<div class="section-title inline-title profile-info-setting-wrap"><h2>個人簡介</h2><button class="mini-gear" type="button">⚙</button></div><p class="profile-bio">${esc(sampleBio)}</p><div class="profile-achievement-showcase"><div class="profile-achievement-head"><h3>成就展示</h3><span class="gift-count">最多展示 5 個</span></div><div class="profile-achievement-slots">${slotsHtml}</div></div><h3 class="profile-subtitle">個性標籤</h3><div class="tag-list">${tagHtml}</div><h3 class="profile-subtitle">遊戲類別</h3><div class="game-list"><span class="game-tag">${esc(sampleGame)}</span></div><div class="profile-preview-real-note">這裡使用正式主頁的版型預覽，所以會和實際會員主頁 / 陪玩主頁顯示效果一致；套用後同樣出現在主頁背景、頭像、名稱與卡片邊框。</div></section>
+    </div>`;
     if(caption) caption.innerHTML = `<div class="achievement-profile-effect-caption-main"><b>${esc(name)}</b><span class="pfx-pill">${esc(effectConfig.profileEffectThemeName)}</span><span class="pfx-pill tier">${esc(profileEffectTierLabel(tier))}</span><span class="pfx-pill role">${esc(profileEffectRoleLabel(allowedRole))}</span><span class="pfx-pill">${esc(profileEffectAccessNote(allowedRole))}</span><span class="pfx-pill">主頁動態光效｜永久解鎖</span><span class="pfx-pill">${unlocked ? '已解鎖可套用' : '未解鎖僅預覽'}</span></div><div class="achievement-profile-effect-caption-text">${esc(desc)}</div><div class="achievement-profile-effect-actions"><button type="button" class="achievement-profile-effect-action" data-profile-effect-apply ${unlocked ? '' : 'disabled'}>${unlocked ? '套用此光效' : '尚未解鎖'}</button><button type="button" class="achievement-profile-effect-action secondary" data-profile-effect-clear>取消目前光效</button></div>`;
   }
   document.addEventListener('click', e=>{
@@ -8146,13 +8197,15 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     return `<article class="achievement-card ${item.unlocked ? 'unlocked' : 'locked'} ${hiddenAchievement ? 'hidden-achievement' : ''} ${secretLocked ? 'secret-locked' : ''}" data-achievement-id="${esc(item.id)}" data-achievement-type="${esc(item.type)}">
       ${iconHtml(item, secretLocked)}
       <div class="achievement-main">
-        <div class="achievement-name" title="${esc(item.name || '未命名成就')}">${esc(item.name || '未命名成就')}</div></div>
+        <div class="achievement-name" title="${esc(item.name || '未命名成就')}">${esc(item.name || '未命名成就')}</div>
+      </div>
       <div class="achievement-score-box"><b>${points}</b><span>成就分</span></div>
       <div class="achievement-details">
         <div class="achievement-desc" title="${esc(item.description || '成就說明待補')}">${esc(item.description || '成就說明待補')}</div>
         <div class="achievement-cond" title="${secretLocked ? '隱藏成就：僅顯示主要條件' : esc(item.condition || '達成條件待補')}">${conditionHtml(item)}</div>
         <div class="achievement-bottom">
-          <div class="achievement-reward" title="${esc(item.reward_text || '獎品即將開放')}">${item.reward_enabled ? '獎品：' : '獎品狀態：'}${rewardTextHtml(item)}${rewardStyleHtml(item)}</div></div>
+          <div class="achievement-reward" title="${esc(item.reward_text || '獎品即將開放')}">${item.reward_enabled ? '獎品：' : '獎品狀態：'}${rewardTextHtml(item)}${rewardStyleHtml(item)}</div>
+        </div>
       </div>
     </article>`;
   }
@@ -8789,7 +8842,8 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     <div id="ancientChatHeadActions" class="ancient-chat-head-actions">
       <button id="ancientChatOrderBtn" class="ancient-chat-action-btn" type="button">下單</button>
       <button id="ancientChatFollowBtn" class="ancient-chat-action-btn" type="button">關注</button>
-      <button id="ancientChatClose" class="ancient-chat-close" type="button">×</button></div>
+      <button id="ancientChatClose" class="ancient-chat-close" type="button">×</button>
+    </div>
   </header>
   <div id="ancientChatTabs" class="ancient-chat-tabs" aria-hidden="true"></div>
   <div id="ancientChatBody" class="ancient-chat-body"><div class="ancient-chat-empty">聊天室載入中...</div></div>
@@ -8800,10 +8854,12 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
       <button class="ancient-gift-choice" data-gift="櫻花箋">櫻花箋</button>
       <button class="ancient-gift-choice" data-gift="月下鈴">月下鈴</button>
       <button class="ancient-gift-choice" data-gift="金盞花">金盞花</button>
-      <button class="ancient-gift-choice" data-gift="夢羽扇">夢羽扇</button></div>
+      <button class="ancient-gift-choice" data-gift="夢羽扇">夢羽扇</button>
+    </div>
     <input id="ancientChatImageInput" type="file" accept="image/*" style="display:none;">
     <textarea id="ancientChatInput" placeholder="寫下訊息..."></textarea>
-    <button id="ancientChatSend" type="button">送出</button></div>
+    <button id="ancientChatSend" type="button">送出</button>
+  </div>
 </section>
 
 <script>
@@ -9584,7 +9640,8 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
       <div class="stage-symbol">${opts.symbol || '👑'}</div>
       <div class="stage-inner">
         <div class="stage-title">${opts.title}</div>
-        <div class="stage-sub">${opts.sub || ''}</div></div>
+        <div class="stage-sub">${opts.sub || ''}</div>
+      </div>
     `;
     layer.appendChild(stage);
 
@@ -10308,14 +10365,16 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 <div id="v97BarragePanel" class="v97-barrage-panel">
   <div class="v97-barrage-head">
     <span>彈幕框架預覽｜含大頭照</span>
-    <button id="v97BarrageClose" class="v97-barrage-close" type="button">×</button></div>
+    <button id="v97BarrageClose" class="v97-barrage-close" type="button">×</button>
+  </div>
   <div class="v97-barrage-grid">
     <button type="button" data-v97-demo="recharge">儲值 Lv.3</button>
     <button type="button" data-v97-demo="order">下單 Lv.2</button>
     <button type="button" data-v97-demo="giftMusic">樂器禮物 Lv.4</button>
     <button type="button" data-v97-demo="giftFan">扇類禮物 Lv.3</button>
     <button type="button" data-v97-demo="rank">榜首 Lv.4</button>
-    <button type="button" data-v97-demo="normal">普通 Lv.1</button></div>
+    <button type="button" data-v97-demo="normal">普通 Lv.1</button>
+  </div>
 </div>
 
 <script>
@@ -10431,7 +10490,8 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
         ${avatarHTML(name,true)}
         <div class="v97-stage-content">
           <div class="v97-stage-title">${title}</div>
-          <div class="v97-stage-sub">${sub}</div></div>
+          <div class="v97-stage-sub">${sub}</div>
+        </div>
       </div>
     `;
     layer.appendChild(stage);
@@ -10570,7 +10630,7 @@ window.addEventListener('DOMContentLoaded', () => {
 </style>
 
 <div class="bp-grid" id="barragePreviewFixedGrid"></div>
-  <div class="bp-note"></div>
+  <div class="bp-note">v114：重新定位 1~44，大頭照優先對準圓形槽位，文字改放入框架主內容區。</div>
 </div>
 
 <script>
@@ -13839,10 +13899,12 @@ img[src*="rank_rewards/badges"]{
           <div class="name-effect-info-v277">
             <div class="name-effect-title-v277"><span>${esc(row.title)}</span><small>第 ${row.rank} 名｜${esc(RANK_LABEL[row.rank])}</small></div>
             <div class="name-effect-sample-v277" data-rank-top3-name="${esc(currentVisibleProfileName())}" data-rank-top3-board="${esc(row.board)}" data-rank-top3-rank="${row.rank}">${esc(currentVisibleProfileName())}</div>
-            <div class="name-effect-meta-v277">${row.owned ? "已獲得，可套用到自己的名稱展示。" : "尚未獲得，但可以預覽完整動態效果。"}${row.badge ? ` <img class="rank-name-badge" src="${esc(row.badge)}" alt="${esc(row.title)}第 ${row.rank} 名徽章" loading="lazy">` : ""}</div></div>
+            <div class="name-effect-meta-v277">${row.owned ? "已獲得，可套用到自己的名稱展示。" : "尚未獲得，但可以預覽完整動態效果。"}${row.badge ? ` <img class="rank-name-badge" src="${esc(row.badge)}" alt="${esc(row.title)}第 ${row.rank} 名徽章" loading="lazy">` : ""}</div>
+          </div>
           <div class="name-effect-actions-v277">
             <button type="button" data-v277-preview-name-effect data-board="${esc(row.board)}" data-rank="${row.rank}" data-title="${esc(row.title)}">預覽</button>
-            <button type="button" data-v277-apply-name-effect data-board="${esc(row.board)}" data-rank="${row.rank}" ${row.owned ? "" : "disabled"}>套用</button></div>
+            <button type="button" data-v277-apply-name-effect data-board="${esc(row.board)}" data-rank="${row.rank}" ${row.owned ? "" : "disabled"}>套用</button>
+          </div>
         </div>`).join("")}</div>
       <div class="modal-actions"><button class="ghost" type="button" data-v277-clear-name-effect>取消目前名字特效</button><button type="button" data-modal-close>關閉</button></div>`;
     ensureProfileModal(html);
@@ -16786,6 +16848,39 @@ body:not(.role-companion) .companion-only-panel{
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(rewriteLoginAreas, 80); });
   else setTimeout(rewriteLoginAreas, 80);
   window.addEventListener("hashchange", function(){ setTimeout(rewriteLoginAreas, 120); });
+})();
+</script>
+
+
+<script id="v346-review-badge-safe-fix-js">
+(function(){
+  async function safeApi(action, payload){
+    const cfg = window.DREAM_CONFIG || {};
+    const API_BASE = cfg.API_BASE || "https://api.131rwjuh.com/api.php";
+    try{
+      const res = await fetch(API_BASE, {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(Object.assign({action}, payload || {}))
+      });
+      const text = await res.text();
+      try{return JSON.parse(text || "{}");}
+      catch(e){return {ok:false,message:"API 回傳格式錯誤"};}
+    }catch(e){
+      return {ok:false,message:e.message || "Failed to fetch"};
+    }
+  }
+
+  window.refreshDreamReviewBadge = async function(){
+    const res = await safeApi("review_pending", {});
+    const count = Number(res && (res.count ?? res.pending_count ?? 0)) || 0;
+    document.querySelectorAll("[data-review-pending-count],[data-bind='review-pending-count']").forEach(function(el){
+      el.textContent = String(count);
+      el.style.display = count > 0 ? "" : "none";
+    });
+    return res;
+  };
 })();
 </script>
 
