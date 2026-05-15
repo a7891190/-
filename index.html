@@ -4672,7 +4672,7 @@ main.app{padding-bottom:0 !important;}
 .exchange-service-price-hint{margin-top:6px;color:rgba(255,223,237,.72);font-size:12px;font-weight:700}
 
 </style>
-<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=333">
+<link rel="stylesheet" href="assets/barrage/barrage_system.css?v=334">
 
 <style>
 /* v215 成就稱號獎勵發光 / 分級環繞動態特效 / 獎勵區即時預覽
@@ -5651,8 +5651,8 @@ main.app{padding-bottom:0 !important;}
 </style>
 
 
-<style id="v333-home-search-button-fix">
-/* v333：首頁搜尋列右側「搜索」文字上移修正，放在最後避免舊樣式覆蓋 */
+<style id="v334-home-search-button-fix">
+/* v334：首頁搜尋列右側「搜索」文字上移修正，放最後避免舊樣式覆蓋 */
 #page-home .search-image-wrap button[data-home-search-btn],
 #page-home .search-image-wrap button{
   top:46%!important;
@@ -10525,7 +10525,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script src="assets/barrage/barrage_system.js?v=333"></script>
+<script src="assets/barrage/barrage_system.js?v=334"></script>
 <style>
 /* v99：隱藏舊版純 CSS 彈幕預覽，避免誤點看不到框架圖 */
 #dreamBarragePreviewToggle,
@@ -10678,7 +10678,7 @@ window.addEventListener('DOMContentLoaded', () => {
         await window.DreamBarrage.init({basePath:'assets/barrage/'});
         return true;
       }
-      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=333 是否存在。');
+      alert('彈幕系統沒有載入，請確認 assets/barrage/barrage_system.js?v=334 是否存在。');
       return false;
     }
 
@@ -16606,6 +16606,65 @@ body:not(.role-companion) .companion-only-panel{
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(patchBackButtons, 30); });
   setTimeout(patchBackButtons, 50);
   setTimeout(patchBackButtons, 300);
+})();
+</script>
+
+
+<script id="v334-barrage1-dom-force-fix">
+/*
+ * v334：電腦版「彈幕預覽 1-44」#1 位置強制修正。
+ * 前幾版改座標表仍未反映到實際畫面，因此這版不再依賴原本座標流程。
+ * 做法：等真正的 .dream-barrage-slide.idx-1 出現在畫面後，直接抓大頭照與文字 DOM 強制右移。
+ * 手機版不動。
+ */
+(function(){
+  const SHIFT = 72; // 電腦版 #1 大頭照與文字強制右移量；手機版不套用
+
+  function isDesktop(){
+    return window.innerWidth >= 768;
+  }
+
+  function forceOne(slide){
+    if(!isDesktop() || !slide || !slide.classList || !slide.classList.contains("idx-1")) return;
+
+    const avatar = slide.querySelector(".dream-barrage-avatar-slot");
+    const text = slide.querySelector(".dream-barrage-text-slot");
+
+    [avatar, text].forEach(function(el){
+      if(!el || el.dataset.v334Barrage1Fixed === "1") return;
+      el.dataset.v334Barrage1Fixed = "1";
+      el.style.setProperty("transform", "translateX(" + SHIFT + "px)", "important");
+      el.style.setProperty("will-change", "transform", "important");
+    });
+  }
+
+  function scan(){
+    if(!isDesktop()) return;
+    document.querySelectorAll(".dream-barrage-slide.idx-1").forEach(forceOne);
+  }
+
+  const observer = new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes && m.addedNodes.forEach(function(node){
+        if(!node || node.nodeType !== 1) return;
+        if(node.matches && node.matches(".dream-barrage-slide.idx-1")) forceOne(node);
+        if(node.querySelectorAll) node.querySelectorAll(".dream-barrage-slide.idx-1").forEach(forceOne);
+      });
+    });
+    scan();
+  });
+
+  function boot(){
+    scan();
+    observer.observe(document.documentElement || document.body, {childList:true, subtree:true});
+    window.addEventListener("resize", scan, {passive:true});
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+
+  // 多補幾次，避免彈幕剛產生後又被原流程重寫樣式
+  [50, 120, 240, 480, 900].forEach(function(ms){ setTimeout(scan, ms); });
 })();
 </script>
 
