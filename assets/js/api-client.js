@@ -1,8 +1,6 @@
-/* v354-login-debug-1778903191 */
-window.DREAM_API_CLIENT_VERSION = "v354-login-debug-1778903191";
+/* v355-syntax-clean-1778903502 */
+window.DREAM_API_CLIENT_VERSION = "v355-syntax-clean-1778903502";
 window.DreamLoginDebug = window.DreamLoginDebug || null;
-/* login-submit-redirect-fix */
-/* final-login-clean-fix api-client */
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
 var authType = window.authType || null;
@@ -449,10 +447,6 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
-    // final-login-clean-fix：未登入不呼叫儲值紀錄 API。
-    const loggedIn = (typeof authUser !== "undefined" && authUser) || (typeof authType !== "undefined" && authType);
-    if(!loggedIn) return;
-
     // v352：未登入不呼叫儲值紀錄 API，避免 401。
     if(!dreamIsLoggedInSafeV352()){
       return;
@@ -707,13 +701,11 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadAllLiveData(){
-    // final-login-clean-fix：此區塊屬於舊版 v44 API。
-    // 只能呼叫本作用域存在的函式，不能呼叫新版 v45 的 loadShop/loadRecords。
+    // v355：舊版 live data 只呼叫同作用域內存在的函式，避免 loadShop is not defined。
     try{ await loadVipRank(); }catch(e){ console.warn("[loadVipRank]", e.message || e); }
     try{ await loadMarketItems(); }catch(e){ console.warn("[loadMarketItems]", e.message || e); }
     try{ await loadCompanions(); }catch(e){ console.warn("[loadCompanions]", e.message || e); }
 
-    // 私人資料必須已登入才載入，避免未登入時噴 401。
     if(!state.user){
       return;
     }
@@ -852,8 +844,6 @@ function $(sel, root=document){ return root.querySelector(sel); }
     clearTimeout(toast.t);
     toast.t = setTimeout(()=>el.style.opacity="0", 1900);
   }
-  window.DreamLoginDebug = window.DreamLoginDebug || {};
-
   async function api(action, payload={}){
     const res = await fetch(API_BASE, {
       method:"POST",
@@ -1057,10 +1047,6 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }).join("");
   }
   async function loadRecords(){
-    // final-login-clean-fix：未登入不呼叫禮物/購買紀錄 API。
-    const loggedIn = (typeof authUser !== "undefined" && authUser) || (typeof authType !== "undefined" && authType);
-    if(!loggedIn) return;
-
     // v352：未登入不呼叫禮物/購買紀錄 API，避免 401。
     if(!dreamIsLoggedInSafeV352()){
       return;
@@ -1114,14 +1100,17 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const password = $("#front_login_pwd")?.value || "";
     if(!username || !password) return toast("請輸入帳號與密碼");
 
-    const payload = {
-      username,
-      password,
-      account: username,
-      email: username
-    };
+    const payload = { username, password, account: username, email: username };
     const action = loginType === "companion" ? "companion_login" : "login";
-    const res = await api(action, payload);
+
+    let res;
+    try{
+      res = await api(action, payload);
+    }catch(e){
+      res = {ok:false, message:e.message || "連線失敗"};
+    }
+
+    window.DreamLoginDebug = { action, payload, response: res, status: res && res.ok ? 200 : 0 };
 
     if(!res || !res.ok){
       const msg = (res && (res.message || res.error)) ? (res.message || res.error) : "登入失敗";
@@ -1133,18 +1122,12 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const user = res.user || res.companion || res.data || {username};
     const role = action === "companion_login" ? "companion" : "member";
 
-    try{
-      setMemberUI(user, role);
-    }catch(e){
-      console.warn("[DreamLogin setMemberUI]", e.message || e);
-    }
+    try{ setMemberUI(user, role); }catch(e){ console.warn("[DreamLogin setMemberUI]", e.message || e); }
 
     try{
       localStorage.setItem("dream_persist_login_type", role);
       localStorage.setItem("dream_persist_user", JSON.stringify(user));
-      if($("#front_login_remember")?.checked){
-        localStorage.setItem("dream_remember_username", username);
-      }
+      if($("#front_login_remember")?.checked) localStorage.setItem("dream_remember_username", username);
     }catch(e){}
 
     toast(res.message || (role === "companion" ? "陪玩登入成功" : "登入成功"));
@@ -1152,37 +1135,15 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const targetPage = role === "companion" ? "companion-home" : "member";
     setTimeout(function(){
       try{
-        if(typeof window.showPage === "function"){
-          window.showPage(targetPage);
-        }else{
-          location.hash = "#" + targetPage;
-        }
-      }catch(e){
-        location.hash = "#" + targetPage;
-      }
+        if(typeof window.showPage === "function") window.showPage(targetPage);
+        else location.hash = "#" + targetPage;
+      }catch(e){ location.hash = "#" + targetPage; }
     }, 120);
 
     setTimeout(function(){
       try{ refreshSession(); }catch(e){}
       try{ loadProtectedData(); }catch(e){}
     }, 350);
-  };
-    const action = loginType === "companion" ? "companion_login" : "login";
-    const res = await api(action, payload);
-    if(!res.ok) {
-      console.warn("[DreamLogin]", action, res);
-      return toast(res.message || "登入失敗");
-    }
-    const user = res.user || res.companion || res.data || {username};
-    setMemberUI(user, loginType);
-    if($("#front_login_remember")?.checked){
-      localStorage.setItem("dream_remember_username", username);
-      localStorage.setItem("dream_persist_login_type", loginType);
-      try{ localStorage.setItem("dream_persist_user", JSON.stringify(user)); }catch(e){}
-    }
-    toast(res.message || "登入成功");
-    if(typeof window.showPage === "function") window.showPage(loginType === "companion" ? "companion-home" : "member");
-    loadProtectedData();
   }
   async function register(){
     const username = $("#front_reg_user")?.value.trim() || "";
@@ -1218,13 +1179,12 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   function loadProtectedData(){
-    // final-login-clean-fix：公開資料可載入；私人紀錄必須登入後才載入。
-    try{ loadShop(); }catch(e){ console.warn("[loadShop]", e.message || e); }
-    try{ loadCompanions(); }catch(e){ console.warn("[loadCompanions]", e.message || e); }
-    const loggedIn = (typeof authUser !== "undefined" && authUser) || (typeof authType !== "undefined" && authType);
-    if(!loggedIn) return;
-    try{ loadRecords(); }catch(e){ console.warn("[loadRecords]", e.message || e); }
-    try{ loadRechargeRecords(); }catch(e){ console.warn("[loadRechargeRecords]", e.message || e); }
+    // v347：公開資料可載入；私人紀錄必須登入後才載入。
+    loadShop();
+    loadCompanions();
+    if(!window.__dreamAuthSafe.isLoggedIn()) return;
+    loadRecords();
+    loadRechargeRecords();
   }
   function wire(){
     document.addEventListener("click", async e=>{
