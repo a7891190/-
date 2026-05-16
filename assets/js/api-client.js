@@ -1,3 +1,6 @@
+/* v354-login-debug-1778903191 */
+window.DREAM_API_CLIENT_VERSION = "v354-login-debug-1778903191";
+window.DreamLoginDebug = window.DreamLoginDebug || null;
 /* login-submit-redirect-fix */
 /* final-login-clean-fix api-client */
 /* v353-global-authuser-guard */
