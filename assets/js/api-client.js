@@ -1,5 +1,5 @@
-/* v365-full-syntax-fix-1778908700 */
-window.DREAM_API_CLIENT_VERSION = "v365-full-syntax-fix-1778908700";
+/* v366-companion-logout-match-refresh-1778909392 */
+window.DREAM_API_CLIENT_VERSION = "v366-companion-logout-match-refresh-1778909392";
 
 
 
@@ -2105,5 +2105,173 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   window.DreamFixCompanionLogoutPositionV363 = ensureLogoutPlacement;
+})();
+
+
+
+
+/* v366：陪玩登出按鈕複製重新整理樣式 */
+(function(){
+  if(window.__dreamCompanionLogoutMatchRefreshV366) return;
+  window.__dreamCompanionLogoutMatchRefreshV366 = true;
+
+  function apiBase(){
+    try{
+      return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
+    }catch(e){
+      return "https://api.131rwjuh.com/api.php";
+    }
+  }
+
+  function isCompanionHome(){
+    return location.hash === "#companion-home" ||
+      !!document.querySelector("#page-companion-home.active, #page-companion-home:not(.hidden)");
+  }
+
+  function findCompanionRoot(){
+    return document.querySelector("#page-companion-home") ||
+      document.querySelector("[data-page='companion-home']");
+  }
+
+  function findRefreshCard(root){
+    if(!root) return null;
+    const candidates = Array.from(root.querySelectorAll("button, a, .service-card, .feature-card, .menu-card, [role='button'], .card, .item"));
+    return candidates.find(function(el){
+      const txt = (el.textContent || "").replace(/\s+/g, "");
+      return txt.includes("重新整理") || txt.includes("刷新");
+    }) || null;
+  }
+
+  function setLogoutContent(card){
+    card.setAttribute("data-v366-companion-logout", "1");
+    card.setAttribute("aria-label", "登出");
+    card.removeAttribute("id");
+
+    // 優先沿用原本卡片內部結構，只替換第一個圖示字與主要文字。
+    const textNodes = Array.from(card.querySelectorAll("*")).filter(function(el){
+      return (el.textContent || "").trim();
+    });
+
+    let iconSet = false;
+    let labelSet = false;
+
+    textNodes.forEach(function(el){
+      const txt = (el.textContent || "").replace(/\s+/g, "");
+      if(!iconSet && (txt === "整" || txt === "刷" || txt.length <= 2)){
+        el.textContent = "出";
+        iconSet = true;
+        return;
+      }
+      if(!labelSet && (txt.includes("重新整理") || txt.includes("刷新"))){
+        el.textContent = "登出";
+        labelSet = true;
+      }
+    });
+
+    if(!labelSet){
+      card.textContent = "";
+      const icon = document.createElement("div");
+      icon.textContent = "出";
+      const label = document.createElement("div");
+      label.textContent = "登出";
+      card.appendChild(icon);
+      card.appendChild(label);
+    }
+
+    // 不自訂大外框，完全沿用「重新整理」class 與父層排版。
+    card.style.cssText = "";
+    card.classList.remove("v363-companion-logout-card");
+    card.classList.add("v366-companion-logout-card");
+    return card;
+  }
+
+  function removeOldLogout(){
+    document.querySelectorAll("[data-v357-companion-logout], [data-v358-companion-logout], [data-v363-companion-logout], [data-v366-companion-logout]").forEach(function(el){
+      el.remove();
+    });
+  }
+
+  function placeLogout(){
+    if(!isCompanionHome()) return;
+
+    const root = findCompanionRoot();
+    const refresh = findRefreshCard(root);
+    if(!root || !refresh) return;
+
+    removeOldLogout();
+
+    const clone = refresh.cloneNode(true);
+    setLogoutContent(clone);
+
+    // 放在重新整理右邊，也就是重新整理的下一格。
+    refresh.parentElement.insertBefore(clone, refresh.nextSibling);
+  }
+
+  async function doLogout(){
+    try{
+      await fetch(apiBase(), {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"companion_logout"})
+      });
+    }catch(e){}
+
+    try{
+      localStorage.removeItem("dream_persist_user");
+      localStorage.removeItem("dream_persist_login_type");
+      localStorage.removeItem("dream_login_keep");
+      localStorage.removeItem("dream_permanent_login");
+    }catch(e){}
+
+    try{
+      document.body.classList.add("dream-guest");
+      document.body.classList.remove("dream-authenticated");
+      document.documentElement.classList.remove("dream-authenticated");
+    }catch(e){}
+
+    try{
+      if(typeof window.showPage === "function") window.showPage("login");
+      else location.hash = "#login";
+    }catch(e){
+      location.hash = "#login";
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest("[data-v366-companion-logout='1']");
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    doLogout();
+    return false;
+  }, true);
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      setTimeout(placeLogout, 120);
+      setTimeout(placeLogout, 600);
+    });
+  }else{
+    setTimeout(placeLogout, 120);
+    setTimeout(placeLogout, 600);
+  }
+
+  window.addEventListener("hashchange", function(){
+    setTimeout(placeLogout, 100);
+    setTimeout(placeLogout, 500);
+  });
+
+  const mo = new MutationObserver(function(){
+    clearTimeout(placeLogout._t);
+    placeLogout._t = setTimeout(placeLogout, 180);
+  });
+
+  if(document.documentElement){
+    mo.observe(document.documentElement, {childList:true, subtree:true});
+  }
+
+  window.DreamFixCompanionLogoutStyleV366 = placeLogout;
 })();
 
