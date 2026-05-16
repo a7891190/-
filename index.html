@@ -1,3 +1,4 @@
+<!-- v368-one-shot-formal -->
 <!-- v367-formal-front-functions -->
 <!-- v361-formal-blank-no-fake -->
 <!-- v346-review-badge-safe-fix -->
@@ -6439,8 +6440,8 @@ main.app{padding-bottom:0 !important;}
 <div class="toast" id="toast"></div>
 <script src="assets/js/app-config.js"></script>
 <script src="assets/js/app-hardening.js?v=295"></script>
-<script src="assets/js/api-client.js?v=367"></script>
-<script src="assets/js/v26-social-client.js?v=367"></script>
+<script src="assets/js/api-client.js?v=368"></script>
+<script src="assets/js/v26-social-client.js?v=368"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -9049,20 +9050,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     if(text.includes('巡撫')) return 5;
     return 0;
   }
-  const recommendSeed = [
-    {id:'companion-cangcen', name:'蒼岑', avatar:'蒼', level:'天策', rating:4.9, orders:286, recent:18},
-    {id:'companion-yeli', name:'夜璃', avatar:'夜', level:'巡撫', rating:4.8, orders:241, recent:15},
-    {id:'companion-moran', name:'墨染', avatar:'墨', level:'天策', rating:4.9, orders:198, recent:12},
-    {id:'companion-qinghuan', name:'清歡', avatar:'清', level:'巡撫', rating:4.7, orders:166, recent:16},
-    {id:'companion-yunge', name:'雲歌', avatar:'雲', level:'提督', rating:4.6, orders:132, recent:20},
-    {id:'companion-fengyue', name:'風月', avatar:'風', level:'天策', rating:5.0, orders:318, recent:21},
-    {id:'companion-lingxi', name:'凌汐', avatar:'凌', level:'提督', rating:4.8, orders:174, recent:14},
-    {id:'companion-suwan', name:'蘇晚', avatar:'蘇', level:'巡撫', rating:4.7, orders:151, recent:17},
-    {id:'companion-jinzhao', name:'錦昭', avatar:'錦', level:'天策', rating:4.9, orders:207, recent:19},
-    {id:'companion-baiyu', name:'白羽', avatar:'白', level:'提督', rating:4.6, orders:143, recent:13},
-    {id:'companion-ningxue', name:'凝雪', avatar:'凝', level:'巡撫', rating:4.8, orders:188, recent:15},
-    {id:'companion-xingluo', name:'星蘿', avatar:'星', level:'名將', rating:4.7, orders:169, recent:11}
-  ];
+  const recommendSeed = [];
   function scoreCompanion(c){
     const ratingScore = Number(c.rating || 0) * 20 * 0.5;
     const orderScore = Math.min(Number(c.orders || 0), 300) / 300 * 100 * 0.3;
@@ -13016,209 +13004,6 @@ window.addEventListener('DOMContentLoaded', () => {
   max-width:74px!important;
 }
 </style>
-<script id="v274-inn-dynamic-comments-reward-script">
-(function(){
-  const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
-  const OWNER_REWARDS={
-    "雲歌":{board:"vip_rank",rank:1},"浮光":{board:"vip_rank",rank:2},"夜笙":{board:"vip_rank",rank:3},
-    "聽雨":{board:"weekly_charm",rank:1},"青鸞":{board:"weekly_charm",rank:2},"白露":{board:"weekly_charm",rank:3},
-    "月白":{board:"monthly_guardian",rank:1},"流螢":{board:"monthly_guardian",rank:2},"千澈":{board:"monthly_guardian",rank:3},
-    "星眠":{board:"companion_gift",rank:1},"洛川":{board:"companion_gift",rank:2},"紫蘇":{board:"companion_gift",rank:3},
-    "青衫":{board:"member_gift",rank:1},"九璃":{board:"member_gift",rank:2},"梨落":{board:"member_gift",rank:3},
-    "阿梨":{board:"total_recharge",rank:1},"半夏":{board:"total_recharge",rank:2},"時雨":{board:"total_recharge",rank:3}
-  };
-  const DEFAULT_COMMENTS={
-    "1":[
-      {name:"雲歌",text:"這篇動態已同步顯示我的 VIP 排行榜徽章。",time:"剛剛"},
-      {name:"聽雨",text:"有獎勵的人在客棧留言也會帶著名字特效。",time:"3 分鐘前"}
-    ],
-    "2":[
-      {name:"星眠",text:"陪玩收禮榜的特效也會顯示在留言者名稱上。",time:"5 分鐘前"},
-      {name:"洛川",text:"徽章和古風名字特效一起保留。",time:"9 分鐘前"}
-    ],
-    "3":[
-      {name:"月白",text:"守護榜的尊榮感在客棧也看得到。",time:"12 分鐘前"},
-      {name:"青衫",text:"會員送禮榜獎勵也會同步展示。",time:"15 分鐘前"}
-    ],
-    "rank-showcase-v274-1":[
-      {name:"浮光",text:"第二名徽章在留言裡也會正常顯示。",time:"2 分鐘前"},
-      {name:"夜笙",text:"第三名特效不會只停留在排行榜頁。",time:"4 分鐘前"}
-    ],
-    "rank-showcase-v274-2":[
-      {name:"九璃",text:"只要是擁有獎勵的留言者，客棧都會亮出來。",time:"6 分鐘前"},
-      {name:"阿梨",text:"累計儲值榜的徽章也能在這裡展示。",time:"8 分鐘前"}
-    ]
-  };
-  let showcaseOwnersRegistered=false;
-  let innRewardTimer=0;
-  function normalize(name){return String(name||"").replace(/\s+/g,"").trim();}
-  function rewardForName(name){
-    const key=normalize(name);
-    const api=window.DREAM_RANK_TOP3_PRESTIGE;
-    if(api&&api.holders&&typeof api.holders.get==="function"){
-      const found=api.holders.get(key);
-      if(found) return found;
-    }
-    try{
-      const saved=JSON.parse(localStorage.getItem("dream_rank_top3_prestige_holders_v2")||"[]");
-      if(Array.isArray(saved)){
-        const hit=saved.find(x=>normalize(x&&x.name)===key&&x.board&&x.rank);
-        if(hit) return {board:hit.board,rank:Number(hit.rank)};
-      }
-    }catch(_){}
-    return OWNER_REWARDS[key]||null;
-  }
-  function registerShowcaseOwners(){
-    if(showcaseOwnersRegistered) return;
-    const api=window.DREAM_RANK_TOP3_PRESTIGE;
-    if(!api||typeof api.register!=="function") return;
-    showcaseOwnersRegistered=true;
-    Object.keys(OWNER_REWARDS).forEach(name=>{
-      const reward=OWNER_REWARDS[name];
-      api.register(name,reward.board,reward.rank);
-    });
-  }
-  function nameAttrs(name){
-    const reward=rewardForName(name);
-    if(!reward) return `data-inn-raw-name="${esc(name)}"`;
-    return `data-inn-raw-name="${esc(name)}" data-rank-top3-name="${esc(name)}" data-rank-top3-board="${esc(reward.board)}" data-rank-top3-rank="${Number(reward.rank)}"`;
-  }
-  function commentHtml(item){
-    const name=item.name||"匿名";
-    return `<div class="inn-comment"><div class="inn-comment-avatar">${esc(name.slice(0,1)||"留")}</div><div class="inn-comment-main"><div class="inn-comment-head"><span class="inn-comment-name" ${nameAttrs(name)}>${esc(name)}</span><span class="inn-comment-time">${esc(item.time||"剛剛")}</span></div><div class="inn-comment-text">${esc(item.text||"")}</div></div></div>`;
-  }
-  function inputRowHtml(id){
-    return `<div class="post-comment-row"><input data-v26-comment-input="${esc(id)}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-v26-action="comment" data-post-id="${esc(id)}" type="button">送出</button></div>`;
-  }
-  function postHtml(post){
-    const name=post.author;
-    return `<article class="panel post-card inn-reward-showcase-post" data-post-id="${esc(post.id)}" data-author="${esc(name)}" data-time="${Number(post.time)}" data-likes="${Number(post.likes)}" data-favorites="${Number(post.favorites)}"><div class="post-head"><div class="post-avatar">${esc(name.slice(0,1))}</div><div><div class="post-name" ${nameAttrs(name)}>${esc(name)}</div><div class="post-time">${esc(post.timeText)}</div></div></div><div class="post-text">${esc(post.text)}</div><div class="post-image"></div><div class="post-actions"><button data-v26-action="favorite" data-post-id="${esc(post.id)}">☆ 收藏 <span data-fav-count>${Number(post.favorites)}</span></button><button data-v26-action="comment" data-post-id="${esc(post.id)}">留言</button><button data-v26-action="like" data-post-id="${esc(post.id)}">♡ <span data-like-count>${Number(post.likes)}</span></button></div><div class="inn-comment-list" data-inn-comments-for="${esc(post.id)}"></div>${inputRowHtml(post.id)}</article>`;
-  }
-  function ensureShowcasePosts(){
-    const list=document.getElementById("innPostList");
-    if(!list) return;
-    const now=Date.now();
-    const posts=[
-      {id:"rank-showcase-v274-1",author:"雲歌",time:now+2100,timeText:"剛剛",likes:188,favorites:56,text:"拿下排行榜前三名後，名字特效與徽章會同步出現在客棧動態與留言區。"},
-      {id:"rank-showcase-v274-2",author:"青衫",time:now+1800,timeText:"1 分鐘前",likes:146,favorites:39,text:"會員送禮榜、陪玩收禮榜、守護榜等獎勵，不只自己看得到，其他用戶在客棧也看得到。"}
-    ];
-    posts.reverse().forEach(post=>{
-      if(!list.querySelector(`[data-post-id="${CSS.escape(post.id)}"]`)){
-        list.insertAdjacentHTML("afterbegin",postHtml(post));
-      }
-    });
-  }
-  function readLocalComments(){
-    try{return JSON.parse(localStorage.getItem("dream_inn_comments_v274")||"{}")||{};}catch(_){return {};}
-  }
-  function writeLocalComments(data){
-    try{localStorage.setItem("dream_inn_comments_v274",JSON.stringify(data));}catch(_){}
-  }
-  function commentsFor(id){
-    const local=readLocalComments();
-    return (DEFAULT_COMMENTS[id]||[]).concat(Array.isArray(local[id])?local[id]:[]);
-  }
-  function ensureCommentArea(card){
-    if(!card) return;
-    const id=card.dataset.postId;
-    let row=card.querySelector(`[data-v26-comment-input="${CSS.escape(id)}"]`)?.closest("div");
-    if(row) row.classList.add("post-comment-row");
-    if(!row){
-      card.insertAdjacentHTML("beforeend",inputRowHtml(id));
-      row=card.querySelector(`[data-v26-comment-input="${CSS.escape(id)}"]`)?.closest("div");
-      if(row) row.classList.add("post-comment-row");
-    }
-    if(!card.querySelector(".inn-comment-list")){
-      (row||card).insertAdjacentHTML(row?"beforebegin":"beforebegin",`<div class="inn-comment-list" data-inn-comments-for="${esc(id)}"></div>`);
-    }
-  }
-  function renderComments(card){
-    ensureCommentArea(card);
-    const id=card.dataset.postId;
-    const box=card.querySelector(".inn-comment-list");
-    if(!box) return;
-    const comments=commentsFor(id);
-    const signature=JSON.stringify(comments.map(item=>[item.name,item.text,item.time]));
-    if(box.dataset.v274CommentSignature===signature && box.innerHTML.trim()) return;
-    box.dataset.v274CommentSignature=signature;
-    box.innerHTML=comments.map(commentHtml).join("");
-  }
-  function applyRewardAttrs(){
-    document.querySelectorAll("#page-inn .post-name,#page-inn .inn-comment-name").forEach(el=>{
-      const raw=el.dataset.innRawName || el.dataset.rankTop3Name || el.textContent.replace(/\s+/g," ").trim();
-      if(!raw) return;
-      el.dataset.innRawName=raw;
-      const reward=rewardForName(raw);
-      if(reward){
-        el.dataset.rankTop3Name=raw;
-        el.dataset.rankTop3Board=reward.board;
-        el.dataset.rankTop3Rank=String(reward.rank);
-      }
-    });
-    if(typeof window.DREAM_APPLY_RANK_TOP3_GUFENG==="function") window.DREAM_APPLY_RANK_TOP3_GUFENG();
-  }
-  function currentUserName(){
-    const u=window.__dreamFrontAuth&&window.__dreamFrontAuth.user;
-    const name=(u&&(u.display_name||u.nickname||u.username||u.name))||"";
-    if(name) return String(name).trim();
-    const shown=document.querySelector("#page-member [data-bind='member-name']")?.textContent?.trim();
-    return shown&&shown!=="點擊登入" ? shown : "我";
-  }
-  function addComment(card,text){
-    const id=card.dataset.postId;
-    const data=readLocalComments();
-    const name=currentUserName();
-    const item={name,text,time:new Date().toLocaleString("zh-TW",{hour12:false,month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})};
-    data[id]=Array.isArray(data[id])?data[id]:[];
-    data[id].push(item);
-    writeLocalComments(data);
-    renderComments(card);
-    applyRewardAttrs();
-  }
-  function initInnRewards(){
-    registerShowcaseOwners();
-    ensureShowcasePosts();
-    document.querySelectorAll("#innPostList .post-card").forEach(renderComments);
-    applyRewardAttrs();
-  }
-  document.addEventListener("click",e=>{
-    const btn=e.target.closest('[data-v26-action="comment"]');
-    if(!btn||!btn.closest("#page-inn")) return;
-    const card=btn.closest(".post-card");
-    if(!card) return;
-    const input=card.querySelector(`[data-v26-comment-input="${CSS.escape(btn.dataset.postId||card.dataset.postId)}"]`);
-    if(btn.closest(".post-actions")){
-      input?.focus();
-      return;
-    }
-    e.preventDefault();
-    e.stopPropagation();
-    const text=(input?.value||"").trim();
-    if(!text){
-      if(typeof toast==="function") toast("留言不能空白"); else alert("留言不能空白");
-      input?.focus();
-      return;
-    }
-    input.value="";
-    addComment(card,text);
-    if(typeof toast==="function") toast("留言已送出");
-  },true);
-  function scheduleInnRewards(){
-    clearTimeout(innRewardTimer);
-    innRewardTimer=setTimeout(initInnRewards,60);
-  }
-  const observer=new MutationObserver(scheduleInnRewards);
-  function boot(){
-    initInnRewards();
-    const list=document.getElementById("innPostList");
-    if(list) observer.observe(list,{childList:true,subtree:true});
-    setTimeout(initInnRewards,250);
-    setTimeout(initInnRewards,900);
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
-  window.addEventListener("hashchange",()=>setTimeout(initInnRewards,120));
-})();
-</script>
 <style id="v275-code-effect-top3-fit-css">
 #page-home .v35-top3 .top3-text{
   display:grid!important;
@@ -16862,5 +16647,6 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
+  <script src="assets/js/formal-front-core.js?v=368"></script>
 </body>
 </html>
