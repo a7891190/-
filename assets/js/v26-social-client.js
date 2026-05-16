@@ -1,6 +1,12 @@
+/* v361-formal-blank-no-fake-1778907686 social-client formal inn */
 (function(){
   if (!window.DreamAPI) return;
   const api = window.DreamAPI.api;
+  const state = {
+    filter: "all",
+    sort: "time",
+    posts: []
+  };
 
   function toast(msg){
     let el = document.getElementById("v26Toast");
@@ -14,6 +20,104 @@
     el.style.opacity = "1";
     clearTimeout(toast.timer);
     toast.timer = setTimeout(()=>el.style.opacity="0", 1800);
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function avatarText(name){
+    const s = String(name || "夢").trim();
+    return esc(s.slice(0,1) || "夢");
+  }
+
+  function timeText(value){
+    if(!value) return "";
+    const d = new Date(value);
+    if(Number.isNaN(d.getTime())) return esc(value);
+    const pad = n => String(n).padStart(2,"0");
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function isInnPage(){
+    return location.hash === "#inn" || document.querySelector("#page-inn.active");
+  }
+
+  function renderComments(post){
+    const comments = Array.isArray(post.comments) ? post.comments : [];
+    if(!comments.length) return "";
+    return `<div class="inn-comments">${comments.map(c => `
+      <div class="inn-comment">
+        <b>${esc(c.author_name || "會員")}</b>
+        <span>${esc(c.comment_text || c.content || "")}</span>
+      </div>
+    `).join("")}</div>`;
+  }
+
+  function renderPosts(){
+    const list = document.getElementById("innPostList");
+    const empty = document.getElementById("innEmptyState");
+    if(!list) return;
+
+    let posts = [...state.posts];
+    if(state.filter === "favorites") posts = posts.filter(p => !!p.is_favorited);
+    if(state.filter === "following") posts = posts.filter(p => !!p.is_following_author);
+
+    if(state.sort === "likes") posts.sort((a,b)=>(Number(b.like_count||0)-Number(a.like_count||0)));
+    else if(state.sort === "favorites") posts.sort((a,b)=>(Number(b.favorite_count||0)-Number(a.favorite_count||0)));
+    else posts.sort((a,b)=> new Date(b.created_at||0) - new Date(a.created_at||0));
+
+    if(!posts.length){
+      list.innerHTML = "";
+      if(empty){
+        empty.style.display = "block";
+        empty.textContent = state.filter === "favorites" ? "目前尚無收藏資料。" : state.filter === "following" ? "目前尚無關注動態。" : "目前尚無客棧動態。";
+      }
+      return;
+    }
+
+    if(empty) empty.style.display = "none";
+
+    list.innerHTML = posts.map(post => {
+      const id = String(post.id || post.post_id || "");
+      const authorName = post.author_name || post.display_name || post.username || "夢競會員";
+      const image = post.image_url || post.post_image_url || "";
+      return `
+      <article class="panel post-card" data-post-id="${esc(id)}">
+        <div class="post-head">
+          <div class="post-avatar">${avatarText(authorName)}</div>
+          <div>
+            <div class="post-name">${esc(authorName)}</div>
+            <div class="post-time">${timeText(post.created_at)}</div>
+          </div>
+        </div>
+        <div class="post-text">${esc(post.content || "")}</div>
+        ${image ? `<div class="post-image"><img src="${esc(image)}" alt="客棧圖片" loading="lazy" style="width:100%;border-radius:16px;display:block"></div>` : `<div class="post-image" style="display:none"></div>`}
+        <div class="post-actions">
+          <button data-v26-action="favorite" data-post-id="${esc(id)}">${post.is_favorited ? "★" : "☆"} 收藏 <span data-fav-count>${Number(post.favorite_count||0)}</span></button>
+          <button data-v26-action="comment-open" data-post-id="${esc(id)}">留言 <span>${Number(post.comment_count||0)}</span></button>
+          <button data-v26-action="like" data-post-id="${esc(id)}">${post.is_liked ? "♥" : "♡"} <span data-like-count>${Number(post.like_count||0)}</span></button>
+        </div>
+        ${renderComments(post)}
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input data-v26-comment-input="${esc(id)}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px">
+          <button class="btn" data-v26-action="comment" data-post-id="${esc(id)}" type="button">送出</button>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  async function loadInnPosts(){
+    const list = document.getElementById("innPostList");
+    if(list && !state.posts.length) list.innerHTML = "";
+    try{
+      const res = await api("inn_post_list", {limit:50});
+      state.posts = res.posts || res.list || res.data || [];
+    }catch(err){
+      console.warn("[inn_post_list]", err.message || err);
+      state.posts = [];
+    }
+    renderPosts();
   }
 
   async function uploadPostImage(file){
@@ -38,6 +142,22 @@
   });
 
   document.addEventListener("click", async (e)=>{
+    const filterBtn = e.target.closest("[data-inn-filter]");
+    if(filterBtn){
+      state.filter = filterBtn.dataset.innFilter || "all";
+      document.querySelectorAll("[data-inn-filter]").forEach(b=>b.classList.toggle("active", b===filterBtn));
+      renderPosts();
+      return;
+    }
+
+    const sortBtn = e.target.closest("[data-inn-sort]");
+    if(sortBtn){
+      state.sort = sortBtn.dataset.innSort || "time";
+      document.querySelectorAll("[data-inn-sort]").forEach(b=>b.classList.toggle("active", b===sortBtn));
+      renderPosts();
+      return;
+    }
+
     const postBtn = e.target.closest("[data-v26-action='inn-post']");
     if(postBtn){
       const input = document.querySelector("[data-v26-input='inn-content']");
@@ -55,36 +175,42 @@
         if(imageInput) imageInput.value = "";
         const label = document.querySelector("[data-v26-image-name]");
         if(label) label.textContent = "尚未選擇圖片";
-      }catch(err){ toast(err.message); }
+        await loadInnPosts();
+      }catch(err){ toast(err.message || "發文失敗"); }
       finally{
         postBtn.disabled = false;
         postBtn.textContent = "＋ 發布文章";
       }
+      return;
     }
 
     const commentBtn = e.target.closest("[data-v26-action='comment']");
     if(commentBtn){
       const postId = commentBtn.dataset.postId;
-      const input = document.querySelector(`[data-v26-comment-input='${postId}']`);
+      const input = document.querySelector(`[data-v26-comment-input='${CSS.escape(String(postId))}']`);
       const comment_text = (input?.value || "").trim();
       if(!comment_text){ toast("留言不能空白"); return; }
       try{
         await api("inn_comment_create", {post_id:postId, comment_text});
         toast("留言成功");
         input.value = "";
-      }catch(err){ toast(err.message); }
+        await loadInnPosts();
+      }catch(err){ toast(err.message || "留言失敗"); }
+      return;
     }
 
     const likeBtn = e.target.closest("[data-v26-action='like']");
     if(likeBtn){
-      try{ await api("inn_like_toggle", {post_id:likeBtn.dataset.postId}); toast("已更新愛心"); }
-      catch(err){ toast(err.message); }
+      try{ await api("inn_like_toggle", {post_id:likeBtn.dataset.postId}); await loadInnPosts(); }
+      catch(err){ toast(err.message || "愛心更新失敗"); }
+      return;
     }
 
     const favBtn = e.target.closest("[data-v26-action='favorite']");
     if(favBtn){
-      try{ await api("inn_favorite_toggle", {post_id:favBtn.dataset.postId}); toast("已更新收藏"); }
-      catch(err){ toast(err.message); }
+      try{ await api("inn_favorite_toggle", {post_id:favBtn.dataset.postId}); await loadInnPosts(); }
+      catch(err){ toast(err.message || "收藏更新失敗"); }
+      return;
     }
 
     const followBtn = e.target.closest("[data-v26-action='follow']");
@@ -92,13 +218,16 @@
       try{
         await api("follow_toggle", {target_type:followBtn.dataset.targetType, target_id:followBtn.dataset.targetId});
         toast("已更新關注紀錄");
-      }catch(err){ toast(err.message); }
+        await loadInnPosts();
+      }catch(err){ toast(err.message || "關注更新失敗"); }
+      return;
     }
 
     const cartBtn = e.target.closest("[data-cart-id]");
     if(cartBtn && cartBtn.dataset.cartId){
       try{ await api("cart_add", {shop_item_id:cartBtn.dataset.cartId}); toast("已加入購物車"); }
       catch(err){ toast(err.message); }
+      return;
     }
 
     const renewBtn = e.target.closest("[data-v26-action='renew-code']");
@@ -110,6 +239,7 @@
         const res = await api("member_renew_by_code", {username, code});
         toast(res.message || "續期成功");
       }catch(err){ toast(err.message); }
+      return;
     }
 
     const checkinBtn = e.target.closest("[data-v26-action='checkin']");
@@ -118,4 +248,13 @@
       catch(err){ toast(err.message); }
     }
   });
+
+  window.addEventListener("hashchange", ()=>{ if(isInnPage()) setTimeout(loadInnPosts, 80); });
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", ()=>setTimeout(loadInnPosts, 120));
+  }else{
+    setTimeout(loadInnPosts, 120);
+  }
+
+  window.DreamInnFormalV361 = {load:loadInnPosts, render:renderPosts, state};
 })();

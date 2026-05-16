@@ -1,5 +1,32 @@
-/* v358-login-ux-persist-logout-1778904457 */
-window.DREAM_API_CLIENT_VERSION = "v358-login-ux-persist-logout-1778904457";
+/* v362-missing-login-helper-fix-1778907884 */
+window.DREAM_API_CLIENT_VERSION = "v362-missing-login-helper-fix-1778907884";
+
+
+/* v362：補回缺失的登入安全判斷，避免 dreamIsLoggedInSafeV352 is not defined */
+(function(){
+  if(window.__dreamMissingLoginHelperFixV362) return;
+  window.__dreamMissingLoginHelperFixV362 = true;
+
+  window.dreamIsLoggedInSafeV352 = window.dreamIsLoggedInSafeV352 || function(){
+    try{
+      if(window.__dreamFrontAuth && window.__dreamFrontAuth.user) return true;
+    }catch(e){}
+    try{
+      const keep = localStorage.getItem("dream_login_keep") === "1" || localStorage.getItem("dream_permanent_login") === "1";
+      const user = localStorage.getItem("dream_persist_user");
+      if(keep && user && user !== "null" && user !== "{}") return true;
+    }catch(e){}
+    try{
+      return document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest");
+    }catch(e){}
+    return false;
+  };
+
+  window.isDreamLoggedInV350 = window.isDreamLoggedInV350 || window.dreamIsLoggedInSafeV352;
+  window.isDreamLoggedInV351 = window.isDreamLoggedInV351 || window.dreamIsLoggedInSafeV352;
+  window.DreamIsLoggedInSafe = window.DreamIsLoggedInSafe || window.dreamIsLoggedInSafeV352;
+})();
+
 window.DreamLoginDebug = window.DreamLoginDebug || null;
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
@@ -45,7 +72,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   };
 
 
-  function dreamIsLoggedInSafeV352(){
+  function window.dreamIsLoggedInSafeV352(){
     try{
       if(window.__dreamFrontAuth && window.__dreamFrontAuth.user) return true;
     }catch(e){}
@@ -447,13 +474,16 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
+    // v362：未登入不呼叫儲值紀錄，避免 helper 缺失與 401。
+    if(!window.dreamIsLoggedInSafeV352()) return;
+
     // v352：未登入不呼叫儲值紀錄 API，避免 401。
-    if(!dreamIsLoggedInSafeV352()){
+    if(!window.dreamIsLoggedInSafeV352()){
       return;
     }
 
     // v349：未登入 / session 尚未確認 / guest 狀態下，不呼叫私人紀錄 API。
-    if(!isDreamLoggedInV351()){
+    if(!window.dreamIsLoggedInSafeV352()){
       return;
     }
     if(document.body.classList.contains("dream-guest") && !document.body.classList.contains("dream-authenticated")){
@@ -461,7 +491,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     }
 
     // v347：未登入或 session 尚未確認前，不呼叫私人紀錄 API，避免 401。
-    if(!isDreamLoggedInV351()){
+    if(!window.dreamIsLoggedInSafeV352()){
       return;
     }
 
@@ -810,7 +840,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   let authType = null;
 
   
-  function isDreamLoggedInV351(){
+  function window.dreamIsLoggedInSafeV352(){
     try{
       if(typeof authUser !== "undefined" && authUser) return true;
       if(typeof authType !== "undefined" && authType) return true;
@@ -1047,13 +1077,16 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }).join("");
   }
   async function loadRecords(){
+    // v362：未登入不呼叫禮物/購買紀錄，避免 helper 缺失與 401。
+    if(!window.dreamIsLoggedInSafeV352()) return;
+
     // v352：未登入不呼叫禮物/購買紀錄 API，避免 401。
-    if(!dreamIsLoggedInSafeV352()){
+    if(!window.dreamIsLoggedInSafeV352()){
       return;
     }
 
     // v349：未登入 / session 尚未確認 / guest 狀態下，不呼叫私人禮物/購買紀錄 API。
-    if(!isDreamLoggedInV351()){
+    if(!window.dreamIsLoggedInSafeV352()){
       return;
     }
     if(document.body.classList.contains("dream-guest") && !document.body.classList.contains("dream-authenticated")){
@@ -1061,7 +1094,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
 
     // v347：未登入或 session 尚未確認前，不呼叫私人禮物/購買紀錄 API，避免 401。
-    if(!isDreamLoggedInV351()){
+    if(!window.dreamIsLoggedInSafeV352()){
       return;
     }
 
@@ -1179,12 +1212,14 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   function loadProtectedData(){
+    // v362：loadProtectedData 私人紀錄必須登入才載入。
+
     // v347：公開資料可載入；私人紀錄必須登入後才載入。
     loadShop();
     loadCompanions();
     if(!window.__dreamAuthSafe.isLoggedIn()) return;
-    loadRecords();
-    loadRechargeRecords();
+    if(window.dreamIsLoggedInSafeV352()) loadRecords();
+    if(window.dreamIsLoggedInSafeV352()) loadRechargeRecords();
   }
   function wire(){
     document.addEventListener("click", async e=>{
@@ -1551,3 +1586,263 @@ function $(sel, root=document){ return root.querySelector(sel); }
   window.DreamApplySavedLoginV358 = applySavedLogin;
 })();
 
+
+
+
+/* v360：永久登入，只有手動登出才清除 */
+(function(){
+  if(window.__dreamPermanentLoginV360) return;
+  window.__dreamPermanentLoginV360 = true;
+
+  const KEEP_KEYS = ["dream_persist_user", "dream_persist_login_type", "dream_login_keep", "dream_permanent_login"];
+
+  function readJson(key){
+    try{ return JSON.parse(localStorage.getItem(key) || "null"); }catch(e){ return null; }
+  }
+
+  function hasSavedLogin(){
+    return localStorage.getItem("dream_login_keep") === "1"
+      && localStorage.getItem("dream_permanent_login") === "1"
+      && !!readJson("dream_persist_user");
+  }
+
+  function savedUser(){ return readJson("dream_persist_user"); }
+  function savedRole(){ return localStorage.getItem("dream_persist_login_type") || "member"; }
+
+  function applySavedLogin(){
+    if(!hasSavedLogin()) return false;
+
+    const user = savedUser();
+    const role = savedRole();
+
+    try{
+      if(typeof setMemberUI === "function"){
+        setMemberUI(user, role);
+      }
+    }catch(e){}
+
+    try{
+      document.body.classList.remove("dream-guest");
+      document.body.classList.add("dream-authenticated");
+      document.documentElement.classList.add("dream-authenticated");
+    }catch(e){}
+
+    return true;
+  }
+
+  function savePermanentLogin(user, role, username){
+    try{
+      localStorage.setItem("dream_persist_login_type", role || "member");
+      localStorage.setItem("dream_persist_user", JSON.stringify(user || {username: username || ""}));
+      localStorage.setItem("dream_login_keep", "1");
+      localStorage.setItem("dream_permanent_login", "1");
+      if(username) localStorage.setItem("dream_remember_username", username);
+    }catch(e){}
+  }
+
+  function apiBase(){
+    try{
+      return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
+    }catch(e){
+      return "https://api.131rwjuh.com/api.php";
+    }
+  }
+
+  function goPage(page){
+    try{
+      if(typeof window.showPage === "function"){
+        window.showPage(page);
+      }else{
+        location.hash = "#" + page;
+      }
+    }catch(e){
+      location.hash = "#" + page;
+    }
+  }
+
+  function toast(msg){
+    try{
+      if(typeof window.toast === "function"){
+        window.toast(msg);
+        return;
+      }
+    }catch(e){}
+
+    let el = document.getElementById("v360Toast");
+    if(!el){
+      el = document.createElement("div");
+      el.id = "v360Toast";
+      el.style.cssText = "position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:2147483647;max-width:88%;padding:12px 16px;border-radius:16px;background:rgba(72,28,50,.96);color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.38);";
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.display = "block";
+    clearTimeout(el._t);
+    el._t = setTimeout(()=>{ el.style.display = "none"; }, 2200);
+  }
+
+  async function manualLogout(){
+    const role = savedRole();
+    const action = role === "companion" ? "companion_logout" : "logout";
+
+    try{
+      await fetch(apiBase(), {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action})
+      });
+    }catch(e){}
+
+    window.__dreamManualLogoutV360 = true;
+    try{
+      KEEP_KEYS.concat(["dream_remember_username"]).forEach(k => localStorage.removeItem(k));
+    }catch(e){}
+    window.__dreamManualLogoutV360 = false;
+
+    try{
+      document.body.classList.add("dream-guest");
+      document.body.classList.remove("dream-authenticated");
+      document.documentElement.classList.remove("dream-authenticated");
+    }catch(e){}
+
+    toast("已登出");
+    setTimeout(()=>goPage("login"), 120);
+  }
+
+  // 保護永久登入資料：非手動登出，任何背景 session/API 流程都不能清掉。
+  const originalRemoveItem = localStorage.removeItem.bind(localStorage);
+  localStorage.removeItem = function(key){
+    if(KEEP_KEYS.includes(key) && !window.__dreamManualLogoutV360){
+      console.warn("[DreamPermanentLogin] 已阻止非手動登出清除：", key);
+      setTimeout(applySavedLogin, 20);
+      return;
+    }
+    return originalRemoveItem(key);
+  };
+
+  const originalClear = localStorage.clear.bind(localStorage);
+  localStorage.clear = function(){
+    if(hasSavedLogin() && !window.__dreamManualLogoutV360){
+      console.warn("[DreamPermanentLogin] 已阻止非手動登出 localStorage.clear");
+      setTimeout(applySavedLogin, 20);
+      return;
+    }
+    return originalClear();
+  };
+
+  // 登入按鈕成功時，強制寫入永久登入狀態。
+  document.addEventListener("click", function(e){
+    const loginBtn = e.target.closest && e.target.closest("#front_login_btn");
+    if(loginBtn){
+      setTimeout(function(){
+        const dbg = window.DreamLoginDebug;
+        if(dbg && dbg.response && dbg.response.ok){
+          const role = dbg.action === "companion_login" ? "companion" : "member";
+          const user = dbg.response.user || dbg.response.companion || dbg.response.data || {username: dbg.payload && dbg.payload.username};
+          savePermanentLogin(user, role, dbg.payload && dbg.payload.username);
+          applySavedLogin();
+        }
+      }, 350);
+      setTimeout(applySavedLogin, 900);
+    }
+
+    const logoutBtn = e.target.closest && e.target.closest("[data-v358-companion-logout], [data-v357-companion-logout], [data-action='logout'], [data-logout], .logout-btn");
+    if(logoutBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      manualLogout();
+      return false;
+    }
+  }, true);
+
+  // 每次載入 / 切頁 / 背景錯誤後都恢復登入。
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      applySavedLogin();
+      setTimeout(applySavedLogin, 80);
+      setTimeout(applySavedLogin, 250);
+      setTimeout(applySavedLogin, 800);
+    });
+  }else{
+    applySavedLogin();
+    setTimeout(applySavedLogin, 80);
+    setTimeout(applySavedLogin, 250);
+    setTimeout(applySavedLogin, 800);
+  }
+
+  window.addEventListener("hashchange", function(){
+    setTimeout(applySavedLogin, 30);
+    setTimeout(applySavedLogin, 180);
+  });
+
+  window.addEventListener("error", function(){
+    setTimeout(applySavedLogin, 30);
+  }, true);
+
+  window.addEventListener("unhandledrejection", function(){
+    setTimeout(applySavedLogin, 30);
+  }, true);
+
+  const mo = new MutationObserver(function(){
+    if(hasSavedLogin()){
+      clearTimeout(applySavedLogin._t);
+      applySavedLogin._t = setTimeout(applySavedLogin, 60);
+    }
+  });
+
+  if(document.documentElement){
+    mo.observe(document.documentElement, {
+      childList:true,
+      subtree:true,
+      attributes:true,
+      attributeFilter:["class"]
+    });
+  }
+
+  window.DreamPermanentLoginV360 = {
+    apply: applySavedLogin,
+    logout: manualLogout,
+    save: savePermanentLogin,
+    hasSavedLogin: hasSavedLogin
+  };
+})();
+
+
+
+
+/* v361-formal-blank-no-fake-1778907686 remove remaining demo UI */
+(function(){
+  if(window.__dreamFormalBlankNoFakeV361) return;
+  window.__dreamFormalBlankNoFakeV361 = true;
+
+  const DEMO_RE = /測試|假資料|Demo|DEMO|小白|蒼岑|夜璃|雲歌|墨染|夜色客棧|短陌儲值\s*2026|收藏的動態貼文|天策陪玩｜已關注/;
+
+  function removeDemoNodes(){
+    document.querySelectorAll("[data-demo-only],.demo-only,.fake-data,.mock-data").forEach(el=>el.remove());
+
+    document.querySelectorAll(".row,.post-card,.companion-card").forEach(el=>{
+      const txt = (el.textContent || "").replace(/\s+/g," ");
+      if(DEMO_RE.test(txt)) el.remove();
+    });
+
+    const grids = [
+      [document.querySelector("#companionGrid"), "目前尚無陪玩資料"],
+      [document.querySelector("[data-list='recharge-records']"), "目前尚無儲值紀錄"],
+      [document.querySelector("#innPostList"), ""]
+    ];
+    grids.forEach(([root,msg])=>{
+      if(root && !root.children.length && msg){
+        root.innerHTML = `<div class="companion-empty">${msg}</div>`;
+      }
+    });
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", ()=>setTimeout(removeDemoNodes,80));
+  else setTimeout(removeDemoNodes,80);
+
+  window.addEventListener("hashchange", ()=>setTimeout(removeDemoNodes,100));
+  const mo = new MutationObserver(()=>{ clearTimeout(removeDemoNodes._t); removeDemoNodes._t=setTimeout(removeDemoNodes,120); });
+  if(document.documentElement) mo.observe(document.documentElement, {childList:true, subtree:true});
+})();
