@@ -1,6 +1,39 @@
-/* v364-syntax-fix-1778908500 */
-window.DREAM_API_CLIENT_VERSION = "v364-syntax-fix-1778908500";
+/* v365-full-syntax-fix-1778908700 */
+window.DREAM_API_CLIENT_VERSION = "v365-full-syntax-fix-1778908700";
 
+
+
+
+/* v365：登入判斷函式保底，避免舊補丁殘留造成錯誤 */
+(function(){
+  if(window.__dreamLoginSafeFallbackV365) return;
+  window.__dreamLoginSafeFallbackV365 = true;
+
+  function fallbackLoggedIn(){
+    try{
+      if(window.__dreamFrontAuth && window.__dreamFrontAuth.user) return true;
+    }catch(e){}
+    try{
+      const keep = localStorage.getItem("dream_login_keep") === "1" || localStorage.getItem("dream_permanent_login") === "1";
+      const user = localStorage.getItem("dream_persist_user");
+      if(keep && user && user !== "null" && user !== "{}") return true;
+    }catch(e){}
+    try{
+      return document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest");
+    }catch(e){}
+    return false;
+  }
+
+  if(typeof window.dreamIsLoggedInSafeV352 !== "function"){
+    window.dreamIsLoggedInSafeV352 = fallbackLoggedIn;
+  }
+  if(typeof window.isDreamLoggedInV350 !== "function"){
+    window.isDreamLoggedInV350 = window.dreamIsLoggedInSafeV352;
+  }
+  if(typeof window.isDreamLoggedInV351 !== "function"){
+    window.isDreamLoggedInV351 = window.dreamIsLoggedInSafeV352;
+  }
+})();
 
 /* v362：補回缺失的登入安全判斷，避免 dreamIsLoggedInSafeV352 is not defined */
 (function(){
