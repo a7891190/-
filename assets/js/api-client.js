@@ -1,3 +1,4 @@
+/* login-submit-redirect-fix */
 /* final-login-clean-fix api-client */
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
@@ -848,6 +849,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
     clearTimeout(toast.t);
     toast.t = setTimeout(()=>el.style.opacity="0", 1900);
   }
+  window.DreamLoginDebug = window.DreamLoginDebug || {};
+
   async function api(action, payload={}){
     const res = await fetch(API_BASE, {
       method:"POST",
@@ -856,7 +859,13 @@ function $(sel, root=document){ return root.querySelector(sel); }
       body:JSON.stringify({action, ...payload})
     });
     const text = await res.text();
-    try{return JSON.parse(text);}
+    try{
+      const parsed = JSON.parse(text);
+      if(["login","companion_login"].includes(action)){
+        window.DreamLoginDebug = {action, payload, response: parsed, status: res.status};
+      }
+      return parsed;
+    }
     catch(e){return {ok:false,message:"API 回傳格式錯誤：" + text.slice(0,80)};}
   }
   async function apiTry(actions, payload={}){
@@ -1101,12 +1110,60 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const username = $("#front_login_user")?.value.trim() || "";
     const password = $("#front_login_pwd")?.value || "";
     if(!username || !password) return toast("請輸入帳號與密碼");
+
     const payload = {
       username,
       password,
       account: username,
       email: username
     };
+    const action = loginType === "companion" ? "companion_login" : "login";
+    const res = await api(action, payload);
+
+    if(!res || !res.ok){
+      const msg = (res && (res.message || res.error)) ? (res.message || res.error) : "登入失敗";
+      console.warn("[DreamLoginFail]", action, res);
+      toast(msg);
+      return;
+    }
+
+    const user = res.user || res.companion || res.data || {username};
+    const role = action === "companion_login" ? "companion" : "member";
+
+    try{
+      setMemberUI(user, role);
+    }catch(e){
+      console.warn("[DreamLogin setMemberUI]", e.message || e);
+    }
+
+    try{
+      localStorage.setItem("dream_persist_login_type", role);
+      localStorage.setItem("dream_persist_user", JSON.stringify(user));
+      if($("#front_login_remember")?.checked){
+        localStorage.setItem("dream_remember_username", username);
+      }
+    }catch(e){}
+
+    toast(res.message || (role === "companion" ? "陪玩登入成功" : "登入成功"));
+
+    const targetPage = role === "companion" ? "companion-home" : "member";
+    setTimeout(function(){
+      try{
+        if(typeof window.showPage === "function"){
+          window.showPage(targetPage);
+        }else{
+          location.hash = "#" + targetPage;
+        }
+      }catch(e){
+        location.hash = "#" + targetPage;
+      }
+    }, 120);
+
+    setTimeout(function(){
+      try{ refreshSession(); }catch(e){}
+      try{ loadProtectedData(); }catch(e){}
+    }, 350);
+  };
     const action = loginType === "companion" ? "companion_login" : "login";
     const res = await api(action, payload);
     if(!res.ok) {
