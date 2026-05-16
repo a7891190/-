@@ -1,5 +1,5 @@
-/* v366-companion-logout-match-refresh-1778909392 */
-window.DREAM_API_CLIENT_VERSION = "v366-companion-logout-match-refresh-1778909392";
+/* v367-formal-front-functions-1778910571 */
+window.DREAM_API_CLIENT_VERSION = "v367-formal-front-functions-1778910571";
 
 
 
@@ -2110,111 +2110,98 @@ function $(sel, root=document){ return root.querySelector(sel); }
 
 
 
-/* v366：陪玩登出按鈕複製重新整理樣式 */
+/* v367：正式前台功能：登出提示、返回歷史、刪假資料、排行榜快取 */
 (function(){
-  if(window.__dreamCompanionLogoutMatchRefreshV366) return;
-  window.__dreamCompanionLogoutMatchRefreshV366 = true;
+  if(window.__dreamFormalFrontFunctionsV367) return;
+  window.__dreamFormalFrontFunctionsV367 = true;
+
+  const RANK_CACHE_KEY = "dream_front_rank_cache_v367";
+  const RANK_CACHE_TIME_KEY = "dream_front_rank_cache_time_v367";
+  const RANK_TTL = 5 * 60 * 1000;
 
   function apiBase(){
-    try{
-      return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
-    }catch(e){
-      return "https://api.131rwjuh.com/api.php";
+    try{return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";}catch(e){return "https://api.131rwjuh.com/api.php";}
+  }
+
+  function toast(msg, sticky){
+    try{ if(typeof window.toast === "function" && !sticky){ window.toast(msg); return; } }catch(e){}
+    let el = document.getElementById("v367FormalToast");
+    if(!el){
+      el = document.createElement("div");
+      el.id = "v367FormalToast";
+      el.style.cssText = "position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:2147483647;max-width:88%;padding:12px 16px;border-radius:16px;background:rgba(72,28,50,.96);color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.38);";
+      document.body.appendChild(el);
     }
+    el.textContent = msg;
+    el.style.display = "block";
+    clearTimeout(el._t);
+    if(!sticky) el._t = setTimeout(()=>{el.style.display="none";}, 2000);
+  }
+  function hideToast(){ const el=document.getElementById("v367FormalToast"); if(el) el.style.display="none"; }
+
+  function currentPage(){
+    const h=(location.hash||"#home").replace(/^#/,"") || "home";
+    return h;
   }
 
-  function isCompanionHome(){
-    return location.hash === "#companion-home" ||
-      !!document.querySelector("#page-companion-home.active, #page-companion-home:not(.hidden)");
+  function goPage(page){
+    try{
+      if(typeof window.showPage === "function") window.showPage(page);
+      else location.hash = "#" + page;
+    }catch(e){ location.hash = "#" + page; }
   }
 
-  function findCompanionRoot(){
-    return document.querySelector("#page-companion-home") ||
-      document.querySelector("[data-page='companion-home']");
+  // Back history: remember actual entrance path.
+  const originalShowPage = typeof window.showPage === "function" ? window.showPage : null;
+  if(originalShowPage && !window.__dreamShowPageHistoryWrappedV367){
+    window.__dreamShowPageHistoryWrappedV367 = true;
+    window.showPage = function(page){
+      try{
+        const cur = currentPage();
+        if(page && page !== cur){
+          sessionStorage.setItem("dream_prev_page_v367", cur);
+        }
+      }catch(e){}
+      return originalShowPage.apply(this, arguments);
+    };
   }
 
-  function findRefreshCard(root){
-    if(!root) return null;
-    const candidates = Array.from(root.querySelectorAll("button, a, .service-card, .feature-card, .menu-card, [role='button'], .card, .item"));
-    return candidates.find(function(el){
-      const txt = (el.textContent || "").replace(/\s+/g, "");
-      return txt.includes("重新整理") || txt.includes("刷新");
-    }) || null;
-  }
-
-  function setLogoutContent(card){
-    card.setAttribute("data-v366-companion-logout", "1");
-    card.setAttribute("aria-label", "登出");
-    card.removeAttribute("id");
-
-    // 優先沿用原本卡片內部結構，只替換第一個圖示字與主要文字。
-    const textNodes = Array.from(card.querySelectorAll("*")).filter(function(el){
-      return (el.textContent || "").trim();
-    });
-
-    let iconSet = false;
-    let labelSet = false;
-
-    textNodes.forEach(function(el){
-      const txt = (el.textContent || "").replace(/\s+/g, "");
-      if(!iconSet && (txt === "整" || txt === "刷" || txt.length <= 2)){
-        el.textContent = "出";
-        iconSet = true;
-        return;
-      }
-      if(!labelSet && (txt.includes("重新整理") || txt.includes("刷新"))){
-        el.textContent = "登出";
-        labelSet = true;
-      }
-    });
-
-    if(!labelSet){
-      card.textContent = "";
-      const icon = document.createElement("div");
-      icon.textContent = "出";
-      const label = document.createElement("div");
-      label.textContent = "登出";
-      card.appendChild(icon);
-      card.appendChild(label);
+  document.addEventListener("click", function(e){
+    const go = e.target.closest && e.target.closest("[data-go]");
+    if(go){
+      const target = go.getAttribute("data-go");
+      const cur = currentPage();
+      if(target && target !== cur) sessionStorage.setItem("dream_prev_page_v367", cur);
+      return;
     }
 
-    // 不自訂大外框，完全沿用「重新整理」class 與父層排版。
-    card.style.cssText = "";
-    card.classList.remove("v363-companion-logout-card");
-    card.classList.add("v366-companion-logout-card");
-    return card;
-  }
+    const back = e.target.closest && e.target.closest(".back-btn, [data-back], [data-action='back']");
+    if(back){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      const prev = sessionStorage.getItem("dream_prev_page_v367") || "home";
+      goPage(prev);
+      return false;
+    }
+  }, true);
 
-  function removeOldLogout(){
-    document.querySelectorAll("[data-v357-companion-logout], [data-v358-companion-logout], [data-v363-companion-logout], [data-v366-companion-logout]").forEach(function(el){
-      el.remove();
+  // Logout loading
+  async function doLogout(role){
+    toast("正在登出，請稍候...", true);
+
+    const btns = document.querySelectorAll("[data-v366-companion-logout], [data-v363-companion-logout], [data-v358-companion-logout], [data-v357-companion-logout], [data-action='logout'], [data-logout], .logout-btn");
+    btns.forEach(btn=>{
+      btn.dataset.oldText = btn.textContent || "登出";
+      btn.textContent = "正在登出...";
+      btn.disabled = true;
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = ".72";
     });
-  }
 
-  function placeLogout(){
-    if(!isCompanionHome()) return;
-
-    const root = findCompanionRoot();
-    const refresh = findRefreshCard(root);
-    if(!root || !refresh) return;
-
-    removeOldLogout();
-
-    const clone = refresh.cloneNode(true);
-    setLogoutContent(clone);
-
-    // 放在重新整理右邊，也就是重新整理的下一格。
-    refresh.parentElement.insertBefore(clone, refresh.nextSibling);
-  }
-
-  async function doLogout(){
+    const action = role === "companion" ? "companion_logout" : "logout";
     try{
-      await fetch(apiBase(), {
-        method:"POST",
-        credentials:"include",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({action:"companion_logout"})
-      });
+      await fetch(apiBase(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action})});
     }catch(e){}
 
     try{
@@ -2224,54 +2211,155 @@ function $(sel, root=document){ return root.querySelector(sel); }
       localStorage.removeItem("dream_permanent_login");
     }catch(e){}
 
-    try{
-      document.body.classList.add("dream-guest");
-      document.body.classList.remove("dream-authenticated");
-      document.documentElement.classList.remove("dream-authenticated");
-    }catch(e){}
-
-    try{
-      if(typeof window.showPage === "function") window.showPage("login");
-      else location.hash = "#login";
-    }catch(e){
-      location.hash = "#login";
-    }
+    hideToast();
+    goPage("login");
   }
 
   document.addEventListener("click", function(e){
-    const btn = e.target.closest && e.target.closest("[data-v366-companion-logout='1']");
-    if(!btn) return;
+    const logoutBtn = e.target.closest && e.target.closest("[data-v366-companion-logout], [data-v363-companion-logout], [data-v358-companion-logout], [data-v357-companion-logout], [data-action='logout'], [data-logout], .logout-btn");
+    if(!logoutBtn) return;
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-    doLogout();
+    let role = "member";
+    try{ role = localStorage.getItem("dream_persist_login_type") || "member"; }catch(e){}
+    doLogout(role);
     return false;
   }, true);
 
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", function(){
-      setTimeout(placeLogout, 120);
-      setTimeout(placeLogout, 600);
+  // Remove remaining demo/fake nodes from front.
+  const DEMO_RE = /測試|假資料|Demo|DEMO|小白|蒼岑|夜璃|雲歌|墨染|夜色客棧|短陌儲值\s*2026|收藏的動態貼文|天策陪玩｜已關注|評分\s*4\./;
+  function removeDemoNodes(){
+    document.querySelectorAll("[data-demo-only],.demo-only,.fake-data,.mock-data").forEach(el=>el.remove());
+    document.querySelectorAll(".row,.post-card,.companion-card").forEach(el=>{
+      const txt=(el.textContent||"").replace(/\s+/g," ");
+      if(DEMO_RE.test(txt)) el.remove();
+    });
+    const inn=document.getElementById("innPostList");
+    const innEmpty=document.getElementById("innEmptyState");
+    if(inn && !inn.children.length && innEmpty){innEmpty.style.display="block"; innEmpty.textContent="目前尚無客棧動態。";}
+    const comp=document.getElementById("companionGrid");
+    if(comp && !comp.querySelector(".companion-card") && !comp.querySelector(".companion-empty")){
+      comp.innerHTML='<div class="companion-empty">目前尚無陪玩資料</div>';
+    }
+  }
+
+  async function fetchRankingSnapshot(force){
+    const now = Date.now();
+    if(!force){
+      try{
+        const ts = Number(sessionStorage.getItem(RANK_CACHE_TIME_KEY) || "0");
+        const raw = sessionStorage.getItem(RANK_CACHE_KEY);
+        if(raw && ts && (now - ts) < RANK_TTL) return JSON.parse(raw);
+      }catch(e){}
+    }
+    const res = await fetch(apiBase(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"front_ranking_snapshot"})});
+    const data = await res.json();
+    if(data && data.ok){
+      try{
+        sessionStorage.setItem(RANK_CACHE_KEY, JSON.stringify(data));
+        sessionStorage.setItem(RANK_CACHE_TIME_KEY, String(now));
+      }catch(e){}
+    }
+    return data;
+  }
+
+  function normalizeRankItems(data){
+    const activity = data && data.activity;
+    let items = [];
+    if(activity && Array.isArray(activity.items)) items = activity.items;
+    if(!items.length && data && data.vip && Array.isArray(data.vip.ranking)) items = data.vip.ranking;
+    return items.map((x,i)=>({
+      rank: Number(x.rank || x.no || i+1),
+      name: x.display_name || x.name || x.username || x.companion_name || "未命名",
+      score: x.score ?? x.total ?? x.completed_orders ?? x.order_count ?? x.exp ?? "",
+      avatar: x.avatar_url || ""
+    }));
+  }
+
+  function rankCard(item, compact){
+    const first = String(item.name||"夢").slice(0,1);
+    return `<div class="v367-rank-card ${compact?'compact':''}" data-v367-rank-card>
+      <div class="v367-rank-no">#${item.rank}</div>
+      <div class="v367-rank-avatar">${item.avatar ? `<img src="${item.avatar}" alt="">` : first}</div>
+      <div class="v367-rank-info"><b>${item.name}</b><span>${item.score!=="" ? item.score : "目前在榜"}</span></div>
+    </div>`;
+  }
+
+  function ensureRankStyle(){
+    if(document.getElementById("v367RankStyle")) return;
+    const style=document.createElement("style");
+    style.id="v367RankStyle";
+    style.textContent=`
+      .v367-rank-wrap{display:grid;gap:10px;margin:10px 0}
+      .v367-rank-card{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,220,235,.25);background:rgba(255,255,255,.06);border-radius:16px;padding:10px;color:inherit}
+      .v367-rank-card.compact{padding:8px;border-radius:14px}
+      .v367-rank-no{font-weight:900;min-width:38px;color:#ffd8ea}
+      .v367-rank-avatar{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,221,235,.16);border:1px solid rgba(255,221,235,.3);font-weight:900;overflow:hidden}
+      .v367-rank-avatar img{width:100%;height:100%;object-fit:cover}
+      .v367-rank-info{display:flex;flex-direction:column;gap:2px;min-width:0}
+      .v367-rank-info b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .v367-rank-info span{font-size:12px;opacity:.8}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function findSectionsByText(texts){
+    const results=[];
+    document.querySelectorAll("section,.panel,.card,div").forEach(el=>{
+      const t=(el.textContent||"").replace(/\s+/g,"");
+      if(texts.some(x=>t.includes(x)) && el.offsetParent!==null) results.push(el);
+    });
+    return results;
+  }
+
+  function renderRankings(data){
+    ensureRankStyle();
+    const items = normalizeRankItems(data);
+    if(!items.length) return;
+
+    const top3 = items.slice(0,3);
+    const next10 = items.slice(3,13);
+
+    // Render into likely home/top ranking sections without destroying whole page.
+    const topSections = findSectionsByText(["本期前三名","前三名"]);
+    topSections.slice(0,2).forEach(sec=>{
+      let box=sec.querySelector("[data-v367-top3]");
+      if(!box){ box=document.createElement("div"); box.setAttribute("data-v367-top3","1"); box.className="v367-rank-wrap"; sec.appendChild(box); }
+      box.innerHTML = top3.map(x=>rankCard(x,false)).join("");
+    });
+
+    const listSections = findSectionsByText(["後10名","後十名","排行榜"]);
+    listSections.slice(0,4).forEach(sec=>{
+      if(sec.querySelector("[data-v367-top3]")) return;
+      let box=sec.querySelector("[data-v367-rank-list]");
+      if(!box){ box=document.createElement("div"); box.setAttribute("data-v367-rank-list","1"); box.className="v367-rank-wrap"; sec.appendChild(box); }
+      box.innerHTML = (next10.length?next10:items.slice(0,10)).map(x=>rankCard(x,true)).join("");
+    });
+  }
+
+  async function loadRankings(force){
+    try{
+      const data = await fetchRankingSnapshot(force);
+      renderRankings(data);
+    }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); }
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded", ()=>{
+      setTimeout(removeDemoNodes,80);
+      setTimeout(()=>loadRankings(false),180);
     });
   }else{
-    setTimeout(placeLogout, 120);
-    setTimeout(placeLogout, 600);
+    setTimeout(removeDemoNodes,80);
+    setTimeout(()=>loadRankings(false),180);
   }
-
-  window.addEventListener("hashchange", function(){
-    setTimeout(placeLogout, 100);
-    setTimeout(placeLogout, 500);
+  window.addEventListener("hashchange", ()=>{
+    setTimeout(removeDemoNodes,100);
+    setTimeout(()=>loadRankings(false),160);
   });
-
-  const mo = new MutationObserver(function(){
-    clearTimeout(placeLogout._t);
-    placeLogout._t = setTimeout(placeLogout, 180);
-  });
-
-  if(document.documentElement){
-    mo.observe(document.documentElement, {childList:true, subtree:true});
-  }
-
-  window.DreamFixCompanionLogoutStyleV366 = placeLogout;
+  const mo = new MutationObserver(()=>{ clearTimeout(removeDemoNodes._t); removeDemoNodes._t=setTimeout(removeDemoNodes,140); });
+  if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
+  window.DreamFormalFrontV367 = {removeDemoNodes, loadRankings, fetchRankingSnapshot};
 })();
 
