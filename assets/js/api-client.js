@@ -1,5 +1,5 @@
-/* v363-companion-logout-position-1778908239 */
-window.DREAM_API_CLIENT_VERSION = "v363-companion-logout-position-1778908239";
+/* v364-syntax-fix-1778908500 */
+window.DREAM_API_CLIENT_VERSION = "v364-syntax-fix-1778908500";
 
 
 /* v362：補回缺失的登入安全判斷，避免 dreamIsLoggedInSafeV352 is not defined */
@@ -72,7 +72,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   };
 
 
-  function window.dreamIsLoggedInSafeV352(){
+  function dreamIsLoggedInSafeV352(){
     try{
       if(window.__dreamFrontAuth && window.__dreamFrontAuth.user) return true;
     }catch(e){}
@@ -85,6 +85,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     }catch(e){}
     return false;
   }
+
+  window.dreamIsLoggedInSafeV352 = window.dreamIsLoggedInSafeV352 || dreamIsLoggedInSafeV352;
 
   function $(sel, root=document){ return root.querySelector(sel); }
   function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -840,7 +842,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   let authType = null;
 
   
-  function window.dreamIsLoggedInSafeV352(){
+  function dreamIsLoggedInSafeV352(){
     try{
       if(typeof authUser !== "undefined" && authUser) return true;
       if(typeof authType !== "undefined" && authType) return true;
