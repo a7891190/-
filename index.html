@@ -1,4 +1,5 @@
-<!-- v368-one-shot-formal -->
+<!-- v370-bullet-formal-link-1778922396 -->
+<!-- v369-clean-arch-1778918812 -->
 <!-- v367-formal-front-functions -->
 <!-- v361-formal-blank-no-fake -->
 <!-- v346-review-badge-safe-fix -->
@@ -5746,9 +5747,9 @@ main.app{padding-bottom:0 !important;}
       <img class="nameplate nameplate-second" src="assets/top3_name_left_v35.webp" alt="">
       <img class="nameplate nameplate-first" src="assets/top3_name_center_v35.webp" alt="">
       <img class="nameplate nameplate-third" src="assets/top3_name_right_v35.webp" alt="">
-<div class="top3-text second"><span class="name">墨染</span><span class="value">VIP經驗值 28,888</span></div>
-      <div class="top3-text first"><span class="name">花間醉</span><span class="value">VIP經驗值 36,666</span></div>
-      <div class="top3-text third"><span class="name">長歌</span><span class="value">VIP經驗值 18,888</span></div>
+<div class="top3-text second"><span class="name">目前尚無資料</span><span class="value">等待排行榜資料</span></div>
+      <div class="top3-text first"><span class="name">目前尚無資料</span><span class="value">等待排行榜資料</span></div>
+      <div class="top3-text third"><span class="name">目前尚無資料</span><span class="value">等待排行榜資料</span></div>
     </div>
     <div class="rank-scroll" data-rank-scroll aria-label="第四名至第十三名排行榜"></div>
   </section>
@@ -6440,8 +6441,8 @@ main.app{padding-bottom:0 !important;}
 <div class="toast" id="toast"></div>
 <script src="assets/js/app-config.js"></script>
 <script src="assets/js/app-hardening.js?v=295"></script>
-<script src="assets/js/api-client.js?v=368"></script>
-<script src="assets/js/v26-social-client.js?v=368"></script>
+<script src="assets/js/api-client.js?v=370"></script>
+<script src="assets/js/v26-social-client.js?v=369"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -8367,326 +8368,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
         bio:"這位陪玩還沒有填寫個人簡介。",achievementSlots:["初次登場","人氣陪玩","穩定在線","成就徽章","高評陪玩"],tags:["陪玩人員"],games:["三角洲行動"],
         reviews:[],posts:["目前開放測試陪玩主頁。"],litGifts:[]
       },
-      "companion-cangcen":{
-        id:"companion-cangcen",type:"companion",name:"蒼岑",avatar:"蒼",gender:"female",
-        rating:4.9,recommend:17,orders:286,status:"空閒",level:"等級：Lv1",fixedTag:"陪玩人員",
-        bio:"擅長黑靈契約與指定單，陪你穩穩上分也能輕鬆聊天。",achievementSlots:["初次登場","人氣陪玩","穩定在線","成就徽章","高評陪玩"],tags:["天策(魔王)","絕活專精","溫柔耐心"],games:["三角洲行動"],
-        reviews:[{from:"會員A",score:5,text:"很穩又會溝通，體驗很好。"}],posts:["今晚在線，歡迎預約。"],litGifts:[]
-      },
-      "companion-yeli":{
-        id:"companion-yeli",type:"companion",name:"夜璃",avatar:"夜",gender:"female",
-        rating:4.8,recommend:92,orders:241,status:"空閒",level:"等級：Lv1",fixedTag:"陪玩人員",
-        bio:"聲音陪伴與娛樂單都可以，主打耐心陪伴。",achievementSlots:["初次登場","初綻魅力","溫柔治癒者","聲音陪伴","穩定在線"],tags:["巡撫(頂尖)","聲甜軟妹","哄睡陪伴"],games:["聲音陪伴"],
-        reviews:[{from:"會員B",score:5,text:"聲音很溫柔，會帶氣氛。"}],posts:["今天也有空檔可以接單。"],litGifts:[]
-      }
-    }
-  }
-  function profiles(){return Object.assign(baseProfiles(), load("dream_profiles_v58", null) || load("dream_profiles_v56", null) || load("dream_profiles_v55", null) || {})}
-  function setProfile(p){const all=profiles(); all[p.id]=p; save("dream_profiles_v58",all)}
-  function getProfile(){const all=profiles(); return all[activeProfileId] || all["member-self"]}
-  function normalizeExclusiveGuardianTagV271(raw){
-    if(!raw) return null;
-    const targetName = raw.targetName || raw.ownerName || raw.guardianOwnerName || raw.profileName || raw.companionName || raw.memberName || raw.name;
-    const rank = Number(raw.rank || raw.place || raw.guardianRank || raw.top || 0);
-    const active = raw.active !== false && raw.valid !== false && raw.expired !== true;
-    if(!targetName || ![1,2,3].includes(rank) || !active) return null;
-    return {
-      targetId: raw.targetId || raw.ownerId || raw.guardianOwnerId || raw.profileId || String(targetName),
-      targetName: String(targetName),
-      rank,
-      text: `${targetName}的第${rank===1?'一':rank===2?'二':'三'}名守護者`,
-      display: raw.display !== false,
-      updatedAt: raw.updatedAt || raw.updated_at || raw.time || ''
-    };
-  }
-  function loadExclusiveGuardianPoolV271(){
-    const keys=['dream_exclusive_guardian_labels_v271','dream_exclusive_guardian_tags_v271','dream_exclusive_guardian_labels_v1','dream_guardian_rank_tags'];
-    for(const k of keys){
-      const v=load(k,null);
-      if(v) return v;
-    }
-    return {};
-  }
-  function exclusiveGuardianTagsForProfileV271(p){
-    const id = String(p?.id || p?.userId || p?.uid || '');
-    let raw=[];
-    if(Array.isArray(p?.exclusiveGuardianTags)) raw=raw.concat(p.exclusiveGuardianTags);
-    if(Array.isArray(p?.exclusiveGuardianLabels)) raw=raw.concat(p.exclusiveGuardianLabels);
-    if(Array.isArray(p?.guardianRankTags)) raw=raw.concat(p.guardianRankTags);
-    if(Array.isArray(p?.guardianBadges)) raw=raw.concat(p.guardianBadges);
-    const pool=loadExclusiveGuardianPoolV271();
-    if(Array.isArray(pool)) raw=raw.concat(pool.filter(x=>String(x.userId||x.accountId||x.ownerUserId||'')===id));
-    else if(pool && typeof pool==='object') raw=raw.concat(pool[id]||[], pool[p?.name]||[]);
-    const map=new Map();
-    raw.map(normalizeExclusiveGuardianTagV271).filter(Boolean).forEach(tag=>{
-      const old=map.get(String(tag.targetId));
-      if(!old || String(tag.updatedAt||'')>=String(old.updatedAt||'')) map.set(String(tag.targetId),tag);
-    });
-    return Array.from(map.values()).sort((a,b)=>a.rank-b.rank || String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
-  }
-  function renderExclusiveGuardianTagV271(tag){
-    return `<span class="profile-tag exclusive-guardian-tag guardian-rank-${tag.rank}" data-exclusive-guardian-rank="${tag.rank}" title="專屬守護榜獎勵｜佔有名次時持有">${esc(tag.text)}</span>`;
-  }
-  function stars(avg){const n=Math.max(0,Math.min(5,Math.round(Number(avg||0))));return "★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n)}
-  const VIP_TITLE_FALLBACK = {VIP1:"雅客",VIP2:"清客",VIP3:"逸客",VIP4:"星使",VIP5:"月使",VIP6:"霓裳使",VIP7:"鳳儀侯",VIP8:"星河侯",VIP9:"凌霄君",VIP10:"絕代風華"};
-  function vipClassFromText(text){
-    const t=String(text||"").toUpperCase();
-    if(/\bS\s*VIP\b/.test(t) || /\bN\s*V\s*I?P\b/.test(t) || /\bNVP\b/.test(t)) return "";
-    const m=t.match(/\bVIP\s*(10|[1-9])\b/);
-    return m ? "vip-vip"+m[1] : "";
-  }
-  function vipDisplayHtml(text){
-    const raw=String(text||"");
-    const normalized=raw.replace(/\bNVP\b/ig,"NVIP");
-    const cls=vipClassFromText(normalized);
-    if(!cls) return esc(normalized);
-    const m=normalized.match(/VIP\s*(10|[1-9])/i);
-    const code=m ? "VIP"+m[1] : "VIP1";
-    const cleaned=cleanVipTitle(normalized, code) || VIP_TITLE_FALLBACK[code] || "專屬會員";
-    return `<span class="vip-display-wrap"><span class="vip-display-prefix">VIP等級：</span><span class="vip-level-effect vip-effect ${cls}">${esc(code)}</span><span class="vip-title-effect vip-effect ${cls}">${esc(cleaned)}</span></span>`;
-  }
-  function bind(name,val){document.querySelectorAll(`[data-profile-bind="${name}"]`).forEach(el=>el.innerHTML=val)}
-  function goProfile(id){
-    activeProfileId = id || "member-self";
-    localStorage.setItem("dream_active_profile_id", activeProfileId);
-    if(typeof showPage === "function") showPage("profile");
-    else {location.hash="#profile"; document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-profile"))}
-    setTimeout(renderProfile,0);
-  }
-  function renderProfileEffectControls(active, label, st, profileRole='member'){
-    if(active && active !== 'none'){
-      return `<div class="profile-effect-controls-head"><h3>目前主頁光效</h3><button type="button" data-profile-effect-clear data-profile-effect-clear-role="${esc(profileRole)}">取消光效</button></div><p>已套用：<b>${esc(label)}</b>。此光效為永久解鎖，且只會顯示在對應身分主頁；會員成就不會套到陪玩主頁，陪玩成就不會套到會員主頁。</p>`;
-    }
-    return `<div class="profile-effect-controls-head"><h3>目前主頁光效</h3></div><p>尚未套用光效。請到成就館點擊「個人頁光效／預覽」，已解鎖的成就可永久套用到目前身分主頁。</p>`;
-  }
-  function applyProfileEffectToProfilePage(p){
-    const fx = window.dreamProfileFx;
-    const page = document.getElementById('page-profile');
-    if(!page || !fx) return;
-    const currentRole = normalizeProfileEffectRole(p?.type || 'member');
-    localStorage.setItem('dream_active_profile_type', currentRole);
-    const st = fx.loadState ? fx.loadState() : {};
-    const activeEntry = Object.assign(createDefaultProfileEffectEntry(), st.activeProfileEffects?.[currentRole] || {});
-    const activeConfig = activeEntry.profileEffectConfig || buildAchievementProfileEffectConfig({achievementId:activeEntry.sourceAchievementId || activeEntry.sourceEffectKey || activeEntry.effect, achievementName:activeEntry.effectName || '', sourceKey:activeEntry.sourceEffectKey || activeEntry.effect, effectKey:activeEntry.effect, tier:activeEntry.tier, role:currentRole});
-    const active = fx.normalize ? fx.normalize(activeConfig.profileEffectBaseType || activeEntry.effect || 'none') : 'none';
-    const tier = fx.normalizeTier ? fx.normalizeTier(activeConfig.profileEffectTier || activeEntry.tier || 'common') : 'common';
-    const canShowActive = active !== 'none';
-    page.className = page.className.replace(/pfx-[a-z0-9-]+/g,'').replace(/pfx-tier-[a-z0-9-]+/g,'').replace(/\s+/g,' ').trim();
-    page.classList.toggle('pfx-profile-active', canShowActive);
-    page.querySelectorAll('.profile-fx-layer,.profile-effect-frame').forEach(x=>x.remove());
-    if(canShowActive){
-      const preset = fx.preset(active);
-      page.classList.add('pfx-' + active);
-      page.classList.add('pfx-tier-' + tier);
-      page.style.setProperty('--pfx-main', preset.main);
-      page.style.setProperty('--pfx-alt', preset.alt);
-      page.style.setProperty('--pfx-deep', preset.deep);
-      page.style.setProperty('--pfx-shadow', preset.main.replace('rgb','rgba').replace(')',', .65)'));
-      page.insertAdjacentHTML('afterbegin', fx.layer(active, tier, 'page-fullscreen-pfx', activeConfig));
-      ['.profile-hero','.profile-info-panel','.profile-gift-panel','.profile-feed-panel'].forEach(sel=>{
-        const el = page.querySelector(sel);
-        if(el) el.insertAdjacentHTML('afterbegin', fx.layer(active, tier, 'panel-overlay-pfx', activeConfig));
-      });
-    }
-    const displayLabel = active !== 'none'
-      ? (activeConfig.profileEffectThemeName || (fx.label ? fx.label(active) : active)) + (fx.tierLabel ? '｜' + fx.tierLabel(tier) : '') + '｜' + profileEffectRoleLabel(currentRole)
-      : '';
-    bind('profile-effect-controls', renderProfileEffectControls(canShowActive ? active : 'none', displayLabel, st, currentRole));
-  }
-
-  const GUARDIAN_NAMES_V249=["星河","清歡","月璃","夜笙","白露","雲歌","錦瑟","浮光","南枝","青鸞","聽雨","鹿鳴","雲舒","望舒","明檀","雲棲","朝顏","清越"];
-  function hashV249(str){let h=2166136261;str=String(str||"");for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
-  function formatGuardianValueV249(n){return `${Number(n||0).toLocaleString('zh-TW')} 守護值`;}
-  function sortLeaderboardNoTieJumpV249(list){
-    return (Array.isArray(list)?list:[]).slice().sort((a,b)=>{
-      const ds=Number(b.score??b.guardianValue??0)-Number(a.score??a.guardianValue??0);
-      if(ds!==0) return ds;
-      const at=Number(new Date(a.scoreReachedAt||a.firstReachedAt||a.createdAt||0).getTime()||0);
-      const bt=Number(new Date(b.scoreReachedAt||b.firstReachedAt||b.createdAt||0).getTime()||0);
-      if(at!==bt) return at-bt;
-      return String(a.userId||a.name||'').localeCompare(String(b.userId||b.name||''),'zh-Hant');
-    }).map((x,i)=>Object.assign({},x,{rank:i+1}));
-  }
-  function buildProfileGuardianRankingV249(profile){
-    const key=profile?.id || profile?.name || 'dream-profile';
-    const base=hashV249(key);
-    const savedKey='dream_profile_guardian_rank_v249_'+String(key).replace(/[^a-zA-Z0-9_-]/g,'_');
-    try{const saved=JSON.parse(localStorage.getItem(savedKey)||'null');if(Array.isArray(saved)&&saved.length)return sortLeaderboardNoTieJumpV249(saved).slice(0,13);}catch(_){ }
-    const monthBase=new Date();monthBase.setDate(1);monthBase.setHours(10,0,0,0);
-    const rows=Array.from({length:13}).map((_,i)=>{
-      const name=GUARDIAN_NAMES_V249[(i+(base%GUARDIAN_NAMES_V249.length))%GUARDIAN_NAMES_V249.length];
-      const score=Math.max(880,Math.floor((98000+(base%18000))/(1+i*.22)-i*631+((base>>(i%8))%900)));
-      const reached=new Date(monthBase.getTime()+((i*37+(base%71))*60000));
-      return {userId:`guardian-${hashV249(key+'-'+i)}`,name,avatar:name.slice(0,1),score,guardianValue:score,scoreReachedAt:reached.toISOString()};
-    });
-    return sortLeaderboardNoTieJumpV249(rows).slice(0,13);
-  }
-  function renderProfileGuardianBoardV249(profile){
-    const list=buildProfileGuardianRankingV249(profile);
-    const top=list.slice(0,3);
-    const rest=list.slice(3,13);
-    const podium=Array.from({length:3}).map((_,i)=>{
-      const item=top[i];
-      const cls=i===0?'rank1':(i===1?'rank2':'rank3');
-      const crown=i===0?'👑':(i===1?'✦':'◆');
-      return `<div class="profile-guardian-podium ${cls}" data-guardian-rank="${i+1}">${item?`<div class="profile-guardian-avatar">${esc(item.avatar||item.name?.slice(0,1)||'守')}</div><div class="profile-guardian-name">${esc(item.name||'-')}</div><div class="profile-guardian-value">${esc(formatGuardianValueV249(item.score||item.guardianValue))}</div><div class="profile-guardian-crown">${crown} 第 ${i+1} 名</div>`:`<div class="profile-guardian-empty">空缺</div><div class="profile-guardian-crown">${crown} 第 ${i+1} 名</div>`}</div>`;
-    }).join('');
-    const rows=rest.length?rest.map(item=>`<div class="profile-guardian-row"><div class="profile-guardian-no">${item.rank}</div><div class="profile-guardian-mini-avatar">${esc(item.avatar||item.name?.slice(0,1)||'守')}</div><div class="profile-guardian-mini-name">${esc(item.name||'-')}</div><div class="profile-guardian-mini-value">${esc(formatGuardianValueV249(item.score||item.guardianValue))}</div></div>`).join(''):`<div class="profile-guardian-list-empty">送禮後即可登上專屬守護榜</div>`;
-    return `<section class="profile-guardian-board"><div class="profile-guardian-head"><h3>專屬守護榜</h3><span>送禮守護值最高的前三名；同分不超車，需超越前一名才會提升排名。</span></div><div class="profile-guardian-top3">${podium}</div><div class="profile-guardian-list">${rows}</div></section>`;
-  }
-  window.DreamRankV249={sortLeaderboardEntries:sortLeaderboardNoTieJumpV249,formatGuardianValue:formatGuardianValueV249,buildProfileGuardianRanking:buildProfileGuardianRankingV249};
-  function renderProfile(){
-    const p = getProfile();
-    if((p.type==="member" || p.type==="companion") && window.__dreamFrontAuth?.user){
-      const u = window.__dreamFrontAuth.user;
-      p.name = u.display_name || u.username || u.name || p.name;
-      p.level = vipDisplay(u);
-      p.fixedTag = fixedVipTag(p.level);
-    }
-    bind("title",p.type==="companion"?"陪玩主頁":"會員主頁");
-    bind("name",esc(p.name));
-    bind("avatar",String(p.avatar||"").startsWith("http")?`<img src="${esc(p.avatar)}" alt="">`:esc((p.avatar||p.name||"夢").slice(0,1)));
-    bind("gender",p.gender==="male"?"♂":(p.gender==="female"?"♀":""));
-    bind("rating",Number(p.rating||0).toFixed(1));
-    bind("stars",stars(p.rating));
-    bind("level", vipDisplayHtml(p.level || "VIP等級：無VIP會員"));
-    bind("recommend",Number(p.recommend||0));
-    bind("orders",Number(p.orders||0));
-    bind("status",esc(p.status || (p.type==="companion"?"空閒":"在線")));
-    bind("bio",esc(p.bio || "這位使用者還沒有填寫個人簡介。"));
-    const ownedAchievements = (p.achievementSlots && p.achievementSlots.length ? p.achievementSlots : ["初入樂園","資料達人","VIP 啟程","送禮達人","收藏愛好者"]).slice(0,5);
-    bind("achievement-slots", Array.from({length:5}).map((_,i)=>{const name=ownedAchievements[i]||"空缺";return `<div class="achievement-slot"><span class="icon">${i<ownedAchievements.length?"✦":"＋"}</span><span>${esc(name)}</span></div>`;}).join(""));
-    const profilePage=document.getElementById("page-profile");
-    if(profilePage){
-      profilePage.classList.toggle("profile-companion", p.type==="companion");
-      profilePage.classList.toggle("profile-member", p.type!=="companion");
-    }
-    const guardianTagsV271=exclusiveGuardianTagsForProfileV271(p);
-    const visibleGuardianTagsV271=guardianTagsV271.filter(t=>t.display!==false).slice(0,3);
-    const normalTags=[p.fixedTag || (p.type==="companion"?"陪玩人員":"無VIP會員")].concat(p.tags||[]);
-    const hiddenGuardianCountV271=Math.max(0, guardianTagsV271.length-visibleGuardianTagsV271.length);
-    bind("tags", normalTags.map(t=>`<span class="profile-tag">${esc(t)}</span>`).join("") + visibleGuardianTagsV271.map(renderExclusiveGuardianTagV271).join("") + (hiddenGuardianCountV271?`<span class="profile-tag exclusive-guardian-hidden" title="未顯示的守護者標籤已保留，未來可在設定中切換">另有 ${hiddenGuardianCountV271} 個守護者標籤</span>`:""));
-    const games=(p.games&&p.games.length?p.games:["尚未選擇"]);
-    bind("games",games.map(t=>`<span class="game-tag">${esc(t)}</span>`).join(""));
-    const gifts=(window.DREAM_GIFT_DATA||[]).slice(0,50);
-    const lit=new Set((p.litGifts||[]).filter(x=>x.date&&(Date.now()-new Date(x.date).getTime())<=31*24*60*60*1000).map(x=>x.slug));
-    bind("gift-count",`已點亮 ${lit.size} / ${gifts.length}`);
-    bind("profile-guardian-board", renderProfileGuardianBoardV249(p));
-    bind("gift-wall",gifts.map(g=>`<div class="wall-gift ${lit.has(g.slug)?"lit":""}"><img src="${esc(g.image)}" alt="${esc(g.name)}"><span>${esc(g.name)}</span></div>`).join(""));
-    const giftFilter = localStorage.getItem("dream_profile_gift_filter") || "owned";
-    document.querySelectorAll("[data-profile-gift-filter]").forEach(btn=>btn.classList.toggle("active", btn.dataset.profileGiftFilter===giftFilter));
-    const collection = gifts.filter(g=>giftFilter==="owned" ? lit.has(g.slug) : !lit.has(g.slug)).slice(0,24);
-    bind("gift-collection", collection.length ? collection.map(g=>`<div class="profile-gift-mini ${lit.has(g.slug)?"":"locked"}"><img src="${esc(g.image)}" alt="${esc(g.name)}"><span>${esc(g.name)}</span></div>`).join("") : `<div class="profile-empty" style="grid-column:1/-1">目前沒有${giftFilter==="owned"?"已獲得":"未獲得"}禮物資料。</div>`);
-    const posts=p.posts||[];
-    bind("posts",posts.length?posts.map((txt,i)=>`<div class="profile-post-item"><div>${esc(txt)}</div><div class="profile-post-time">個人動態 #${i+1}</div></div>`).join(""):`<div class="profile-empty">目前尚無個人動態。</div>`);
-    applyProfileEffectToProfilePage(p);
-    const back=document.querySelector(".profile-back");
-    if(back){ var selfProfileId=""; try{selfProfileId=localStorage.getItem("dream_active_profile_id")||activeProfileId||"";}catch(_){selfProfileId=activeProfileId||"";} back.dataset.go = (p.type==="companion" && selfProfileId==="companion-self") ? "companion-home" : (p.type==="companion" ? "companion" : "member"); }
-  }
-  window.renderProfile = renderProfile;
-  function modal(html){
-    let mask=document.getElementById("profileModalMask");
-    if(!mask){
-      mask=document.createElement("div"); mask.id="profileModalMask"; mask.className="profile-modal-mask";
-      mask.innerHTML='<div class="profile-modal" id="profileModal"></div>'; document.body.appendChild(mask);
-      mask.addEventListener("click",e=>{if(e.target===mask) mask.classList.remove("show")});
-    }
-    document.getElementById("profileModal").innerHTML=html; mask.classList.add("show");
-  }
-  function closeModal(){document.getElementById("profileModalMask")?.classList.remove("show")}
-  function needLogin(msg){return true} // v239：暫時開放入口可觀看/測試
-
-
-  function completedAchievementNamesForProfile(){
-    const role = getProfile().type || getDreamLoginRole();
-    const data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
-    const names = data.filter(a=>a && a.unlocked && (a.type === role || a.type === 'common' || (role === 'companion' && a.type === 'member'))).map(a=>a.name).filter(Boolean);
-    return names.length ? Array.from(new Set(names)) : ['空缺'];
-  }
-  function buildAchievementSlotEditor(p){
-    const completed = completedAchievementNamesForProfile();
-    const current = (p.achievementSlots && p.achievementSlots.length ? p.achievementSlots : []).slice(0,5);
-    return Array.from({length:5}).map((_,i)=>{
-      const val = current[i] || '';
-      const opts = [''].concat(completed).map(n=>`<option value="${esc(n)}" ${n===val?'selected':''}>${n?esc(n):'空缺'}</option>`).join('');
-      return `<select id="achievementSlot${i}" style="width:100%;border-radius:12px;padding:10px;border:1px solid rgba(218,99,146,.24);background:rgba(255,255,255,.8);color:#74304f">${opts}</select>`;
-    }).join('');
-  }
-
-  function editProfile(){
-    const p=getProfile(); if(!needLogin("請先登入後才能編輯個人資料")) return;
-    const opts=p.type==="companion"?companionTags:memberTags;
-    const chosen=new Set(p.tags||[]), games=new Set(p.games||[]);
-    modal(`<h3>編輯個人資料</h3>
-      <label>個人簡介</label><textarea id="editBio">${esc(p.bio||"")}</textarea>
-      <label>成就展示 5 格</label><div class="check-grid" id="achievementSlotChecks">${buildAchievementSlotEditor(p)}</div>
-      <label>性別</label><div class="gender-options"><label class="gender-option"><input type="radio" name="editGender" value="male" ${p.gender==="male"?"checked":""}> 男生 ♂</label><label class="gender-option"><input type="radio" name="editGender" value="female" ${p.gender==="female"?"checked":""}> 女生 ♀</label></div>
-      <label>可選個性標籤</label><div class="check-grid">${opts.map(t=>`<label class="check-pill"><input type="checkbox" value="${esc(t)}" ${chosen.has(t)?"checked":""}>${esc(t)}</label>`).join("")}</div>
-      <label>遊戲類別</label><div class="check-grid" id="gameChecks">${gameOptions.map(t=>`<label class="check-pill"><input type="checkbox" value="${esc(t)}" ${games.has(t)?"checked":""}>${esc(t)}</label>`).join("")}</div>
-      <input id="customGame" placeholder="新增其他遊戲類別，可不填">
-      <div class="modal-actions"><button class="ghost" type="button" data-modal-close>取消</button><button type="button" id="saveProfileInfo">確認</button></div>`);
-    document.getElementById("saveProfileInfo").onclick=()=>{
-      p.bio=document.getElementById("editBio").value.trim()||"這位使用者還沒有填寫個人簡介。";
-      p.achievementSlots=Array.from(document.querySelectorAll('[id^="achievementSlot"]')).map(x=>x.value.trim()).filter(Boolean).slice(0,5);
-      const gender=document.querySelector('input[name="editGender"]:checked'); p.gender=gender?gender.value:"";
-      p.tags=Array.from(document.querySelectorAll(".check-grid input[type='checkbox']:checked")).filter(x=>!x.closest("#gameChecks")).map(x=>x.value);
-      p.games=Array.from(document.querySelectorAll("#gameChecks input:checked")).map(x=>x.value);
-      const custom=document.getElementById("customGame").value.trim(); if(custom&&!p.games.includes(custom)) p.games.push(custom);
-      setProfile(p); closeModal(); renderProfile();
-    };
-  }
-  function editPosts(){
-    const p=getProfile(); if(!needLogin("請先登入後才能刪除個人動態")) return;
-    const posts=p.posts||[];
-    modal(`<h3>管理個人動態</h3>${posts.length?posts.map((txt,i)=>`<label class="check-pill" style="width:100%;border-radius:14px"><input type="checkbox" value="${i}"><span>${esc(txt)}</span></label>`).join(""):`<p class="profile-empty">目前沒有可刪除的個人動態。</p>`}<div class="modal-actions"><button class="ghost" data-modal-close type="button">取消</button><button type="button" id="deletePosts">刪除勾選</button></div>`);
-    document.getElementById("deletePosts").onclick=()=>{const del=new Set(Array.from(document.querySelectorAll("#profileModal input:checked")).map(x=>Number(x.value))); p.posts=posts.filter((_,i)=>!del.has(i)); setProfile(p); closeModal(); renderProfile()};
-  }
-  function reviews(){
-    const p=getProfile(); if(!needLogin("請先登入後才能查看評價紀錄")) return;
-    const rs=p.reviews||[];
-    modal(`<h3>${esc(p.name)} 的評價紀錄</h3>${rs.length?rs.map(r=>`<div class="review-card"><b>${"★".repeat(Number(r.score||0))}${"☆".repeat(5-Number(r.score||0))}</b><div>${esc(r.text||"")}</div><div class="profile-post-time">來自 ${esc(r.from||"匿名")}</div></div>`).join(""):`<p class="profile-empty">目前尚無完成訂單後的公開評價。</p>`}<div class="modal-actions"><button type="button" data-modal-close>關閉</button></div>`);
-  }
-  function recommend(){
-    const p=getProfile(); if(!needLogin("請先登入後才能推薦")) return;
-    const key="dream_recommended_"+p.id; if(localStorage.getItem(key)){toast?.("你已經推薦過此人");return}
-    p.recommend=Number(p.recommend||0)+1; localStorage.setItem(key,"1"); setProfile(p); renderProfile(); toast?.("已推薦");
-  }
-
-  document.addEventListener("click",function(e){
-    const self=e.target.closest('[data-open-profile="self"], .member-name.profile-click-name');
-    if(self){
-      e.preventDefault(); e.stopPropagation();
-      if(!window.__dreamFrontAuth || !window.__dreamFrontAuth.user){
-        if(typeof showPage === "function") showPage("login"); else location.hash="#login";
-        return;
-      }
-      goProfile(ownProfileId()); return;
-    }
-
-    const nameEl=e.target.closest(".companion-card h3, .companion-card .name-block");
-    if(nameEl){
-      const card=nameEl.closest(".companion-card");
-      const name=(card?.dataset?.name || card?.querySelector("h3")?.textContent || "").trim();
-      e.preventDefault(); e.stopPropagation();
-      goProfile(name.includes("夜") ? "companion-yeli" : "companion-cangcen");
-      return;
-    }
-
-    const postName=e.target.closest(".post-name");
-    if(postName){ e.preventDefault(); e.stopPropagation(); goProfile("member-self"); return; }
-
-    const action=e.target.closest("[data-action]")?.dataset.action;
-    if(action==="edit-profile-info") editProfile();
-    if(action==="edit-profile-posts") editPosts();
-    if(action==="open-profile-reviews") reviews();
-    if(action==="recommend-profile") recommend();
-    if(action==="follow-profile"){ if(needLogin("請先登入後才能關注")){ const p=getProfile(); try{const arr=JSON.parse(localStorage.getItem("dream_followed_names")||"[]"); if(!arr.includes(p.name)) arr.push(p.name); localStorage.setItem("dream_followed_names",JSON.stringify(arr));}catch(e){} toast?.("已加入關注紀錄"); } }
-    if(action==="reserve-profile"){ if(typeof showPage === "function") showPage("market"); }
-    if(action==="service-order") window.open(window.DREAM_CONFIG?.LINE_CUSTOMER_SERVICE_URL || "https://lin.ee/64EK1Iu","_blank");
-    if(action==="raffle-single" || action==="raffle-ten") window.startDreamRaffleAnimation?.(action==="raffle-ten" ? "ten" : "single");
-    const giftFilterBtn=e.target.closest("[data-profile-gift-filter]");
-    if(giftFilterBtn){ e.preventDefault(); localStorage.setItem("dream_profile_gift_filter", giftFilterBtn.dataset.profileGiftFilter || "owned"); renderProfile(); return; }
-  }, true);
+      true);
 
   document.addEventListener("click",e=>{if(e.target.closest("[data-modal-close]")) closeModal()});
   window.renderDreamProfilePage=renderProfile;
@@ -16646,7 +16328,6 @@ body:not(.role-companion) .companion-only-panel{
   };
 })();
 </script>
-
-  <script src="assets/js/formal-front-core.js?v=368"></script>
+<script src="assets/js/formal-front-core.js?v=370"></script>
 </body>
 </html>

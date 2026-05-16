@@ -1,110 +1,393 @@
-/* v368-one-shot-formal-1778913533 formal front core */
+/* v370-bullet-formal-link-1778922396 */
 (function(){
-  if(window.__dreamFormalCoreV368) return;
-  window.__dreamFormalCoreV368 = true;
-  window.DREAM_FORMAL_CORE_VERSION = "v368-one-shot-formal-1778913533";
+  if(window.__dreamFormalCoreCleanV369) return;
+  window.__dreamFormalCoreCleanV369 = true;
 
   const API_BASE = () => {
-    try{ return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || 'https://api.131rwjuh.com/api.php'; }catch(e){ return 'https://api.131rwjuh.com/api.php'; }
+    try{ return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php"; }
+    catch(e){ return "https://api.131rwjuh.com/api.php"; }
   };
-  const RANK_CACHE_KEY = 'dream_front_rank_cache_v368';
-  const RANK_TIME_KEY = 'dream_front_rank_cache_time_v368';
-  const RANK_TTL = 5 * 60 * 1000;
-  const DEMO_RE = /雲歌|浮光|夜笙|青衫|九璃|阿黎|阿梨|小白|蒼岑|夜璃|墨染|測試|假資料|Demo|DEMO|rank-showcase|OWNER_REWARDS|DEFAULT_COMMENTS|評分\s*4\./;
 
-  function api(action, payload={}){
-    return fetch(API_BASE(), {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify(Object.assign({action}, payload))})
-      .then(async r=>{ const t=await r.text(); try{ return JSON.parse(t||'{}'); }catch(e){ return {ok:false,message:'API 回傳格式錯誤：'+t.slice(0,120),status:r.status}; } });
-  }
+  const DEMO_RE = /雲歌|浮光|夜笙|青衫|九璃|阿黎|阿梨|小白|蒼岑|夜璃|墨染|花間醉|長歌|測試|假資料|Demo|DEMO|收藏的動態貼文|短陌儲值\s*2026|評分\s*4\./;
+
   function toast(msg, sticky){
-    let el=document.getElementById('formalToastV368');
-    if(!el){ el=document.createElement('div'); el.id='formalToastV368'; el.style.cssText='position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:2147483647;max-width:88%;padding:12px 16px;border-radius:16px;background:rgba(72,28,50,.96);color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.38);'; document.body.appendChild(el); }
-    el.textContent=msg; el.style.display='block'; clearTimeout(el._t); if(!sticky) el._t=setTimeout(()=>el.style.display='none',2200);
+    let el = document.getElementById("dreamCleanToast");
+    if(!el){
+      el = document.createElement("div");
+      el.id = "dreamCleanToast";
+      el.style.cssText = "position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:2147483647;max-width:88%;padding:12px 16px;border-radius:16px;background:rgba(72,28,50,.96);color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.38);";
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.display = "block";
+    clearTimeout(el._t);
+    if(!sticky) el._t = setTimeout(()=>el.style.display="none", 1800);
   }
-  function hideToast(){ const el=document.getElementById('formalToastV368'); if(el) el.style.display='none'; }
-  function currentPage(){ return (location.hash||'#home').replace(/^#/,'') || 'home'; }
-  function goPage(page){ try{ if(typeof window.showPage==='function') window.showPage(page); else location.hash='#'+page; }catch(e){ location.hash='#'+page; } }
 
-  // 全站返回：記錄點入口前的頁面，返回就回那裡。
-  const originalShowPage = typeof window.showPage === 'function' ? window.showPage : null;
-  if(originalShowPage && !window.__dreamHistoryWrappedV368){
-    window.__dreamHistoryWrappedV368 = true;
+  function pageName(){
+    return (location.hash || "#home").replace(/^#/,"") || "home";
+  }
+
+  function show(page){
+    try{ if(typeof window.showPage === "function"){ window.showPage(page); return; } }catch(e){}
+    location.hash = "#" + page;
+  }
+
+  // 返回鍵：只記錄入口，不讓回上一頁時又被覆蓋。
+  let internalBack = false;
+  const originalShowPage = typeof window.showPage === "function" ? window.showPage : null;
+  if(originalShowPage && !window.__dreamCleanShowPageWrappedV369){
+    window.__dreamCleanShowPageWrappedV369 = true;
     window.showPage = function(page){
-      try{ const cur=currentPage(); if(page && page!==cur) sessionStorage.setItem('dream_prev_page_v368', cur); }catch(e){}
+      try{
+        const cur = pageName();
+        if(!internalBack && page && page !== cur){
+          sessionStorage.setItem("dream_prev_page_clean", cur);
+        }
+      }catch(e){}
       return originalShowPage.apply(this, arguments);
     };
   }
-  document.addEventListener('click', function(e){
-    const nav = e.target.closest && e.target.closest('[data-go], [data-page-link], [data-open-page]');
-    if(nav){ try{ sessionStorage.setItem('dream_prev_page_v368', currentPage()); }catch(_e){} }
-    const back = e.target.closest && e.target.closest('.back-btn,[data-back],[data-action="back"]');
-    if(back){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); goPage(sessionStorage.getItem('dream_prev_page_v368') || 'home'); return false; }
+
+  document.addEventListener("click", function(e){
+    const back = e.target.closest && e.target.closest(".back-btn,[data-back],[data-action='back']");
+    if(back){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      const prev = sessionStorage.getItem("dream_prev_page_clean") || "home";
+      internalBack = true;
+      show(prev);
+      setTimeout(()=>internalBack=false, 80);
+      return false;
+    }
+
+    const go = e.target.closest && e.target.closest("[data-go]");
+    if(go){
+      const target = go.getAttribute("data-go");
+      const cur = pageName();
+      if(target && target !== cur) sessionStorage.setItem("dream_prev_page_clean", cur);
+    }
   }, true);
 
-  // 登出處理中提示。
   async function logout(role){
-    toast('正在登出，請稍候...', true);
-    document.querySelectorAll('[data-v366-companion-logout],[data-v363-companion-logout],[data-v358-companion-logout],[data-v357-companion-logout],[data-action="logout"],[data-logout],.logout-btn').forEach(btn=>{ btn.dataset.oldText=btn.textContent||'登出'; btn.textContent='正在登出...'; btn.disabled=true; btn.style.pointerEvents='none'; btn.style.opacity='.72'; });
-    const action = role === 'companion' ? 'companion_logout' : 'logout';
-    try{ await api(action); }catch(e){}
-    try{ ['dream_persist_user','dream_persist_login_type','dream_login_keep','dream_permanent_login'].forEach(k=>localStorage.removeItem(k)); }catch(e){}
-    hideToast(); goPage('login');
+    toast("正在登出，請稍候...", true);
+    const action = role === "companion" ? "companion_logout" : "logout";
+    try{
+      await fetch(API_BASE(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action})});
+    }catch(e){}
+    try{
+      localStorage.removeItem("dream_persist_user");
+      localStorage.removeItem("dream_persist_login_type");
+      localStorage.removeItem("dream_login_keep");
+      localStorage.removeItem("dream_permanent_login");
+    }catch(e){}
+    show("login");
   }
-  document.addEventListener('click', function(e){
-    const btn=e.target.closest && e.target.closest('[data-v366-companion-logout],[data-v363-companion-logout],[data-v358-companion-logout],[data-v357-companion-logout],[data-action="logout"],[data-logout],.logout-btn');
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest("[data-v366-companion-logout], [data-action='logout'], [data-logout], .logout-btn");
     if(!btn) return;
-    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-    let role='member'; try{ role=localStorage.getItem('dream_persist_login_type')||'member'; }catch(e){}
-    logout(role); return false;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    btn.dataset.oldText = btn.textContent || "登出";
+    btn.textContent = "正在登出...";
+    btn.disabled = true;
+    btn.style.pointerEvents = "none";
+    btn.style.opacity = ".72";
+    let role = "member";
+    try{ role = localStorage.getItem("dream_persist_login_type") || "member"; }catch(e){}
+    logout(role);
+    return false;
   }, true);
 
-  // 清除所有殘留展示假資料，不只是隱藏客棧。
-  function removeDemoNodes(){
-    document.querySelectorAll('[data-demo-only],.demo-only,.fake-data,.mock-data,.inn-reward-showcase-post').forEach(el=>el.remove());
-    document.querySelectorAll('.post-card,.inn-comment,.companion-card,.recommend-card,.row').forEach(el=>{ const txt=(el.textContent||'').replace(/\s+/g,' '); if(DEMO_RE.test(txt)) el.remove(); });
-    const inn=document.getElementById('innPostList'), empty=document.getElementById('innEmptyState');
-    if(inn && !inn.children.length && empty){ empty.style.display='block'; empty.textContent='目前尚無客棧動態。'; }
-    const comp=document.getElementById('companionGrid');
-    if(comp && !comp.querySelector('.companion-card') && !comp.querySelector('.companion-empty')) comp.innerHTML='<div class="companion-empty">目前尚無陪玩資料</div>';
+  // 登出按鈕：複製重新整理樣式
+  function findCompanionRoot(){
+    return document.querySelector("#page-companion-home") || document.querySelector("[data-page='companion-home']");
   }
-
-  // 排行榜 5 分鐘快取。
-  async function getRanking(force){
-    const now=Date.now();
-    if(!force){ try{ const ts=Number(sessionStorage.getItem(RANK_TIME_KEY)||'0'); const raw=sessionStorage.getItem(RANK_CACHE_KEY); if(raw && ts && now-ts<RANK_TTL) return JSON.parse(raw); }catch(e){} }
-    const data=await api('front_ranking_snapshot');
-    if(data && data.ok){ try{ sessionStorage.setItem(RANK_CACHE_KEY, JSON.stringify(data)); sessionStorage.setItem(RANK_TIME_KEY, String(now)); }catch(e){} }
-    return data;
+  function isCompanionHome(){
+    return location.hash === "#companion-home" || !!document.querySelector("#page-companion-home.active, #page-companion-home:not(.hidden)");
   }
-  function esc(s){ return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-  function styleRanks(){ if(document.getElementById('rankStyleV368'))return; const st=document.createElement('style'); st.id='rankStyleV368'; st.textContent='.rank-v368-wrap{display:grid;gap:10px;margin:10px 0}.rank-v368-card{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,220,235,.25);background:rgba(255,255,255,.06);border-radius:16px;padding:10px;color:inherit}.rank-v368-no{font-weight:900;min-width:38px;color:#ffd8ea}.rank-v368-av{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,221,235,.16);border:1px solid rgba(255,221,235,.3);font-weight:900;overflow:hidden}.rank-v368-av img{width:100%;height:100%;object-fit:cover}.rank-v368-info{display:flex;flex-direction:column;gap:2px;min-width:0}.rank-v368-info b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rank-v368-info span{font-size:12px;opacity:.8}'; document.head.appendChild(st); }
-  function itemHtml(x){ const name=x.display_name||x.name||x.username||x.companion_name||'未命名'; const score=x.score??x.total??x.completed_orders??x.order_count??x.exp??'目前在榜'; const rank=x.rank||x.no||''; const av=x.avatar_url||x.avatar||''; return `<div class="rank-v368-card"><div class="rank-v368-no">#${esc(rank)}</div><div class="rank-v368-av">${av?`<img src="${esc(av)}" alt="">`:esc(String(name).slice(0,1))}</div><div class="rank-v368-info"><b>${esc(name)}</b><span>${esc(score)}</span></div></div>`; }
-  function rankItems(data){ let items=[]; if(data?.activity?.items) items=data.activity.items; if(!items.length && data?.vip?.ranking) items=data.vip.ranking; return Array.isArray(items)?items:[]; }
-  function findSections(words){ const out=[]; document.querySelectorAll('section,.panel,.card,div').forEach(el=>{ const t=(el.textContent||'').replace(/\s+/g,''); if(words.some(w=>t.includes(w)) && el.offsetParent!==null) out.push(el); }); return out; }
-  async function renderRankings(force){
-    try{ const data=await getRanking(force); const items=rankItems(data); if(!items.length)return; styleRanks(); const top3=items.slice(0,3), rest=items.slice(3,13);
-      findSections(['本期前三名','前三名']).slice(0,2).forEach(sec=>{ let box=sec.querySelector('[data-rank-v368-top3]'); if(!box){ box=document.createElement('div'); box.className='rank-v368-wrap'; box.setAttribute('data-rank-v368-top3','1'); sec.appendChild(box); } box.innerHTML=top3.map(itemHtml).join(''); });
-      findSections(['後10名','後十名','排行榜']).slice(0,5).forEach(sec=>{ if(sec.querySelector('[data-rank-v368-top3]'))return; let box=sec.querySelector('[data-rank-v368-list]'); if(!box){ box=document.createElement('div'); box.className='rank-v368-wrap'; box.setAttribute('data-rank-v368-list','1'); sec.appendChild(box); } box.innerHTML=(rest.length?rest:items.slice(0,10)).map(itemHtml).join(''); });
-    }catch(e){ console.warn('[front_ranking_snapshot]', e.message||e); }
+  function findRefreshCard(root){
+    if(!root) return null;
+    return Array.from(root.querySelectorAll("button,a,.service-card,.feature-card,.menu-card,[role='button'],.card,.item")).find(el=>{
+      const txt=(el.textContent||"").replace(/\s+/g,"");
+      return txt.includes("重新整理") || txt.includes("刷新");
+    }) || null;
   }
-
-  // 陪玩登出按鈕跟重新整理一樣樣式。
-  function fixCompanionLogoutStyle(){
-    if(location.hash !== '#companion-home') return;
-    const root=document.querySelector('#page-companion-home')||document.querySelector('[data-page="companion-home"]'); if(!root)return;
-    const cards=Array.from(root.querySelectorAll('button,a,.service-card,.feature-card,.menu-card,[role="button"],.card,.item'));
-    const refresh=cards.find(el=>/重新整理|刷新/.test((el.textContent||'').replace(/\s+/g,''))); if(!refresh || !refresh.parentElement)return;
-    root.querySelectorAll('[data-v366-companion-logout],[data-v363-companion-logout],[data-v358-companion-logout],[data-v357-companion-logout]').forEach(x=>x.remove());
-    const clone=refresh.cloneNode(true); clone.setAttribute('data-v366-companion-logout','1'); clone.setAttribute('aria-label','登出');
-    const nodes=Array.from(clone.querySelectorAll('*')).filter(el=>(el.textContent||'').trim()); let icon=false,label=false;
-    nodes.forEach(el=>{ const t=(el.textContent||'').replace(/\s+/g,''); if(!icon && (t==='整'||t==='刷'||t.length<=2)){el.textContent='出'; icon=true; return;} if(!label && /重新整理|刷新/.test(t)){el.textContent='登出'; label=true;} });
-    if(!label) clone.innerHTML='<div>出</div><div>登出</div>';
+  function setLogoutCard(card){
+    card.setAttribute("data-v366-companion-logout","1");
+    card.setAttribute("aria-label","登出");
+    card.removeAttribute("id");
+    const nodes = Array.from(card.querySelectorAll("*")).filter(el=>(el.textContent||"").trim());
+    let icon=false, label=false;
+    nodes.forEach(el=>{
+      const txt=(el.textContent||"").replace(/\s+/g,"");
+      if(!icon && (txt==="整" || txt==="刷" || txt.length<=2)){ el.textContent="出"; icon=true; return; }
+      if(!label && (txt.includes("重新整理") || txt.includes("刷新"))){ el.textContent="登出"; label=true; }
+    });
+    if(!label){
+      card.textContent="";
+      const a=document.createElement("div"); a.textContent="出";
+      const b=document.createElement("div"); b.textContent="登出";
+      card.appendChild(a); card.appendChild(b);
+    }
+    return card;
+  }
+  function placeCompanionLogout(){
+    if(!isCompanionHome()) return;
+    const root = findCompanionRoot();
+    const refresh = findRefreshCard(root);
+    if(!root || !refresh || !refresh.parentElement) return;
+    document.querySelectorAll("[data-v357-companion-logout],[data-v358-companion-logout],[data-v363-companion-logout],[data-v366-companion-logout]").forEach(el=>el.remove());
+    const clone = refresh.cloneNode(true);
+    setLogoutCard(clone);
     refresh.parentElement.insertBefore(clone, refresh.nextSibling);
   }
 
-  function boot(){ removeDemoNodes(); renderRankings(false); fixCompanionLogoutStyle(); }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,100)); else setTimeout(boot,100);
-  window.addEventListener('hashchange',()=>setTimeout(boot,120));
-  const mo=new MutationObserver(()=>{ clearTimeout(boot._t); boot._t=setTimeout(removeDemoNodes,160); }); if(document.documentElement)mo.observe(document.documentElement,{childList:true,subtree:true});
-  window.DreamFormalCoreV368={removeDemoNodes,renderRankings,fixCompanionLogoutStyle};
+  // 清除展示假資料，不碰真 API 回來的資料，除非命中特定展示假名字。
+  function removeDemoNodes(){
+    document.querySelectorAll("[data-demo-only],.demo-only,.fake-data,.mock-data").forEach(el=>el.remove());
+    document.querySelectorAll(".post-card,.companion-card,.row").forEach(el=>{
+      const txt=(el.textContent||"").replace(/\s+/g," ");
+      if(DEMO_RE.test(txt)) el.remove();
+    });
+    const inn=document.getElementById("innPostList");
+    const innEmpty=document.getElementById("innEmptyState");
+    if(inn && !inn.children.length && innEmpty){ innEmpty.style.display="block"; innEmpty.textContent="目前尚無客棧動態。"; }
+    const comp=document.getElementById("companionGrid");
+    if(comp && !comp.querySelector(".companion-card") && !comp.querySelector(".companion-empty")) comp.innerHTML='<div class="companion-empty">目前尚無陪玩資料</div>';
+  }
+
+  const RANK_CACHE_KEY = "dream_front_rank_cache_clean_v369";
+  const RANK_TIME_KEY = "dream_front_rank_cache_time_clean_v369";
+  const RANK_TTL = 5 * 60 * 1000;
+
+  async function getRanking(force){
+    const now=Date.now();
+    if(!force){
+      try{
+        const ts=Number(sessionStorage.getItem(RANK_TIME_KEY)||"0");
+        const raw=sessionStorage.getItem(RANK_CACHE_KEY);
+        if(raw && ts && now-ts<RANK_TTL) return JSON.parse(raw);
+      }catch(e){}
+    }
+    const res = await fetch(API_BASE(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"front_ranking_snapshot"})});
+    const data = await res.json();
+    if(data && data.ok){
+      try{ sessionStorage.setItem(RANK_CACHE_KEY, JSON.stringify(data)); sessionStorage.setItem(RANK_TIME_KEY, String(now)); }catch(e){}
+    }
+    return data;
+  }
+  function rankItems(data){
+    let items = [];
+    if(data && data.activity && Array.isArray(data.activity.items)) items = data.activity.items;
+    if(!items.length && data && data.vip && Array.isArray(data.vip.ranking)) items = data.vip.ranking;
+    return items.map((x,i)=>({rank:Number(x.rank||i+1), name:x.display_name||x.name||x.username||x.companion_name||"未命名", score:x.score??x.total??x.completed_orders??x.order_count??x.exp??"", avatar:x.avatar_url||""}));
+  }
+  function ensureRankStyle(){
+    if(document.getElementById("dreamCleanRankStyle")) return;
+    const style=document.createElement("style"); style.id="dreamCleanRankStyle";
+    style.textContent='.dream-clean-rank-wrap{display:grid;gap:10px;margin:10px 0}.dream-clean-rank-card{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,220,235,.25);background:rgba(255,255,255,.06);border-radius:16px;padding:10px;color:inherit}.dream-clean-rank-no{font-weight:900;min-width:38px;color:#ffd8ea}.dream-clean-rank-avatar{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,221,235,.16);border:1px solid rgba(255,221,235,.3);font-weight:900;overflow:hidden}.dream-clean-rank-avatar img{width:100%;height:100%;object-fit:cover}.dream-clean-rank-info{display:flex;flex-direction:column;gap:2px;min-width:0}.dream-clean-rank-info b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dream-clean-rank-info span{font-size:12px;opacity:.8}';
+    document.head.appendChild(style);
+  }
+  function card(x){
+    const first=String(x.name||"夢").slice(0,1);
+    return `<div class="dream-clean-rank-card"><div class="dream-clean-rank-no">#${x.rank}</div><div class="dream-clean-rank-avatar">${x.avatar?`<img src="${x.avatar}" alt="">`:first}</div><div class="dream-clean-rank-info"><b>${x.name}</b><span>${x.score!==""?x.score:"目前在榜"}</span></div></div>`;
+  }
+  function sectionsByText(list){
+    const out=[];
+    document.querySelectorAll("section,.panel,.card,div").forEach(el=>{
+      const t=(el.textContent||"").replace(/\s+/g,"");
+      if(list.some(x=>t.includes(x)) && el.offsetParent!==null) out.push(el);
+    });
+    return out;
+  }
+  function renderRanking(data){
+    const items=rankItems(data);
+    if(!items.length) return;
+    ensureRankStyle();
+    sectionsByText(["本期前三名","前三名"]).slice(0,2).forEach(sec=>{
+      let box=sec.querySelector("[data-clean-top3]");
+      if(!box){ box=document.createElement("div"); box.className="dream-clean-rank-wrap"; box.setAttribute("data-clean-top3","1"); sec.appendChild(box); }
+      box.innerHTML=items.slice(0,3).map(card).join("");
+    });
+    sectionsByText(["後10名","後十名","排行榜"]).slice(0,4).forEach(sec=>{
+      if(sec.querySelector("[data-clean-top3]")) return;
+      let box=sec.querySelector("[data-clean-rank-list]");
+      if(!box){ box=document.createElement("div"); box.className="dream-clean-rank-wrap"; box.setAttribute("data-clean-rank-list","1"); sec.appendChild(box); }
+      box.innerHTML=(items.slice(3,13).length?items.slice(3,13):items.slice(0,10)).map(card).join("");
+    });
+  }
+  async function loadRanking(force){ try{ renderRanking(await getRanking(force)); }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); } }
+
+  function boot(){
+    removeDemoNodes();
+    placeCompanionLogout();
+    loadRanking(false);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(boot,100));
+  else setTimeout(boot,100);
+  window.addEventListener("hashchange",()=>setTimeout(boot,120));
+  const mo=new MutationObserver(()=>{ clearTimeout(boot._t); boot._t=setTimeout(()=>{removeDemoNodes(); placeCompanionLogout();},180); });
+  if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
+
+  window.DreamCleanFormalV369 = {removeDemoNodes, placeCompanionLogout, loadRanking};
 })();
+
+
+
+/* v370：正式彈幕特效前台顯示 */
+(function(){
+  if(window.__dreamBulletFormalV370) return;
+  window.__dreamBulletFormalV370 = true;
+
+  const SEEN_KEY = "dream_seen_bullet_events_v370";
+  const POLL_MS = 30000;
+
+  function apiBase(){
+    try{return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";}catch(e){return "https://api.131rwjuh.com/api.php";}
+  }
+
+  function seenSet(){
+    try{return new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]"));}catch(e){return new Set();}
+  }
+
+  function saveSeen(set){
+    try{sessionStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(set).slice(-120)));}catch(e){}
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function ensureLayer(){
+    let layer = document.getElementById("dreamBulletLayer");
+    if(layer) return layer;
+
+    const style = document.createElement("style");
+    style.id = "dreamBulletStyleV370";
+    style.textContent = `
+      #dreamBulletLayer{
+        pointer-events:none;
+        position:fixed;
+        left:0;
+        right:0;
+        top:74px;
+        height:42vh;
+        z-index:2147483500;
+        overflow:hidden;
+      }
+      .dream-bullet-item{
+        position:absolute;
+        right:-120%;
+        min-width:max-content;
+        max-width:88vw;
+        display:flex;
+        align-items:center;
+        gap:8px;
+        padding:8px 14px;
+        border-radius:999px;
+        background:rgba(55,24,45,.86);
+        color:#fff;
+        border:1px solid rgba(255,221,235,.32);
+        box-shadow:0 12px 28px rgba(0,0,0,.28);
+        font-size:14px;
+        font-weight:900;
+        white-space:nowrap;
+        animation:dreamBulletMoveV370 var(--dur,12s) linear forwards;
+        backdrop-filter:blur(8px);
+      }
+      .dream-bullet-item.gift{
+        background:linear-gradient(90deg,rgba(116,42,70,.92),rgba(211,119,83,.88));
+        border-color:rgba(255,225,170,.46);
+      }
+      .dream-bullet-item.notice{
+        background:linear-gradient(90deg,rgba(45,44,88,.92),rgba(116,42,100,.88));
+      }
+      .dream-bullet-item.gold{
+        background:linear-gradient(90deg,rgba(106,75,22,.94),rgba(211,151,59,.9));
+        border-color:rgba(255,230,160,.6);
+      }
+      .dream-bullet-badge{
+        display:inline-flex;
+        width:28px;
+        height:28px;
+        border-radius:11px;
+        align-items:center;
+        justify-content:center;
+        background:rgba(255,255,255,.16);
+        border:1px solid rgba(255,255,255,.24);
+      }
+      @keyframes dreamBulletMoveV370{
+        from{transform:translateX(0);}
+        to{transform:translateX(calc(-100vw - 140%));}
+      }
+    `;
+    document.head.appendChild(style);
+
+    layer = document.createElement("div");
+    layer.id = "dreamBulletLayer";
+    document.body.appendChild(layer);
+    return layer;
+  }
+
+  function showBullet(ev, index){
+    const layer = ensureLayer();
+    const item = document.createElement("div");
+    const effect = String(ev.effect_key || "normal").toLowerCase();
+    item.className = "dream-bullet-item " + effect;
+    item.style.top = ((index % 7) * 44) + "px";
+    item.style.setProperty("--dur", (11 + (index % 4)) + "s");
+
+    const badge = effect === "gift" ? "禮" : effect === "notice" ? "告" : effect === "gold" ? "賞" : "訊";
+    const title = ev.title ? `<b>${esc(ev.title)}</b>` : "";
+    const name = ev.display_name ? `<span>${esc(ev.display_name)}</span>` : "";
+    const msg = `<span>${esc(ev.message || "")}</span>`;
+
+    item.innerHTML = `<span class="dream-bullet-badge">${badge}</span>${title}${name}${msg}`;
+    layer.appendChild(item);
+    item.addEventListener("animationend", ()=>item.remove());
+  }
+
+  async function loadBullets(){
+    let data = null;
+    try{
+      const res = await fetch(apiBase(), {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"bullet_event_list", limit:20})
+      });
+      data = await res.json();
+    }catch(e){
+      console.warn("[bullet_event_list]", e.message || e);
+      return;
+    }
+
+    if(!data || !data.ok) return;
+    const events = Array.isArray(data.events) ? data.events.slice().reverse() : [];
+    const seen = seenSet();
+    let count = 0;
+
+    events.forEach(ev=>{
+      const id = String(ev.id || "");
+      if(!id || seen.has(id)) return;
+      seen.add(id);
+      showBullet(ev, count++);
+    });
+
+    saveSeen(seen);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", ()=>setTimeout(loadBullets, 800));
+  }else{
+    setTimeout(loadBullets, 800);
+  }
+
+  setInterval(loadBullets, POLL_MS);
+  window.DreamBulletFormalV370 = {load: loadBullets};
+})();
+
