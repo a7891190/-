@@ -1,5 +1,5 @@
-/* v356-force-login-bind-1778903727 */
-window.DREAM_API_CLIENT_VERSION = "v356-force-login-bind-1778903727";
+/* v358-login-ux-persist-logout-1778904457 */
+window.DREAM_API_CLIENT_VERSION = "v358-login-ux-persist-logout-1778904457";
 window.DreamLoginDebug = window.DreamLoginDebug || null;
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
@@ -1227,82 +1227,160 @@ function $(sel, root=document){ return root.querySelector(sel); }
 
 
 
-/* v356：強制綁定前台登入按鈕，避免原本事件沒觸發 */
+
+
+
+/* v358：登入體驗、保持登入、陪玩登出整合修正 */
 (function(){
-  if(window.__dreamForceLoginBindV356) return;
-  window.__dreamForceLoginBindV356 = true;
+  if(window.__dreamLoginUxPersistLogoutV358) return;
+  window.__dreamLoginUxPersistLogoutV358 = true;
 
-  function toastV356(msg){
-    try{
-      if(typeof window.toast === "function"){ window.toast(msg); return; }
-    }catch(e){}
-    let el = document.getElementById("v356LoginToast");
-    if(!el){
-      el = document.createElement("div");
-      el.id = "v356LoginToast";
-      el.style.cssText = "position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:2147483647;max-width:88%;padding:12px 16px;border-radius:14px;background:rgba(72,28,50,.96);color:#fff;font-size:14px;text-align:center;box-shadow:0 12px 28px rgba(0,0,0,.36);";
-      document.body.appendChild(el);
-    }
-    el.textContent = msg;
-    el.style.display = "block";
-    clearTimeout(el._t);
-    el._t = setTimeout(()=>{ el.style.display = "none"; }, 2200);
-  }
-
-  function apiBaseV356(){
+  const API_BASE = function(){
     try{
       return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
     }catch(e){
       return "https://api.131rwjuh.com/api.php";
     }
+  };
+
+  function toastV358(msg, sticky){
+    let el = document.getElementById("v358LoginToast");
+    if(!el){
+      el = document.createElement("div");
+      el.id = "v358LoginToast";
+      el.style.cssText = [
+        "position:fixed",
+        "left:50%",
+        "bottom:112px",
+        "transform:translateX(-50%)",
+        "z-index:2147483647",
+        "max-width:88%",
+        "padding:12px 16px",
+        "border-radius:16px",
+        "background:rgba(72,28,50,.96)",
+        "color:#fff",
+        "font-size:14px",
+        "font-weight:900",
+        "text-align:center",
+        "box-shadow:0 12px 30px rgba(0,0,0,.38)",
+        "border:1px solid rgba(255,220,235,.35)"
+      ].join(";");
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.display = "block";
+    clearTimeout(el._t);
+    if(!sticky){
+      el._t = setTimeout(()=>{ el.style.display = "none"; }, 2200);
+    }
   }
 
-  function currentLoginRoleV356(){
+  function hideToastV358(){
+    const el = document.getElementById("v358LoginToast");
+    if(el){
+      clearTimeout(el._t);
+      el.style.display = "none";
+    }
+  }
+
+  function setLoginButtonLoading(loading){
+    const btn = document.querySelector("#front_login_btn");
+    if(!btn) return;
+    if(loading){
+      btn.dataset.oldText = btn.dataset.oldText || btn.textContent || "登入";
+      btn.textContent = "正在登入...";
+      btn.disabled = true;
+      btn.classList.add("is-loading");
+      btn.style.opacity = ".72";
+      btn.style.pointerEvents = "none";
+    }else{
+      btn.textContent = btn.dataset.oldText || "登入";
+      btn.disabled = false;
+      btn.classList.remove("is-loading");
+      btn.style.opacity = "";
+      btn.style.pointerEvents = "";
+    }
+  }
+
+  function readJson(key){
+    try{ return JSON.parse(localStorage.getItem(key) || "null"); }catch(e){ return null; }
+  }
+
+  function savedUser(){ return readJson("dream_persist_user"); }
+  function savedRole(){ return localStorage.getItem("dream_persist_login_type") || ""; }
+
+  function isSavedLoggedIn(){
+    return localStorage.getItem("dream_login_keep") === "1" && !!savedUser();
+  }
+
+  function currentLoginRole(){
     const active = document.querySelector("[data-login-tab].active");
     const role = active && active.dataset ? active.dataset.loginTab : "";
     return role === "companion" ? "companion" : "member";
   }
 
-  function goPageV356(page){
+  function goPage(page){
     try{
       if(typeof window.showPage === "function"){
         window.showPage(page);
-        return;
+      }else{
+        location.hash = "#" + page;
       }
-    }catch(e){}
-    location.hash = "#" + page;
+    }catch(e){
+      location.hash = "#" + page;
+    }
   }
 
-  function setUiV356(user, role){
+  function applySavedLogin(){
+    if(!isSavedLoggedIn()) return false;
+
+    const role = savedRole() || "member";
+    const user = savedUser();
+
     try{
       if(typeof setMemberUI === "function"){
         setMemberUI(user, role);
       }
     }catch(e){}
+
     try{
       document.body.classList.remove("dream-guest");
       document.body.classList.add("dream-authenticated");
     }catch(e){}
+
+    return true;
   }
 
-  async function doLoginV356(){
+  function saveLogin(user, role, username){
+    try{
+      localStorage.setItem("dream_persist_login_type", role);
+      localStorage.setItem("dream_persist_user", JSON.stringify(user || {username}));
+      localStorage.setItem("dream_login_keep", "1");
+      if(username) localStorage.setItem("dream_remember_username", username);
+    }catch(e){}
+  }
+
+  async function doLogin(){
     const username = (document.querySelector("#front_login_user")?.value || "").trim();
     const password = document.querySelector("#front_login_pwd")?.value || "";
 
     if(!username || !password){
-      toastV356("請輸入帳號與密碼");
+      toastV358("請輸入帳號與密碼");
       return;
     }
 
-    const role = currentLoginRoleV356();
+    const role = currentLoginRole();
     const action = role === "companion" ? "companion_login" : "login";
     const payload = { action, username, account: username, email: username, password };
+
+    setLoginButtonLoading(true);
+    toastV358("正在登入，請稍候...", true);
 
     let parsed = null;
     let status = 0;
 
     try{
-      const res = await fetch(apiBaseV356(), {
+      const res = await fetch(API_BASE(), {
         method: "POST",
         credentials: "include",
         headers: {"Content-Type":"application/json"},
@@ -1323,37 +1401,153 @@ function $(sel, root=document){ return root.querySelector(sel); }
     console.log("[DreamLoginDebug]", window.DreamLoginDebug);
 
     if(!parsed || !parsed.ok){
-      toastV356((parsed && (parsed.message || parsed.error)) || "登入失敗");
+      setLoginButtonLoading(false);
+      toastV358((parsed && (parsed.message || parsed.error)) || "登入失敗");
       return;
     }
 
     const user = parsed.user || parsed.companion || parsed.data || {username};
     const loginType = role === "companion" ? "companion" : "member";
+    const targetPage = loginType === "companion" ? "companion-home" : "member";
+
+    saveLogin(user, loginType, username);
 
     try{
-      localStorage.setItem("dream_persist_login_type", loginType);
-      localStorage.setItem("dream_persist_user", JSON.stringify(user));
-      localStorage.setItem("dream_remember_username", username);
+      if(typeof setMemberUI === "function"){
+        setMemberUI(user, loginType);
+      }
     }catch(e){}
 
-    setUiV356(user, loginType);
-    toastV356(parsed.message || (loginType === "companion" ? "陪玩登入成功" : "登入成功"));
+    try{
+      document.body.classList.remove("dream-guest");
+      document.body.classList.add("dream-authenticated");
+    }catch(e){}
+
+    toastV358(parsed.message || (loginType === "companion" ? "陪玩登入成功" : "登入成功"));
+
+    // 立即跳轉，再補一次，避免原本 guard 或動畫延遲。
+    goPage(targetPage);
+    setTimeout(()=>goPage(targetPage), 40);
+    setTimeout(()=>goPage(targetPage), 160);
 
     setTimeout(()=>{
-      goPageV356(loginType === "companion" ? "companion-home" : "member");
-    }, 150);
+      setLoginButtonLoading(false);
+      hideToastV358();
+    }, 650);
   }
 
+  async function logout(){
+    const role = savedRole();
+    const action = role === "companion" ? "companion_logout" : "logout";
+
+    try{
+      await fetch(API_BASE(), {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action})
+      });
+    }catch(e){}
+
+    try{
+      localStorage.removeItem("dream_persist_user");
+      localStorage.removeItem("dream_persist_login_type");
+      localStorage.removeItem("dream_login_keep");
+      localStorage.removeItem("dream_remember_username");
+    }catch(e){}
+
+    try{
+      document.body.classList.add("dream-guest");
+      document.body.classList.remove("dream-authenticated");
+    }catch(e){}
+
+    toastV358("已登出");
+    setTimeout(()=>goPage("login"), 120);
+  }
+
+  function ensureCompanionLogoutButton(){
+    const roots = [
+      document.querySelector("#page-companion-home"),
+      document.querySelector("#page-companion"),
+      document.querySelector("[data-page='companion-home']"),
+      document.querySelector("[data-page='companion']")
+    ].filter(Boolean);
+
+    roots.forEach(root=>{
+      if(root.querySelector("[data-v358-companion-logout]")) return;
+
+      const serviceArea =
+        root.querySelector(".service-grid") ||
+        root.querySelector(".feature-grid") ||
+        root.querySelector(".member-service-grid") ||
+        root.querySelector(".profile-service-grid") ||
+        root.querySelector(".menu-grid") ||
+        root.querySelector(".center-grid") ||
+        root.querySelector(".quick-grid") ||
+        root.querySelector(".function-service") ||
+        root.querySelector(".service-list");
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("data-v358-companion-logout", "1");
+      btn.className = "service-card feature-card menu-card v358-companion-logout";
+      btn.innerHTML = '<span class="icon">⇥</span><span>登出</span>';
+
+      if(serviceArea){
+        serviceArea.appendChild(btn);
+      }else{
+        btn.style.cssText = "display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 32px);margin:12px 16px;padding:12px;border-radius:16px;border:1px solid rgba(255,220,235,.32);background:rgba(255,255,255,.08);color:#fff;font-weight:900;";
+        root.appendChild(btn);
+      }
+    });
+  }
+
+  // 強制登入按鈕一定觸發，不受原本 click handler 影響。
   document.addEventListener("click", function(e){
-    const btn = e.target.closest && e.target.closest("#front_login_btn");
-    if(!btn) return;
+    const loginBtn = e.target.closest && e.target.closest("#front_login_btn");
+    if(loginBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      doLogin();
+      return false;
+    }
 
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    doLoginV356();
-    return false;
+    const logoutBtn = e.target.closest && e.target.closest("[data-v358-companion-logout], [data-action='logout'], [data-logout]");
+    if(logoutBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      logout();
+      return false;
+    }
   }, true);
+
+  // 重新整理後先恢復登入，不等待後台 session。
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      setTimeout(applySavedLogin, 20);
+      setTimeout(ensureCompanionLogoutButton, 180);
+    });
+  }else{
+    setTimeout(applySavedLogin, 20);
+    setTimeout(ensureCompanionLogoutButton, 180);
+  }
+
+  window.addEventListener("hashchange", function(){
+    setTimeout(applySavedLogin, 40);
+    setTimeout(ensureCompanionLogoutButton, 120);
+  });
+
+  const mo = new MutationObserver(function(){
+    clearTimeout(ensureCompanionLogoutButton._t);
+    ensureCompanionLogoutButton._t = setTimeout(ensureCompanionLogoutButton, 120);
+  });
+  if(document.documentElement){
+    mo.observe(document.documentElement, {childList:true, subtree:true});
+  }
+
+  window.DreamLogoutV358 = logout;
+  window.DreamApplySavedLoginV358 = applySavedLogin;
 })();
 
