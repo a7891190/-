@@ -1,4 +1,4 @@
-/* v370-bullet-formal-link-1778922396 */
+/* v375-root-timeout-fix-current */
 (function(){
   if(window.__dreamFormalCoreCleanV369) return;
   window.__dreamFormalCoreCleanV369 = true;

@@ -1,5 +1,5 @@
-/* v370-bullet-formal-link-1778922396 */
-window.DREAM_API_CLIENT_VERSION = "v370-bullet-formal-link-1778922396";
+/* v375-root-timeout-fix-current */
+window.DREAM_API_CLIENT_VERSION = "v375-root-timeout-fix-current";
 
 
 
@@ -453,6 +453,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
+    if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v362：未登入不呼叫儲值紀錄，避免 helper 缺失與 401。
     if(!window.dreamIsLoggedInSafeV352()) return;
 
@@ -1056,6 +1057,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }).join("");
   }
   async function loadRecords(){
+    if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v362：未登入不呼叫禮物/購買紀錄，避免 helper 缺失與 401。
     if(!window.dreamIsLoggedInSafeV352()) return;
 
@@ -1229,7 +1231,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const savedUser = localStorage.getItem("dream_persist_user");
     const savedType = localStorage.getItem("dream_persist_login_type");
     if(savedUser && savedType){ try{ setMemberUI(JSON.parse(savedUser), savedType); }catch(e){} }
-    await refreshSession();
+    try{ await refreshSession(); }catch(e){ console.warn('[refreshSession]', e.message || e); }
     loadRanking(); // 排行榜可公開顯示
     guardCurrentPage();
     if(window.__dreamAuthSafe.isLoggedIn()) loadProtectedData();

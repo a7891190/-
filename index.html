@@ -1,4 +1,4 @@
-<!-- v372-render-profile-fix -->
+<!-- v375-root-timeout-fix-current -->
 <!-- v369-clean-arch-1778918812 -->
 <!-- v367-formal-front-functions -->
 <!-- v361-formal-blank-no-fake -->
@@ -6440,9 +6440,10 @@ main.app{padding-bottom:0 !important;}
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
 <script src="assets/js/app-config.js"></script>
-<script src="assets/js/app-hardening.js?v=372"></script>
-<script src="assets/js/api-client.js?v=372"></script>
-<script src="assets/js/v26-social-client.js?v=372"></script>
+<script src="assets/js/app-hardening.js?v=375"></script>
+<script src="assets/js/front-api-stabilizer.js?v=375"></script>
+<script src="assets/js/api-client.js?v=375"></script>
+<script src="assets/js/v26-social-client.js?v=375"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -8402,9 +8403,9 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     }
   }
 
-  window.renderDreamProfilePage=renderProfile;
-  window.openDreamProfile=goProfile;
-  if(location.hash==="#profile"){ document.body.classList.add("profile-page-active"); setTimeout(renderProfile,100); }
+  window.renderDreamProfilePage=(typeof renderProfile==="function"?renderProfile:function(){});
+  window.openDreamProfile=(typeof goProfile==="function"?goProfile:function(id){try{localStorage.setItem("dream_active_profile_id",id||"member-self");}catch(e){} if(typeof window.showPage==="function") window.showPage("profile"); else location.hash="#profile";});
+  if(location.hash==="#profile"){ document.body.classList.add("profile-page-active"); setTimeout(window.renderDreamProfilePage,100); }
 })();
 </script>
 <script>
@@ -16359,6 +16360,6 @@ body:not(.role-companion) .companion-only-panel{
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=372"></script>
+<script src="assets/js/formal-front-core.js?v=375"></script>
 </body>
 </html>
