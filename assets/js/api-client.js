@@ -1,5 +1,5 @@
-/* v362-missing-login-helper-fix-1778907884 */
-window.DREAM_API_CLIENT_VERSION = "v362-missing-login-helper-fix-1778907884";
+/* v363-companion-logout-position-1778908239 */
+window.DREAM_API_CLIENT_VERSION = "v363-companion-logout-position-1778908239";
 
 
 /* v362：補回缺失的登入安全判斷，避免 dreamIsLoggedInSafeV352 is not defined */
@@ -1846,3 +1846,229 @@ function $(sel, root=document){ return root.querySelector(sel); }
   const mo = new MutationObserver(()=>{ clearTimeout(removeDemoNodes._t); removeDemoNodes._t=setTimeout(removeDemoNodes,120); });
   if(document.documentElement) mo.observe(document.documentElement, {childList:true, subtree:true});
 })();
+
+
+
+/* v363：陪玩中心登出按鈕固定到功能服務重新整理右邊 */
+(function(){
+  if(window.__dreamCompanionLogoutPositionV363) return;
+  window.__dreamCompanionLogoutPositionV363 = true;
+
+  function apiBase(){
+    try{
+      return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
+    }catch(e){
+      return "https://api.131rwjuh.com/api.php";
+    }
+  }
+
+  function isCompanionPage(){
+    return location.hash === "#companion-home" ||
+      !!document.querySelector("#page-companion-home.active, #page-companion-home:not(.hidden)");
+  }
+
+  function isCompanionLoggedIn(){
+    try{
+      const role = localStorage.getItem("dream_persist_login_type") || "";
+      return role === "companion";
+    }catch(e){}
+    return false;
+  }
+
+  function removeWrongLogoutButtons(){
+    // 移除之前被插到「我的訂單」或其他錯誤位置的補丁登出鈕
+    document.querySelectorAll("[data-v357-companion-logout], [data-v358-companion-logout], [data-v363-companion-logout]").forEach(function(btn){
+      const keep = btn.getAttribute("data-v363-companion-logout") === "1" && btn.closest("[data-v363-function-service-area]");
+      if(!keep) btn.remove();
+    });
+  }
+
+  function findRefreshButton(root){
+    const candidates = Array.from(root.querySelectorAll("button, a, .service-card, .feature-card, .menu-card, [role='button']"));
+    return candidates.find(function(el){
+      const txt = (el.textContent || "").replace(/\s+/g, "");
+      return txt.includes("重新整理") || txt === "刷新" || txt.includes("刷新");
+    }) || null;
+  }
+
+  function findFunctionServiceArea(root, refreshBtn){
+    if(refreshBtn){
+      const area = refreshBtn.closest(
+        ".service-grid, .feature-grid, .member-service-grid, .profile-service-grid, .menu-grid, .center-grid, .quick-grid, .function-service, .service-list, .grid"
+      );
+      if(area) return area;
+    }
+
+    const titles = Array.from(root.querySelectorAll("h1,h2,h3,.section-title,.panel-title,.title"));
+    const serviceTitle = titles.find(function(el){
+      const txt = (el.textContent || "").replace(/\s+/g, "");
+      return txt.includes("功能服務");
+    });
+
+    if(serviceTitle){
+      let node = serviceTitle.parentElement;
+      for(let i=0; node && i<5; i++, node=node.parentElement){
+        const area = node.querySelector(".service-grid, .feature-grid, .member-service-grid, .profile-service-grid, .menu-grid, .center-grid, .quick-grid, .function-service, .service-list, .grid");
+        if(area) return area;
+      }
+    }
+
+    return root.querySelector(".service-grid, .feature-grid, .member-service-grid, .profile-service-grid, .menu-grid, .center-grid, .quick-grid, .function-service, .service-list, .grid");
+  }
+
+  function makeLogoutButton(){
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("data-v363-companion-logout", "1");
+    btn.setAttribute("aria-label", "登出");
+    btn.className = "service-card feature-card menu-card v363-companion-logout-card";
+    btn.innerHTML = '<div class="v363-logout-icon">出</div><div class="v363-logout-label">登出</div>';
+    btn.style.cssText = [
+      "display:flex",
+      "flex-direction:column",
+      "align-items:center",
+      "justify-content:center",
+      "gap:6px",
+      "min-height:74px",
+      "border-radius:18px",
+      "border:1px solid rgba(255,220,235,.34)",
+      "background:rgba(255,255,255,.08)",
+      "color:#fff",
+      "font-weight:900",
+      "box-shadow:0 10px 24px rgba(0,0,0,.18)",
+      "cursor:pointer"
+    ].join(";");
+    return btn;
+  }
+
+  function ensureStyle(){
+    if(document.getElementById("v363-companion-logout-style")) return;
+    const style = document.createElement("style");
+    style.id = "v363-companion-logout-style";
+    style.textContent = `
+      .v363-companion-logout-card .v363-logout-icon{
+        width:34px;
+        height:34px;
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(255,221,235,.16);
+        border:1px solid rgba(255,221,235,.34);
+        font-size:18px;
+        line-height:1;
+      }
+      .v363-companion-logout-card .v363-logout-label{
+        font-size:13px;
+        letter-spacing:.04em;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureLogoutPlacement(){
+    if(!isCompanionPage()) return;
+
+    ensureStyle();
+    removeWrongLogoutButtons();
+
+    const root = document.querySelector("#page-companion-home") || document.querySelector("[data-page='companion-home']");
+    if(!root) return;
+
+    const refreshBtn = findRefreshButton(root);
+    const area = findFunctionServiceArea(root, refreshBtn);
+    if(!area) return;
+
+    area.setAttribute("data-v363-function-service-area", "1");
+
+    let btn = area.querySelector("[data-v363-companion-logout='1']");
+    if(!btn){
+      btn = makeLogoutButton();
+    }
+
+    if(refreshBtn && refreshBtn.parentElement === area){
+      // 放在重新整理右邊
+      if(refreshBtn.nextSibling !== btn){
+        area.insertBefore(btn, refreshBtn.nextSibling);
+      }
+    }else if(refreshBtn){
+      // 重新整理在卡片內部時，放在該卡片後面
+      const card = refreshBtn.closest(".service-card,.feature-card,.menu-card,button,a,[role='button']") || refreshBtn;
+      if(card && card.parentElement){
+        card.parentElement.insertBefore(btn, card.nextSibling);
+      }else{
+        area.appendChild(btn);
+      }
+    }else{
+      // 找不到重新整理就放在功能服務最後一個
+      area.appendChild(btn);
+    }
+  }
+
+  async function logoutCompanion(){
+    try{
+      await fetch(apiBase(), {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({action:"companion_logout"})
+      });
+    }catch(e){}
+
+    try{
+      localStorage.removeItem("dream_persist_user");
+      localStorage.removeItem("dream_persist_login_type");
+      localStorage.removeItem("dream_login_keep");
+      localStorage.removeItem("dream_permanent_login");
+    }catch(e){}
+
+    try{
+      document.body.classList.add("dream-guest");
+      document.body.classList.remove("dream-authenticated");
+      document.documentElement.classList.remove("dream-authenticated");
+    }catch(e){}
+
+    try{
+      if(typeof window.showPage === "function") window.showPage("login");
+      else location.hash = "#login";
+    }catch(e){
+      location.hash = "#login";
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest("[data-v363-companion-logout='1']");
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    logoutCompanion();
+    return false;
+  }, true);
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){
+      setTimeout(ensureLogoutPlacement, 120);
+      setTimeout(ensureLogoutPlacement, 600);
+    });
+  }else{
+    setTimeout(ensureLogoutPlacement, 120);
+    setTimeout(ensureLogoutPlacement, 600);
+  }
+
+  window.addEventListener("hashchange", function(){
+    setTimeout(ensureLogoutPlacement, 100);
+    setTimeout(ensureLogoutPlacement, 500);
+  });
+
+  const mo = new MutationObserver(function(){
+    clearTimeout(ensureLogoutPlacement._t);
+    ensureLogoutPlacement._t = setTimeout(ensureLogoutPlacement, 160);
+  });
+  if(document.documentElement){
+    mo.observe(document.documentElement, {childList:true, subtree:true});
+  }
+
+  window.DreamFixCompanionLogoutPositionV363 = ensureLogoutPlacement;
+})();
+
