@@ -1,4 +1,4 @@
-/* v377-home-render-isolation：首頁渲染隔離，避免陪玩資料塞到首頁 */
+/* v378-login-quiet-defer */
 (function(){
   if(window.__dreamHomeRenderIsolationV377) return;
   window.__dreamHomeRenderIsolationV377 = true;
@@ -60,7 +60,7 @@
   async function loadHomeRanking(){
     if(!isHome()) return;
     try{
-      const api=window.DreamStableFetchV377 || window.DreamStableFetchV376;
+      const api=window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376;
       if(!api) return;
       renderHomeRanking(await api('front_ranking_snapshot',{}));
     }catch(e){ console.warn('[home ranking isolated]', e.message||e); }

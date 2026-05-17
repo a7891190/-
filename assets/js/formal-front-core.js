@@ -1,5 +1,9 @@
-/* v377-home-render-isolation */
+/* v378-login-quiet-defer */
 (function(){
+  function dreamFormalIsLoginPageV378(){
+    const p = (location.hash || "#home").replace(/^#/,"") || "home";
+    return p === "login" || p === "register" || p === "forgot";
+  }
   if(window.__dreamFormalCoreCleanV369) return;
   window.__dreamFormalCoreCleanV369 = true;
 
@@ -173,7 +177,7 @@
         if(raw && ts && now-ts<RANK_TTL) return JSON.parse(raw);
       }catch(e){}
     }
-    const data = window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV377 || window.DreamStableFetchV376("front_ranking_snapshot", {}) : await (await fetch(API_BASE(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"front_ranking_snapshot"})})).json();
+    const data = window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376("front_ranking_snapshot", {}) : await (await fetch(API_BASE(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"front_ranking_snapshot"})})).json();
     if(data && data.ok){
       try{ sessionStorage.setItem(RANK_CACHE_KEY, JSON.stringify(data)); sessionStorage.setItem(RANK_TIME_KEY, String(now)); }catch(e){}
     }
@@ -220,7 +224,8 @@
       box.innerHTML=(items.slice(3,13).length?items.slice(3,13):items.slice(0,10)).map(card).join("");
     });
   }
-  async function loadRanking(force){ try{ renderRanking(await getRanking(force)); }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); } }
+  async function loadRanking(force){
+    if(dreamFormalIsLoginPageV378()) return; try{ renderRanking(await getRanking(force)); }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); } }
 
   function boot(){
     removeDemoNodes();
@@ -352,9 +357,10 @@
   }
 
   async function loadBullets(){
+    if(dreamFormalIsLoginPageV378()) return;
     let data = null;
     try{
-      data = window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV377 || window.DreamStableFetchV376("bullet_event_list", {limit:20}) : await (await fetch(apiBase(), {
+      data = window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376("bullet_event_list", {limit:20}) : await (await fetch(apiBase(), {
         method:"POST",
         credentials:"include",
         headers:{"Content-Type":"application/json"},

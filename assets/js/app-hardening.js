@@ -157,3 +157,17 @@
     if(msg && msg.includes('連線逾時')){ console.warn('[DreamHardening] 背景 API 逾時已降級處理，不中斷前台'); e.preventDefault(); }
   });
 })();
+
+
+/* v378：登入頁背景逾時降噪 */
+(function(){
+  if(window.__dreamLoginQuietV378) return;
+  window.__dreamLoginQuietV378 = true;
+  window.addEventListener("unhandledrejection", function(e){
+    const msg = e && e.reason && (e.reason.message || String(e.reason));
+    if(msg && msg.includes("連線逾時")){
+      e.preventDefault();
+      if(window.DREAM_API_DEBUG) console.warn("[DreamQuiet]", msg);
+    }
+  });
+})();

@@ -1,4 +1,4 @@
-/* v377-home-render-isolation */
+/* v378-login-quiet-defer */
 (function(){
   if(window.__dreamFrontApiStabilizerV375) return;
   window.__dreamFrontApiStabilizerV375 = true;
@@ -126,7 +126,7 @@
       clearTimeout(timer);
       const msg = err && err.name === "AbortError" ? "背景資料載入逾時，已先顯示空狀態" : (err.message || "連線失敗");
       if(BACKGROUND_ACTIONS.has(action)){
-        console.warn("[DreamAPI stable]", action, msg);
+        if(window.DREAM_API_DEBUG) console.warn("[DreamAPI stable]", action, msg);
         return fallback(action, msg);
       }
       throw err;
@@ -175,3 +175,5 @@
     }
   }, true);
 })();
+
+window.DreamStableFetchV378 = window.DreamStableFetchV377 || window.DreamStableFetchV376;

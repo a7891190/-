@@ -1,9 +1,14 @@
-/* v377-home-render-isolation */
-window.DREAM_API_CLIENT_VERSION = "v377-home-render-isolation";
+/* v378-login-quiet-defer */
+window.DREAM_API_CLIENT_VERSION = "v378-login-quiet-defer";
 
 
 
 
+
+function dreamCurrentPageV378(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
+function dreamIsLoginPageV378(){ const p = dreamCurrentPageV378(); return p === "login" || p === "register" || p === "forgot"; }
+function dreamIsMarketPageV378(){ const p = dreamCurrentPageV378(); return p === "market" || p === "shop" || p === "mall"; }
+function dreamIsInnPageV378(){ return dreamCurrentPageV378() === "inn"; }
 window.DreamLoginDebug = window.DreamLoginDebug || null;
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
@@ -320,6 +325,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadVipRank(){
+    // v378 guard loadVipRank
+    if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return;
     const host = $("[data-list='vip-rank']");
     if(host && !host.innerHTML.trim()) host.innerHTML = `<div class="row"><div class="badge">…</div><div>載入中...</div></div>`;
     try{
@@ -378,6 +385,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadMarketItems(){
+    // v378 guard loadMarketItems
+    if(typeof dreamIsMarketPageV378==="function" && !dreamIsMarketPageV378()) return;
     const host = $("[data-list='market-items']");
     if(!host) return;
     // v242：保留 index.html 內建商品作為保底，不再因 API 失敗覆蓋成「商品載入失敗」
@@ -465,6 +474,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
+    // v378 guard loadRechargeRecords
+    if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return; if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v362：未登入不呼叫儲值紀錄，避免 helper 缺失與 401。
     if(!window.dreamIsLoggedInSafeV352()) return;
@@ -1011,6 +1022,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
   }
   async function loadRanking(){
+    // v378 guard loadRanking
+    if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return;
     if(window.__loadRankingRunningV376) return;
     window.__loadRankingRunningV376 = true;
     try {
@@ -1032,6 +1045,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   async function loadShop(){
+    // v378 guard loadShop
+    if(typeof dreamIsMarketPageV378==="function" && !dreamIsMarketPageV378()) return;
     const host = $("[data-list='market-items']");
     if(!host) return;
     const fallbackHtml = host.dataset.localFallbackHtml || host.innerHTML;
