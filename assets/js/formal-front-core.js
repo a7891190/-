@@ -1,4 +1,4 @@
-/* v375-root-timeout-fix-current */
+/* v377-home-render-isolation */
 (function(){
   if(window.__dreamFormalCoreCleanV369) return;
   window.__dreamFormalCoreCleanV369 = true;
@@ -173,8 +173,7 @@
         if(raw && ts && now-ts<RANK_TTL) return JSON.parse(raw);
       }catch(e){}
     }
-    const res = await fetch(API_BASE(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"front_ranking_snapshot"})});
-    const data = await res.json();
+    const data = window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV377 || window.DreamStableFetchV376("front_ranking_snapshot", {}) : await (await fetch(API_BASE(), {method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"front_ranking_snapshot"})})).json();
     if(data && data.ok){
       try{ sessionStorage.setItem(RANK_CACHE_KEY, JSON.stringify(data)); sessionStorage.setItem(RANK_TIME_KEY, String(now)); }catch(e){}
     }
@@ -205,6 +204,7 @@
     return out;
   }
   function renderRanking(data){
+    if(window.DreamHomeRenderIsolationV377 && typeof window.DreamHomeRenderIsolationV377.renderHomeRanking === "function"){ window.DreamHomeRenderIsolationV377.renderHomeRanking(data); return; }
     const items=rankItems(data);
     if(!items.length) return;
     ensureRankStyle();
@@ -354,13 +354,12 @@
   async function loadBullets(){
     let data = null;
     try{
-      const res = await fetch(apiBase(), {
+      data = window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV377 || window.DreamStableFetchV376("bullet_event_list", {limit:20}) : await (await fetch(apiBase(), {
         method:"POST",
         credentials:"include",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({action:"bullet_event_list", limit:20})
-      });
-      data = await res.json();
+      })).json();
     }catch(e){
       console.warn("[bullet_event_list]", e.message || e);
       return;

@@ -1,4 +1,4 @@
-/* v375-root-timeout-fix-current：前台 API 穩定器，不靠延長 60 秒 */
+/* v377-home-render-isolation */
 (function(){
   if(window.__dreamFrontApiStabilizerV375) return;
   window.__dreamFrontApiStabilizerV375 = true;
@@ -135,6 +135,12 @@
     inFlight.set(key, p);
     return p;
   }
+
+
+  // v376：給 api-client.js 內部 api() 直接呼叫，避免繞過穩定器。
+  window.DreamStableFetchV377 = window.DreamStableFetchV376 = async function(action, payload){
+    return stableApi(action, payload || {});
+  };
 
   window.DreamStableAPI = {api:stableApi, cache:memoryCache, isLoggedIn};
 

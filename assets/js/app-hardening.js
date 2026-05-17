@@ -124,3 +124,36 @@
     });
   });
 })();
+
+
+/* v376：背景逾時不丟未捕捉錯誤 */
+(function(){
+  if(window.__dreamHardeningTimeoutV376) return;
+  window.__dreamHardeningTimeoutV376 = true;
+
+  window.addEventListener("unhandledrejection", function(e){
+    const msg = e && e.reason && (e.reason.message || String(e.reason));
+    if(msg && msg.includes("連線逾時")){
+      console.warn("[DreamHardening] 背景 API 逾時已降級處理，不中斷前台");
+      e.preventDefault();
+    }
+  });
+
+  window.addEventListener("error", function(e){
+    const msg = e && e.message;
+    if(msg && msg.includes("連線逾時")){
+      e.preventDefault();
+    }
+  }, true);
+})();
+
+
+/* v377：背景逾時不丟未捕捉錯誤 */
+(function(){
+  if(window.__dreamHardeningTimeoutV377) return;
+  window.__dreamHardeningTimeoutV377 = true;
+  window.addEventListener('unhandledrejection', function(e){
+    const msg = e && e.reason && (e.reason.message || String(e.reason));
+    if(msg && msg.includes('連線逾時')){ console.warn('[DreamHardening] 背景 API 逾時已降級處理，不中斷前台'); e.preventDefault(); }
+  });
+})();

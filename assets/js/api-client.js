@@ -1,5 +1,5 @@
-/* v375-root-timeout-fix-current */
-window.DREAM_API_CLIENT_VERSION = "v375-root-timeout-fix-current";
+/* v377-home-render-isolation */
+window.DREAM_API_CLIENT_VERSION = "v377-home-render-isolation";
 
 
 
@@ -102,6 +102,15 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function api(action, payload = {}) {
+    // v376：背景/公開資料改走穩定器，避免重複請求與未捕捉逾時。
+    const stableActionsV376 = new Set([
+      "vip_ranking","front_ranking_snapshot","inn_post_list","bullet_event_list",
+      "shop_list","companion_front_list","recharge_request_history","gift_history",
+      "exchange_history","session","companion_session"
+    ]);
+    if(window.DreamStableFetchV376 && stableActionsV376.has(action)){
+      return window.DreamStableFetchV376(action, payload || {});
+    }
     const res = await fetch(API_BASE, {
       method: "POST",
       credentials: "include",
@@ -393,6 +402,9 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadCompanions(){
+    // v377：陪玩列表只允許在陪玩頁渲染，避免塞到首頁。
+    const currentHashV377 = (location.hash || "#home").replace(/^#/,"") || "home";
+    if(currentHashV377 !== "companion" && currentHashV377 !== "companion-home"){ return; }
     const host = $("[data-list='companions']");
     if(!host) return;
     try{
@@ -999,6 +1011,9 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
   }
   async function loadRanking(){
+    if(window.__loadRankingRunningV376) return;
+    window.__loadRankingRunningV376 = true;
+    try {
     const res = await api("vip_ranking");
     const rows = (res.ranking || res.items || res.data || []).map((x,i)=>({
       ...x,
@@ -1012,7 +1027,10 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(host){
       host.innerHTML = rows.length ? rows.slice(0,100).map(x=>`<div class="row"><div class="badge">${x.rank}</div><div class="row-main"><div class="row-title">${htmlEscape(x.username)}</div><div class="row-sub">VIP經驗值：${money(x.exp)}</div></div><div class="row-right">第 ${x.rank} 名</div></div>`).join("") : `<div class="row"><div class="badge">榜</div><div><div class="row-title">目前沒有排行榜資料</div><div class="row-sub">等待後台帶入</div></div></div>`;
     }
+    } catch(e){ console.warn("[loadRanking]", e.message || e); }
+    finally{ window.__loadRankingRunningV376 = false; }
   }
+
   async function loadShop(){
     const host = $("[data-list='market-items']");
     if(!host) return;
