@@ -1,4 +1,17 @@
-/* v378-login-quiet-defer */
+/* v379-formal-login-helper-fix */
+
+
+/* v379：全域登入頁判斷，給 formal-front-core.js 所有獨立區塊共用 */
+window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV379 || function(){
+  try{
+    const p = (location.hash || "#home").replace(/^#/,"") || "home";
+    return p === "login" || p === "register" || p === "forgot";
+  }catch(e){
+    return false;
+  }
+};
+window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
+
 (function(){
   function dreamFormalIsLoginPageV378(){
     const p = (location.hash || "#home").replace(/^#/,"") || "home";
@@ -225,7 +238,7 @@
     });
   }
   async function loadRanking(force){
-    if(dreamFormalIsLoginPageV378()) return; try{ renderRanking(await getRanking(force)); }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); } }
+    if(window.dreamFormalIsLoginPageV379 && window.dreamFormalIsLoginPageV379()) return; try{ renderRanking(await getRanking(force)); }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); } }
 
   function boot(){
     removeDemoNodes();
@@ -357,7 +370,7 @@
   }
 
   async function loadBullets(){
-    if(dreamFormalIsLoginPageV378()) return;
+    if(window.dreamFormalIsLoginPageV379 && window.dreamFormalIsLoginPageV379()) return;
     let data = null;
     try{
       data = window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376 ? await window.DreamStableFetchV378 || window.DreamStableFetchV377 || window.DreamStableFetchV376("bullet_event_list", {limit:20}) : await (await fetch(apiBase(), {

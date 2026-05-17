@@ -1,4 +1,4 @@
-/* v378-login-quiet-defer */
+/* v379-formal-login-helper-fix */
 (function(){
   if(window.__dreamHomeRenderIsolationV377) return;
   window.__dreamHomeRenderIsolationV377 = true;

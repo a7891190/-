@@ -1,5 +1,5 @@
-/* v378-login-quiet-defer */
-window.DREAM_API_CLIENT_VERSION = "v378-login-quiet-defer";
+/* v379-formal-login-helper-fix */
+window.DREAM_API_CLIENT_VERSION = "v379-formal-login-helper-fix";
 
 
 

@@ -1,4 +1,4 @@
-/* v378-login-quiet-defer */
+/* v379-formal-login-helper-fix */
 (function(){
   if(window.__dreamFrontApiStabilizerV375) return;
   window.__dreamFrontApiStabilizerV375 = true;
