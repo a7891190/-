@@ -1,5 +1,11 @@
-/* v379-formal-login-helper-fix */
-window.DREAM_API_CLIENT_VERSION = "v379-formal-login-helper-fix";
+/* v381-architecture-complete */
+window.DREAM_API_CLIENT_VERSION = "v381-architecture-complete";
+
+function dreamCurrentPageV381(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
+function dreamIsLoginPageV381(){ const p=dreamCurrentPageV381(); return p==="login" || p==="register" || p==="forgot"; }
+function dreamIsMarketPageV381(){ const p=dreamCurrentPageV381(); return p==="market" || p==="shop" || p==="mall"; }
+function dreamIsInnPageV381(){ return dreamCurrentPageV381()==="inn"; }
+
 
 
 
@@ -385,6 +391,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadMarketItems(){
+    // v381 guard loadMarketItems
+    if(typeof dreamIsMarketPageV381==="function" && !dreamIsMarketPageV381()) return;
     // v378 guard loadMarketItems
     if(typeof dreamIsMarketPageV378==="function" && !dreamIsMarketPageV378()) return;
     const host = $("[data-list='market-items']");
@@ -411,6 +419,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadCompanions(){
+    // v381 guard loadCompanions
+    const p381=(location.hash||"#home").replace(/^#/,"")||"home"; if(p381!=="companion" && p381!=="companion-home") return;
     // v377：陪玩列表只允許在陪玩頁渲染，避免塞到首頁。
     const currentHashV377 = (location.hash || "#home").replace(/^#/,"") || "home";
     if(currentHashV377 !== "companion" && currentHashV377 !== "companion-home"){ return; }
@@ -474,6 +484,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
+    // v381 guard loadRechargeRecords
+    if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v378 guard loadRechargeRecords
     if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return; if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
@@ -1045,6 +1057,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   async function loadShop(){
+    // v381 guard loadShop
+    if(typeof dreamIsMarketPageV381==="function" && !dreamIsMarketPageV381()) return;
     // v378 guard loadShop
     if(typeof dreamIsMarketPageV378==="function" && !dreamIsMarketPageV378()) return;
     const host = $("[data-list='market-items']");

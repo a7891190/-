@@ -1,4 +1,4 @@
-/* v369-clean-arch-1778918812 formal shared inn client */
+/* v381-architecture-complete formal shared inn client */
 (function(){
   if (!window.DreamAPI) return;
   const api = window.DreamAPI.api;
@@ -74,6 +74,7 @@
   }
 
   async function loadInnPosts(){
+    if(location.hash !== "#inn") return;
     try{
       const res = await api("inn_post_list", {limit:50});
       state.posts = res.posts || res.list || res.data || [];

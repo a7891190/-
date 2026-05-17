@@ -126,7 +126,7 @@
 })();
 
 
-/* v376：背景逾時不丟未捕捉錯誤 */
+/* v381-architecture-complete */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
@@ -168,6 +168,20 @@
     if(msg && msg.includes("連線逾時")){
       e.preventDefault();
       if(window.DREAM_API_DEBUG) console.warn("[DreamQuiet]", msg);
+    }
+  });
+})();
+
+
+/* v381：背景錯誤降噪 */
+(function(){
+  if(window.__dreamHardeningV381) return;
+  window.__dreamHardeningV381 = true;
+  window.addEventListener("unhandledrejection", function(e){
+    const msg=e && e.reason && (e.reason.message || String(e.reason));
+    if(msg && (msg.includes("連線逾時") || msg.includes("dreamFormalIsLoginPage"))){
+      e.preventDefault();
+      if(window.DREAM_API_DEBUG) console.warn("[DreamHardening]", msg);
     }
   });
 })();

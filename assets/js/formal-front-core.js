@@ -1,4 +1,13 @@
-/* v379-formal-login-helper-fix */
+
+/* v381：formal 全域登入頁判斷 */
+window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV381 || function(){
+  const p=(location.hash||"#home").replace(/^#/,"")||"home";
+  return p==="login" || p==="register" || p==="forgot";
+};
+window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV381;
+window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV381;
+
+/* v381-architecture-complete */
 
 
 /* v379：全域登入頁判斷，給 formal-front-core.js 所有獨立區塊共用 */

@@ -1,0 +1,96 @@
+/* v381-architecture-complete：前台架構主控 */
+(function(){
+  if(window.__dreamArchitectureCoreV381) return;
+  window.__dreamArchitectureCoreV381 = true;
+
+  function page(){return (location.hash || "#home").replace(/^#/,"") || "home";}
+  function isLoginPage(){const p=page(); return p==="login" || p==="register" || p==="forgot";}
+  function isLoggedIn(){
+    try{
+      const keep=localStorage.getItem("dream_login_keep")==="1" || localStorage.getItem("dream_permanent_login")==="1";
+      const u=localStorage.getItem("dream_persist_user");
+      if(keep && u && u!=="null" && u!=="{}") return true;
+    }catch(e){}
+    return false;
+  }
+  function go(p){
+    try{if(typeof window.showPage==="function"){window.showPage(p); return;}}catch(e){}
+    location.hash="#"+p;
+  }
+  function toast(msg){
+    let el=document.getElementById("dreamArchToastV381");
+    if(!el){
+      el=document.createElement("div");
+      el.id="dreamArchToastV381";
+      el.style.cssText="position:fixed;left:50%;bottom:112px;transform:translateX(-50%);z-index:2147483600;max-width:88%;padding:12px 16px;border-radius:16px;background:rgba(72,28,50,.96);color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.38);";
+      document.body.appendChild(el);
+    }
+    el.textContent=msg; el.style.opacity="1"; clearTimeout(el._t); el._t=setTimeout(()=>el.style.opacity="0",1800);
+  }
+
+  const PUBLIC = new Set(["home","login","register","forgot","companion","inn","market","market-rules"]);
+  const originalShowPage = typeof window.showPage==="function" ? window.showPage : null;
+  if(originalShowPage && !window.__dreamShowPageArchV381){
+    window.__dreamShowPageArchV381 = true;
+    window.showPage = function(target){
+      const current=page();
+      if(target && target!==current && current!=="login"){
+        try{sessionStorage.setItem("dream_prev_page_v381", current);}catch(e){}
+      }
+      return originalShowPage.apply(this, arguments);
+    };
+  }
+
+  document.addEventListener("click", function(e){
+    const back=e.target.closest && e.target.closest(".back-btn,[data-back],[data-action='back']");
+    if(back){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      go(sessionStorage.getItem("dream_prev_page_v381") || "home");
+      return false;
+    }
+    const logout=e.target.closest && e.target.closest("[data-action='logout'],[data-logout],.logout-btn,[data-v366-companion-logout]");
+    if(logout){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      logout.textContent="正在登出...";
+      const role=localStorage.getItem("dream_persist_login_type")==="companion" ? "companion_logout" : "logout";
+      fetch((window.DREAM_CONFIG&&window.DREAM_CONFIG.API_BASE)||"https://api.131rwjuh.com/api.php",{
+        method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:role})
+      }).catch(()=>{}).finally(()=>{
+        ["dream_persist_user","dream_persist_login_type","dream_login_keep","dream_permanent_login"].forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
+        document.body.classList.remove("dream-authenticated"); document.body.classList.add("dream-guest");
+        toast("已登出"); go("login");
+      });
+      return false;
+    }
+  }, true);
+
+  function isolate(){
+    const p=page();
+    const home=document.querySelector("#page-home");
+    if(home){
+      home.querySelectorAll(".companion-card,[data-companion-id],[data-role='companion-card'],#companionGrid,[data-list='companions']").forEach(el=>{
+        if(!el.closest("[data-home-ranking],.top3-stage,.rank-scroll,.top3-board")) el.remove();
+      });
+    }
+    const compGrid=document.querySelector("#companionGrid");
+    if(compGrid && compGrid.closest("#page-home")) compGrid.remove();
+    if(isLoginPage()){
+      document.body.classList.add("dream-login-page");
+    }else{
+      document.body.classList.remove("dream-login-page");
+    }
+    if(!PUBLIC.has(p) && !isLoggedIn()){
+      toast("請先登入後再使用");
+      go("login");
+    }
+  }
+
+  function boot(){isolate();}
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>setTimeout(boot,80));
+  else setTimeout(boot,80);
+  window.addEventListener("hashchange",()=>setTimeout(boot,80));
+  const mo=new MutationObserver(()=>{clearTimeout(boot._t); boot._t=setTimeout(isolate,120);});
+  if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
+
+  window.DreamArchitectureV381 = {page,isLoginPage,isLoggedIn,go,isolate};
+})();
