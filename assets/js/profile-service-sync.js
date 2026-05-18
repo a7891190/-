@@ -19,13 +19,32 @@
       return !!(u && u !== "null" && u !== "{}");
     }catch(e){ return false; }
   }
+  function normalizeRoleValue(value){
+    const v = String(value || "").toLowerCase();
+    if(v.includes("companion") || v.includes("playmate") || v.includes("player") || v.includes("staff") || v.includes("陪玩")) return "companion";
+    if(v.includes("member") || v.includes("user") || v.includes("customer") || v.includes("會員")) return "member";
+    return "";
+  }
   function getRole(){
     try{
-      const r = localStorage.getItem("dream_persist_login_type");
-      if(r === "companion") return "companion";
+      if(typeof window.getDreamLoginRole === "function"){
+        const r = normalizeRoleValue(window.getDreamLoginRole());
+        if(r) return r;
+      }
+    }catch(e){}
+    try{
+      const auth = window.__dreamFrontAuth || {};
+      const user = auth.user || {};
+      const r = normalizeRoleValue(auth.role || auth.type || user.role || user.type || user.identity || "");
+      if(r) return r;
+    }catch(e){}
+    try{
+      const r = normalizeRoleValue(localStorage.getItem("dream_persist_login_type") || "");
+      if(r) return r;
     }catch(e){}
     return "member";
   }
+  function profileIdFor(role){ return role === "companion" ? "companion-self" : "member-self"; }
   function getPersistUser(){
     try{ return JSON.parse(localStorage.getItem("dream_persist_user") || "{}"); }catch(e){ return {}; }
   }
@@ -44,6 +63,36 @@
   }
   function escapeHtml(v){
     return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function firstValue(){
+    for(const v of arguments){
+      if(v !== undefined && v !== null && String(v).trim() !== "") return v;
+    }
+    return "";
+  }
+  function asArray(v){
+    if(Array.isArray(v)) return v.filter(x => String(x ?? "").trim() !== "");
+    if(typeof v === "string"){
+      const s = v.trim();
+      if(!s) return [];
+      try{
+        const parsed = JSON.parse(s);
+        if(Array.isArray(parsed)) return parsed.filter(x => String(x ?? "").trim() !== "");
+      }catch(e){}
+      return s.split(/[,\u3001/|]/).map(x => x.trim()).filter(Boolean);
+    }
+    return [];
+  }
+  function numberText(v, fallback){
+    const n = Number(v);
+    return Number.isFinite(n) ? String(n) : String(fallback ?? 0);
+  }
+  function starsHtml(value){
+    const n = Math.max(0, Math.min(5, Math.round(Number(value || 0))));
+    return Array.from({length:5}, (_, i) => i < n ? "&#9733;" : "&#9734;").join("");
+  }
+  function profileName(role, profile){
+    return String(firstValue(profile.display_name, profile.name, profile.username, profile.nickname, role === "companion" ? "\u5922\u7af6\u966a\u73a9" : "\u5922\u7af6\u6703\u54e1"));
   }
   async function api(action, payload){
     const res = await fetch(API_BASE(), {
@@ -70,8 +119,8 @@
     return Object.assign({}, local || {}, data || {}, {role});
   }
 
-  async function loadProfile(force){
-    const role = getRole();
+  async function loadProfile(force, roleOverride){
+    const role = normalizeRoleValue(roleOverride) || getRole();
     if(!isLoggedIn()) return null;
     if(!force && current.role === role && current.profile && Date.now() - current.loadedAt < 15000) return current.profile;
 
@@ -122,7 +171,7 @@
     ` : "";
 
     return `
-      <section class="panel dream-profile-panel-v388" id="dreamProfilePanelV388">
+      <section class="panel dream-profile-panel-v388" id="dreamProfilePanelV388" data-profile-role="${escapeHtml(role)}">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px">
           <div>
             <h2 style="margin:0;font-size:20px">${profileTitle(role)}</h2>
@@ -139,6 +188,7 @@
             <label class="dream-profile-field"><span>Email</span><input id="dreamV388Email" value="${escapeHtml(email)}" placeholder="Email"></label>
             <label class="dream-profile-field"><span>手機 / 聯絡方式</span><input id="dreamV388Phone" value="${escapeHtml(phone)}" placeholder="聯絡方式"></label>
             <label class="dream-profile-field"><span>性別</span><input id="dreamV388Gender" value="${escapeHtml(gender)}" placeholder="男 / 女 / 不公開"></label>
+            <label class="dream-profile-field"><span>大頭照網址</span><input id="dreamV388Avatar" value="${escapeHtml(avatar)}" placeholder="https://..."></label>
             ${companionExtra}
             <label class="dream-profile-field full"><span>簡介</span><textarea id="dreamV388Intro" placeholder="介紹自己">${escapeHtml(intro)}</textarea></label>
           </div>
@@ -169,6 +219,140 @@
     document.head.appendChild(st);
   }
 
+  function setProfileBind(pageEl, name, value, html){
+    if(!pageEl) return;
+    pageEl.querySelectorAll(`[data-profile-bind="${name}"]`).forEach(el=>{
+      if(html) el.innerHTML = value == null ? "" : String(value);
+      else el.textContent = value == null ? "" : String(value);
+    });
+  }
+  function genderLabel(value){
+    const s = String(value || "").toLowerCase();
+    if(s.includes("female") || s.includes("girl") || s.includes("女")) return "\u2640";
+    if(s.includes("male") || s.includes("boy") || s.includes("男")) return "\u2642";
+    return "\u25c7";
+  }
+  function listHtml(items, className, fallback){
+    const list = asArray(items).map(item => {
+      if(item && typeof item === "object") return firstValue(item.name, item.title, item.label, item.text, item.badge_name);
+      return item;
+    }).filter(x => String(x || "").trim() !== "").slice(0, 10);
+    if(!list.length && fallback) list.push(fallback);
+    return list.map(item => `<span class="${className}">${escapeHtml(item)}</span>`).join("");
+  }
+  function achievementHtml(items){
+    const list = asArray(items).map(item => {
+      if(item && typeof item === "object") return firstValue(item.name, item.title, item.label, item.badge_name);
+      return item;
+    }).filter(x => String(x || "").trim() !== "").slice(0, 5);
+    while(list.length < 5) list.push("");
+    return list.map(item => item
+      ? `<div class="achievement-slot"><span class="icon">&#9733;</span><span>${escapeHtml(item)}</span></div>`
+      : `<div class="achievement-slot is-empty">\u5c1a\u672a\u8a2d\u5b9a</div>`
+    ).join("");
+  }
+  function syncProfileSettingMenu(pageEl, role){
+    if(!pageEl) return;
+    const key = "profile-self";
+    pageEl.querySelectorAll(".profile-info-setting-wrap [data-setting-toggle]").forEach(btn=>{
+      btn.dataset.settingToggle = key;
+      btn.setAttribute("aria-label", "\u500b\u4eba\u7c21\u4ecb\u8a2d\u5b9a");
+    });
+    pageEl.querySelectorAll(".profile-info-setting-menu,[data-setting-menu='profile-companion'],[data-setting-menu='profile-self']").forEach(menu=>{
+      menu.dataset.settingMenu = key;
+      if(!menu.querySelector('[data-setting-action="edit-profile-info"]')){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.settingAction = "edit-profile-info";
+        btn.dataset.settingScope = role;
+        btn.textContent = "\u7de8\u8f2f\u500b\u4eba\u7c21\u4ecb";
+        menu.insertBefore(btn, menu.firstChild);
+      }
+      menu.querySelectorAll("[data-setting-scope]").forEach(btn=>{ btn.dataset.settingScope = role; });
+    });
+  }
+  function renderCenterCard(role, profile){
+    const root = document.querySelector(role === "companion" ? "#page-companion-home" : "#page-member");
+    if(!root) return;
+    const name = profileName(role, profile || {});
+    const avatar = firstValue(profile?.avatar_url, profile?.avatar);
+    root.querySelectorAll("[data-bind='member-name']").forEach(el=>{ el.textContent = name; });
+    root.querySelectorAll("[data-bind='member-gender-icon']").forEach(el=>{ el.textContent = genderLabel(firstValue(profile?.gender, profile?.sex)); });
+    root.querySelectorAll("[data-bind='member-avatar']").forEach(el=>{
+      if(avatar) el.innerHTML = `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      else el.textContent = name.slice(0,1) || (role === "companion" ? "\u966a" : "\u6703");
+    });
+  }
+  function renderProfilePage(role, profile){
+    role = normalizeRoleValue(role) || getRole();
+    profile = Object.assign({}, profile || getPersistUser() || {}, {role});
+    current = {role, user:profile, profile, loadedAt:Date.now()};
+    const pageEl = document.getElementById("page-profile");
+    if(!pageEl) return;
+    const isCompanion = role === "companion";
+    const name = profileName(role, profile);
+    const avatar = firstValue(profile.avatar_url, profile.avatar);
+    const rating = Number(firstValue(profile.avg_rating, profile.rating, profile.score, 0)) || 0;
+    const intro = firstValue(profile.intro, profile.bio, profile.description, profile.self_intro, "\u9019\u4f4d\u4f7f\u7528\u8005\u9084\u6c92\u6709\u586b\u5beb\u500b\u4eba\u7c21\u4ecb\u3002");
+    const orders = firstValue(profile.total_completed_orders, profile.total_order_count, profile.orders, profile.order_count, 0);
+    const recommend = firstValue(profile.recommend_count, profile.recommend, profile.likes, profile.like_count, 0);
+    const level = isCompanion
+      ? firstValue(profile.level, profile.grade, profile.status, "\u767b\u5165\u8eab\u5206\uff1a\u966a\u73a9")
+      : firstValue(profile.vip_name, profile.vip_title, profile.vip_level_name, profile.vip_level ? ("VIP\u7b49\u7d1a\uff1a" + profile.vip_level) : "", "VIP\u7b49\u7d1a\uff1a\u7121VIP\u6703\u54e1");
+    pageEl.classList.toggle("profile-companion", isCompanion);
+    pageEl.classList.toggle("profile-member", !isCompanion);
+    pageEl.dataset.profileRole = role;
+    try{
+      localStorage.setItem("dream_active_profile_id", profileIdFor(role));
+      localStorage.setItem("dream_persist_login_type", role);
+      localStorage.setItem("dream_persist_user", JSON.stringify(profile || {}));
+      window.__dreamFrontAuth = {type:role, role, user:profile};
+    }catch(e){}
+    setProfileBind(pageEl, "title", isCompanion ? "\u966a\u73a9\u4e3b\u9801" : "\u6703\u54e1\u4e3b\u9801");
+    setProfileBind(pageEl, "avatar", avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}" loading="lazy">` : escapeHtml(name.slice(0,1) || (isCompanion ? "\u966a" : "\u6703")), !!avatar);
+    setProfileBind(pageEl, "name", name);
+    setProfileBind(pageEl, "gender", genderLabel(firstValue(profile.gender, profile.sex)));
+    setProfileBind(pageEl, "rating", rating.toFixed(1));
+    setProfileBind(pageEl, "stars", starsHtml(rating), true);
+    setProfileBind(pageEl, "level", level);
+    setProfileBind(pageEl, "status", firstValue(profile.work_status, profile.status, "\u5728\u7dda"));
+    setProfileBind(pageEl, "recommend", numberText(recommend, 0));
+    setProfileBind(pageEl, "orders", numberText(orders, 0));
+    setProfileBind(pageEl, "bio", intro);
+    setProfileBind(pageEl, "tags", listHtml(firstValue(profile.tags, profile.tag_list, profile.personality_tags), "profile-tag", isCompanion ? "\u966a\u73a9" : "\u6703\u54e1"), true);
+    setProfileBind(pageEl, "games", listHtml(firstValue(profile.games, profile.game_list, profile.game, profile.game_name, profile.category), "game-tag", isCompanion ? "\u53ef\u9810\u7d04" : "\u81ea\u7531\u586b\u5beb"), true);
+    setProfileBind(pageEl, "achievement-slots", achievementHtml(firstValue(profile.achievement_slots, profile.achievements, profile.badges, profile.badge_names)), true);
+    setProfileBind(pageEl, "gift-count", "\u5df2\u9ede\u4eae 0 / 50");
+    setProfileBind(pageEl, "posts", `<div class="companion-empty">\u5c1a\u672a\u767c\u5e03\u52d5\u614b</div>`, true);
+    pageEl.querySelectorAll(".profile-back,#page-profile [data-profile-back]").forEach(back=>{
+      const target = isCompanion ? "companion-home" : "member";
+      back.dataset.go = target;
+      back.setAttribute("data-go", target);
+    });
+    syncProfileSettingMenu(pageEl, role);
+    renderCenterCard(role, profile);
+  }
+  function showProfileEditor(role, profile){
+    role = normalizeRoleValue(role) || getRole();
+    ensureStyle();
+    try{ localStorage.setItem("dream_active_profile_id", profileIdFor(role)); }catch(e){}
+    if(page() !== "profile") go("profile");
+    const host = document.getElementById("page-profile") || findProfileHost(role);
+    if(!host) return;
+    $all("#dreamProfilePanelV388").forEach(el=>el.remove());
+    const anchor = host.querySelector(".profile-info-panel");
+    if(anchor) anchor.insertAdjacentHTML("afterend", buildProfilePanel(role, profile || current.profile || {}));
+    else host.insertAdjacentHTML("afterbegin", buildProfilePanel(role, profile || current.profile || {}));
+    const panel = $("#dreamProfilePanelV388");
+    if(panel) setTimeout(()=>panel.scrollIntoView({behavior:"smooth", block:"start"}), 30);
+  }
+  function renderDreamProfilePage(){
+    const role = getRole();
+    const cached = current.role === role && current.profile ? current.profile : getPersistUser();
+    renderProfilePage(role, cached || {});
+    loadProfile(true, role).then(profile=>{ if(profile) renderProfilePage(role, profile); }).catch(()=>{});
+  }
+
   function findProfileHost(role){
     const selectors = role === "companion"
       ? ["#page-companion-profile", "#page-companion-data", "#page-profile", "[data-page='companion-profile']", "#page-companion-home .sub-panel", "#page-companion-home", "#page-member"]
@@ -187,8 +371,9 @@
     return pageEl;
   }
 
-  async function openProfile(role){
-    role = role || getRole();
+  async function openProfile(role, options){
+    role = normalizeRoleValue(role) || getRole();
+    options = options || {};
     if(!isLoggedIn()){
       toast("請先登入後再使用");
       go("login");
@@ -196,8 +381,17 @@
     }
     ensureStyle();
     toast("正在載入資料...", true);
-    const profile = await loadProfile(true);
-    const host = findProfileHost(role);
+    try{ localStorage.setItem("dream_active_profile_id", profileIdFor(role)); }catch(e){}
+    if(page() !== "profile") go("profile");
+    const profile = await loadProfile(true, role);
+    renderProfilePage(role, profile || {});
+    if(options.editor) showProfileEditor(role, profile || {});
+    if(window.DreamHideLoginToastV387) try{ window.DreamHideLoginToastV387(); }catch(e){}
+    toast("\u8cc7\u6599\u5df2\u8f09\u5165");
+    return;
+  }
+  /*
+    const host = {id:"", querySelector(){ return null; }, insertAdjacentHTML(){}};
     if(!host){
       toast("找不到資料頁容器");
       return;
@@ -213,13 +407,16 @@
     }
   }
 
+  */
+
   async function saveProfile(){
-    const role = getRole();
+    const role = normalizeRoleValue($("#dreamProfilePanelV388")?.dataset?.profileRole) || getRole();
     const payload = {
       display_name: ($("#dreamV388DisplayName")?.value || "").trim(),
       email: ($("#dreamV388Email")?.value || "").trim(),
       phone: ($("#dreamV388Phone")?.value || "").trim(),
       gender: ($("#dreamV388Gender")?.value || "").trim(),
+      avatar_url: ($("#dreamV388Avatar")?.value || "").trim(),
       intro: ($("#dreamV388Intro")?.value || "").trim(),
       game: ($("#dreamV388Game")?.value || "").trim(),
       price: ($("#dreamV388Price")?.value || "").trim(),
@@ -244,7 +441,7 @@
     current.loadedAt = Date.now();
     try{ localStorage.setItem("dream_persist_user", JSON.stringify(current.profile || {})); }catch(e){}
     toast("資料已儲存");
-    await openProfile(role);
+    await openProfile(role, {editor:true});
   }
 
   function markServiceButtons(){
@@ -272,6 +469,24 @@
 
   function bind(){
     document.addEventListener("click", function(e){
+      const selfProfile = e.target.closest && e.target.closest("[data-open-profile='self'],[data-open-companion-self]");
+      if(selfProfile){
+        const role = selfProfile.closest("#page-companion-home") || selfProfile.hasAttribute("data-open-companion-self") ? "companion" : "member";
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        openProfile(role);
+        return false;
+      }
+      const settingAction = e.target.closest && e.target.closest("#page-profile [data-setting-action]");
+      if(settingAction){
+        const action = settingAction.dataset.settingAction || "";
+        if(action === "edit-profile-info" || action === "edit-name" || action === "edit-avatar"){
+          e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+          const role = normalizeRoleValue(settingAction.dataset.settingScope) || getRole();
+          document.querySelectorAll("[data-setting-menu]").forEach(menu=>menu.classList.remove("open"));
+          openProfile(role, {editor:true});
+          return false;
+        }
+      }
       const profileBtn = e.target.closest && e.target.closest("[data-v388-profile-entry]");
       if(profileBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
@@ -309,8 +524,8 @@
       }
     }, true);
 
-    window.addEventListener("hashchange", ()=>setTimeout(syncServiceVisibility, 120));
-    window.addEventListener("dream-auth-updated", ()=>setTimeout(()=>{loadProfile(true);syncServiceVisibility();}, 180));
+    window.addEventListener("hashchange", ()=>setTimeout(()=>{syncServiceVisibility(); if(page()==="profile") renderDreamProfilePage();}, 120));
+    window.addEventListener("dream-auth-updated", ()=>setTimeout(()=>{loadProfile(true);syncServiceVisibility(); if(page()==="profile") renderDreamProfilePage();}, 180));
     setInterval(syncServiceVisibility, 1200);
     syncServiceVisibility();
     if(isLoggedIn()) loadProfile(false).catch(()=>{});
@@ -319,5 +534,8 @@
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
   else bind();
 
-  window.DreamProfileServiceSyncV388 = {loadProfile, openProfile, saveProfile, syncServiceVisibility};
+  window.renderDreamProfilePage = renderDreamProfilePage;
+  window.openDreamProfile = openProfile;
+  window.goProfile = openProfile;
+  window.DreamProfileServiceSyncV388 = {loadProfile, openProfile, saveProfile, syncServiceVisibility, renderProfilePage, renderDreamProfilePage, showProfileEditor};
 })();

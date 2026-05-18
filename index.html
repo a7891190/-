@@ -16396,6 +16396,68 @@ body:not(.role-companion) .companion-only-panel{
 </script>
 
 
+<script id="dream-v390-self-profile-router">
+(function(){
+  if(window.__dreamV390SelfProfileRouter) return;
+  window.__dreamV390SelfProfileRouter = true;
+  function roleFrom(value){
+    var v = String(value || "").toLowerCase();
+    if(v.indexOf("companion") >= 0 || v.indexOf("playmate") >= 0 || v.indexOf("player") >= 0 || v.indexOf("staff") >= 0 || v.indexOf("陪玩") >= 0) return "companion";
+    if(v.indexOf("member") >= 0 || v.indexOf("user") >= 0 || v.indexOf("會員") >= 0) return "member";
+    try{
+      if(typeof window.getDreamLoginRole === "function") return roleFrom(window.getDreamLoginRole()) || "member";
+    }catch(_){}
+    try{
+      var auth = window.__dreamFrontAuth || {};
+      var user = auth.user || {};
+      return roleFrom(auth.role || auth.type || user.role || user.type || localStorage.getItem("dream_persist_login_type") || "") || "member";
+    }catch(_){}
+    return "member";
+  }
+  function service(){ return window.DreamProfileServiceSyncV388 || null; }
+  function openSelfProfile(value, options){
+    var role = roleFrom(value);
+    try{ localStorage.setItem("dream_active_profile_id", role === "companion" ? "companion-self" : "member-self"); }catch(_){}
+    var svc = service();
+    if(svc && typeof svc.openProfile === "function") return svc.openProfile(role, options || {});
+    if(typeof window.showPage === "function") window.showPage("profile");
+    else location.hash = "#profile";
+  }
+  function renderSelfProfile(){
+    var svc = service();
+    if(svc && typeof svc.renderDreamProfilePage === "function") return svc.renderDreamProfilePage();
+  }
+  function install(){
+    window.openDreamProfile = openSelfProfile;
+    window.goProfile = openSelfProfile;
+    window.renderDreamProfilePage = renderSelfProfile;
+  }
+  document.addEventListener("click", function(e){
+    var target = e.target.closest && e.target.closest("#page-member [data-open-profile='self'],#page-companion-home [data-open-companion-self],#page-companion-home [data-open-profile='self']");
+    if(target){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      openSelfProfile(target.closest("#page-companion-home") ? "companion" : "member");
+      return false;
+    }
+    var edit = e.target.closest && e.target.closest("#page-profile [data-setting-action='edit-profile-info'],#page-profile [data-setting-action='edit-name'],#page-profile [data-setting-action='edit-avatar']");
+    if(edit){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      document.querySelectorAll("[data-setting-menu]").forEach(function(menu){ menu.classList.remove("open"); });
+      openSelfProfile(edit.dataset.settingScope || "", {editor:true});
+      return false;
+    }
+  }, true);
+  install();
+  setTimeout(install, 80);
+  setTimeout(install, 400);
+  window.addEventListener("dream-auth-updated", function(){ setTimeout(install, 80); });
+})();
+</script>
+
 <script id="dream-v389-formal-cleanup-marker">
 (function(){
   window.DREAM_FRONT_PATCH_VERSION = "v389-formal-version-cleanup";
