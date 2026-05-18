@@ -108,6 +108,43 @@
     if(!res.ok && data.ok !== true){ data.ok = false; data.status = res.status; }
     return data;
   }
+  function uploadAvatarEndpoint(){
+    try{ return new URL("upload_avatar.php", API_BASE()).toString(); }
+    catch(e){ return String(API_BASE()).replace(/api\.php(?:\?.*)?$/i, "upload_avatar.php"); }
+  }
+  function fileToDataUrl(file){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onload = ()=>resolve(String(reader.result || ""));
+      reader.onerror = ()=>reject(reader.error || new Error("avatar read failed"));
+      reader.readAsDataURL(file);
+    });
+  }
+  async function uploadMemberAvatar(file){
+    const form = new FormData();
+    form.append("avatar", file);
+    const res = await fetch(uploadAvatarEndpoint(), {
+      method:"POST",
+      credentials:"include",
+      body:form
+    });
+    const text = await res.text();
+    let data;
+    try{ data = JSON.parse(text || "{}"); }
+    catch(e){ data = {ok:false, message:"頭像上傳回傳格式錯誤"}; }
+    if(!res.ok && data.ok !== true){ data.ok = false; data.status = res.status; }
+    return data;
+  }
+  async function uploadAvatar(role, file){
+    if(!file) return {ok:false, message:"請先選擇大頭照圖片"};
+    if(!/^image\/(jpeg|png|webp)$/i.test(file.type || "")) return {ok:false, message:"僅支援 JPG、PNG、WEBP 圖片"};
+    if(Number(file.size || 0) > 5 * 1024 * 1024) return {ok:false, message:"圖片不可超過 5MB"};
+    if(role === "companion"){
+      const avatar_data = await fileToDataUrl(file);
+      return api("companion_update_avatar", {avatar_data});
+    }
+    return uploadMemberAvatar(file);
+  }
   function go(p){
     try{ if(typeof window.showPage === "function"){ window.showPage(p); return; } }catch(e){}
     location.hash = "#" + p;
@@ -153,9 +190,57 @@
     return role === "companion" ? "陪玩資料" : "個人資料";
   }
 
-  function buildProfilePanel(role, profile){
+  function profileEditorModeLabel(mode){
+    if(mode === "name") return "編輯名稱";
+    if(mode === "avatar") return "更換大頭照";
+    return "編輯個人簡介";
+  }
+  function buildFocusedProfilePanel(role, profile, mode){
+    mode = mode === "name" || mode === "avatar" ? mode : "bio";
+    const name = profileName(role, profile || {});
+    const intro = firstValue(profile?.intro, profile?.bio, profile?.description, profile?.self_intro);
+    const avatar = firstValue(profile?.avatar_url, profile?.avatar);
+    const body = mode === "name" ? `
+      <label class="dream-profile-field full">
+        <span>用戶名稱</span>
+        <input id="dreamV388DisplayName" maxlength="40" value="${escapeHtml(name)}" placeholder="輸入要顯示給其他用戶看的名稱">
+      </label>
+      <div class="dream-profile-editor-note">此名稱會作為你的公開用戶名稱，在會員中心、主頁、排行、留言與其他公開位置顯示。</div>
+    ` : mode === "avatar" ? `
+      <div class="dream-profile-avatar-editor-v390">
+        <div class="dream-profile-avatar-v388" data-v388-avatar-preview>${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}">` : `<span>${escapeHtml(name.slice(0,1) || "夢")}</span>`}</div>
+        <label class="dream-profile-file-v390">
+          <input id="dreamV388AvatarFile" data-v388-avatar-file type="file" accept="image/jpeg,image/png,image/webp">
+          <span>選擇圖片</span>
+        </label>
+      </div>
+      <div class="dream-profile-editor-note">僅能上傳 JPG、PNG、WEBP 圖片，最多 5MB；不提供手填圖片網址。</div>
+    ` : `
+      <label class="dream-profile-field full">
+        <span>個人簡介</span>
+        <textarea id="dreamV388Intro" maxlength="500" placeholder="填寫你的基本介紹說明">${escapeHtml(intro)}</textarea>
+      </label>
+      <div class="dream-profile-editor-note">這裡只會更新主頁上的個人簡介，不會更動其他帳號資料。</div>
+    `;
+    return `
+      <section class="panel dream-profile-panel-v388 dream-profile-editor-v390" id="dreamProfilePanelV388" data-profile-role="${escapeHtml(role)}" data-profile-mode="${escapeHtml(mode)}">
+        <div class="dream-profile-editor-head-v390">
+          <div>
+            <h2>${profileEditorModeLabel(mode)}</h2>
+            <p>${role === "companion" ? "陪玩" : "會員"}公開主頁設定</p>
+          </div>
+          <button type="button" class="btn ghost small-btn" data-v388-profile-cancel>取消</button>
+        </div>
+        <div class="dream-profile-form-v388">${body}</div>
+        <div class="dream-profile-editor-actions-v390">
+          <button type="button" class="btn" data-v388-profile-save>儲存</button>
+        </div>
+      </section>`;
+  }
+
+  function buildProfilePanel(role, profile, mode){
+    return buildFocusedProfilePanel(role, profile, mode);
     const name = profile.display_name || profile.name || profile.username || profile.nickname || "";
-    const email = profile.email || "";
     const phone = profile.phone || profile.mobile || "";
     const intro = profile.intro || profile.bio || profile.description || profile.self_intro || "";
     const gender = profile.gender || profile.sex || "";
@@ -185,10 +270,8 @@
           </div>
           <div class="dream-profile-form-v388">
             <label class="dream-profile-field"><span>顯示名稱</span><input id="dreamV388DisplayName" value="${escapeHtml(name)}" placeholder="輸入顯示名稱"></label>
-            <label class="dream-profile-field"><span>Email</span><input id="dreamV388Email" value="${escapeHtml(email)}" placeholder="Email"></label>
             <label class="dream-profile-field"><span>手機 / 聯絡方式</span><input id="dreamV388Phone" value="${escapeHtml(phone)}" placeholder="聯絡方式"></label>
             <label class="dream-profile-field"><span>性別</span><input id="dreamV388Gender" value="${escapeHtml(gender)}" placeholder="男 / 女 / 不公開"></label>
-            <label class="dream-profile-field"><span>大頭照網址</span><input id="dreamV388Avatar" value="${escapeHtml(avatar)}" placeholder="https://..."></label>
             ${companionExtra}
             <label class="dream-profile-field full"><span>簡介</span><textarea id="dreamV388Intro" placeholder="介紹自己">${escapeHtml(intro)}</textarea></label>
           </div>
@@ -208,12 +291,21 @@
       .dream-profile-panel-v388{margin:12px 0;padding:16px;border-radius:22px}
       .dream-profile-grid-v388{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}
       .dream-profile-avatar-v388{width:120px;height:120px;border-radius:24px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;border:1px solid rgba(255,221,235,.22);overflow:hidden}
+      .dream-profile-avatar-v388 img{width:100%;height:100%;object-fit:cover;border-radius:22px;display:block}
       .dream-profile-form-v388{display:grid;grid-template-columns:1fr 1fr;gap:10px}
       .dream-profile-field{display:flex;flex-direction:column;gap:6px;font-size:13px}
       .dream-profile-field span{opacity:.75}
       .dream-profile-field input,.dream-profile-field textarea{border-radius:14px;border:1px solid rgba(255,221,235,.22);background:rgba(255,255,255,.08);color:inherit;padding:10px 12px;outline:none}
       .dream-profile-field textarea{min-height:96px;resize:vertical}
       .dream-profile-field.full{grid-column:1/-1}
+      .dream-profile-editor-v390{max-width:560px;margin:12px auto;padding:16px}
+      .dream-profile-editor-head-v390{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+      .dream-profile-editor-head-v390 h2{margin:0;font-size:18px;color:#ffeaf3}
+      .dream-profile-editor-head-v390 p,.dream-profile-editor-note{margin:4px 0 0;font-size:12px;line-height:1.55;color:rgba(255,238,246,.70)}
+      .dream-profile-editor-actions-v390{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+      .dream-profile-avatar-editor-v390{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+      .dream-profile-file-v390 input{position:absolute;opacity:0;pointer-events:none}
+      .dream-profile-file-v390 span{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:14px;background:linear-gradient(180deg,#ffe1ef,#ff9bc8);color:#682342;font-weight:950;cursor:pointer}
       @media(max-width:680px){.dream-profile-grid-v388{grid-template-columns:1fr}.dream-profile-form-v388{grid-template-columns:1fr}.dream-profile-avatar-v388{width:96px;height:96px}}
     `;
     document.head.appendChild(st);
@@ -332,8 +424,9 @@
     syncProfileSettingMenu(pageEl, role);
     renderCenterCard(role, profile);
   }
-  function showProfileEditor(role, profile){
+  function showProfileEditor(role, profile, mode){
     role = normalizeRoleValue(role) || getRole();
+    mode = mode === "name" || mode === "avatar" ? mode : "bio";
     ensureStyle();
     try{ localStorage.setItem("dream_active_profile_id", profileIdFor(role)); }catch(e){}
     if(page() !== "profile") go("profile");
@@ -341,8 +434,8 @@
     if(!host) return;
     $all("#dreamProfilePanelV388").forEach(el=>el.remove());
     const anchor = host.querySelector(".profile-info-panel");
-    if(anchor) anchor.insertAdjacentHTML("afterend", buildProfilePanel(role, profile || current.profile || {}));
-    else host.insertAdjacentHTML("afterbegin", buildProfilePanel(role, profile || current.profile || {}));
+    if(anchor) anchor.insertAdjacentHTML("afterend", buildProfilePanel(role, profile || current.profile || {}, mode));
+    else host.insertAdjacentHTML("afterbegin", buildProfilePanel(role, profile || current.profile || {}, mode));
     const panel = $("#dreamProfilePanelV388");
     if(panel) setTimeout(()=>panel.scrollIntoView({behavior:"smooth", block:"start"}), 30);
   }
@@ -385,7 +478,7 @@
     if(page() !== "profile") go("profile");
     const profile = await loadProfile(true, role);
     renderProfilePage(role, profile || {});
-    if(options.editor) showProfileEditor(role, profile || {});
+    if(options.editor) showProfileEditor(role, profile || {}, options.action);
     if(window.DreamHideLoginToastV387) try{ window.DreamHideLoginToastV387(); }catch(e){}
     toast("\u8cc7\u6599\u5df2\u8f09\u5165");
     return;
@@ -411,17 +504,38 @@
 
   async function saveProfile(){
     const role = normalizeRoleValue($("#dreamProfilePanelV388")?.dataset?.profileRole) || getRole();
+    const panel = $("#dreamProfilePanelV388");
+    const mode = panel?.dataset?.profileMode || "bio";
+    if(mode === "avatar"){
+      const file = $("#dreamV388AvatarFile")?.files?.[0];
+      toast("正在上傳大頭照...", true);
+      let res;
+      try{ res = await uploadAvatar(role, file); }
+      catch(e){ res = {ok:false, message:e.message || "大頭照上傳失敗"}; }
+      window.DreamProfileDebugV388 = {role, mode, response:res};
+      if(!res || !res.ok){
+        toast((res && (res.message || res.error)) || "大頭照上傳失敗");
+        return;
+      }
+      const updated = normalizeProfile(role, res);
+      const avatarUrl = res.avatar_url || updated.avatar_url || updated.avatar || "";
+      current.profile = Object.assign({}, current.profile || {}, updated || {}, avatarUrl ? {avatar_url:avatarUrl} : {});
+      current.loadedAt = Date.now();
+      try{ localStorage.setItem("dream_persist_user", JSON.stringify(current.profile || {})); }catch(e){}
+      renderProfilePage(role, current.profile || {});
+      panel?.remove();
+      toast("大頭照已更新");
+      return;
+    }
     const payload = {
-      display_name: ($("#dreamV388DisplayName")?.value || "").trim(),
-      email: ($("#dreamV388Email")?.value || "").trim(),
-      phone: ($("#dreamV388Phone")?.value || "").trim(),
-      gender: ($("#dreamV388Gender")?.value || "").trim(),
-      avatar_url: ($("#dreamV388Avatar")?.value || "").trim(),
-      intro: ($("#dreamV388Intro")?.value || "").trim(),
-      game: ($("#dreamV388Game")?.value || "").trim(),
-      price: ($("#dreamV388Price")?.value || "").trim(),
-      status: ($("#dreamV388Status")?.value || "").trim()
+      display_name: mode === "name" ? ($("#dreamV388DisplayName")?.value || "").trim() : undefined,
+      intro: mode !== "name" ? ($("#dreamV388Intro")?.value || "").trim() : undefined
     };
+    Object.keys(payload).forEach(key=>payload[key] === undefined && delete payload[key]);
+    if(mode === "name" && !payload.display_name){
+      toast("用戶名稱不可空白");
+      return;
+    }
     toast("正在儲存資料...", true);
     let res;
     if(role === "companion"){
@@ -440,8 +554,9 @@
     current.profile = Object.assign({}, current.profile || {}, payload, updated || {});
     current.loadedAt = Date.now();
     try{ localStorage.setItem("dream_persist_user", JSON.stringify(current.profile || {})); }catch(e){}
-    toast("資料已儲存");
-    await openProfile(role, {editor:true});
+    renderProfilePage(role, current.profile || {});
+    panel?.remove();
+    toast(mode === "name" ? "用戶名稱已更新" : "個人簡介已更新");
   }
 
   function markServiceButtons(){
@@ -482,8 +597,9 @@
         if(action === "edit-profile-info" || action === "edit-name" || action === "edit-avatar"){
           e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
           const role = normalizeRoleValue(settingAction.dataset.settingScope) || getRole();
+          const mode = action === "edit-name" ? "name" : (action === "edit-avatar" ? "avatar" : "bio");
           document.querySelectorAll("[data-setting-menu]").forEach(menu=>menu.classList.remove("open"));
-          openProfile(role, {editor:true});
+          openProfile(role, {editor:true, action:mode});
           return false;
         }
       }
@@ -491,6 +607,12 @@
       if(profileBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
         openProfile(profileBtn.dataset.v388ProfileEntry || getRole());
+        return false;
+      }
+      const cancelBtn = e.target.closest && e.target.closest("[data-v388-profile-cancel]");
+      if(cancelBtn){
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        $("#dreamProfilePanelV388")?.remove();
         return false;
       }
       const saveBtn = e.target.closest && e.target.closest("[data-v388-profile-save]");
@@ -522,6 +644,22 @@
           return false;
         }
       }
+    }, true);
+
+    document.addEventListener("change", function(e){
+      const input = e.target.closest && e.target.closest("[data-v388-avatar-file]");
+      if(!input) return;
+      const file = input.files && input.files[0];
+      const preview = $("[data-v388-avatar-preview]");
+      if(!file || !preview) return;
+      if(!/^image\/(jpeg|png|webp)$/i.test(file.type || "")){
+        toast("僅支援 JPG、PNG、WEBP 圖片");
+        input.value = "";
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      preview.innerHTML = `<img src="${escapeHtml(url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:22px">`;
+      setTimeout(()=>URL.revokeObjectURL(url), 1200);
     }, true);
 
     window.addEventListener("hashchange", ()=>setTimeout(()=>{syncServiceVisibility(); if(page()==="profile") renderDreamProfilePage();}, 120));

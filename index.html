@@ -16447,7 +16447,8 @@ body:not(.role-companion) .companion-only-panel{
       e.stopPropagation();
       e.stopImmediatePropagation();
       document.querySelectorAll("[data-setting-menu]").forEach(function(menu){ menu.classList.remove("open"); });
-      openSelfProfile(edit.dataset.settingScope || "", {editor:true});
+      var action = edit.dataset.settingAction || "";
+      openSelfProfile(edit.dataset.settingScope || "", {editor:true, action: action === "edit-name" ? "name" : (action === "edit-avatar" ? "avatar" : "bio")});
       return false;
     }
   }, true);
