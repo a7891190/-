@@ -10,7 +10,7 @@ window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV387;
 window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV387;
 
 
-/* v387：統一背景 API 呼叫，修正排行榜 / 彈幕舊版呼叫殘留 */
+/* v388-profile-service-sync */
 window.dreamStableApiV387 = window.dreamStableApiV387 || async function(action, payload){
   const fn = window.DreamStableFetchV387 ||
              window.dreamStableApiV387 ||

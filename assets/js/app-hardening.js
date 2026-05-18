@@ -126,7 +126,7 @@
 })();
 
 
-/* v387-full-bundle-maintenance */
+/* v388-profile-service-sync */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;

@@ -1,5 +1,5 @@
-/* v387-full-bundle-maintenance */
-window.DREAM_API_CLIENT_VERSION = "v387-full-bundle-maintenance";
+/* v388-profile-service-sync */
+window.DREAM_API_CLIENT_VERSION = "v388-profile-service-sync";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }

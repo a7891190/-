@@ -1,4 +1,4 @@
-/* v387-full-bundle-maintenance */
+/* v388-profile-service-sync */
 (function(){
   if(window.__dreamArchitectureCoreV384)return;window.__dreamArchitectureCoreV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}

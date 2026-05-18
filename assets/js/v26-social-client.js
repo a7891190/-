@@ -1,4 +1,4 @@
-/* v387-full-bundle-maintenance formal shared inn client */
+/* v388-profile-service-sync */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});
