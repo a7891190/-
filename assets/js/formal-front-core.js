@@ -314,6 +314,29 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     if(!items.length && data && data.vip && Array.isArray(data.vip.ranking)) items = data.vip.ranking;
     return items.map((x,i)=>({rank:Number(x.rank||i+1), name:x.display_name||x.name||x.username||x.companion_name||"未命名", score:x.score??x.total??x.completed_orders??x.order_count??x.exp??"", avatar:x.avatar_url||""}));
   }
+  function companionTopFive(data){
+    const rows = data && data.activity && Array.isArray(data.activity.items) ? data.activity.items : [];
+    return rows.slice(0,5).map((x,i)=>({
+      id:x.companion_id||x.id||"",
+      rank:Number(x.rank||i+1),
+      name:x.display_name||x.name||x.username||"陪玩",
+      avatar:x.avatar_url||x.avatar||"",
+      orders:Number(x.total_orders||x.completed_orders||x.order_count||0),
+      score:x.score??x.weighted_orders??"",
+      grade:x.grade_label||x.grade_code||""
+    }));
+  }
+  function renderHomeRecommendedCompanions(data){
+    const host=document.getElementById("homeRecommendCompanions");
+    if(!host) return;
+    const items=companionTopFive(data);
+    if(!items.length){
+      host.innerHTML='<div class="companion-empty">尚無接單排行資料</div>';
+      return;
+    }
+    const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    host.innerHTML=items.map(c=>`<article class="recommend-card" data-open-recommend-profile="${esc(c.id)}"><div class="recommend-avatar">${c.avatar?`<img src="${esc(c.avatar)}" alt="${esc(c.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`:esc(String(c.name).slice(0,1))}</div><div class="recommend-name">${esc(c.name)}</div><div class="recommend-meta"><span>#${c.rank}</span><span class="recommend-total-score">接單 ${c.orders} 單</span></div></article>`).join("");
+  }
   function ensureRankStyle(){
     if(document.getElementById("dreamCleanRankStyle")) return;
     const style=document.createElement("style"); style.id="dreamCleanRankStyle";
@@ -350,7 +373,13 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     });
   }
   async function loadRanking(force){
-    if(window.dreamFormalIsLoginPageV379 && window.dreamFormalIsLoginPageV379()) return; try{ renderRanking(await getRanking(force)); }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); } }
+    if(window.dreamFormalIsLoginPageV379 && window.dreamFormalIsLoginPageV379()) return;
+    try{
+      const data = await getRanking(force);
+      renderRanking(data);
+      renderHomeRecommendedCompanions(data);
+    }catch(e){ console.warn("[front_ranking_snapshot]", e.message||e); }
+  }
 
   function boot(){
     removeDemoNodes();
@@ -515,4 +544,3 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
   setInterval(loadBullets, POLL_MS);
   window.DreamBulletFormalV370 = {load: loadBullets};
 })();
-

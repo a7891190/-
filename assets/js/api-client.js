@@ -1101,6 +1101,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }).join("");
   }
   async function loadCompanions(){
+    const page = (location.hash || "#home").replace(/^#/,"") || "home";
+    if(page !== "companion" && page !== "companion-home") return;
     const host = $("[data-list='companions']");
     if(host) host.innerHTML = `<div class="empty-card">陪玩資料載入中...</div>`;
     const res = await apiTry(["companion_front_list","companion_status"]);
