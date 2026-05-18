@@ -1,4 +1,4 @@
-/* v381-architecture-complete：會員/陪玩登入唯一主控 */
+/* v382-emergency-login-force */
 (function(){
   if(window.__dreamLoginCompleteControllerV381) return;
   window.__dreamLoginCompleteControllerV381 = true;

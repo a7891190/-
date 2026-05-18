@@ -1,5 +1,5 @@
-/* v381-architecture-complete */
-window.DREAM_API_CLIENT_VERSION = "v381-architecture-complete";
+/* v382-emergency-login-force */
+window.DREAM_API_CLIENT_VERSION = "v382-emergency-login-force";
 
 function dreamCurrentPageV381(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsLoginPageV381(){ const p=dreamCurrentPageV381(); return p==="login" || p==="register" || p==="forgot"; }

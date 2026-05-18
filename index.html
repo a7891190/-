@@ -1,4 +1,4 @@
-<!-- v381-architecture-complete -->
+<!-- v382-emergency-login-force -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6431,13 +6431,13 @@ main.app{padding-bottom:0 !important;}
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
 <script src="assets/js/app-config.js"></script>
-<script src="assets/js/app-hardening.js?v=381"></script>
-<script src="assets/js/front-api-stabilizer.js?v=381"></script>
-<script src="assets/js/home-render-isolation.js?v=381"></script>
-<script src="assets/js/architecture-complete-core.js?v=381"></script>
-<script src="assets/js/api-client.js?v=381"></script>
-<script src="assets/js/login-complete-controller.js?v=381"></script>
-<script src="assets/js/v26-social-client.js?v=381"></script>
+<script src="assets/js/app-hardening.js?v=382"></script>
+<script src="assets/js/front-api-stabilizer.js?v=382"></script>
+<script src="assets/js/home-render-isolation.js?v=382"></script>
+<script src="assets/js/architecture-complete-core.js?v=382"></script>
+<script src="assets/js/api-client.js?v=382"></script>
+<script src="assets/js/login-complete-controller.js?v=382"></script>
+<script src="assets/js/v26-social-client.js?v=382"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -16354,6 +16354,214 @@ body:not(.role-companion) .companion-only-panel{
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=381"></script>
+<script src="assets/js/formal-front-core.js?v=382"></script>
+
+<script id="dream-v382-emergency-login-force">
+/* v382-emergency-login-force：登入無反應強制修正 */
+(function(){
+  if(window.__dreamEmergencyLoginV382) return;
+  window.__dreamEmergencyLoginV382 = true;
+  console.info("[DreamLogin v382] emergency login controller loaded");
+
+  function $(s,r){return (r||document).querySelector(s);}
+  function $all(s,r){return Array.from((r||document).querySelectorAll(s));}
+  function apiBase(){
+    try{return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";}catch(e){return "https://api.131rwjuh.com/api.php";}
+  }
+  function pageGo(page){
+    try{ if(typeof window.showPage === "function"){ window.showPage(page); return; } }catch(e){}
+    location.hash = "#" + page;
+  }
+  function toast(msg, sticky){
+    let el = $("#dreamV382LoginToast");
+    if(!el){
+      el = document.createElement("div");
+      el.id = "dreamV382LoginToast";
+      el.style.cssText = "position:fixed;left:50%;bottom:112px;transform:translateX(-50%);width:min(88%,380px);padding:12px 15px;border-radius:16px;border:1px solid rgba(255,221,190,.42);background:rgba(72,28,50,.96);color:#fff;text-align:center;font-size:14px;font-weight:900;z-index:2147483647;box-shadow:0 14px 28px rgba(0,0,0,.45);opacity:1;transition:.2s";
+      document.body.appendChild(el);
+    }
+    el.textContent = String(msg || "");
+    el.style.opacity = "1";
+    clearTimeout(el._t);
+    if(!sticky) el._t = setTimeout(()=>{el.style.opacity="0";}, 2400);
+  }
+  function setLoading(btn, on){
+    if(!btn) return;
+    if(on){
+      if(!btn.dataset.v382Text) btn.dataset.v382Text = btn.textContent || "登入";
+      btn.textContent = "正在登入中...";
+      btn.disabled = true;
+      btn.classList.add("is-loading");
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = ".7";
+    }else{
+      btn.textContent = btn.dataset.v382Text || "登入";
+      btn.disabled = false;
+      btn.classList.remove("is-loading");
+      btn.style.pointerEvents = "";
+      btn.style.opacity = "";
+      delete btn.dataset.v382Text;
+    }
+  }
+  function currentRole(){
+    const active = document.querySelector("[data-login-tab].active");
+    if(active && active.dataset.loginTab === "companion") return "companion";
+    try{
+      const saved = localStorage.getItem("dream_login_type_preview") || localStorage.getItem("dream_login_preview_role");
+      if(saved === "companion") return "companion";
+    }catch(e){}
+    return "member";
+  }
+  function setRole(role){
+    role = role === "companion" ? "companion" : "member";
+    $all("[data-login-tab]").forEach(btn=>{
+      const active = btn.dataset.loginTab === role;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
+    });
+    try{ localStorage.setItem("dream_login_type_preview", role); }catch(e){}
+    document.body.dataset.loginType = role;
+  }
+  async function postLogin(action, payload){
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), 18000);
+    try{
+      const res = await fetch(apiBase(), {
+        method:"POST",
+        credentials:"include",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(Object.assign({action}, payload || {})),
+        signal:controller.signal
+      });
+      const text = await res.text();
+      let data;
+      try{ data = JSON.parse(text || "{}"); }
+      catch(e){ data = {ok:false, status:res.status, message:"API 回傳格式錯誤：" + text.slice(0,160)}; }
+      if(!res.ok && data.ok !== true){
+        data.ok = false;
+        data.status = res.status;
+      }
+      return data;
+    }catch(e){
+      return {ok:false, message:e && e.name === "AbortError" ? "登入連線逾時，請稍後再試" : (e.message || "登入連線失敗")};
+    }finally{
+      clearTimeout(timer);
+    }
+  }
+  function persist(role, user){
+    try{
+      localStorage.setItem("dream_persist_login_type", role);
+      localStorage.setItem("dream_login_keep", "1");
+      localStorage.setItem("dream_permanent_login", "1");
+      localStorage.setItem("dream_persist_user", JSON.stringify(user || {}));
+      window.__dreamFrontAuth = {type:role, user:user || null};
+      document.body.classList.add("dream-authenticated");
+      document.body.classList.remove("dream-guest");
+      document.documentElement.classList.add("dream-authenticated");
+      window.dispatchEvent(new CustomEvent("dream-auth-updated", {detail:{type:role, user:user || null}}));
+    }catch(e){}
+  }
+  let running = false;
+  async function forceLogin(btn){
+    if(running) return;
+    const userInput = $("#front_login_user") || $("#v44_login_user") || document.querySelector("input[autocomplete='username']");
+    const pwdInput = $("#front_login_pwd") || $("#v44_login_pwd") || document.querySelector("input[type='password'][autocomplete='current-password'], input[type='password']");
+    const username = (userInput && userInput.value || "").trim();
+    const password = (pwdInput && pwdInput.value || "");
+    const role = currentRole();
+
+    console.info("[DreamLogin v382] login clicked", {role, hasUsername:!!username, hasPassword:!!password});
+
+    if(!username || !password){
+      toast("請輸入帳號與密碼");
+      return;
+    }
+
+    running = true;
+    setLoading(btn || $("#front_login_btn") || $("#v44_login_btn"), true);
+    toast("正在登入中，請稍候...", true);
+
+    const payload = {username, password, account:username, email:username};
+    const action = role === "companion" ? "companion_login" : "login";
+
+    let res = await postLogin(action, payload);
+    if(role === "member" && (!res || !res.ok) && (res.status === 400 || res.status === 404)){
+      res = await postLogin("member_login", payload);
+    }
+
+    window.DreamLoginDebug = {
+      version:"v382-emergency-login-force",
+      role,
+      action,
+      payload:{username, account:username, email:username},
+      response:res
+    };
+
+    if(!res || !res.ok){
+      running = false;
+      setLoading(btn || $("#front_login_btn") || $("#v44_login_btn"), false);
+      toast((res && (res.message || res.error)) || "登入失敗");
+      console.warn("[DreamLogin v382] login failed", res);
+      return;
+    }
+
+    const loginUser = res.user || res.companion || res.data || {username, display_name:username};
+    persist(role, loginUser);
+
+    toast(role === "companion" ? "陪玩登入成功，正在前往陪玩中心..." : "登入成功，正在前往會員中心...", true);
+    console.info("[DreamLogin v382] login success", {role, user:loginUser});
+
+    setTimeout(()=>{
+      running = false;
+      setLoading(btn || $("#front_login_btn") || $("#v44_login_btn"), false);
+      pageGo(role === "companion" ? "companion-home" : "member");
+    }, 260);
+  }
+
+  function bind(){
+    setRole(currentRole());
+
+    document.addEventListener("click", function(e){
+      const tab = e.target.closest && e.target.closest("[data-login-tab]");
+      if(tab){
+        setRole(tab.dataset.loginTab === "companion" ? "companion" : "member");
+        return;
+      }
+
+      const btn = e.target.closest && e.target.closest("#front_login_btn, #v44_login_btn, .login-main-btn-v116, [data-login-submit]");
+      if(btn){
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        forceLogin(btn);
+        return false;
+      }
+    }, true);
+
+    document.addEventListener("keydown", function(e){
+      if(e.key !== "Enter") return;
+      const target = e.target;
+      if(!target) return;
+      if(target.id === "front_login_user" || target.id === "front_login_pwd" || target.id === "v44_login_user" || target.id === "v44_login_pwd"){
+        e.preventDefault();
+        e.stopPropagation();
+        forceLogin($("#front_login_btn") || $("#v44_login_btn"));
+      }
+    }, true);
+
+    const btn = $("#front_login_btn") || $("#v44_login_btn");
+    if(btn){
+      btn.dataset.v382Bound = "1";
+      btn.title = "v382 登入主控已接管";
+    }
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
+
+  window.DreamLoginForceV382 = {login:forceLogin, setRole:setRole, getRole:currentRole};
+})();
+</script>
+
 </body>
 </html>
