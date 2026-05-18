@@ -1,7 +1,7 @@
-/* v384-full-current-login-architecture formal shared inn client */
+/* v387-full-bundle-maintenance formal shared inn client */
 (function(){
   if (!window.DreamAPI) return;
-  const api = window.DreamAPI.api;
+  const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});
   const state = { filter:"all", sort:"time", posts:[] };
 
   function toast(msg){
@@ -75,8 +75,7 @@
 
   async function loadInnPosts(){
     if(location.hash !== "#inn") return;
-    if(location.hash !== "#inn") return;
-    try{
+try{
       const res = await api("inn_post_list", {limit:50});
       state.posts = res.posts || res.list || res.data || [];
     }catch(err){

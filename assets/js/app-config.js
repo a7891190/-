@@ -11,5 +11,5 @@ window.DREAM_CONFIG = {
   // 若後台回傳 /uploads/... 或完整網址，前台會自動處理
   UPLOAD_BASE: "https://api.131rwjuh.com",
 
-  VERSION: "v295-app-web-hardening"
+  VERSION: "v387-full-bundle-maintenance"
 };

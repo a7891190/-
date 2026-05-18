@@ -1,4 +1,4 @@
-/* v385-login-toast-auto-hide */
+/* v387-full-bundle-maintenance */
 (function(){
   if(window.__dreamLoginCompleteControllerV384)return;window.__dreamLoginCompleteControllerV384=true;console.info("[DreamLogin v385] controller loaded");
   const API_BASE=()=>{try{return(window.DREAM_CONFIG&&window.DREAM_CONFIG.API_BASE)||"https://api.131rwjuh.com/api.php";}catch(e){return"https://api.131rwjuh.com/api.php";}};
@@ -33,3 +33,12 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind);else bind();
   window.DreamLoginForceV384={login,bind,mark,setRole,getRole:role};
 })();
+
+
+/* v387：登入提示清理接口別名 */
+window.DreamHideLoginToastV387 = window.DreamHideLoginToastV385 || function(){
+  ["dreamV384LoginToast","dreamV383LoginToast","dreamV382LoginToast","dreamLoginToastV380","dreamLoginToastV381"].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){ el.style.opacity="0"; setTimeout(function(){try{el.remove();}catch(e){}},260); }
+  });
+};

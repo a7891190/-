@@ -1,5 +1,5 @@
-/* v385-login-toast-auto-hide */
-window.DREAM_API_CLIENT_VERSION = "v385-login-toast-auto-hide";
+/* v387-full-bundle-maintenance */
+window.DREAM_API_CLIENT_VERSION = "v387-full-bundle-maintenance";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -124,8 +124,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
       "shop_list","companion_front_list","recharge_request_history","gift_history",
       "exchange_history","session","companion_session"
     ]);
-    if(window.DreamStableFetchV376 && stableActionsV376.has(action)){
-      return window.DreamStableFetchV376(action, payload || {});
+    if(window.DreamStableFetchV387 || window.DreamStableFetchV386 || window.DreamStableFetchV385 || window.DreamStableFetchV384 || window.DreamStableFetchV376 && stableActionsV376.has(action)){
+      return window.DreamStableFetchV387 || window.DreamStableFetchV386 || window.DreamStableFetchV385 || window.DreamStableFetchV384 || window.DreamStableFetchV376(action, payload || {});
     }
     const res = await fetch(API_BASE, {
       method: "POST",

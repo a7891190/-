@@ -1,4 +1,4 @@
-/* v384-full-current-login-architecture：前台架構主控 */
+/* v387-full-bundle-maintenance */
 (function(){
   if(window.__dreamArchitectureCoreV384)return;window.__dreamArchitectureCoreV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}
