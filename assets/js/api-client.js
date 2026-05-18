@@ -124,8 +124,9 @@ window.__dreamAuthSafe.isLoggedIn = function(){
       "shop_list","companion_front_list","recharge_request_history","gift_history",
       "exchange_history","session","companion_session"
     ]);
-    if(window.DreamStableFetchV387 || window.DreamStableFetchV386 || window.DreamStableFetchV385 || window.DreamStableFetchV384 || window.DreamStableFetchV376 && stableActionsV376.has(action)){
-      return window.DreamStableFetchV387 || window.DreamStableFetchV386 || window.DreamStableFetchV385 || window.DreamStableFetchV384 || window.DreamStableFetchV376(action, payload || {});
+    const stableFetchV376 = window.DreamStableFetchV387 || window.DreamStableFetchV386 || window.DreamStableFetchV385 || window.DreamStableFetchV384 || window.DreamStableFetchV376;
+    if(stableFetchV376 && stableActionsV376.has(action)){
+      return stableFetchV376(action, payload || {});
     }
     const res = await fetch(API_BASE, {
       method: "POST",
