@@ -1,20 +1,21 @@
 
-window.dreamFormalIsLoginPageV387 = window.dreamFormalIsLoginPageV387 || function(){
+window.dreamFormalIsLoginPageV389 = window.dreamFormalIsLoginPageV389 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
   return p==="login" || p==="register" || p==="forgot";
 };
-window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV387;
-window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV387;
-window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV387;
-window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV387;
-window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV387;
+window.dreamFormalIsLoginPageV388 = window.dreamFormalIsLoginPageV389;
+window.dreamFormalIsLoginPageV387 = window.dreamFormalIsLoginPageV389;
+window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV389;
+window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV389;
+window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV389;
+window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV389;
+window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV389;
 
 
-/* v388-profile-service-sync */
-window.dreamStableApiV387 = window.dreamStableApiV387 || async function(action, payload){
-  const fn = window.DreamStableFetchV387 ||
-             window.dreamStableApiV387 ||
-             window.dreamStableApiV387;
+/* v389：正式統一背景 API 呼叫，避免舊 DreamStableFetch 呼叫殘留 */
+window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
+  const fn = window.DreamStableFetchV389 ||
+             window.dreamStableApiV389;
   if(typeof fn === "function") return await fn(action, payload || {});
   const apiBase = (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
   const res = await fetch(apiBase, {
@@ -27,7 +28,41 @@ window.dreamStableApiV387 = window.dreamStableApiV387 || async function(action, 
   try{ return JSON.parse(text || "{}"); }
   catch(e){ return {ok:false, message:"API 回傳格式錯誤：" + text.slice(0,120)}; }
 };
-window.dreamStableApiV387 = window.dreamStableApiV387;
+window.dreamStableApiV389 = window.dreamStableApiV389;
+window.dreamStableApiV389 = window.dreamStableApiV389;
+window.dreamStableApiV389 = window.dreamStableApiV389;
+
+/* v389-formal-version-cleanup */
+
+window.dreamFormalIsLoginPageV387 = window.dreamFormalIsLoginPageV387 || function(){
+  const p=(location.hash||"#home").replace(/^#/,"")||"home";
+  return p==="login" || p==="register" || p==="forgot";
+};
+window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV387;
+window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV387;
+window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV387;
+window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV387;
+window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV387;
+
+
+/* v389-formal-version-cleanup */
+window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
+  const fn = window.DreamStableFetchV387 ||
+             window.dreamStableApiV389 ||
+             window.dreamStableApiV389;
+  if(typeof fn === "function") return await fn(action, payload || {});
+  const apiBase = (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
+  const res = await fetch(apiBase, {
+    method:"POST",
+    credentials:"include",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(Object.assign({action}, payload || {}))
+  });
+  const text = await res.text();
+  try{ return JSON.parse(text || "{}"); }
+  catch(e){ return {ok:false, message:"API 回傳格式錯誤：" + text.slice(0,120)}; }
+};
+window.dreamStableApiV389 = window.dreamStableApiV389;
 
 /* v387-full-bundle-maintenance */
 
@@ -42,9 +77,9 @@ window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV386;
 
 
 /* v387-full-bundle-maintenance */
-window.dreamStableApiV387 = window.dreamStableApiV387 || async function(action, payload){
-  const fn = window.dreamStableApiV387 ||
-             window.dreamStableApiV387;
+window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
+  const fn = window.dreamStableApiV389 ||
+             window.dreamStableApiV389;
   if(typeof fn === "function") return await fn(action, payload || {});
   const apiBase = (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";
   const res = await fetch(apiBase, {
@@ -267,7 +302,7 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
         if(raw && ts && now-ts<RANK_TTL) return JSON.parse(raw);
       }catch(e){}
     }
-    const data = await window.dreamStableApiV387("front_ranking_snapshot", {});
+    const data = await window.dreamStableApiV389("front_ranking_snapshot", {});
     if(data && data.ok){
       try{ sessionStorage.setItem(RANK_CACHE_KEY, JSON.stringify(data)); sessionStorage.setItem(RANK_TIME_KEY, String(now)); }catch(e){}
     }
@@ -450,7 +485,7 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     if(window.dreamFormalIsLoginPageV379 && window.dreamFormalIsLoginPageV379()) return;
     let data = null;
     try{
-      data = await window.dreamStableApiV387("bullet_event_list", {limit:20});
+      data = await window.dreamStableApiV389("bullet_event_list", {limit:20});
     }catch(e){
       console.warn("[bullet_event_list]", e.message || e);
       return;

@@ -1,4 +1,4 @@
-/* v388-profile-service-sync */
+/* v389-formal-version-cleanup */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});

@@ -1,4 +1,4 @@
-/* v388-profile-service-sync */
+/* v389-formal-version-cleanup */
 (function(){
   if(window.__dreamHomeRenderIsolationV384)return;window.__dreamHomeRenderIsolationV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}

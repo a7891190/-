@@ -1,5 +1,5 @@
-/* v388-profile-service-sync */
-window.DREAM_API_CLIENT_VERSION = "v388-profile-service-sync";
+/* v389-formal-version-cleanup */
+window.DREAM_API_CLIENT_VERSION = "v389-formal-version-cleanup";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }

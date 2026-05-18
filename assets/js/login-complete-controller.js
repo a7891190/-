@@ -1,4 +1,4 @@
-/* v388-profile-service-sync */
+/* v389-formal-version-cleanup */
 (function(){
   if(window.__dreamLoginCompleteControllerV384)return;window.__dreamLoginCompleteControllerV384=true;console.info("[DreamLogin v385] controller loaded");
   const API_BASE=()=>{try{return(window.DREAM_CONFIG&&window.DREAM_CONFIG.API_BASE)||"https://api.131rwjuh.com/api.php";}catch(e){return"https://api.131rwjuh.com/api.php";}};

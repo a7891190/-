@@ -1,4 +1,4 @@
-/* v388-profile-service-sync：會員/陪玩資料與功能服務同步 */
+/* v389-formal-version-cleanup */
 (function(){
   if(window.__dreamProfileServiceSyncV388) return;
   window.__dreamProfileServiceSyncV388 = true;
