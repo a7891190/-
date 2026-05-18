@@ -649,7 +649,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
       <input id="v44_reg_pwd" type="password" placeholder="設定密碼（8碼以上）">
       <input id="v44_reg_pwd2" type="password" placeholder="確認密碼">
       <input id="v44_reg_email" placeholder="Gmail 信箱">
-      <input id="v44_reg_code" placeholder="會員碼（選填）">
+      <input id="v44_reg_code" placeholder="會員碼（可選填，用於開通 VIP 資格）">
       <label class="login-legal-v116"><input type="checkbox" id="v44_reg_terms"><span>已閱讀並同意《服務條款》</span></label>
       <label class="login-legal-v116"><input type="checkbox" id="v44_reg_privacy"><span>已閱讀並同意《隱私權政策》</span></label>
       <button class="btn" id="v44_register_btn" type="button">註冊</button>
@@ -1101,13 +1101,15 @@ function $(sel, root=document){ return root.querySelector(sel); }
       const id = item.id || item.item_id || idx+1;
       const name = item.name || item.title || "未命名商品";
       const cat = item.category || item.type || "未分類";
+      const scope = item.market_scope || item.scope || item.game_scope || item.game_type || item.game || item.game_name || "";
       const price = Number(item.cost || item.coin || item.price || 0);
       const im = imgUrl(item.image_url || item.image || item.cover || "");
-      return `<article class="product-card" data-category="${htmlEscape(cat)}" data-name="${htmlEscape(name)}" data-id="${id}">
+      return `<article class="product-card" data-market-scope="${htmlEscape(scope)}" data-category="${htmlEscape(cat)}" data-name="${htmlEscape(name)}" data-id="${id}">
         <div class="product-art"><div class="product-tag">${htmlEscape(cat)}</div>${im ? `<img src="${htmlEscape(im)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="product-symbol">禮</div>`}</div>
         <div class="product-body"><div class="product-name">${htmlEscape(name)}</div><div class="product-meta"><span>${money(price)} 短陌</span><span>已兌 ${money(item.sold_count || 0)}</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-buy-id="${id}">點擊兌換</button></div></div>
       </article>`;
     }).join("");
+    window.applyDreamMarketFilter?.();
   }
   async function loadCompanions(){
     const page = (location.hash || "#home").replace(/^#/,"") || "home";
