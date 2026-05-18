@@ -1,5 +1,5 @@
-/* v384-full-current-login-architecture */
-window.DREAM_API_CLIENT_VERSION = "v384-full-current-login-architecture";
+/* v385-login-toast-auto-hide */
+window.DREAM_API_CLIENT_VERSION = "v385-login-toast-auto-hide";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }

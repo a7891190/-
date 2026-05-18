@@ -1,4 +1,4 @@
-<!-- v384-full-current-login-architecture -->
+<!-- v385-login-toast-auto-hide -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6431,13 +6431,13 @@ main.app{padding-bottom:0 !important;}
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
 <script src="assets/js/app-config.js"></script>
-<script src="assets/js/app-hardening.js?v=384"></script>
-<script src="assets/js/front-api-stabilizer.js?v=384"></script>
-<script src="assets/js/home-render-isolation.js?v=384"></script>
-<script src="assets/js/architecture-complete-core.js?v=384"></script>
-<script src="assets/js/api-client.js?v=384"></script>
-<script src="assets/js/login-complete-controller.js?v=384"></script>
-<script src="assets/js/v26-social-client.js?v=384"></script>
+<script src="assets/js/app-hardening.js?v=385"></script>
+<script src="assets/js/front-api-stabilizer.js?v=385"></script>
+<script src="assets/js/home-render-isolation.js?v=385"></script>
+<script src="assets/js/architecture-complete-core.js?v=385"></script>
+<script src="assets/js/api-client.js?v=385"></script>
+<script src="assets/js/login-complete-controller.js?v=385"></script>
+<script src="assets/js/v26-social-client.js?v=385"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -16354,7 +16354,7 @@ body:not(.role-companion) .companion-only-panel{
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=384"></script>
+<script src="assets/js/formal-front-core.js?v=385"></script>
 
 <script id="dream-v384-login-inline-guard">
 /* v384-full-current-login-architecture inline fallback */
@@ -16366,6 +16366,31 @@ body:not(.role-companion) .companion-only-panel{
     if(window.DreamLoginForceV384 && window.DreamLoginForceV384.bind) window.DreamLoginForceV384.bind();
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot); else setTimeout(boot,30);
+})();
+</script>
+
+
+<script id="dream-v385-login-toast-cleaner">
+/* v385-login-toast-auto-hide：登入成功提示自動消失 */
+(function(){
+  if(window.__dreamLoginToastCleanerV385) return;
+  window.__dreamLoginToastCleanerV385 = true;
+  function hideLoginToast(){
+    ["dreamV384LoginToast","dreamV383LoginToast","dreamV382LoginToast","dreamLoginToastV380","dreamLoginToastV381"].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){
+        el.style.opacity = "0";
+        el.style.pointerEvents = "none";
+        setTimeout(function(){ try{ el.remove(); }catch(e){} }, 260);
+      }
+    });
+  }
+  window.DreamHideLoginToastV385 = hideLoginToast;
+  window.addEventListener("hashchange", function(){
+    var p = (location.hash || "").replace(/^#/,"");
+    if(p === "member" || p === "companion-home" || p === "companion-center") setTimeout(hideLoginToast, 350);
+  });
+  window.addEventListener("dream-auth-updated", function(){ setTimeout(hideLoginToast, 1200); });
 })();
 </script>
 
