@@ -310,9 +310,19 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
   }
   function rankItems(data){
     let items = [];
-    if(data && data.activity && Array.isArray(data.activity.items)) items = data.activity.items;
-    if(!items.length && data && data.vip && Array.isArray(data.vip.ranking)) items = data.vip.ranking;
-    return items.map((x,i)=>({rank:Number(x.rank||i+1), name:x.display_name||x.name||x.username||x.companion_name||"未命名", score:x.score??x.total??x.completed_orders??x.order_count??x.exp??"", avatar:x.avatar_url||""}));
+    if(data && data.vip && Array.isArray(data.vip.ranking)) items = data.vip.ranking;
+    return items.map((x,i)=>({rank:Number(x.rank||i+1), name:x.display_name||x.name||x.username||x.member_name||"未命名", score:x.score??x.total??x.vip_exp??x.exp??"", avatar:mediaUrl(x.avatar_url||x.avatar||"")}));
+  }
+  function mediaUrl(value){
+    const raw=String(value||"").trim();
+    if(!raw) return "";
+    if(/^data:/i.test(raw) || /^https?:\/\//i.test(raw)) return raw;
+    try{
+      const api=(window.DREAM_CONFIG&&window.DREAM_CONFIG.API_BASE)||window.DREAM_COMPANION_API_URL||"https://api.131rwjuh.com/api.php";
+      return new URL(raw.replace(/^\/+/,""), new URL(api, location.href).origin + "/").toString();
+    }catch(e){
+      return raw;
+    }
   }
   function companionTopFive(data){
     const rows = data && data.activity && Array.isArray(data.activity.items) ? data.activity.items : [];
@@ -320,11 +330,19 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
       id:x.companion_id||x.id||"",
       rank:Number(x.rank||i+1),
       name:x.display_name||x.name||x.username||"陪玩",
-      avatar:x.avatar_url||x.avatar||"",
+      avatar:mediaUrl(x.avatar_url||x.avatar||x.image_url||x.photo_url||x.companion_avatar_url||x.author_avatar_url||""),
       orders:Number(x.total_orders||x.completed_orders||x.order_count||0),
       score:x.score??x.weighted_orders??"",
       grade:x.grade_label||x.grade_code||""
     }));
+  }
+  function cleanupHomeCompanionLeaks(){
+    const home=document.getElementById("page-home");
+    const allowed=document.getElementById("homeRecommendCompanions");
+    if(!home) return;
+    home.querySelectorAll("[data-list='companions'],#companionGrid,.companion-card").forEach(el=>{
+      if(!allowed || !allowed.contains(el)) el.remove();
+    });
   }
   function renderHomeRecommendedCompanions(data){
     const host=document.getElementById("homeRecommendCompanions");
@@ -332,10 +350,12 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     const items=companionTopFive(data);
     if(!items.length){
       host.innerHTML='<div class="companion-empty">尚無接單排行資料</div>';
+      cleanupHomeCompanionLeaks();
       return;
     }
     const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
     host.innerHTML=items.map(c=>`<article class="recommend-card" data-open-recommend-profile="${esc(c.id)}"><div class="recommend-avatar">${c.avatar?`<img src="${esc(c.avatar)}" alt="${esc(c.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`:esc(String(c.name).slice(0,1))}</div><div class="recommend-name">${esc(c.name)}</div><div class="recommend-meta"><span>#${c.rank}</span><span class="recommend-total-score">接單 ${c.orders} 單</span></div></article>`).join("");
+    cleanupHomeCompanionLeaks();
   }
   function ensureRankStyle(){
     if(document.getElementById("dreamCleanRankStyle")) return;
@@ -358,6 +378,7 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
   function renderRanking(data){
     if(window.DreamHomeRenderIsolationV377 && typeof window.DreamHomeRenderIsolationV377.renderHomeRanking === "function"){ window.DreamHomeRenderIsolationV377.renderHomeRanking(data); return; }
     const items=rankItems(data);
+    cleanupHomeCompanionLeaks();
     if(!items.length) return;
     ensureRankStyle();
     sectionsByText(["本期前三名","前三名"]).slice(0,2).forEach(sec=>{

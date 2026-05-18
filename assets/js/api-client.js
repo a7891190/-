@@ -278,10 +278,13 @@ window.__dreamAuthSafe.isLoggedIn = function(){
       const rank = Number(item.display_rank || item.rank || index + 1);
       const vipName = item.vip_name || item.vip_title || item.vip_level_name || "";
       const vipLevel = Number.isFinite(Number(item.vip_level)) ? Number(item.vip_level) : inferVipLevelFromName(vipName);
+      const publicName = item.display_name || item.name || item.member_name || item.nickname || item.username || item.member_username || "會員";
       return {
         ...item,
         display_rank: rank,
-        username: item.username || item.display_name || item.member_username || "會員",
+        account_username: item.username || item.member_username || "",
+        display_name: publicName,
+        username: publicName,
         exp: Number(item.exp || item.vip_exp || item.total_exp || 0),
         vip_name: vipName,
         vip_level: vipLevel,
@@ -641,11 +644,14 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   function openRegisterModal(){
     openModal(`
       <h3>會員註冊</h3>
+      <input id="v44_reg_display_name" placeholder="設定用戶名稱">
       <input id="v44_reg_user" placeholder="設定帳號（6碼以上）">
       <input id="v44_reg_pwd" type="password" placeholder="設定密碼（8碼以上）">
       <input id="v44_reg_pwd2" type="password" placeholder="確認密碼">
       <input id="v44_reg_email" placeholder="Gmail 信箱">
       <input id="v44_reg_code" placeholder="會員碼（選填）">
+      <label class="login-legal-v116"><input type="checkbox" id="v44_reg_terms"><span>已閱讀並同意《服務條款》</span></label>
+      <label class="login-legal-v116"><input type="checkbox" id="v44_reg_privacy"><span>已閱讀並同意《隱私權政策》</span></label>
       <button class="btn" id="v44_register_btn" type="button">註冊</button>
       <div class="linkline"><button type="button" id="v44_back_login">返回登入</button></div>
     `);
@@ -655,7 +661,6 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     const username = $("#v44_login_user")?.value.trim() || "";
     const password = $("#v44_login_pwd")?.value || "";
     if(!username || !password) return toast("請輸入帳號與密碼");
-    if(!$("#front_login_terms")?.checked || !$("#front_login_privacy")?.checked) return toast("請先分別勾選服務條款與隱私權政策");
     try{
       const res = await api("login", {username, password});
       if(res.ok){
@@ -668,15 +673,17 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function doRegister(){
+    const display_name = $("#v44_reg_display_name")?.value.trim() || "";
     const username = $("#v44_reg_user")?.value.trim() || "";
     const password = $("#v44_reg_pwd")?.value.trim() || "";
     const confirm_password = $("#v44_reg_pwd2")?.value.trim() || "";
     const email = $("#v44_reg_email")?.value.trim() || "";
     const code = $("#v44_reg_code")?.value.trim() || "";
+    if(!display_name) return toast("請輸入用戶名稱");
     if(password !== confirm_password) return toast("確認密碼必須相同");
-    if(!$("#front_reg_terms")?.checked || !$("#front_reg_privacy")?.checked) return toast("請先分別勾選服務條款與隱私權政策");
+    if(!$("#v44_reg_terms")?.checked || !$("#v44_reg_privacy")?.checked) return toast("請先分別勾選服務條款與隱私權政策");
     try{
-      const res = await api("register", {username, password, confirm_password, email, code});
+      const res = await api("register", {display_name, username, password, confirm_password, email, code});
       toast(res.message || (res.ok ? "註冊成功" : "註冊失敗"));
       if(res.ok) openLoginModal();
     }catch(err){ toast(err.message); }
@@ -1033,7 +1040,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
         if(t) t.innerHTML = `<span class="name">暫無資料</span><span class="value">VIP經驗值 0</span>`;
         continue;
       }
-      const name = p.item.username || p.item.display_name || "會員";
+      const name = p.item.display_name || p.item.name || p.item.username || "會員";
       const av = imgUrl(p.item.avatar_url || p.item.avatar || "");
       const exp = Number(p.item.exp || p.item.vip_exp || 0);
       if(a) a.innerHTML = av ? `<img src="${htmlEscape(av)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : htmlEscape(name.slice(0,1));
@@ -1042,7 +1049,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const scroll = $(".rank-scroll");
     if(scroll){
       const rest = ranking.slice(3,13);
-      scroll.innerHTML = rest.length ? rest.map((x,i)=>`<div class="rank-chip"><span class="rank-no">${i+4}</span><span class="rank-title">${htmlEscape(x.username || x.display_name || "會員")}</span><span class="rank-value">VIP經驗值 ${money(x.exp || x.vip_exp || 0)}</span></div>`).join("") : `<div class="rank-chip"><span class="rank-no">…</span><span class="rank-title">暫無資料</span><span class="rank-value">VIP經驗值 0</span></div>`;
+      scroll.innerHTML = rest.length ? rest.map((x,i)=>`<div class="rank-chip"><span class="rank-no">${i+4}</span><span class="rank-title">${htmlEscape(x.display_name || x.name || x.username || "會員")}</span><span class="rank-value">VIP經驗值 ${money(x.exp || x.vip_exp || 0)}</span></div>`).join("") : `<div class="rank-chip"><span class="rank-no">…</span><span class="rank-title">暫無資料</span><span class="rank-value">VIP經驗值 0</span></div>`;
     }
   }
   async function loadRanking(){
@@ -1054,7 +1061,9 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const res = await api("vip_ranking");
     const rows = (res.ranking || res.items || res.data || []).map((x,i)=>({
       ...x,
-      username:x.username || x.display_name || x.member_username || "會員",
+      account_username:x.username || x.member_username || "",
+      display_name:x.display_name || x.name || x.member_name || x.nickname || x.username || x.member_username || "會員",
+      username:x.display_name || x.name || x.member_name || x.nickname || x.username || x.member_username || "會員",
       exp:Number(x.exp || x.vip_exp || x.total_exp || 0),
       avatar_url:x.avatar_url || x.avatar || "",
       rank:Number(x.display_rank || x.rank || i+1)
@@ -1223,13 +1232,16 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }, 350);
   }
   async function register(){
+    const display_name = $("#front_reg_display_name")?.value.trim() || "";
     const username = $("#front_reg_user")?.value.trim() || "";
     const password = $("#front_reg_pwd")?.value.trim() || "";
     const confirm_password = $("#front_reg_pwd2")?.value.trim() || "";
     const email = $("#front_reg_email")?.value.trim() || "";
     const code = $("#front_reg_code")?.value.trim() || "";
+    if(!display_name) return toast("請輸入用戶名稱");
     if(password !== confirm_password) return toast("確認密碼必須相同");
-    const res = await api("register", {username,password,confirm_password,email,code});
+    if(!$("#front_reg_terms")?.checked || !$("#front_reg_privacy")?.checked) return toast("請先分別勾選服務條款與隱私權政策");
+    const res = await api("register", {display_name,username,password,confirm_password,email,code});
     toast(res.message || (res.ok ? "註冊成功" : "註冊失敗"));
     if(res.ok && typeof window.showPage === "function") window.showPage("login");
   }
@@ -1266,13 +1278,24 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(window.dreamIsLoggedInSafeV352()) loadRechargeRecords();
   }
   function wire(){
+    function syncLoginRoleControls(){
+      try{ document.body.dataset.loginType = loginType; }catch(e){}
+      $all("[data-member-only-register],[data-member-only-forgot]").forEach(el=>{
+        el.style.display = loginType === "companion" ? "none" : "";
+      });
+    }
+    function syncLoginFormMode(target){
+      const mode = target || ($("[data-login-form].active")?.dataset?.loginForm || "login");
+      const page = $("#page-login");
+      if(page) page.classList.toggle("is-register-mode", mode === "register");
+    }
     document.addEventListener("click", async e=>{
       const tab = e.target.closest("[data-login-tab]");
       if(tab){
         e.preventDefault();
         loginType = tab.dataset.loginTab === "companion" ? "companion" : "member";
         $all("[data-login-tab]").forEach(b=>b.classList.toggle("active", b === tab));
-        $all("[data-member-only-forgot]").forEach(el=>el.style.display = loginType === "companion" ? "none" : "inline-block");
+        syncLoginRoleControls();
         return;
       }
       const switcher = e.target.closest("[data-login-form-switch]");
@@ -1280,12 +1303,15 @@ function $(sel, root=document){ return root.querySelector(sel); }
         e.preventDefault();
         const target = switcher.dataset.loginFormSwitch;
         $all("[data-login-form]").forEach(form=>form.classList.toggle("active", form.dataset.loginForm === target));
+        syncLoginFormMode(target);
         return;
       }
       if(e.target.closest("#front_login_btn")){ e.preventDefault(); await login(); return; }
       if(e.target.closest("#front_reg_btn")){ e.preventDefault(); await register(); return; }
       if(e.target.closest("#page-forgot .btn")){ e.preventDefault(); await forgot(); return; }
     }, true);
+    syncLoginRoleControls();
+    syncLoginFormMode();
     window.addEventListener("hashchange", guardCurrentPage);
   }
   async function init(){

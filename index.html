@@ -2657,6 +2657,9 @@ body.dream-guest .profile-card .member-name{color:#ffd5e7;text-decoration:underl
 .login-card-v116{max-width:520px;margin:0 auto;padding:18px 6px 28px;}
 .login-title-v116{text-align:center;font-size:30px;font-weight:950;letter-spacing:.05em;text-shadow:0 0 16px rgba(255,192,220,.35);margin:18px 0 70px;}
 .login-tabs-v116{display:flex;justify-content:center;gap:68px;margin-bottom:46px;}
+#page-login.is-register-mode .login-tabs-v116{display:none!important;}
+body[data-login-type="companion"] [data-member-only-register],
+body[data-login-type="companion"] [data-member-only-forgot]{display:none!important;}
 .login-tab-v116{position:relative;border:0;background:transparent;color:#ffd8e8;font-size:24px;font-weight:800;letter-spacing:.04em;padding:0 0 12px;cursor:pointer;}
 .login-tab-v116.active::after{content:"";position:absolute;left:50%;bottom:0;width:118px;height:4px;border-radius:99px;background:#ef6fa7;transform:translateX(-50%);box-shadow:0 0 12px rgba(239,111,167,.55);}
 .login-form-v116{display:none;}
@@ -6384,11 +6387,12 @@ main.app{padding-bottom:0 !important;}
       <div class="login-form-v116 active" data-login-form="login">
         <div class="login-field-v116"><span class="icon">♙</span><input id="front_login_user" autocomplete="username" placeholder="請輸入登入帳號"></div>
         <div class="login-field-v116"><span class="icon">♜</span><input id="front_login_pwd" type="password" autocomplete="current-password" placeholder="請輸入登入密碼"></div>
-        <div class="login-legal-v116"><label><input type="checkbox" id="front_login_terms"><span>已閱讀並同意 <a href="terms.html" target="_blank" rel="noopener">《服務條款》</a></span></label><label><input type="checkbox" id="front_login_privacy"><span>已閱讀並同意 <a href="privacy.html" target="_blank" rel="noopener">《隱私權政策》</a></span></label><label class="remember-account-row"><input type="checkbox" id="front_login_remember"><span>記住帳號</span></label></div>
+        <div class="login-legal-v116"><label class="remember-account-row"><input type="checkbox" id="front_login_remember"><span>記住帳號</span></label></div>
 <div class="login-actions-v116"><button class="login-main-btn-v116" id="front_login_btn" type="button">登入</button></div>
         <div class="login-sub-links-v116"><button type="button" data-login-form-switch="register" data-member-only-register>註冊帳號</button><button type="button" data-go="forgot" data-member-only-forgot>忘記密碼</button></div>
       </div>
       <div class="login-form-v116" data-login-form="register">
+        <div class="login-field-v116"><span class="icon">名</span><input id="front_reg_display_name" autocomplete="nickname" placeholder="設定用戶名稱"></div>
         <div class="login-field-v116"><span class="icon">♙</span><input id="front_reg_user" autocomplete="username" placeholder="設定會員帳號"></div>
         <div class="login-field-v116"><span class="icon">✉</span><input id="front_reg_email" autocomplete="email" placeholder="請輸入 Gmail"></div>
         <div class="login-field-v116"><span class="icon">♜</span><input id="front_reg_pwd" type="password" autocomplete="new-password" placeholder="設定登入密碼"></div>
@@ -12219,7 +12223,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   function normalize(raw,i,k){
     raw=raw||{};
-    const name=raw.name||raw.nickname||raw.username||raw.user_name||raw.member_name||raw.companion_name||raw.display_name||'';
+    const name=raw.display_name||raw.name||raw.nickname||raw.member_name||raw.companion_name||raw.username||raw.user_name||'';
     if(!name) return null;
     const value=Number(raw.value ?? raw.score ?? raw.points ?? raw.amount ?? raw.total ?? raw.vip_exp ?? raw.charm ?? raw.guardian_value ?? raw.gift_total ?? raw.recharge_total ?? 0);
     const rank=Number(raw.rank ?? raw.place ?? raw.no ?? raw.position ?? (i+1));
