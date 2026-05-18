@@ -1,5 +1,10 @@
-/* v382-emergency-login-force */
-window.DREAM_API_CLIENT_VERSION = "v382-emergency-login-force";
+/* v384-full-current-login-architecture */
+window.DREAM_API_CLIENT_VERSION = "v384-full-current-login-architecture";
+
+function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
+function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
+function dreamIsInnPageV384(){ return dreamCurrentPageV384()==="inn"; }
+
 
 function dreamCurrentPageV381(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsLoginPageV381(){ const p=dreamCurrentPageV381(); return p==="login" || p==="register" || p==="forgot"; }
@@ -391,6 +396,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadMarketItems(){
+    // v384 guard loadMarketItems
+    if(typeof dreamIsMarketPageV384==="function" && !dreamIsMarketPageV384()) return;
     // v381 guard loadMarketItems
     if(typeof dreamIsMarketPageV381==="function" && !dreamIsMarketPageV381()) return;
     // v378 guard loadMarketItems
@@ -419,6 +426,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadCompanions(){
+    // v384 guard loadCompanions
+    const p384=(location.hash||"#home").replace(/^#/,"")||"home"; if(p384!=="companion" && p384!=="companion-home") return;
     // v381 guard loadCompanions
     const p381=(location.hash||"#home").replace(/^#/,"")||"home"; if(p381!=="companion" && p381!=="companion-home") return;
     // v377：陪玩列表只允許在陪玩頁渲染，避免塞到首頁。
@@ -484,6 +493,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
+    // v384 guard loadRechargeRecords
+    if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v381 guard loadRechargeRecords
     if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v378 guard loadRechargeRecords
@@ -1057,6 +1068,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   async function loadShop(){
+    // v384 guard loadShop
+    if(typeof dreamIsMarketPageV384==="function" && !dreamIsMarketPageV384()) return;
     // v381 guard loadShop
     if(typeof dreamIsMarketPageV381==="function" && !dreamIsMarketPageV381()) return;
     // v378 guard loadShop

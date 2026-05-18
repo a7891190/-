@@ -126,7 +126,7 @@
 })();
 
 
-/* v382-emergency-login-force */
+/* v384-full-current-login-architecture */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
@@ -183,5 +183,15 @@
       e.preventDefault();
       if(window.DREAM_API_DEBUG) console.warn("[DreamHardening]", msg);
     }
+  });
+})();
+
+
+/* v384：背景錯誤降噪 */
+(function(){
+  if(window.__dreamHardeningV384)return;window.__dreamHardeningV384=true;
+  window.addEventListener("unhandledrejection",function(e){
+    const msg=e&&e.reason&&(e.reason.message||String(e.reason));
+    if(msg&&(msg.includes("連線逾時")||msg.includes("dreamFormalIsLoginPage"))){e.preventDefault();if(window.DREAM_API_DEBUG)console.warn("[DreamHardening]",msg);}
   });
 })();

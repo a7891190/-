@@ -1,5 +1,15 @@
 
-/* v381：formal 全域登入頁判斷 */
+/* v384：formal 全域登入頁判斷 */
+window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV384 || function(){
+  const p=(location.hash||"#home").replace(/^#/,"")||"home";
+  return p==="login" || p==="register" || p==="forgot";
+};
+window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV384;
+window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV384;
+window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV384;
+
+
+/* v384-full-current-login-architecture */
 window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV381 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
   return p==="login" || p==="register" || p==="forgot";
