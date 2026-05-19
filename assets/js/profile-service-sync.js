@@ -373,6 +373,25 @@
       : `<div class="achievement-slot is-empty">\u5c1a\u672a\u8a2d\u5b9a</div>`
     ).join("");
   }
+  function activeAsset(profile, slot){
+    const list = Array.isArray(profile?.active_assets) ? profile.active_assets : [];
+    return list.find(item => item && item.slot === slot && !item.expired) || null;
+  }
+  function profileLevelHtml(role, profile, fallbackLevel){
+    const title = activeAsset(profile, "title");
+    const vipLevel = firstValue(profile?.vip_level, profile?.vipLevel, profile?.member_level, profile?.level_no, "0");
+    const vipName = role === "companion"
+      ? firstValue(profile?.vip_name, profile?.vip_title, profile?.vip_level_name, profile?.level, profile?.grade, profile?.status, fallbackLevel, "\u966a\u73a9")
+      : firstValue(profile?.vip_name, profile?.vip_title, profile?.vip_level_name, fallbackLevel, "\u7121VIP\u6703\u54e1");
+    const charm = numberText(firstValue(profile?.charm_value, profile?.charm, 0), 0);
+    const guardian = numberText(firstValue(profile?.guardian_value, profile?.guardian, 0), 0);
+    const titleName = title ? firstValue(title.item_name, title.name, title.title) : "";
+    return [
+      `<span class="profile-vip-line"><b>VIP ${escapeHtml(vipLevel)}</b><span>${escapeHtml(vipName)}</span></span>`,
+      titleName ? `<span class="profile-equipped-title">\u7a31\u865f\uff1a${escapeHtml(titleName)}</span>` : `<span class="profile-equipped-title is-empty">\u7a31\u865f\uff1a\u5c1a\u672a\u8a2d\u5b9a</span>`,
+      `<span class="profile-value-line">\u9b45\u529b\u503c ${escapeHtml(charm)} \uff5c \u5b88\u8b77\u503c ${escapeHtml(guardian)}</span>`
+    ].join("");
+  }
   function syncProfileSettingMenu(pageEl, role){
     if(!pageEl) return;
     const key = "profile-self";
@@ -397,6 +416,20 @@
         btn.dataset.settingScope = role;
         btn.textContent = "\u500b\u6027\u6a19\u7c64";
         const anchor = menu.querySelector('[data-setting-action="edit-bio-achievements"],[data-setting-action="change-gender"]');
+        if(anchor) anchor.insertAdjacentElement("afterend", btn);
+        else menu.appendChild(btn);
+      }
+      const duplicateBadge = menu.querySelector('[data-setting-action="edit-achievement-badges"]');
+      if(duplicateBadge) duplicateBadge.remove();
+      const badgeBtn = menu.querySelector('[data-setting-action="edit-bio-achievements"]');
+      if(badgeBtn) badgeBtn.textContent = "\u66f4\u63db\u6210\u5c31\u5fbd\u7ae0";
+      if(!menu.querySelector('[data-setting-action="change-title"]')){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.settingAction = "change-title";
+        btn.dataset.settingScope = role;
+        btn.textContent = "\u66f4\u63db\u7a31\u865f";
+        const anchor = menu.querySelector('[data-setting-action="edit-bio-achievements"],[data-setting-action="change-profile-effect"]');
         if(anchor) anchor.insertAdjacentElement("afterend", btn);
         else menu.appendChild(btn);
       }
@@ -447,13 +480,15 @@
     setProfileBind(pageEl, "gender", genderLabel(firstValue(profile.gender, profile.sex)));
     setProfileBind(pageEl, "rating", rating.toFixed(1));
     setProfileBind(pageEl, "stars", starsHtml(rating), true);
-    setProfileBind(pageEl, "level", level);
+    setProfileBind(pageEl, "level", profileLevelHtml(role, profile, level), true);
     setProfileBind(pageEl, "status", firstValue(profile.work_status, profile.status, "\u5728\u7dda"));
     setProfileBind(pageEl, "recommend", numberText(recommend, 0));
     setProfileBind(pageEl, "orders", numberText(orders, 0));
     setProfileBind(pageEl, "bio", intro);
     setProfileBind(pageEl, "tags", listHtml(firstValue(profile.personality_tags, profile.tags, profile.tag_list), "profile-tag", isCompanion ? "\u966a\u73a9" : "\u6703\u54e1"), true);
-    setProfileBind(pageEl, "achievement-slots", achievementHtml(firstValue(profile.achievement_slots, profile.achievements, profile.badges, profile.badge_names)), true);
+    const activeBadge = activeAsset(profile, "badge");
+    const achievementSource = activeBadge ? [activeBadge] : firstValue(profile.achievement_slots, profile.achievements, profile.badges, profile.badge_names);
+    setProfileBind(pageEl, "achievement-slots", achievementHtml(achievementSource), true);
     setProfileBind(pageEl, "gift-count", "\u5df2\u9ede\u4eae 0 / 50");
     setProfileBind(pageEl, "posts", `<div class="companion-empty">\u5c1a\u672a\u767c\u5e03\u52d5\u614b</div>`, true);
     pageEl.querySelectorAll(".profile-back,#page-profile [data-profile-back]").forEach(back=>{

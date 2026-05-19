@@ -16597,6 +16597,304 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
+<style id="v392-formal-backpack-profile-settings-css">
+#page-profile .profile-info-panel,
+#page-profile .profile-achievement-showcase,
+#page-profile .profile-gift-collection-panel,
+#page-profile .profile-feed-panel{overflow:visible!important}
+#page-profile .profile-info-setting-wrap{position:relative!important;z-index:214748300!important;overflow:visible!important}
+#page-profile .profile-info-setting-menu{position:absolute!important;right:0!important;top:calc(100% + 8px)!important;z-index:214748320!important;min-width:188px!important;max-height:min(64vh,430px)!important;overflow:auto!important}
+#page-profile .profile-info-setting-menu.open{display:grid!important}
+#page-profile .profile-level{display:grid!important;gap:5px!important;line-height:1.35!important}
+#page-profile .profile-vip-line{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;color:#ffeaf3!important}
+#page-profile .profile-vip-line b{display:inline-flex!important;min-height:24px!important;align-items:center!important;padding:0 9px!important;border-radius:999px!important;background:linear-gradient(180deg,#ffe1a8,#d99a3a)!important;color:#5c2415!important}
+#page-profile .profile-equipped-title,#page-profile .profile-value-line{font-size:12px!important;color:rgba(255,238,246,.82)!important}
+#page-profile .profile-equipped-title.is-empty{color:rgba(255,238,246,.56)!important}
+.backpack-grid[data-backpack-list]{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(218px,1fr))!important;align-items:stretch!important;gap:10px!important}
+.backpack-item.v392-backpack-card{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;gap:12px!important;align-items:start!important;min-height:132px!important;padding:13px!important;border-radius:16px!important}
+.v392-backpack-main{min-width:0!important;display:grid!important;gap:5px!important}
+.v392-backpack-title{display:flex!important;justify-content:space-between!important;gap:8px!important;color:#fff4f8!important;font-weight:950!important}
+.v392-backpack-title b{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.v392-backpack-tag{font-size:11px!important;color:#ffe0a9!important;white-space:nowrap!important}
+.v392-backpack-meta{font-size:12px!important;color:rgba(255,238,246,.72)!important;line-height:1.45!important}
+.v392-backpack-actions{display:flex!important;gap:8px!important;align-items:center!important;margin-top:4px!important}
+.v392-backpack-use,.gift-send-btn{border:0!important;border-radius:999px!important;min-height:34px!important;padding:0 13px!important;background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;font-weight:950!important;cursor:pointer!important}
+.v392-backpack-use:disabled{opacity:.48!important;cursor:not-allowed!important}
+.v392-empty{grid-column:1/-1!important;padding:18px!important;text-align:center!important;border:1px dashed rgba(255,221,190,.28)!important;border-radius:16px!important;color:rgba(255,238,246,.72)!important}
+.v392-modal-mask{position:fixed!important;inset:0!important;z-index:2147483600!important;display:none!important;align-items:center!important;justify-content:center!important;padding:18px!important;background:rgba(10,3,9,.68)!important;backdrop-filter:blur(8px)!important}
+.v392-modal-mask.show{display:flex!important}
+.v392-modal{width:min(92vw,460px)!important;max-height:min(82vh,640px)!important;overflow:auto!important;border-radius:22px!important;border:1px solid rgba(255,221,190,.38)!important;background:linear-gradient(180deg,rgba(72,28,50,.98),rgba(31,12,25,.98))!important;color:#fff3f8!important;box-shadow:0 24px 64px rgba(0,0,0,.48)!important;padding:16px!important}
+.v392-modal h3{margin:0 0 7px!important;font-size:20px!important;color:#fff6fa!important}
+.v392-modal p{margin:0 0 12px!important;color:rgba(255,238,246,.72)!important;font-size:12px!important;line-height:1.55!important}
+.v392-asset-list{display:grid!important;gap:8px!important;margin:10px 0 14px!important}
+.v392-asset-row{display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center!important;gap:10px!important;min-height:54px!important;padding:9px 10px!important;border-radius:15px!important;border:1px solid rgba(255,221,190,.24)!important;background:rgba(255,255,255,.07)!important}
+.v392-asset-row.is-active{border-color:rgba(255,224,169,.64)!important;background:rgba(255,224,169,.12)!important}
+.v392-asset-mark{width:36px!important;height:36px!important;border-radius:12px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.10)!important;color:#ffe0a9!important;font-weight:950!important}
+.v392-asset-row b{display:block!important;font-size:13px!important;color:#fff6fa!important}
+.v392-asset-row small{display:block!important;margin-top:2px!important;color:rgba(255,238,246,.62)!important;font-size:11px!important}
+.v392-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+.v392-modal-actions button,.v392-asset-row button{min-height:38px!important;border-radius:999px!important;border:1px solid rgba(255,221,190,.32)!important;background:rgba(255,255,255,.09)!important;color:#fff3f8!important;font-weight:900!important;cursor:pointer!important}
+.v392-asset-row button{background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;border:0!important;padding:0 13px!important}
+.gift-send-btn{width:100%!important;margin-top:8px!important}
+</style>
+
+<script id="v392-formal-backpack-profile-settings-js">
+(function(){
+  if(window.__dreamFormalProfileSettingsV392) return;
+  window.__dreamFormalProfileSettingsV392 = true;
+  const DEFAULT_AVATARS = {
+    member:"assets/default_avatars/member_default.webp",
+    companion:"assets/default_avatars/companion_default.webp",
+    customer:"assets/default_avatars/customer_service_default.webp"
+  };
+  const API_BASE = () => {
+    try{return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";}catch(_){return "https://api.131rwjuh.com/api.php";}
+  };
+  function esc(v){return String(v == null ? "" : v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+  function toast(msg){try{if(typeof window.toast==="function") return window.toast(msg);}catch(_){} try{if(typeof window.toast2==="function") return window.toast2(msg);}catch(_){}}
+  async function api(action,payload){
+    const res = await fetch(API_BASE(),{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({action},payload||{}))});
+    const text = await res.text();
+    let data; try{data=JSON.parse(text||"{}");}catch(_){data={ok:false,message:text.slice(0,120)};}
+    if(!res.ok && data.ok!==true){data.ok=false;data.status=res.status;}
+    return data;
+  }
+  function roleFromText(node, fallback){
+    const text = ((node && node.textContent) || "") + " " + ((node && node.getAttribute && (node.getAttribute("data-role")||node.getAttribute("data-author-type")||"")) || "");
+    if(/companion|陪玩|闄帺/i.test(text)) return "companion";
+    if(/customer|客服/i.test(text)) return "customer";
+    return fallback || "member";
+  }
+  function ensureDefaultAvatar(node, role){
+    if(!node) return;
+    const img = node.querySelector && node.querySelector("img");
+    if(img && img.getAttribute("src")) return;
+    const src = DEFAULT_AVATARS[role] || DEFAULT_AVATARS.member;
+    node.dataset.defaultAvatarRole = role;
+    node.innerHTML = `<img src="${src}" alt="${role === "companion" ? "陪玩預設大頭照" : "會員預設大頭照"}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;">`;
+  }
+  function applyDefaultListAvatars(){
+    document.querySelectorAll("#page-home .top3-avatar,#page-home .rank-avatar,#page-home .full-rank-row .row-right").forEach(el=>ensureDefaultAvatar(el,"member"));
+    document.querySelectorAll("#page-home .recommend-avatar").forEach(el=>ensureDefaultAvatar(el,"companion"));
+    document.querySelectorAll("#page-companion .companion-card .art-panel,#page-companion [data-list='companions'] .art-panel").forEach(el=>ensureDefaultAvatar(el,"companion"));
+    document.querySelectorAll("#page-inn .post-avatar,#page-inn .inn-comment-avatar").forEach(el=>ensureDefaultAvatar(el,roleFromText(el.closest("[data-author-type],.post-card,.inn-comment"),"member")));
+    document.querySelectorAll(".member-avatar,.companion-avatar").forEach(el=>ensureDefaultAvatar(el,el.classList.contains("companion-avatar")?"companion":"member"));
+  }
+  function itemLabel(type){
+    return ({badge:"成就徽章",title:"稱號",avatar_frame:"大頭照外框",profile_effect:"主頁特效",shortmo:"短陌",limited_shortmo:"限時短陌",coin:"短陌",raffle_ticket:"抽獎券",ticket:"抽獎券"})[type] || "道具";
+  }
+  function itemIcon(type){return ({badge:"徽",title:"稱",avatar_frame:"框",profile_effect:"效",shortmo:"陌",limited_shortmo:"限",coin:"陌",raffle_ticket:"券",ticket:"券"})[type] || "物";}
+  function isSettingType(type){return ["badge","title","avatar_frame","profile_effect"].includes(type);}
+  function renderBackpack(items){
+    const host = document.querySelector("[data-backpack-list]");
+    if(!host) return;
+    const list = Array.isArray(items) ? items : [];
+    if(!list.length){
+      host.innerHTML = `<div class="v392-empty">目前背包沒有可使用物品。成就、達標或活動獎勵會先送到這裡。</div>`;
+      return;
+    }
+    host.innerHTML = list.map(item=>{
+      const type = String(item.item_type || "");
+      const exp = item.expires_at ? `期限：${esc(item.expires_at)}` : "永久或未設定期限";
+      const hint = isSettingType(type) ? "使用後加入個人簡介設定，可再進設定切換。" : "使用後立即生效並從背包移除。";
+      return `<div class="backpack-item v392-backpack-card" data-item-type="${esc(type)}">
+        <div class="service-icon classic">${esc(itemIcon(type))}</div>
+        <div class="v392-backpack-main">
+          <div class="v392-backpack-title"><b>${esc(item.item_name || item.name || itemLabel(type))}</b><span class="v392-backpack-tag">${esc(itemLabel(type))}</span></div>
+          <div class="v392-backpack-meta">${esc(hint)}</div>
+          <div class="v392-backpack-meta">${esc(exp)}${Number(item.quantity||1)>1 ? ` ｜ ${Number(item.quantity)} 個` : ""}</div>
+          <div class="v392-backpack-actions"><button class="v392-backpack-use" type="button" data-v392-backpack-use="${Number(item.id||0)}" ${item.expired ? "disabled" : ""}>使用</button></div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+  async function updateBackpack(){
+    const host = document.querySelector("[data-backpack-list]");
+    if(!host) return;
+    try{
+      const res = await api("backpack_list");
+      if(!res.ok){ if(res.status===401) renderBackpack([]); return; }
+      renderBackpack(res.items || []);
+      window.__dreamProfileSettingAssetsV392 = res.setting_assets || [];
+    }catch(err){console.warn("[backpack_list]",err);}
+  }
+  const slotTitle = {badge:"更換成就徽章",title:"更換稱號",avatar_frame:"更換大頭照外框",profile_effect:"更換主頁特效"};
+  function ensureModal(){
+    let mask = document.querySelector(".v392-modal-mask");
+    if(mask) return mask;
+    mask = document.createElement("div");
+    mask.className = "v392-modal-mask";
+    mask.innerHTML = `<div class="v392-modal" role="dialog" aria-modal="true"></div>`;
+    document.body.appendChild(mask);
+    mask.addEventListener("click",e=>{if(e.target===mask || e.target.closest("[data-v392-close]")) mask.classList.remove("show");});
+    return mask;
+  }
+  async function openAssetManager(slot){
+    const mask = ensureModal();
+    const box = mask.querySelector(".v392-modal");
+    box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>正在讀取已從背包使用解鎖的項目...</p>`;
+    mask.classList.add("show");
+    const res = await api("profile_setting_assets",{slot});
+    const list = res.ok && Array.isArray(res.assets) ? res.assets : [];
+    const body = list.length ? list.map(asset=>`
+      <div class="v392-asset-row ${asset.active ? "is-active" : ""}">
+        <span class="v392-asset-mark">${esc(itemIcon(asset.item_type || slot))}</span>
+        <span><b>${esc(asset.item_name || "未命名")}</b><small>${asset.active ? "目前顯示中" : "已解鎖可更換"}${asset.expires_at ? " ｜ 期限：" + esc(asset.expires_at) : ""}</small></span>
+        <button type="button" data-v392-apply-asset="${Number(asset.id||0)}" data-v392-slot="${esc(slot)}">${asset.active ? "已套用" : "套用"}</button>
+      </div>`).join("") : `<div class="v392-empty">尚未解鎖可更換項目。獲得獎勵後會先進背包，必須在背包點「使用」後，才會出現在這裡供更換；未解鎖前僅能預覽，不能套用。</div>`;
+    box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>背包物品使用後會先存進此功能庫，這裡一次只套用一個目前顯示項目。</p><div class="v392-asset-list">${body}</div><div class="v392-modal-actions"><button type="button" data-v392-clear-slot="${esc(slot)}">取消目前顯示</button><button type="button" data-v392-close>關閉</button></div>`;
+  }
+  function currentRole(){
+    try{return (window.__dreamFrontAuth?.type || window.__dreamFrontAuth?.role || localStorage.getItem("dream_persist_login_type") || "member").includes("companion") ? "companion" : "member";}catch(_){return "member";}
+  }
+  function syncVisualLocal(slot, asset){
+    if(slot === "profile_effect" && asset){
+      try{localStorage.setItem("dream_profile_effect_quick_apply",JSON.stringify({effect:asset.item_key || asset.item_name,tier:asset.payload?.style || "unlocked",updatedAt:new Date().toISOString()}));}catch(_){}
+    }
+    if(slot === "avatar_frame" && asset){
+      try{localStorage.setItem("dream_avatar_frame_active_"+currentRole(), asset.item_key || asset.item_name || "");}catch(_){}
+    }
+  }
+  function cleanupMenus(){
+    document.querySelectorAll('[data-setting-action="edit-achievement-badges"]').forEach(btn=>btn.remove());
+    document.querySelectorAll("[data-setting-menu]").forEach(menu=>{
+      const badges = Array.from(menu.querySelectorAll('[data-setting-action="edit-bio-achievements"]'));
+      badges.forEach((btn,i)=>{btn.textContent="更換成就徽章"; if(i>0) btn.remove();});
+      if(!menu.querySelector('[data-setting-action="change-title"]')){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.settingAction = "change-title";
+        btn.dataset.settingScope = menu.dataset.settingMenu || currentRole();
+        btn.textContent = "更換稱號";
+        const anchor = menu.querySelector('[data-setting-action="edit-bio-achievements"],[data-setting-action="change-profile-effect"]');
+        if(anchor) anchor.insertAdjacentElement("afterend",btn); else menu.appendChild(btn);
+      }
+    });
+  }
+  window.addEventListener("click",function(e){
+    const menuBtn = e.target.closest && e.target.closest('[data-setting-action]');
+    if(menuBtn){
+      const action = menuBtn.dataset.settingAction;
+      const map = {"edit-bio-achievements":"badge","edit-achievement-badges":"badge","change-title":"title","change-avatar-frame":"avatar_frame","change-profile-effect":"profile_effect"};
+      if(map[action]){
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        document.querySelectorAll("[data-setting-menu]").forEach(menu=>menu.classList.remove("open"));
+        openAssetManager(map[action]);
+        return false;
+      }
+    }
+    const use = e.target.closest && e.target.closest("[data-v392-backpack-use]");
+    if(use){
+      e.preventDefault(); e.stopPropagation();
+      api("backpack_use",{item_id:Number(use.dataset.v392BackpackUse||0)}).then(res=>{
+        toast(res.message || (res.ok ? "使用成功" : "使用失敗"));
+        if(res.ok){ renderBackpack(res.items || []); window.__dreamProfileSettingAssetsV392 = res.setting_assets || []; try{window.renderDreamProfilePage?.();}catch(_){} }
+      }).catch(err=>toast(err.message || "使用失敗"));
+      return;
+    }
+    const apply = e.target.closest && e.target.closest("[data-v392-apply-asset]");
+    if(apply){
+      e.preventDefault();
+      const slot = apply.dataset.v392Slot || "";
+      api("profile_setting_apply",{asset_id:Number(apply.dataset.v392ApplyAsset||0),slot}).then(res=>{
+        toast(res.message || (res.ok ? "套用成功" : "套用失敗"));
+        if(res.ok){ syncVisualLocal(slot,res.asset); openAssetManager(slot); try{window.renderDreamProfilePage?.(); window.renderProfile?.();}catch(_){} }
+      });
+      return;
+    }
+    const clear = e.target.closest && e.target.closest("[data-v392-clear-slot]");
+    if(clear){
+      e.preventDefault();
+      const slot = clear.dataset.v392ClearSlot || "";
+      api("profile_setting_apply",{slot,clear:true}).then(res=>{toast(res.message || "已取消顯示"); openAssetManager(slot); try{window.renderDreamProfilePage?.();}catch(_){};});
+      return;
+    }
+  },true);
+  function enhanceGiftCards(){
+    const gifts = Array.isArray(window.DREAM_GIFT_DATA) ? window.DREAM_GIFT_DATA : [];
+    document.querySelectorAll(".gift-card").forEach(card=>{
+      if(!card.dataset.giftPrice){
+        const name = card.dataset.giftName || card.querySelector(".gift-name")?.textContent || "";
+        const match = gifts.find(g=>String(g.name)===String(name));
+        if(match){card.dataset.giftPrice = match.price || 0; card.dataset.giftImage = match.image || "";}
+      }
+      if(!card.querySelector("[data-gift-send]")){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gift-send-btn";
+        btn.dataset.giftSend = "1";
+        btn.textContent = "送出";
+        card.appendChild(btn);
+      }
+    });
+  }
+  document.addEventListener("click",function(e){
+    const btn = e.target.closest && e.target.closest("[data-gift-send]");
+    if(!btn) return;
+    const card = btn.closest(".gift-card");
+    if(!card || card.classList.contains("locked")) return;
+    e.preventDefault();
+    const receiverType = prompt("收禮者類型請輸入 member 或 companion", "companion");
+    if(!receiverType) return;
+    const receiverId = prompt("請輸入收禮者ID");
+    if(!receiverId) return;
+    api("gift_send",{
+      receiver_type:receiverType,
+      receiver_id:Number(receiverId),
+      gift_name:card.dataset.giftName || card.querySelector(".gift-name")?.textContent || "禮物",
+      price:Number(card.dataset.giftPrice || 0),
+      guardian_value:Number(card.dataset.guardianValue || card.dataset.giftPrice || 0),
+      gift_image_url:card.dataset.giftImage || card.querySelector("img")?.getAttribute("src") || ""
+    }).then(res=>toast(res.message || (res.ok ? "送禮成功" : "送禮失敗")));
+  },true);
+  function achievementState(){try{return JSON.parse(localStorage.getItem("dream_achievement_progress_state_v277")||"{}")||{};}catch(_){return {};}}
+  function isAchievementDone(a,state){
+    const saved = state[a.id] || {};
+    const target = Math.max(1,Number(a.target || saved.target || 1));
+    const progress = Math.max(Number(a.progress || 0),Number(saved.progress || 0));
+    return !!(a.unlocked || saved.unlocked || progress >= target);
+  }
+  async function syncAchievementRewards(){
+    const data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
+    if(!data.length) return;
+    const sentKey = "dream_formal_claimed_achievements_v392";
+    let sent = {}; try{sent=JSON.parse(localStorage.getItem(sentKey)||"{}")||{};}catch(_){}
+    const state = achievementState();
+    for(const a of data){
+      if(!a || !a.id || sent[a.id] || !isAchievementDone(a,state)) continue;
+      if(!a.reward_enabled && !a.reward_assets && !a.reward_amount) continue;
+      const res = await api("achievement_reward_claim",a);
+      if(res && res.ok){
+        sent[a.id]=Date.now();
+        try{localStorage.setItem(sentKey,JSON.stringify(sent));}catch(_){}
+        if(res.stats && window.__dreamFrontAuth && window.__dreamFrontAuth.user){
+          window.__dreamFrontAuth.user.limited_coin = res.stats.limited_coin;
+          document.querySelectorAll("[data-bind='limited-coin']").forEach(el=>{el.textContent=String(res.stats.limited_coin || 0);});
+        }
+        if(res.direct_rewards && res.direct_rewards.length) toast("限時短陌已直接入帳");
+        else if(res.granted && res.granted.length) toast("成就獎勵已送入背包");
+      }
+    }
+    updateBackpack();
+  }
+  const oldUpdate = window.updateDreamBackpack;
+  window.updateDreamBackpack = function(){try{oldUpdate&&oldUpdate();}catch(_){} updateBackpack();};
+  function boot(){
+    cleanupMenus();
+    enhanceGiftCards();
+    applyDefaultListAvatars();
+    updateBackpack();
+    setTimeout(syncAchievementRewards,300);
+  }
+  const mo = new MutationObserver(()=>{clearTimeout(boot._t);boot._t=setTimeout(()=>{cleanupMenus();enhanceGiftCards();applyDefaultListAvatars();},80);});
+  if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else setTimeout(boot,40);
+  window.addEventListener("hashchange",()=>setTimeout(boot,100));
+  window.addEventListener("dream-auth-updated",()=>setTimeout(boot,120));
+  setInterval(()=>{cleanupMenus();enhanceGiftCards();applyDefaultListAvatars();},2000);
+})();
+</script>
+
 <script id="dream-v389-formal-cleanup-marker">
 (function(){
   window.DREAM_FRONT_PATCH_VERSION = "v389-formal-version-cleanup";
