@@ -156,8 +156,16 @@ textarea::placeholder,input::placeholder{color:rgba(255,235,242,.58)}
 .chips{display:flex;gap:10px;overflow-x:auto;white-space:nowrap;margin:0 0 12px;padding:2px 2px 8px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;border:1px solid rgba(255,221,190,.46);background:rgba(64,24,43,.62);border-radius:999px;padding:10px 15px;color:#fff2f6;font-weight:800;cursor:pointer}
 .chip.active{background:linear-gradient(180deg,rgba(248,172,205,.98),rgba(220,103,151,.94));}
-.companion-grid,.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.companion-grid,.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
 .companion-card,.product-card{border:1px solid rgba(255,220,184,.48);border-radius:16px;background:linear-gradient(180deg,rgba(86,34,58,.86),rgba(42,16,31,.88));overflow:hidden;box-shadow:var(--shadow)}
+#companionGrid .companion-card{display:flex;flex-direction:column;height:100%;min-height:248px}
+#companionGrid .companion-card .art-panel{flex:0 0 auto;width:100%;aspect-ratio:1/.9;overflow:hidden}
+#companionGrid .companion-card .card-body{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+#companionGrid .companion-card .card-top{display:grid;grid-template-rows:1fr auto;gap:10px;height:100%}
+#companionGrid .companion-card .name-block{min-width:0}
+#companionGrid .companion-card .name-block span{display:block;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,238,244,.76);font-size:11px;margin-top:4px}
+#companionTabs.companion-category-row{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-snap-type:x proximity;padding-bottom:10px}
+#companionTabs.companion-category-row .chip{scroll-snap-align:start}
 .art-panel,.product-art{aspect-ratio:1/.9;background:radial-gradient(circle at 60% 35%,rgba(255,184,213,.30),transparent 28%),linear-gradient(140deg,#24111b,#783452);display:grid;place-items:center}
 .avatar-mark,.product-symbol{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,221,190,.46);background:rgba(255,210,226,.18);font-family:"DFKai-SB","KaiTi";font-size:32px;font-weight:900}
 .card-body,.product-body{padding:10px 10px 12px}.name-block h3,.product-name{font-size:15px;color:#fff7f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -4500,6 +4508,9 @@ main.app{padding-bottom:0 !important;}
 .market-detail-art{position:relative;height:300px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;overflow:hidden;border:1px solid rgba(255,229,238,.18);background:linear-gradient(180deg,rgba(61,76,54,.92),rgba(18,30,24,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
 .market-detail-art::before{content:"";position:absolute;inset:0;background:var(--product-detail-bg, linear-gradient(180deg,rgba(61,76,54,.92),rgba(18,30,24,.96)));opacity:1}
 .market-detail-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.18));pointer-events:none}
+.market-detail-art.has-product-image::before{background:rgba(0,0,0,.22)}
+.market-detail-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.market-detail-art.has-product-image>*:not(.market-detail-img){position:relative;z-index:2;text-shadow:0 2px 12px rgba(0,0,0,.46)}
 .market-detail-watermark{position:absolute;inset:auto 0 18px 0;font-size:88px;font-weight:900;letter-spacing:.12em;color:rgba(255,255,255,.06);text-align:center;transform:translateY(6px);pointer-events:none}
 .market-detail-badge,.market-detail-title,.market-detail-game,.market-detail-sub{position:relative;z-index:1}
 .market-detail-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;background:rgba(255,238,198,.18);border:1px solid rgba(255,227,176,.4);color:#ffe7a8;font-size:14px;font-weight:800;letter-spacing:.08em}
@@ -4652,6 +4663,8 @@ main.app{padding-bottom:0 !important;}
 .profile-effect-controls{display:none!important}.profile-achievement-showcase{margin-bottom:0!important}
 .profile-modal .decor-list{display:grid;gap:10px;margin-top:10px}.profile-modal .decor-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.8);border:1px solid rgba(218,99,146,.22);color:#74304f}.profile-modal .decor-item strong{display:block}.profile-modal .decor-item small{display:block;opacity:.72;margin-top:3px}.profile-modal .decor-item button{border:0;border-radius:999px;padding:8px 12px;background:linear-gradient(180deg,#f8acd0,#d86197);color:#fff;font-weight:900}.profile-modal .frame-preview{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:3px solid #ffd99c;background:#8b315d;color:#fff;font-weight:900;box-shadow:0 0 0 3px rgba(255,214,232,.24)}
 .companion-booking-photo{height:320px;aspect-ratio:1/1;max-width:100%;margin:0 auto;border-radius:28px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 26%,rgba(255,228,240,.34),transparent 32%),linear-gradient(180deg,rgba(96,41,73,.95),rgba(36,14,30,.98));border:1px solid rgba(255,221,236,.28);box-shadow:0 16px 36px rgba(0,0,0,.22)}
+.companion-booking-photo img{width:100%;height:100%;object-fit:cover}
+.companion-booking-photo.has-photo .avatar-mark{display:none}
 .companion-booking-photo .avatar-mark{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ffd9e9,#e778aa);color:#7b214e;font-size:56px;font-weight:950;box-shadow:0 18px 34px rgba(0,0,0,.26)}
 .companion-booking-name{text-align:center;margin:14px 0 4px;font-size:30px;font-weight:950;color:#fff3f8}.companion-booking-role{text-align:center;color:#ffd4e7;font-weight:800;margin-bottom:12px}.companion-booking-page{padding-bottom:170px}.companion-booking-page .market-detail-bottom{z-index:27}.companion-booking-page .exchange-form-panel{margin-top:12px}.voice-hidden-field{display:none!important}
 .home-search-results{display:none;margin:8px 0 12px;border-radius:18px;border:1px solid rgba(255,205,226,.18);background:rgba(64,24,43,.64);overflow:hidden}.home-search-results.show{display:block}.home-search-result{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.07);color:#fff3f8}.home-search-result:last-child{border-bottom:0}.home-search-result i{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(255,211,228,.16);font-style:normal;font-weight:900;color:#ffe1af}.home-search-result small{display:block;color:rgba(255,238,246,.66);margin-top:3px}.home-search-result button{border:0;border-radius:999px;padding:8px 12px;background:linear-gradient(180deg,#f8acd0,#d86197);color:white;font-weight:900}
@@ -5753,7 +5766,7 @@ main.app{padding-bottom:0 !important;}
     <section class="page-head"><h1>陪玩專區</h1></section>
     <div class="search-row"><input id="companionSearch" placeholder="請輸入陪玩名稱、關鍵詞"><button class="btn">搜索</button></div>
     <section class="panel info-strip"><h2>本期三名新人陪玩</h2><p>本期三名新人陪玩主要為接單數低的。</p></section>
-    <div class="chips" id="companionTabs"><button class="chip active" data-role="全部">全部</button><button class="chip" data-role="天策陪玩">天策陪玩</button><button class="chip" data-role="巡撫陪玩">巡撫陪玩</button><button class="chip" data-role="提督陪玩">提督陪玩</button><button class="chip" data-role="專攻陪玩">專攻陪玩</button><button class="chip" data-role="普通陪玩">普通陪玩</button><button class="chip" data-role="名將陪玩">名將陪玩</button></div>
+    <div class="chips companion-category-row" id="companionTabs"><button class="chip active" data-role="全部">全部</button><button class="chip" data-role="天策陪玩">天策陪玩</button><button class="chip" data-role="巡撫陪玩">巡撫陪玩</button><button class="chip" data-role="提督陪玩">提督陪玩</button><button class="chip" data-role="專攻陪玩">專攻陪玩</button><button class="chip" data-role="普通陪玩">普通陪玩</button><button class="chip" data-role="名將陪玩">名將陪玩</button></div>
     <div class="section-title"><h2>精選陪玩</h2></div>
     <section class="companion-grid" data-list="companions" id="companionGrid">
       <div class="companion-empty">目前尚無陪玩資料</div>
@@ -5802,13 +5815,7 @@ main.app{padding-bottom:0 !important;}
     <div class="category-row" id="marketCats"></div>
     <div class="section-title"><h2 data-market-title>市集商品</h2><span class="muted">後台帶入</span></div>
     <section class="product-grid" data-list="market-items" id="productGrid">
-      <article class="product-card" data-market-scope="delta" data-category="趣味單" data-name="趣味陪玩盲盒" data-product-id="funny-blind-box"><div class="product-art"><div class="product-tag">趣味單</div><div class="product-symbol">趣</div></div><div class="product-body"><div class="product-name">趣味陪玩盲盒</div><div class="product-meta"><span>288 短陌</span><span>已兌 126</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="funny-blind-box">點擊兌換</button></div></div></article>
-      <article class="product-card" data-market-scope="delta" data-category="趣味單" data-name="戰術驚喜趣味單" data-product-id="funny-delta-01"><div class="product-art"><div class="product-tag">趣味單</div><div class="product-symbol">趣</div></div><div class="product-body"><div class="product-name">戰術驚喜趣味單</div><div class="product-meta"><span>230 短陌</span><span>新品上架</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="funny-delta-01">點擊兌換</button></div></div></article>
-      <article class="product-card" data-market-scope="delta" data-category="保底單" data-name="保底陪玩券" data-product-id="guarantee-ticket"><div class="product-art"><div class="product-tag">保底單</div><div class="product-symbol">保</div></div><div class="product-body"><div class="product-name">保底陪玩券</div><div class="product-meta"><span>588 短陌</span><span>已兌 84</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="guarantee-ticket">點擊兌換</button></div></div></article>
-      <article class="product-card" data-market-scope="voice" data-category="聲優陪聊" data-name="聲優陪聊體驗券" data-product-id="voice-chat-trial"><div class="product-art"><div class="product-tag">聲優陪聊</div><div class="product-symbol">聲</div></div><div class="product-body"><div class="product-name">聲優陪聊體驗券</div><div class="product-meta"><span>388 短陌</span><span>已兌 52</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="voice-chat-trial">點擊兌換</button></div></div></article>
-      <article class="product-card" data-market-scope="market" data-category="實體兌換品" data-name="夢競實體禮盒" data-product-id="physical-gift-box"><div class="product-art"><div class="product-tag">實體兌換品</div><div class="product-symbol">禮</div></div><div class="product-body"><div class="product-name">夢競實體禮盒</div><div class="product-meta"><span>1,288 短陌</span><span>已兌 18</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="physical-gift-box">點擊兌換</button></div></div></article>
-      <article class="product-card" data-market-scope="market" data-category="實體兌換品" data-name="夢競限定實體禮盒" data-product-id="physical-box-01"><div class="product-art"><div class="product-tag">實體兌換品</div><div class="product-symbol">禮</div></div><div class="product-body"><div class="product-name">夢競限定實體禮盒</div><div class="product-meta"><span>1,680 短陌</span><span>新品上架</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="physical-box-01">點擊兌換</button></div></div></article>
-      <article class="product-card" data-market-scope="market" data-category="虛擬兌換品" data-name="夢競虛擬禮包" data-product-id="virtual-pack"><div class="product-art"><div class="product-tag">虛擬兌換品</div><div class="product-symbol">虛</div></div><div class="product-body"><div class="product-name">夢競虛擬禮包</div><div class="product-meta"><span>188 短陌</span><span>已兌 0</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-product-id="virtual-pack">點擊兌換</button></div></div></article>
+      <div class="empty-card">目前沒有後台上架商品</div>
     </section>
   </section>
 
@@ -6022,7 +6029,7 @@ main.app{padding-bottom:0 !important;}
         <div class="section-title inline-title profile-info-setting-wrap">
           <h2>個人簡介</h2>
           <button class="mini-gear" type="button" data-setting-toggle="profile-companion" aria-label="個人簡介設定">⚙</button>
-          <div class="setting-menu profile-info-setting-menu" data-setting-menu="profile-companion"><button type="button" data-setting-action="edit-name" data-setting-scope="companion">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="companion">編輯大頭照</button><button type="button" data-setting-action="change-gender" data-setting-scope="companion">更換性別</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="companion">更換成就徽章</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="companion">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="companion">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="companion">開啟手機推播</button></div>
+          <div class="setting-menu profile-info-setting-menu" data-setting-menu="profile-companion"><button type="button" data-setting-action="edit-name" data-setting-scope="companion">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="companion">編輯大頭照</button><button type="button" data-setting-action="change-gender" data-setting-scope="companion">更換性別</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="companion">更換成就徽章</button><button type="button" data-setting-action="edit-personality-tags" data-setting-scope="companion">個性標籤</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="companion">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="companion">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="companion">開啟手機推播</button></div>
         </div>
         <p class="profile-bio" data-profile-bind="bio">這位使用者還沒有填寫個人簡介。</p>
         <div class="profile-achievement-showcase">
@@ -6075,7 +6082,7 @@ main.app{padding-bottom:0 !important;}
     <section class="page-head member-page-head">
       <h1>會員中心</h1>
       <button class="setting-btn" id="memberSettingBtn" type="button" aria-label="會員設定" data-setting-toggle="member">⚙</button>
-      <div class="setting-menu" id="memberSettingMenu" data-setting-menu="member"><button type="button" data-setting-action="edit-name" data-setting-scope="member">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="member">編輯大頭照</button><button type="button" data-setting-action="change-gender" data-setting-scope="member">更換性別</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="member">更換成就徽章</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="member">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="member">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="member">開啟手機推播</button><button type="button" data-go="forgot">忘記密碼</button></div>
+      <div class="setting-menu" id="memberSettingMenu" data-setting-menu="member"><button type="button" data-setting-action="edit-name" data-setting-scope="member">編輯名稱</button><button type="button" data-setting-action="edit-avatar" data-setting-scope="member">編輯大頭照</button><button type="button" data-setting-action="change-gender" data-setting-scope="member">更換性別</button><button type="button" data-setting-action="edit-bio-achievements" data-setting-scope="member">更換成就徽章</button><button type="button" data-setting-action="edit-personality-tags" data-setting-scope="member">個性標籤</button><button type="button" data-setting-action="change-profile-effect" data-setting-scope="member">主頁動態光效更換</button><button type="button" data-setting-action="change-avatar-frame" data-setting-scope="member">個人照外框更換</button><button type="button" data-setting-action="push" data-setting-scope="member">開啟手機推播</button><button type="button" data-go="forgot">忘記密碼</button></div>
     </section>
     
     <section class="register-legal-consent-box" data-legal-consent-box>
@@ -6084,7 +6091,7 @@ main.app{padding-bottom:0 !important;}
       <a href="privacy.html" target="_blank" rel="noopener">《隱私權政策》</a>。
       <span data-legal-consent-status>尚未完成勾選確認</span>
     </section>
-    <section class="panel profile-card"><div class="profile-main"><div class="avatar" data-bind="member-avatar">夢</div><div><div class="member-name profile-click-name" data-bind="member-name" data-open-profile="self">點擊登入</div><div class="member-card-extra"><span class="member-card-gender-icon" data-bind="member-gender-icon">◇</span><span data-bind="member-profile-tip">登入後可查看會員中心</span></div><div class="profile-login-tip">點擊名稱或大頭照可前往帳密登入頁面。</div>
+    <section class="panel profile-card"><div class="profile-main"><div class="avatar" data-bind="member-avatar">夢</div><div><div class="member-name profile-click-name" data-bind="member-name" data-open-profile="self">點擊登入</div><div class="member-card-extra"><span class="member-card-gender-icon" data-bind="member-gender-icon">◇</span><span data-bind="member-profile-tip">登入後可查看會員中心</span></div><div class="profile-login-tip"></div>
           <div class="test-role-switch-row"><button type="button" class="test-role-switch-btn" data-test-role-switch>已登錄的會員/陪玩</button></div></div></div></section>
     <section class="panel assets coin-combined"><div class="asset-cell coin-stack"><div class="coin-stack-row"><div class="asset-num" data-bind="coin">0</div><div class="asset-label">短陌餘額</div></div><div class="coin-stack-row"><div class="asset-num limited" data-bind="limited-coin">0</div><div class="asset-label">限時短陌</div></div></div><div class="asset-cell"><div class="asset-num" data-bind="vip-total">0</div><div class="asset-label">VIP累計儲值</div><div class="asset-sub" data-bind="normal-total">普通累計儲值：0</div></div><div class="asset-cell"><div class="asset-num" data-bind="vip-status-main">開通</div><div class="asset-label" data-bind="vip-status">VIP權益：（開通）</div><div class="asset-sub" data-bind="vip-expire">到期：2026/05/28 23:59</div></div></section>
     <section class="panel" style="margin-bottom:12px"><div class="section-title"><h2>我的訂單</h2></div><div class="service-grid"><a class="service-item" data-go="exchange-record"><div class="service-icon classic">⇄</div><div class="service-name">兌換紀錄</div></a><a class="service-item" data-go="recharge-record"><div class="service-icon classic">卡</div><div class="service-name">儲值紀錄</div></a><a class="service-item" data-go="review"><div class="service-icon classic">★</div><div class="service-name">待評價<span class="review-badge" data-review-pending-badge style="display:none">0</span></div></a></div></section>
@@ -6110,7 +6117,7 @@ main.app{padding-bottom:0 !important;}
         <div>
           <div class="member-name profile-click-name" data-bind="member-name" data-open-profile="self">夢競陪玩</div>
           <div class="member-card-extra"><span class="member-card-gender-icon" data-bind="member-gender-icon">◇</span><span data-bind="member-profile-tip">陪玩會員中心</span></div>
-          <div class="profile-login-tip">點擊名稱或大頭照可前往帳密登入頁面。</div>
+          <div class="profile-login-tip"></div>
           <div class="test-role-switch-row"><button type="button" class="test-role-switch-btn" data-test-role-switch>已登錄的會員/陪玩</button></div>
         </div>
       </div>
@@ -6548,7 +6555,10 @@ function buildProductFromCard(card){
   const price = Number((priceText.match(/[0-9,]+/)||['0'])[0].replace(/,/g,''));
   const redeemed = card.querySelectorAll('.product-meta span')[1]?.textContent?.trim() || '可兌換';
   const symbol = card.querySelector('.product-symbol')?.textContent?.trim() || (category.includes('實體')?'禮':category.slice(0,1)||'兌');
-  const scopeKind = inferMarketScope(card); const fulfillType = category==='實體兌換品'?'physical':(scopeKind==='delta'?'game':(scopeKind==='voice'?'booking':'virtual')); return {id,name,category,type:category,scope:scopeKind==='delta'?'三角洲行動':(scopeKind==='voice'?'聲音陪伴':'夢競商城'),fulfillType,price,redeemed:'',stock:'',heroTitle:name.replace(/券|禮盒|禮包/g,''),heroSub:`${category}・專屬兌換`,watermark:category.slice(0,2)||'兌換',gameMark:symbol,game:scopeKind==='delta'?'三角洲行動':(scopeKind==='voice'?'聲優陪聊':'夢競商城'),bg:'linear-gradient(180deg,rgba(78,48,69,.95),rgba(31,14,28,.97))',desc:'此商品為夢競商城兌換品，包含商品名稱、說明與價格。後續可由後台補充更完整內容與實際兌換規則。'};
+  const imageUrl = card.dataset.imageUrl || card.querySelector('.product-art img')?.getAttribute('src') || '';
+  const scopeKind = inferMarketScope(card);
+  const fulfillType = category==='實體兌換品'?'physical':(scopeKind==='delta'?'game':(scopeKind==='voice'?'booking':'virtual'));
+  return {id,name,category,type:category,scope:scopeKind==='delta'?'三角洲行動':(scopeKind==='voice'?'聲音陪伴':'夢競商城'),fulfillType,price,redeemed:'',stock:'',imageUrl,heroTitle:name.replace(/券|禮盒|禮包/g,''),heroSub:`${category}・專屬兌換`,watermark:category.slice(0,2)||'兌換',gameMark:symbol,game:scopeKind==='delta'?'三角洲行動':(scopeKind==='voice'?'聲優陪聊':'夢競商城'),bg:'linear-gradient(180deg,rgba(78,48,69,.95),rgba(31,14,28,.97))',desc:'此商品為夢競商城兌換品，包含商品名稱、說明與價格。後續可由後台補充更完整內容與實際兌換規則。'};
 }
 function openMarketProduct(productId, fallbackCard=null){
   const product = DREAM_MARKET_PRODUCTS[productId] || buildProductFromCard(fallbackCard);
@@ -6556,7 +6566,25 @@ function openMarketProduct(productId, fallbackCard=null){
   currentMarketProductId = product.id || productId;
   currentMarketProductData = product;
   const art = document.querySelector('[data-product-art]');
-  if(art) art.style.setProperty('--product-detail-bg', product.bg);
+  if(art){
+    art.style.setProperty('--product-detail-bg', product.bg);
+    const imageUrl = product.imageUrl || product.image_url || product.image || '';
+    let img = art.querySelector('[data-product-detail-image]');
+    if(imageUrl){
+      if(!img){
+        img = document.createElement('img');
+        img.className = 'market-detail-img';
+        img.dataset.productDetailImage = '1';
+        art.insertBefore(img, art.firstChild);
+      }
+      img.src = imageUrl;
+      img.alt = product.name || '商品圖片';
+      art.classList.add('has-product-image');
+    }else{
+      img?.remove();
+      art.classList.remove('has-product-image');
+    }
+  }
   product.fulfillType = product.fulfillType || inferProductFulfillType(product);
   const map = {
     '[data-product-category]': product.category,
@@ -6821,7 +6849,7 @@ document.addEventListener('click', e=>{
   const toggle = e.target.closest('[data-setting-toggle]');
   if(toggle){e.preventDefault();e.stopPropagation();const scope=toggle.dataset.settingToggle;document.querySelectorAll('[data-setting-menu]').forEach(menu=>{menu.classList.toggle('open',menu.dataset.settingMenu===scope&&!menu.classList.contains('open'));});return;}
   const actionBtn=e.target.closest('[data-setting-action]');
-  if(actionBtn){e.preventDefault();e.stopPropagation();const scopeText=actionBtn.dataset.settingScope==='companion'?'陪玩':'會員';const action=actionBtn.dataset.settingAction;document.querySelectorAll('[data-setting-menu]').forEach(menu=>menu.classList.remove('open'));if(action==='edit-name') toast?.(`${scopeText}名稱編輯功能已開啟，正式資料會以該身分帳號保存。`);if(action==='edit-avatar') toast?.(`${scopeText}大頭照編輯功能已開啟，正式資料會以該身分帳號保存。`);if(action==='edit-bio-achievements'){ if(typeof showPage==='function') showPage('profile'); setTimeout(()=>{ const btn=document.querySelector('[data-action="edit-profile-info"]'); if(btn) btn.click(); else if(typeof window.openDreamProfile==='function') window.openDreamProfile(window.__dreamFrontAuth?.user?.role==='companion'?'companion-self':'member-self'); },120); }if(action==='push') toast?.(`${scopeText}手機推播設定已切換。`);return;}
+  if(actionBtn){e.preventDefault();e.stopPropagation();const scope=actionBtn.dataset.settingScope||window.__dreamFrontAuth?.user?.role||'member';const scopeText=scope==='companion'?'陪玩':'會員';const action=actionBtn.dataset.settingAction;document.querySelectorAll('[data-setting-menu]').forEach(menu=>menu.classList.remove('open'));if(action==='edit-name'||action==='edit-avatar'||action==='edit-profile-info'||action==='edit-personality-tags'){const mode=action==='edit-name'?'name':(action==='edit-avatar'?'avatar':(action==='edit-personality-tags'?'tags':'bio'));if(typeof window.openDreamProfile==='function') window.openDreamProfile(scope,{editor:true,action:mode});else if(typeof showPage==='function') showPage('profile');return;}if(action==='edit-bio-achievements'){ if(typeof showPage==='function') showPage('profile'); setTimeout(()=>{ const btn=document.querySelector('[data-action="edit-profile-info"]'); if(btn) btn.click(); else if(typeof window.openDreamProfile==='function') window.openDreamProfile(window.__dreamFrontAuth?.user?.role==='companion'?'companion-self':'member-self'); },120); }if(action==='push') toast?.(`${scopeText}手機推播設定已切換。`);return;}
   const clickedLoginName=e.target.closest('.profile-card .member-name, .profile-card .avatar');
   if(clickedLoginName&&(!window.__dreamFrontAuth||!window.__dreamFrontAuth.user)){e.preventDefault();if(typeof showPage==='function') showPage('login');else location.hash='#login';return;}
   document.querySelectorAll('[data-setting-menu]').forEach(menu=>{if(!menu.contains(e.target)&&!e.target.closest('[data-setting-toggle]')) menu.classList.remove('open');});
@@ -6830,7 +6858,7 @@ document.addEventListener('click', e=>{
 document.querySelectorAll('.stars .star').forEach((s,i,arr)=>s.addEventListener('click',()=>arr.forEach((item,j)=>item.classList.toggle('active',j<=i))));
 document.querySelectorAll('#companionTabs .chip').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('#companionTabs .chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  const role=btn.dataset.role;document.querySelectorAll('#companionGrid .companion-card').forEach(c=>c.style.display=(role==='全部'||c.dataset.role===role)?'':'none');
+  const role=btn.dataset.role;document.querySelectorAll('#companionGrid .companion-card').forEach(c=>{const cats=(c.dataset.categories||c.dataset.role||'').split('|').map(x=>x.trim()).filter(Boolean);c.style.display=(role==='全部'||c.dataset.role===role||cats.includes(role))?'':'none';});
 }));
 document.addEventListener('click', e=>{
   const exchangeBtn = e.target.closest('#productGrid .exchange-btn, #productGrid .small-btn, #productGrid .product-card');
@@ -11953,11 +11981,8 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('DOMContentLoaded',initRankDrag);setTimeout(initRankDrag,500);
 
   const sampleData = [
-    {type:'陪玩',title:'蒼岑',desc:'天策陪玩・三角洲行動',go:'companion'},
-    {type:'陪玩',title:'夜璃',desc:'巡撫陪玩・聲音陪伴',go:'companion'},
-    {type:'商品',title:'戰術驚喜趣味單',desc:'趣味單・短陌兌換商城',go:'market'},
-    {type:'商品',title:'夢競限定實體禮盒',desc:'實體兌換品・短陌兌換商城',go:'market'},
-    {type:'公告',title:'本期三名新人陪玩',desc:'主要為接單數低的新人陪玩推薦',go:'companion'},
+    {type:'功能',title:'陪玩專區',desc:'依後台陪玩分類查看可預約陪玩',go:'companion'},
+    {type:'功能',title:'短陌兌換商城',desc:'查看後台已上架兌換商品',go:'market'},
     {type:'文章',title:'夢競客棧動態',desc:'搜尋文章與動態內容',go:'inn'}
   ];
   function runHomeSearch(){
@@ -12021,10 +12046,28 @@ window.addEventListener('DOMContentLoaded', () => {
   function openCompanionBooking(card){
     const name=(card?.dataset?.name||card?.querySelector('h3')?.textContent||'夢競陪玩').trim();
     const role=(card?.dataset?.role||card?.querySelector('.meta-row span:last-child')?.textContent||'陪玩').trim();
+    const avatarUrl=(card?.dataset?.avatarUrl||card?.querySelector('.art-panel img')?.getAttribute('src')||'').trim();
     const mark=(name||'陪').slice(0,1);
     document.querySelector('[data-companion-booking-name]')&&(document.querySelector('[data-companion-booking-name]').textContent=name);
     document.querySelector('[data-companion-booking-role]')&&(document.querySelector('[data-companion-booking-role]').textContent=role);
     document.querySelector('[data-companion-booking-avatar]')&&(document.querySelector('[data-companion-booking-avatar]').textContent=mark);
+    const photo=document.querySelector('[data-companion-booking-photo]');
+    if(photo){
+      let img=photo.querySelector('[data-companion-booking-image]');
+      if(avatarUrl){
+        if(!img){
+          img=document.createElement('img');
+          img.dataset.companionBookingImage='1';
+          photo.insertBefore(img, photo.firstChild);
+        }
+        img.src=avatarUrl;
+        img.alt=name;
+        photo.classList.add('has-photo');
+      }else{
+        img?.remove();
+        photo.classList.remove('has-photo');
+      }
+    }
     document.querySelector('[data-companion-booking-submit]')?.setAttribute('data-companion-name',name);
     setCompanionServicesV250(name);
     setDreamQty('companion', 1);
@@ -15859,6 +15902,15 @@ body:not(.role-companion) .companion-only-panel{
 </style>
 
 
+<style id="v391-auth-center-market-companion-fix-css">
+body.dream-authenticated .profile-login-tip,
+body.dream-authenticated .member-login-tip{display:none!important}
+body.dream-authenticated #page-member .profile-card,
+body.dream-authenticated #page-companion-home .profile-card{cursor:default}
+.setting-menu [data-setting-action="edit-personality-tags"]{color:#ffe7b8!important}
+</style>
+
+
 <script id="v340-gender-avatar-badge-fix-js">
 (function(){
   const STORE="dream_profile_gender_v340";
@@ -16143,6 +16195,19 @@ body:not(.role-companion) .companion-only-panel{
     location.hash = "#login";
   }
 
+  function isLoggedIn(){
+    try{
+      const auth = window.__dreamFrontAuth || {};
+      const u = auth.user || window.authUser || null;
+      if(u && (u.id || u.user_id || u.member_id || u.companion_id || u.username || u.display_name || u.name || u.email)) return true;
+    }catch(e){}
+    try{
+      const raw = localStorage.getItem("dream_persist_user") || localStorage.getItem("dream_user") || localStorage.getItem("dream_auth_user") || "";
+      if(raw && raw !== "null" && raw !== "{}") return true;
+    }catch(e){}
+    return document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest");
+  }
+
   function currentPageIsMember(){
     const p = document.getElementById("page-member");
     if(!p) return false;
@@ -16157,7 +16222,7 @@ body:not(.role-companion) .companion-only-panel{
   }
 
   document.addEventListener("click", function(e){
-    if(!currentPageIsMember()) return;
+    if(isLoggedIn() || !currentPageIsMember()) return;
 
     const target = e.target.closest(
       "#page-member .profile-card, " +
@@ -16182,6 +16247,7 @@ body:not(.role-companion) .companion-only-panel{
 
   // 直接把卡片上的 data-open-profile 拿掉，避免原本事件再導去會員主頁
   function neutralizeMemberLoginCard(){
+    if(isLoggedIn()) return;
     document.querySelectorAll("#page-member .profile-card, #page-member [data-open-profile='self']").forEach(function(el){
       const text = (el.textContent || "").replace(/\s+/g, "");
       if(text.includes("點擊登入") || text.includes("尚未登入")){
@@ -16231,6 +16297,19 @@ body:not(.role-companion) .companion-only-panel{
     } catch(e) {}
   }
 
+  function isLoggedIn(){
+    try{
+      const auth = window.__dreamFrontAuth || {};
+      const u = auth.user || window.authUser || null;
+      if(u && (u.id || u.user_id || u.member_id || u.companion_id || u.username || u.display_name || u.name || u.email)) return true;
+    }catch(e){}
+    try{
+      const raw = localStorage.getItem("dream_persist_user") || localStorage.getItem("dream_user") || localStorage.getItem("dream_auth_user") || "";
+      if(raw && raw !== "null" && raw !== "{}") return true;
+    }catch(e){}
+    return document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest");
+  }
+
   function pageMember(){
     return document.getElementById("page-member");
   }
@@ -16247,6 +16326,7 @@ body:not(.role-companion) .companion-only-panel{
   }
 
   function findLoginArea(target){
+    if(isLoggedIn()) return null;
     const member = pageMember();
     if(!member || !member.contains(target)) return null;
 
@@ -16273,6 +16353,7 @@ body:not(.role-companion) .companion-only-panel{
   }
 
   function rewriteLoginAreas(){
+    if(isLoggedIn()) return;
     const member = pageMember();
     if(!member) return;
     member.querySelectorAll("*").forEach(function(el){
@@ -16296,7 +16377,7 @@ body:not(.role-companion) .companion-only-panel{
   }
 
   document.addEventListener("click", function(e){
-    if(!isMemberVisible()) return;
+    if(isLoggedIn() || !isMemberVisible()) return;
     const area = findLoginArea(e.target);
     if(!area) return;
 
@@ -16308,7 +16389,7 @@ body:not(.role-companion) .companion-only-panel{
   }, true);
 
   document.addEventListener("pointerdown", function(e){
-    if(!isMemberVisible()) return;
+    if(isLoggedIn() || !isMemberVisible()) return;
     const area = findLoginArea(e.target);
     if(!area) return;
 
@@ -16448,14 +16529,14 @@ body:not(.role-companion) .companion-only-panel{
       openSelfProfile(target.closest("#page-companion-home") ? "companion" : "member");
       return false;
     }
-    var edit = e.target.closest && e.target.closest("#page-profile [data-setting-action='edit-profile-info'],#page-profile [data-setting-action='edit-name'],#page-profile [data-setting-action='edit-avatar']");
+    var edit = e.target.closest && e.target.closest("#page-profile [data-setting-action='edit-profile-info'],#page-profile [data-setting-action='edit-name'],#page-profile [data-setting-action='edit-avatar'],#page-profile [data-setting-action='edit-personality-tags']");
     if(edit){
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
       document.querySelectorAll("[data-setting-menu]").forEach(function(menu){ menu.classList.remove("open"); });
       var action = edit.dataset.settingAction || "";
-      openSelfProfile(edit.dataset.settingScope || "", {editor:true, action: action === "edit-name" ? "name" : (action === "edit-avatar" ? "avatar" : "bio")});
+      openSelfProfile(edit.dataset.settingScope || "", {editor:true, action: action === "edit-name" ? "name" : (action === "edit-avatar" ? "avatar" : (action === "edit-personality-tags" ? "tags" : "bio"))});
       return false;
     }
   }, true);

@@ -238,7 +238,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     setBind("vip-level", formatVipLevel(vipCode, vipName));
     setBind("vip-exp", "VIP經驗值：" + money(exp) + " / " + money(nextExp));
     setBind("member-gender-icon", String(user.gender || user.sex || "").toLowerCase().includes("female") || String(user.gender || user.sex || "").includes("女") ? "♀" : (String(user.gender || user.sex || "").toLowerCase().includes("male") || String(user.gender || user.sex || "").includes("男") ? "♂" : "◇"));
-    setBind("member-profile-tip", "登入後可編輯性別圖示、簡介與成就展示");
+    setBind("member-profile-tip", "會員個人中心");
     setBind("coin", money(user.coin || user.short_coin || 0));
     setBind("vip-total", money(user.vip_total_recharge_coin || user.vip_total_recharge || 0));
     setBind("normal-total", "普通累計儲值：" + money(user.normal_total_recharge_coin || user.normal_total_recharge || 0));
@@ -369,6 +369,13 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     }));
   }
 
+  function normalizeCompanionCategories(c){
+    const raw = Array.isArray(c?.categories) ? c.categories : (c?.categories || c?.companion_categories || c?.category || c?.role || c?.type || "名將陪玩");
+    const list = Array.isArray(raw) ? raw : String(raw || "").split(/[、,，|/]/);
+    const cleaned = list.map(x => String(x || "").trim()).filter(Boolean);
+    return cleaned.length ? cleaned : ["名將陪玩"];
+  }
+
   function renderMarketItems(){
     const host = $("[data-list='market-items']");
     if(!host) return;
@@ -385,7 +392,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
       return;
     }
     host.innerHTML = list.map(item => `
-      <article class="product-card" data-market-scope="${escapeHtml(item.scope)}" data-category="${escapeHtml(item.category)}" data-name="${escapeHtml(item.name)}" data-id="${escapeHtml(item.id)}">
+      <article class="product-card" data-market-scope="${escapeHtml(item.scope)}" data-category="${escapeHtml(item.category)}" data-name="${escapeHtml(item.name)}" data-image-url="${escapeHtml(item.image_url)}" data-id="${escapeHtml(item.id)}">
         <div class="product-art">
           <div class="product-tag">${escapeHtml(item.category || "商品")}</div>
           ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="product-symbol">禮</div>`}
@@ -419,12 +426,14 @@ window.__dreamAuthSafe.isLoggedIn = function(){
         renderMarketItems();
         window.applyDreamMarketFilter?.();
       }else{
-        host.innerHTML = fallbackHtml;
+        state.shopItems = [];
+        host.innerHTML = `<div class="empty-card">目前沒有後台上架商品</div>`;
         window.applyDreamMarketFilter?.();
       }
     }catch(err){
       console.warn("[shop_list]", err.message);
-      host.innerHTML = fallbackHtml;
+      state.shopItems = [];
+      host.innerHTML = `<div class="empty-card">商品資料連線失敗，請稍後再試</div>`;
       window.applyDreamMarketFilter?.();
     }
   }
@@ -442,13 +451,17 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     try{
       const res = await api("companion_front_list");
       const items = res.items || res.companions || res.data || [];
-      if(!Array.isArray(items) || !items.length) return;
+      if(!Array.isArray(items) || !items.length){
+        host.innerHTML = `<div class="empty-card">目前沒有陪玩資料</div>`;
+        return;
+      }
       host.innerHTML = items.map((c, idx)=>{
         const name = c.display_name || c.name || c.username || "陪玩";
-        const role = c.category || c.role || c.type || "名將陪玩";
+        const categories = normalizeCompanionCategories(c);
+        const role = categories[0] || "名將陪玩";
         const avatar = normalizeImage(c.avatar_url || c.avatar || "");
         return `
-          <article class="companion-card" data-role="${escapeHtml(role)}" data-name="${escapeHtml(name)}" data-tags="${escapeHtml(c.status || "")}">
+          <article class="companion-card" data-role="${escapeHtml(role)}" data-categories="${escapeHtml(categories.join("|"))}" data-name="${escapeHtml(name)}" data-avatar-url="${escapeHtml(avatar)}" data-tags="${escapeHtml(c.status || "")}">
             <div class="art-panel theme-${["a","b","c","d","e","f","g","h"][idx % 8]}">
               ${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="avatar-mark">${escapeHtml(name.slice(0,1))}</div>`}
             </div>
@@ -895,6 +908,12 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(src.startsWith("/")) return UPLOAD_BASE.replace(/\/$/,"") + src;
     return UPLOAD_BASE.replace(/\/$/,"") + "/" + src.replace(/^\//,"");
   }
+  function companionCategories(c){
+    const raw = Array.isArray(c?.categories) ? c.categories : (c?.categories || c?.companion_categories || c?.category || c?.role || c?.type || "名將陪玩");
+    const list = Array.isArray(raw) ? raw : String(raw || "").split(/[、,，|/]/);
+    const cleaned = list.map(x => String(x || "").trim()).filter(Boolean);
+    return cleaned.length ? cleaned : ["名將陪玩"];
+  }
   function toast(msg){
     let el = $("#v45Toast");
     if(!el){
@@ -1007,7 +1026,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     $all("[data-bind='vip-level']").forEach(el=>el.textContent = vipLevelLabel(user, type));
     $all("[data-bind='vip-exp']").forEach(el=>el.textContent = user ? ("VIP經驗值：" + money(exp) + " / 298888") : "");
     $all("[data-bind='member-gender-icon']").forEach(el=>{ const g=String(user?.gender || user?.sex || '').toLowerCase(); el.textContent = g.includes('female') || g.includes('女') ? '♀' : (g.includes('male') || g.includes('男') ? '♂' : '◇'); });
-    $all("[data-bind='member-profile-tip']").forEach(el=>el.textContent = user ? (type === "companion" ? "陪玩個人中心" : "登入後可編輯性別圖示、簡介與成就展示") : "登入後可查看個人中心");
+    $all("[data-bind='member-profile-tip']").forEach(el=>el.textContent = user ? (type === "companion" ? "陪玩個人中心" : "會員個人中心") : "登入後可查看個人中心");
     $all("[data-bind='coin']").forEach(el=>el.textContent = money(coin));
     $all("[data-bind='limited-coin']").forEach(el=>el.textContent = money(user?.limited_coin || user?.limited_short_coin || user?.limited_balance || 0));
     $all("[data-bind='vip-total']").forEach(el=>el.textContent = money(user?.vip_total_recharge_coin || 0));
@@ -1086,14 +1105,12 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(typeof dreamIsMarketPageV378==="function" && !dreamIsMarketPageV378()) return;
     const host = $("[data-list='market-items']");
     if(!host) return;
-    const fallbackHtml = host.dataset.localFallbackHtml || host.innerHTML;
-    host.dataset.localFallbackHtml = fallbackHtml;
     let res = {};
     try{ res = await api("shop_list"); }
-    catch(err){ console.warn("[shop_list]", err.message); host.innerHTML = fallbackHtml; window.applyDreamMarketFilter?.(); return; }
+    catch(err){ console.warn("[shop_list]", err.message); host.innerHTML = `<div class="empty-card">商品資料連線失敗，請稍後再試</div>`; window.applyDreamMarketFilter?.(); return; }
     const items = res.items || res.shop_items || res.data || [];
     if(!Array.isArray(items) || !items.length){
-      host.innerHTML = fallbackHtml;
+      host.innerHTML = `<div class="empty-card">目前沒有後台上架商品</div>`;
       window.applyDreamMarketFilter?.();
       return;
     }
@@ -1104,7 +1121,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
       const scope = item.market_scope || item.scope || item.game_scope || item.game_type || item.game || item.game_name || "";
       const price = Number(item.cost || item.coin || item.price || 0);
       const im = imgUrl(item.image_url || item.image || item.cover || "");
-      return `<article class="product-card" data-market-scope="${htmlEscape(scope)}" data-category="${htmlEscape(cat)}" data-name="${htmlEscape(name)}" data-id="${id}">
+      return `<article class="product-card" data-market-scope="${htmlEscape(scope)}" data-category="${htmlEscape(cat)}" data-name="${htmlEscape(name)}" data-image-url="${htmlEscape(im)}" data-id="${id}">
         <div class="product-art"><div class="product-tag">${htmlEscape(cat)}</div>${im ? `<img src="${htmlEscape(im)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="product-symbol">禮</div>`}</div>
         <div class="product-body"><div class="product-name">${htmlEscape(name)}</div><div class="product-meta"><span>${money(price)} 短陌</span><span>已兌 ${money(item.sold_count || 0)}</span></div><div class="product-actions"><button class="exchange-btn" type="button" data-buy-id="${id}">點擊兌換</button></div></div>
       </article>`;
@@ -1125,9 +1142,10 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
     host.innerHTML = items.map((c,idx)=>{
       const name = c.display_name || c.name || c.username || "陪玩";
-      const role = c.category || c.role || c.type || "名將陪玩";
+      const categories = companionCategories(c);
+      const role = categories[0] || "名將陪玩";
       const av = imgUrl(c.avatar_url || c.avatar || "");
-      return `<article class="companion-card" data-role="${htmlEscape(role)}" data-name="${htmlEscape(name)}"><div class="art-panel">${av ? `<img src="${htmlEscape(av)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="avatar-mark">${htmlEscape(name.slice(0,1))}</div>`}</div><div class="card-body"><div class="card-top"><div class="name-block"><h3>${htmlEscape(name)}</h3></div><button class="reserve-btn" type="button" data-companion-id="${c.id||""}">預約</button></div></div></article>`;
+      return `<article class="companion-card" data-role="${htmlEscape(role)}" data-categories="${htmlEscape(categories.join("|"))}" data-name="${htmlEscape(name)}" data-avatar-url="${htmlEscape(av)}"><div class="art-panel">${av ? `<img src="${htmlEscape(av)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="avatar-mark">${htmlEscape(name.slice(0,1))}</div>`}</div><div class="card-body"><div class="card-top"><div class="name-block"><h3>${htmlEscape(name)}</h3><span>${htmlEscape(role)}</span></div><button class="reserve-btn" type="button" data-companion-id="${c.id||""}">預約</button></div></div></article>`;
     }).join("");
   }
   async function loadRecords(){

@@ -190,16 +190,31 @@
     return role === "companion" ? "陪玩資料" : "個人資料";
   }
 
+  const PERSONALITY_TAGS = {
+    member: ["新手會員","活躍會員","收藏控","聊天派","競技派","休閒派","夜貓子","暖心支持","任務控","VIP養成"],
+    companion: ["穩定上分","氣氛帶動","耐心教學","聲音陪伴","戰術指揮","娛樂陪玩","新手友善","高配合度","深夜在線","溫柔陪聊"]
+  };
+
+  function tagOptions(role){
+    return PERSONALITY_TAGS[role === "companion" ? "companion" : "member"];
+  }
+
+  function selectedTags(profile){
+    return asArray(firstValue(profile?.personality_tags, profile?.tags, profile?.tag_list)).map(x => String(x || "").trim()).filter(Boolean);
+  }
+
   function profileEditorModeLabel(mode){
     if(mode === "name") return "編輯名稱";
     if(mode === "avatar") return "更換大頭照";
+    if(mode === "tags") return "新增個性標籤";
     return "編輯個人簡介";
   }
   function buildFocusedProfilePanel(role, profile, mode){
-    mode = mode === "name" || mode === "avatar" ? mode : "bio";
+    mode = mode === "name" || mode === "avatar" || mode === "tags" ? mode : "bio";
     const name = profileName(role, profile || {});
     const intro = firstValue(profile?.intro, profile?.bio, profile?.description, profile?.self_intro);
     const avatar = firstValue(profile?.avatar_url, profile?.avatar);
+    const selected = new Set(selectedTags(profile || {}));
     const body = mode === "name" ? `
       <label class="dream-profile-field full">
         <span>用戶名稱</span>
@@ -215,6 +230,16 @@
         </label>
       </div>
       <div class="dream-profile-editor-note">僅能上傳 JPG、PNG、WEBP 圖片，最多 5MB；不提供手填圖片網址。</div>
+    ` : mode === "tags" ? `
+      <div class="dream-profile-tag-picker-v390" role="group" aria-label="個性標籤">
+        ${tagOptions(role).map(tag => `
+          <label class="dream-profile-tag-option-v390">
+            <input type="checkbox" value="${escapeHtml(tag)}" ${selected.has(tag) ? "checked" : ""}>
+            <span>${escapeHtml(tag)}</span>
+          </label>
+        `).join("")}
+      </div>
+      <div class="dream-profile-editor-note">可複選適合你的公開個性標籤，會員與陪玩會使用各自不同的標籤列表。</div>
     ` : `
       <label class="dream-profile-field full">
         <span>個人簡介</span>
@@ -306,7 +331,12 @@
       .dream-profile-avatar-editor-v390{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
       .dream-profile-file-v390 input{position:absolute;opacity:0;pointer-events:none}
       .dream-profile-file-v390 span{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:14px;background:linear-gradient(180deg,#ffe1ef,#ff9bc8);color:#682342;font-weight:950;cursor:pointer}
+      .dream-profile-tag-picker-v390{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+      .dream-profile-tag-option-v390{min-height:42px;display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:14px;border:1px solid rgba(255,221,235,.22);background:rgba(255,255,255,.08);font-size:13px;font-weight:900;color:#fff2f7;cursor:pointer}
+      .dream-profile-tag-option-v390 input{width:16px;height:16px;accent-color:#ff9bc8}
+      .dream-profile-tag-option-v390:has(input:checked){border-color:rgba(255,221,235,.58);background:rgba(255,155,200,.20)}
       @media(max-width:680px){.dream-profile-grid-v388{grid-template-columns:1fr}.dream-profile-form-v388{grid-template-columns:1fr}.dream-profile-avatar-v388{width:96px;height:96px}}
+      @media(max-width:520px){.dream-profile-tag-picker-v390{grid-template-columns:1fr}}
     `;
     document.head.appendChild(st);
   }
@@ -360,6 +390,16 @@
         btn.textContent = "\u7de8\u8f2f\u500b\u4eba\u7c21\u4ecb";
         menu.insertBefore(btn, menu.firstChild);
       }
+      if(!menu.querySelector('[data-setting-action="edit-personality-tags"]')){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.settingAction = "edit-personality-tags";
+        btn.dataset.settingScope = role;
+        btn.textContent = "\u500b\u6027\u6a19\u7c64";
+        const anchor = menu.querySelector('[data-setting-action="edit-bio-achievements"],[data-setting-action="change-gender"]');
+        if(anchor) anchor.insertAdjacentElement("afterend", btn);
+        else menu.appendChild(btn);
+      }
       menu.querySelectorAll("[data-setting-scope]").forEach(btn=>{ btn.dataset.settingScope = role; });
     });
   }
@@ -411,7 +451,7 @@
     setProfileBind(pageEl, "recommend", numberText(recommend, 0));
     setProfileBind(pageEl, "orders", numberText(orders, 0));
     setProfileBind(pageEl, "bio", intro);
-    setProfileBind(pageEl, "tags", listHtml(firstValue(profile.tags, profile.tag_list, profile.personality_tags), "profile-tag", isCompanion ? "\u966a\u73a9" : "\u6703\u54e1"), true);
+    setProfileBind(pageEl, "tags", listHtml(firstValue(profile.personality_tags, profile.tags, profile.tag_list), "profile-tag", isCompanion ? "\u966a\u73a9" : "\u6703\u54e1"), true);
     setProfileBind(pageEl, "games", listHtml(firstValue(profile.games, profile.game_list, profile.game, profile.game_name, profile.category), "game-tag", isCompanion ? "\u53ef\u9810\u7d04" : "\u81ea\u7531\u586b\u5beb"), true);
     setProfileBind(pageEl, "achievement-slots", achievementHtml(firstValue(profile.achievement_slots, profile.achievements, profile.badges, profile.badge_names)), true);
     setProfileBind(pageEl, "gift-count", "\u5df2\u9ede\u4eae 0 / 50");
@@ -426,7 +466,7 @@
   }
   function showProfileEditor(role, profile, mode){
     role = normalizeRoleValue(role) || getRole();
-    mode = mode === "name" || mode === "avatar" ? mode : "bio";
+    mode = mode === "name" || mode === "avatar" || mode === "tags" ? mode : "bio";
     ensureStyle();
     try{ localStorage.setItem("dream_active_profile_id", profileIdFor(role)); }catch(e){}
     if(page() !== "profile") go("profile");
@@ -527,9 +567,11 @@
       toast("大頭照已更新");
       return;
     }
-    const payload = {
+    const payload = mode === "tags" ? {
+      personality_tags: JSON.stringify($all("#dreamProfilePanelV388 .dream-profile-tag-option-v390 input:checked").map(input => input.value).filter(Boolean))
+    } : {
       display_name: mode === "name" ? ($("#dreamV388DisplayName")?.value || "").trim() : undefined,
-      intro: mode !== "name" ? ($("#dreamV388Intro")?.value || "").trim() : undefined
+      intro: mode === "bio" ? ($("#dreamV388Intro")?.value || "").trim() : undefined
     };
     Object.keys(payload).forEach(key=>payload[key] === undefined && delete payload[key]);
     if(mode === "name" && !payload.display_name){
@@ -556,7 +598,7 @@
     try{ localStorage.setItem("dream_persist_user", JSON.stringify(current.profile || {})); }catch(e){}
     renderProfilePage(role, current.profile || {});
     panel?.remove();
-    toast(mode === "name" ? "用戶名稱已更新" : "個人簡介已更新");
+    toast(mode === "name" ? "用戶名稱已更新" : (mode === "tags" ? "個性標籤已更新" : "個人簡介已更新"));
   }
 
   function markServiceButtons(){
@@ -594,10 +636,10 @@
       const settingAction = e.target.closest && e.target.closest("#page-profile [data-setting-action]");
       if(settingAction){
         const action = settingAction.dataset.settingAction || "";
-        if(action === "edit-profile-info" || action === "edit-name" || action === "edit-avatar"){
+        if(action === "edit-profile-info" || action === "edit-name" || action === "edit-avatar" || action === "edit-personality-tags"){
           e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
           const role = normalizeRoleValue(settingAction.dataset.settingScope) || getRole();
-          const mode = action === "edit-name" ? "name" : (action === "edit-avatar" ? "avatar" : "bio");
+          const mode = action === "edit-name" ? "name" : (action === "edit-avatar" ? "avatar" : (action === "edit-personality-tags" ? "tags" : "bio"));
           document.querySelectorAll("[data-setting-menu]").forEach(menu=>menu.classList.remove("open"));
           openProfile(role, {editor:true, action:mode});
           return false;
