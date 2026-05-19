@@ -452,7 +452,6 @@
     setProfileBind(pageEl, "orders", numberText(orders, 0));
     setProfileBind(pageEl, "bio", intro);
     setProfileBind(pageEl, "tags", listHtml(firstValue(profile.personality_tags, profile.tags, profile.tag_list), "profile-tag", isCompanion ? "\u966a\u73a9" : "\u6703\u54e1"), true);
-    setProfileBind(pageEl, "games", listHtml(firstValue(profile.games, profile.game_list, profile.game, profile.game_name, profile.category), "game-tag", isCompanion ? "\u53ef\u9810\u7d04" : "\u81ea\u7531\u586b\u5beb"), true);
     setProfileBind(pageEl, "achievement-slots", achievementHtml(firstValue(profile.achievement_slots, profile.achievements, profile.badges, profile.badge_names)), true);
     setProfileBind(pageEl, "gift-count", "\u5df2\u9ede\u4eae 0 / 50");
     setProfileBind(pageEl, "posts", `<div class="companion-empty">\u5c1a\u672a\u767c\u5e03\u52d5\u614b</div>`, true);

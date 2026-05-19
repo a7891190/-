@@ -1155,7 +1155,7 @@ img, video, canvas, svg{
 .mini-gear{width:31px;height:31px;border-radius:50%;border:1px solid rgba(255,220,235,.45);background:rgba(255,255,255,.08);color:#ffe7ef}
 .profile-bio{min-height:52px;line-height:1.7;color:rgba(255,245,248,.9);margin:12px 0 18px}
 .profile-subtitle{font-size:20px;margin:15px 0 10px}
-.tag-list,.game-list{display:flex;flex-wrap:wrap;gap:8px}
+.tag-list{display:flex;flex-wrap:wrap;gap:8px}
 .profile-tag,.game-tag{padding:7px 13px;border-radius:999px;background:#ffd6e5;color:#9a3c65;font-weight:800;border:1px solid rgba(255,255,255,.35)}
 .game-tag{background:rgba(255,255,255,.09);color:#ffe4ee}
 .gift-count{font-size:18px;color:#ffeaf1}
@@ -6039,8 +6039,6 @@ main.app{padding-bottom:0 !important;}
         <div class="profile-effect-controls" data-profile-bind="profile-effect-controls"></div>
         <h3 class="profile-subtitle">個性標籤</h3>
         <div class="tag-list" data-profile-bind="tags"></div>
-        <h3 class="profile-subtitle">遊戲類別</h3>
-        <div class="game-list" data-profile-bind="games"></div>
       </section>
   
       <section class="panel profile-guardian-panel" aria-label="專屬守護榜">
@@ -8108,7 +8106,6 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     const sampleLevel = role === 'companion' ? '等級：Lv1 高評陪玩' : 'VIP等級：無VIP會員';
     const sampleBio = role === 'companion' ? '擅長陪玩、娛樂單與穩定接單，會依照需求提供舒適的陪伴體驗。' : '這位會員還沒有填寫個人簡介。';
     const sampleTags = role === 'companion' ? ['陪玩人員','天策(魔王)','溫柔耐心'] : ['無VIP會員','佛系娛樂','守時不鴿'];
-    const sampleGame = role === 'companion' ? '三角洲行動' : '三角洲行動';
     const realLayer = buildProfileFxLayer(presetKey, tier, '', effectConfig);
     const previewRootLayer = buildProfileFxLayer(presetKey, tier, "page-fullscreen-pfx", effectConfig);
     const slots = ['初入樂園','資料達人','VIP 啟程','按讚之交','收藏愛好者'];
@@ -8116,7 +8113,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     const tagHtml = sampleTags.map(x=>`<span class="profile-tag">${esc(x)}</span>`).join('');
     if(stage) stage.innerHTML = `<div class="achievement-profile-real-preview profile-effect-frame role-${esc(role)} pfx-profile-active pfx-${esc(presetKey)} pfx-tier-${esc(tier)} family-${esc(particles.family)} ${esc(styleKey)} ${esc(effectClass)} ${esc(templateClass)}" style="${esc(inlineStyle)}">${previewRootLayer}
       <section class="profile-hero">${buildProfileFxLayer(presetKey, tier, "panel-overlay-pfx", effectConfig)}<button class="back-btn profile-back" type="button">‹</button><h1>${esc(sampleTitle)}</h1><div class="profile-top"><div class="profile-avatar-lg">${esc(avatarText)}</div><div class="profile-head-info"><div class="profile-name-row"><h2>${esc(sampleName)}</h2><span class="gender-icon">${role === 'companion' ? '♀' : ''}</span></div><div class="rating-line"><span>評分：</span><b>${esc(sampleRating)}</b><span class="stars-view">${esc(sampleStars)}</span><button class="review-arrow" type="button">›</button></div><div class="review-help">點擊星星右側箭頭，可查看此人完成訂單後收到的公開評價。</div><div class="profile-level">${esc(sampleLevel)}</div></div></div><div class="profile-stat-row"><span class="status-pill">${esc(sampleStatus)}</span><span><i class="profile-stat-icon like" aria-hidden="true"></i><b>${esc(sampleRecommend)}</b> 人推薦</span><span><i class="profile-stat-icon order" aria-hidden="true"></i><b>${esc(sampleOrders)}</b> 單</span></div></section>
-      <section class="panel profile-info-panel">${buildProfileFxLayer(presetKey, tier, "panel-overlay-pfx", effectConfig)}<div class="section-title inline-title profile-info-setting-wrap"><h2>個人簡介</h2><button class="mini-gear" type="button">⚙</button></div><p class="profile-bio">${esc(sampleBio)}</p><div class="profile-achievement-showcase"><div class="profile-achievement-head"><h3>成就展示</h3><span class="gift-count">最多展示 5 個</span></div><div class="profile-achievement-slots">${slotsHtml}</div></div><h3 class="profile-subtitle">個性標籤</h3><div class="tag-list">${tagHtml}</div><h3 class="profile-subtitle">遊戲類別</h3><div class="game-list"><span class="game-tag">${esc(sampleGame)}</span></div><div class="profile-preview-real-note">這裡使用正式主頁的版型預覽，所以會和實際會員主頁 / 陪玩主頁顯示效果一致；套用後同樣出現在主頁背景、頭像、名稱與卡片邊框。</div></section>
+      <section class="panel profile-info-panel">${buildProfileFxLayer(presetKey, tier, "panel-overlay-pfx", effectConfig)}<div class="section-title inline-title profile-info-setting-wrap"><h2>個人簡介</h2><button class="mini-gear" type="button">⚙</button></div><p class="profile-bio">${esc(sampleBio)}</p><div class="profile-achievement-showcase"><div class="profile-achievement-head"><h3>成就展示</h3><span class="gift-count">最多展示 5 個</span></div><div class="profile-achievement-slots">${slotsHtml}</div></div><h3 class="profile-subtitle">個性標籤</h3><div class="tag-list">${tagHtml}</div><div class="profile-preview-real-note">這裡使用正式主頁的版型預覽，所以會和實際會員主頁 / 陪玩主頁顯示效果一致；套用後同樣出現在主頁背景、頭像、名稱與卡片邊框。</div></section>
     </div>`;
     if(caption) caption.innerHTML = `<div class="achievement-profile-effect-caption-main"><b>${esc(name)}</b><span class="pfx-pill">${esc(effectConfig.profileEffectThemeName)}</span><span class="pfx-pill tier">${esc(profileEffectTierLabel(tier))}</span><span class="pfx-pill role">${esc(profileEffectRoleLabel(allowedRole))}</span><span class="pfx-pill">${esc(profileEffectAccessNote(allowedRole))}</span><span class="pfx-pill">主頁動態光效｜永久解鎖</span><span class="pfx-pill">${unlocked ? '已解鎖可套用' : '未解鎖僅預覽'}</span></div><div class="achievement-profile-effect-caption-text">${esc(desc)}</div><div class="achievement-profile-effect-actions"><button type="button" class="achievement-profile-effect-action" data-profile-effect-apply ${unlocked ? '' : 'disabled'}>${unlocked ? '套用此光效' : '尚未解鎖'}</button><button type="button" class="achievement-profile-effect-action secondary" data-profile-effect-clear>取消目前光效</button></div>`;
   }
