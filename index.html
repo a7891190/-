@@ -8452,6 +8452,59 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
+<script id="v392-public-profile-reviews">
+(function(){
+  const API_URL = window.DREAM_COMPANION_API_URL || "https://api.131rwjuh.com/api.php";
+  function esc(str){return String(str ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
+  function stars(n){n=Math.max(0,Math.min(5,Number(n||0)));let out="";for(let i=1;i<=5;i++)out+=i<=Math.round(n)?"★":"☆";return out;}
+  async function api(action, extra={}){
+    const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({action,...extra})});
+    let data;try{data=await res.json();}catch(_){data={ok:false,message:"API 回傳格式不是 JSON"};}
+    if(!res.ok && data && !data.message)data.message=`HTTP ${res.status}`;
+    return data||{ok:false,message:"API 無回應"};
+  }
+  function activeProfile(){
+    const page=document.getElementById("page-profile");
+    const raw=localStorage.getItem("dream_persist_user")||"{}";
+    let user={};try{user=JSON.parse(raw)||{};}catch(_){}
+    const auth=window.__dreamFrontAuth?.user||{};
+    const role=(page?.dataset.profileRole||user.role||auth.role||window.__dreamFrontAuth?.role||"").toLowerCase().includes("companion")?"companion":"member";
+    const id=Number(page?.dataset.profileId||user.id||user.user_id||user.companion_id||user.member_id||auth.id||auth.user_id||auth.companion_id||auth.member_id||0);
+    const name=(document.querySelector("#page-profile [data-profile-bind='name']")?.textContent||user.display_name||user.username||auth.display_name||auth.username||"此人").trim();
+    return {role,id,name};
+  }
+  function ensureModal(){
+    let m=document.querySelector("[data-public-review-modal]");
+    if(m)return m;
+    m=document.createElement("div");
+    m.className="profile-modal-mask";
+    m.dataset.publicReviewModal="1";
+    m.innerHTML='<div class="profile-modal" role="dialog" aria-modal="true" aria-label="公開評價"><h3 data-public-review-title>公開評價</h3><div class="review-list" data-public-review-list><div class="companion-empty">正在載入公開評價...</div></div><div class="modal-actions"><button class="ghost" type="button" data-public-review-close>關閉</button></div></div>';
+    document.body.appendChild(m);
+    m.addEventListener("click",e=>{if(e.target===m||e.target.closest("[data-public-review-close]"))m.classList.remove("show");});
+    return m;
+  }
+  function render(list, rows){
+    if(!rows.length){list.innerHTML='<div class="companion-empty">目前尚無公開評價</div>';return;}
+    list.innerHTML=rows.map(r=>`<article class="review-card"><div class="review-card-title"><span class="review-stars">${stars(r.rating)}</span> ${esc(r.product_name||"完成訂單評價")}</div><div class="review-meta">評價者：${esc(r.reviewer_name||"匿名")}｜${esc(r.created_at||"")}</div>${r.comment?`<div class="review-comment">${esc(r.comment)}</div>`:""}</article>`).join("");
+  }
+  async function openReviews(){
+    const info=activeProfile();
+    const m=ensureModal();
+    const title=m.querySelector("[data-public-review-title]");
+    const list=m.querySelector("[data-public-review-list]");
+    if(title)title.textContent=`${info.name} 的公開評價`;
+    if(list)list.innerHTML='<div class="companion-empty">正在載入公開評價...</div>';
+    m.classList.add("show");
+    if(!info.id){if(list)list.innerHTML='<div class="companion-empty">找不到此主頁的正式 ID，請重新登入後再查看。</div>';return;}
+    const r=await api("profile_public_reviews",{target_type:info.role,target_id:info.id,limit:50});
+    if(!r.ok){if(list)list.innerHTML=`<div class="companion-empty">${esc(r.message||"公開評價載入失敗")}</div>`;return;}
+    render(list,r.reviews||r.records||[]);
+  }
+  document.addEventListener("click",e=>{const btn=e.target.closest("#page-profile [data-action='open-profile-reviews'],#page-profile .review-arrow");if(!btn)return;e.preventDefault();e.stopPropagation();openReviews();},true);
+})();
+</script>
+
 <script>
 /* v74 前台連接陪玩後台 API：只動前台，不需要替換後台檔案 */
 (function(){
