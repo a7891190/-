@@ -12097,6 +12097,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const name=(card?.dataset?.name||card?.querySelector('h3')?.textContent||'夢競陪玩').trim();
     const role=(card?.dataset?.role||card?.querySelector('.meta-row span:last-child')?.textContent||'陪玩').trim();
     const avatarUrl=(card?.dataset?.avatarUrl||card?.querySelector('.art-panel img')?.getAttribute('src')||'').trim();
+    const companionId=(card?.dataset?.companionId||card?.querySelector('[data-companion-id]')?.dataset?.companionId||'').trim();
     const mark=(name||'陪').slice(0,1);
     document.querySelector('[data-companion-booking-name]')&&(document.querySelector('[data-companion-booking-name]').textContent=name);
     document.querySelector('[data-companion-booking-role]')&&(document.querySelector('[data-companion-booking-role]').textContent=role);
@@ -12119,6 +12120,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
     document.querySelector('[data-companion-booking-submit]')?.setAttribute('data-companion-name',name);
+    document.querySelector('[data-companion-booking-submit]')?.setAttribute('data-companion-id',companionId);
     setCompanionServicesV250(name);
     setDreamQty('companion', 1);
     updateCompanionBookingTotal();
@@ -12135,9 +12137,20 @@ window.addEventListener('DOMContentLoaded', () => {
       const unitPrice=getCompanionUnitPriceV250();
       const quantity=getDreamQty('companion');
       const serviceName=getCompanionServiceNameV250() || get('serviceItem');
-      const order=saveCompanionBookingOrder({type:'companion_booking',productName:`陪玩預約｜${submit.dataset.companionName||'夢競陪玩'}`,companionName:submit.dataset.companionName||'',serviceId:get('serviceItem'),serviceItem:serviceName,server:get('server'),gameName:get('gameName'),reserveTime:get('reserveTime'),note:get('note'),quantity,unitPrice,total:unitPrice*quantity,totalPrice:unitPrice*quantity});
-      toast?.('已送出預約，後台可進行派單處理');
-      if(typeof showPage==='function') showPage('exchange-record');
+      submit.disabled=true;
+      (async()=>{
+        try{
+          const apiUrl=(window.DREAM_COMPANION_API_URL||window.DREAM_CONFIG?.API_BASE||'https://api.131rwjuh.com/api.php');
+          const res=await fetch(apiUrl,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'companion_booking_create',companion_id:Number(submit.dataset.companionId||0),companion_name:submit.dataset.companionName||'',service_id:get('serviceItem'),service_name:serviceName,server_name:get('server'),game_name:get('gameName'),role_name:get('gameName'),reserve_time:get('reserveTime'),note:get('note'),quantity,unit_price:unitPrice,total_cost:unitPrice*quantity})}).then(r=>r.json());
+          toast?.(res.message||(res.ok?'預約已送出':'預約送出失敗'));
+          if(res.ok){
+            try{localStorage.removeItem(companionStoreKey);localStorage.removeItem('dream_exchange_orders');localStorage.removeItem('dream_exchange_orders_v245');}catch(_){}
+            if(typeof window.refreshSession==='function') window.refreshSession();
+            if(typeof showPage==='function') showPage('exchange-record');
+          }
+        }catch(err){toast?.(err.message||'預約送出失敗');}
+        finally{submit.disabled=false;}
+      })();
       return;
     }
   },true);
@@ -12170,6 +12183,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   document.addEventListener('click',e=>{
     const action=e.target.closest('[data-setting-action]')?.dataset?.settingAction;
+    if(window.__dreamFormalProfileSettingsV392 && ['change-profile-effect','change-avatar-frame','edit-bio-achievements','edit-achievement-badges','change-title'].includes(action)) return;
     if(action==='change-profile-effect'){e.preventDefault();e.stopPropagation();openProfileEffectManager();return;}
     if(action==='change-avatar-frame'){e.preventDefault();e.stopPropagation();openAvatarFrameManager();return;}
     const effect=e.target.closest('[data-v248-apply-effect]');
@@ -16834,9 +16848,10 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     const card = btn.closest(".gift-card");
     if(!card || card.classList.contains("locked")) return;
     e.preventDefault();
-    const receiverType = prompt("收禮者類型請輸入 member 或 companion", "companion");
+    const presetReceiver = window.__dreamGiftReceiverV394 || null;
+    const receiverType = presetReceiver?.type || prompt("收禮者類型請輸入 member 或 companion", "companion");
     if(!receiverType) return;
-    const receiverId = prompt("請輸入收禮者ID");
+    const receiverId = presetReceiver?.id || prompt("請輸入收禮者ID");
     if(!receiverId) return;
     api("gift_send",{
       receiver_type:receiverType,
@@ -16892,6 +16907,156 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   window.addEventListener("hashchange",()=>setTimeout(boot,100));
   window.addEventListener("dream-auth-updated",()=>setTimeout(boot,120));
   setInterval(()=>{cleanupMenus();enhanceGiftCards();applyDefaultListAvatars();},2000);
+})();
+</script>
+
+<script id="v394-formal-linkage-fix-js">
+(function(){
+  if(window.__dreamFormalLinkageV394) return;
+  window.__dreamFormalLinkageV394 = true;
+  const API_BASE=()=>{try{return (window.DREAM_CONFIG&&window.DREAM_CONFIG.API_BASE)||window.DREAM_COMPANION_API_URL||"https://api.131rwjuh.com/api.php";}catch(_){return "https://api.131rwjuh.com/api.php";}};
+  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  const toast=msg=>{try{if(typeof window.toast==="function")return window.toast(msg);}catch(_){} try{if(typeof window.toast2==="function")return window.toast2(msg);}catch(_){}};
+  async function api(action,payload){
+    const res=await fetch(API_BASE(),{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({action},payload||{}))});
+    const text=await res.text();let data;try{data=JSON.parse(text||"{}");}catch(_){data={ok:false,message:text.slice(0,160)};}
+    if(!res.ok&&data.ok!==true){data.ok=false;data.status=res.status;}
+    return data;
+  }
+  function clearLegacyLocalOrders(){
+    ["dream_exchange_orders","dream_exchange_orders_v245","dream_companion_exchange_orders_v250","dream_achievement_reward_inventory","dream_raffle_tickets"].forEach(k=>{try{localStorage.removeItem(k);}catch(_){}});
+  }
+  async function syncRankBoards(force){
+    try{
+      const data=await api("front_ranking_snapshot",{force:!!force});
+      if(data&&data.ok){
+        const boards=data.boards||{};
+        window.DREAM_RANK_BOARDS=boards;
+        if(typeof window.DREAM_SET_RANK_BOARDS==="function") window.DREAM_SET_RANK_BOARDS(boards);
+        if(window.DreamCleanFormalV369&&typeof window.DreamCleanFormalV369.loadRanking==="function") window.DreamCleanFormalV369.loadRanking(true);
+      }
+    }catch(e){console.warn("[v394 rankings]",e.message||e);}
+  }
+  function orderStatusText(status){
+    return ({waiting_dispatch:"等待後台派單",dispatching:"派單中",in_progress:"進行中",completed:"已完成",returned_to_member:"已退回",cancelled:"已取消"})[status]||status||"已送出";
+  }
+  async function renderFormalExchangeRecords(){
+    const host=document.querySelector("#page-exchange-record .list,[data-exchange-record-list]");
+    if(!host) return;
+    host.innerHTML='<div class="companion-empty">正在載入正式訂單...</div>';
+    try{
+      const res=await api("formal_order_history",{});
+      const rows=res.records||res.orders||[];
+      if(!res.ok) throw new Error(res.message||"訂單載入失敗");
+      host.innerHTML=rows.length?rows.map(r=>`<article class="exchange-record-card"><div class="exchange-record-top"><div><div class="exchange-record-title">${esc(r.name||"正式訂單")}</div><div class="exchange-record-sub">${esc(r.created_at||"")}｜${esc(r.game_name||"")} ${esc(r.server_name||"")}｜預約 ${esc(r.reserve_time||"-")}</div></div><div class="exchange-record-price">${Number(r.cost||0)} 短陌</div></div><div class="exchange-record-sub"><span class="exchange-status-pill">${esc(orderStatusText(r.companion_order_status))}</span> ${Number(r.accepted_count||0)}/${Number(r.required_companions||0)} 人接單</div></article>`).join(""):'<div class="companion-empty">目前尚無正式訂單紀錄</div>';
+    }catch(e){host.innerHTML=`<div class="companion-empty">${esc(e.message||"正式訂單載入失敗")}</div>`;}
+  }
+  window.renderDreamExchangeRecords=renderFormalExchangeRecords;
+  function stars(n){n=Math.max(0,Math.min(5,Math.round(Number(n||0))));return Array.from({length:5},(_,i)=>i<n?"★":"☆").join("");}
+  function mediaUrl(value){
+    const raw=String(value||"").trim();
+    if(!raw||/^data:|^https?:\/\//i.test(raw)) return raw;
+    try{return new URL(raw.replace(/^\/+/,""),new URL(API_BASE(),location.href).origin+"/").toString();}catch(_){return raw;}
+  }
+  function setBind(root,key,value,html){
+    root.querySelectorAll(`[data-profile-bind="${key}"]`).forEach(el=>{if(html)el.innerHTML=value;else el.textContent=value;});
+  }
+  function profileLevelHtml(role,p){
+    const vip=role==="member"?(p.vip_name||p.vip_title||(p.vip_level?`VIP ${p.vip_level}`:"無VIP會員")):"陪玩";
+    const activeTitle=(p.active_assets||[]).find(x=>x.slot==="title");
+    return `<div class="profile-vip-line"><b>${esc(vip)}</b></div><div class="profile-equipped-title ${activeTitle?"":"is-empty"}">${activeTitle?`稱號：${esc(activeTitle.item_name||activeTitle.item_key)}`:"尚未裝備稱號"}</div><div class="profile-value-line">魅力值 ${Number(p.charm_value||0)}｜守護值 ${Number(p.guardian_value||0)}</div>`;
+  }
+  function listHtml(list,cls,empty){
+    let arr=Array.isArray(list)?list:String(list||"").split(/[,、|/]/).map(x=>x.trim()).filter(Boolean);
+    return arr.length?arr.map(x=>`<span class="${cls}">${esc(x)}</span>`).join(""):`<span class="${cls}">${esc(empty)}</span>`;
+  }
+  function renderPublicProfile(role,profile){
+    const page=document.getElementById("page-profile"); if(!page) return;
+    const name=profile.display_name||profile.name||profile.username||(role==="companion"?"夢競陪玩":"夢競會員");
+    const avatar=mediaUrl(profile.avatar_url||profile.avatar||"");
+    const summary=profile.review_summary||{};
+    const rating=Number(summary.avg_rating??profile.avg_rating??profile.rating??0)||0;
+    page.classList.toggle("profile-companion",role==="companion");
+    page.classList.toggle("profile-member",role!=="companion");
+    page.dataset.profileRole=role;
+    page.dataset.profileId=String(profile.id||profile.user_id||profile.companion_id||profile.member_id||"");
+    page.dataset.publicProfile="1";
+    setBind(page,"title",role==="companion"?"陪玩主頁":"會員主頁");
+    setBind(page,"avatar",avatar?`<img src="${esc(avatar)}" alt="${esc(name)}" loading="lazy">`:esc(name.slice(0,1)),true);
+    setBind(page,"name",name);
+    setBind(page,"gender",profile.gender||"");
+    setBind(page,"rating",rating.toFixed(1));
+    setBind(page,"stars",stars(rating),true);
+    setBind(page,"level",profileLevelHtml(role,profile),true);
+    setBind(page,"status",profile.work_status||profile.status||(role==="companion"?"在線":"會員"));
+    setBind(page,"recommend",String(profile.recommend_count||profile.recommend||0));
+    setBind(page,"orders",String(profile.total_completed_orders||profile.total_order_count||profile.orders||0));
+    setBind(page,"bio",profile.intro||profile.bio||profile.description||"這位用戶尚未填寫個人簡介。");
+    setBind(page,"tags",listHtml(profile.personality_tags||profile.tags,"profile-tag",role==="companion"?"陪玩":"會員"),true);
+    const badge=(profile.active_assets||[]).find(x=>x.slot==="badge");
+    setBind(page,"achievement-slots",badge?`<span>${esc(badge.item_name||badge.item_key)}</span>`:'<span>尚未展示徽章</span>',true);
+    const gifts=profile.gift_wall||[];
+    setBind(page,"gift-count",`已收到 ${gifts.length} 種禮物`);
+    setBind(page,"gift-wall",gifts.length?gifts.slice(0,12).map(g=>`<span class="profile-gift-dot" title="${esc(g.gift_name||"禮物")}">${g.gift_image_url?`<img src="${esc(mediaUrl(g.gift_image_url))}" alt="${esc(g.gift_name||"禮物")}">`:esc(String(g.gift_name||"禮").slice(0,1))}</span>`).join(""):'<div class="companion-empty">尚未收到禮物</div>',true);
+    page.querySelectorAll("[data-setting-toggle],.profile-info-setting-menu").forEach(el=>{el.style.display="none";});
+    page.querySelectorAll(".profile-back,#page-profile [data-profile-back]").forEach(back=>back.dataset.go=role==="companion"?"companion":"member");
+    window.__dreamGiftReceiverV394={type:role,id:Number(page.dataset.profileId||0),name};
+    if(typeof window.showPage==="function") window.showPage("profile"); else location.hash="#profile";
+  }
+  async function openPublicProfile(role,id){
+    id=Number(id||0); if(!id) return;
+    const res=await api("public_profile",{target_type:role,target_id:id});
+    if(!res.ok) return toast(res.message||"主頁載入失敗");
+    renderPublicProfile(role,res.profile||res.user||res.data||{});
+  }
+  window.openDreamPublicProfileV394=openPublicProfile;
+  function ensureProfileGiftButton(){
+    const bar=document.querySelector("#page-profile .profile-bottom-actions"); if(!bar||bar.querySelector('[data-action="gift-profile"]')) return;
+    const btn=document.createElement("button");btn.type="button";btn.dataset.action="gift-profile";btn.className="gift-main";btn.innerHTML="<span>送禮</span>";
+    const before=bar.querySelector('[data-action="service-order"]'); if(before)bar.insertBefore(btn,before); else bar.appendChild(btn);
+  }
+  function updateGiftHint(){
+    const t=window.__dreamGiftReceiverV394;
+    document.querySelectorAll("#page-gift [data-gift-hint]").forEach(el=>{if(t&&t.id)el.innerHTML=`目前送禮對象：<strong>${esc(t.name||"用戶")}</strong>`;});
+  }
+  function openBookingFromProfile(){
+    const page=document.getElementById("page-profile"); if(!page||page.dataset.profileRole!=="companion") return;
+    const id=page.dataset.profileId||"";
+    const name=page.querySelector('[data-profile-bind="name"]')?.textContent?.trim()||"夢競陪玩";
+    const avatar=page.querySelector('[data-profile-bind="avatar"] img')?.getAttribute("src")||"";
+    document.querySelector('[data-companion-booking-name]')&&(document.querySelector('[data-companion-booking-name]').textContent=name);
+    document.querySelector('[data-companion-booking-role]')&&(document.querySelector('[data-companion-booking-role]').textContent="陪玩預約");
+    document.querySelector('[data-companion-booking-avatar]')&&(document.querySelector('[data-companion-booking-avatar]').textContent=name.slice(0,1)||"陪");
+    const submit=document.querySelector('[data-companion-booking-submit]');
+    if(submit){submit.dataset.companionName=name;submit.dataset.companionId=id;}
+    const photo=document.querySelector('[data-companion-booking-photo]');
+    if(photo&&avatar){photo.innerHTML=`<img data-companion-booking-image="1" src="${esc(avatar)}" alt="${esc(name)}"><div class="avatar-mark" data-companion-booking-avatar>${esc(name.slice(0,1)||"陪")}</div>`;photo.classList.add("has-photo");}
+    try{window.updateCompanionBookingTotal?.();}catch(_){}
+    if(typeof window.showPage==="function") window.showPage("companion-booking"); else location.hash="#companion-booking";
+  }
+  document.addEventListener("click",function(e){
+    const gift=e.target.closest&&e.target.closest('#page-profile [data-action="gift-profile"]');
+    if(gift){e.preventDefault();const page=document.getElementById("page-profile");const role=page?.dataset.profileRole||"member";const id=Number(page?.dataset.profileId||0);const name=page?.querySelector('[data-profile-bind="name"]')?.textContent?.trim()||"用戶";window.__dreamGiftReceiverV394={type:role,id,name};if(typeof window.showPage==="function")window.showPage("gift");else location.hash="#gift";setTimeout(updateGiftHint,60);return;}
+    const reserve=e.target.closest&&e.target.closest('#page-profile [data-action="reserve-profile"]');
+    if(reserve){const page=document.getElementById("page-profile");if(page?.dataset.profileRole==="companion"){e.preventDefault();openBookingFromProfile();return;}}
+    const rec=e.target.closest&&e.target.closest("[data-open-recommend-profile]");
+    if(rec){e.preventDefault();e.stopPropagation();openPublicProfile("companion",rec.dataset.openRecommendProfile);return;}
+    const card=e.target.closest&&e.target.closest("#page-companion .companion-card");
+    if(card&&!e.target.closest(".reserve-btn,[data-companion-booking-open]")){
+      const id=card.dataset.companionId||card.querySelector("[data-companion-id]")?.dataset.companionId||"";
+      if(id){e.preventDefault();openPublicProfile("companion",id);return;}
+    }
+  },true);
+  function boot(){
+    clearLegacyLocalOrders();
+    ensureProfileGiftButton();
+    updateGiftHint();
+    syncRankBoards(false);
+    if((location.hash||"").includes("exchange-record")) renderFormalExchangeRecords();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(boot,80));else setTimeout(boot,80);
+  window.addEventListener("hashchange",()=>setTimeout(boot,100));
+  window.addEventListener("dream-auth-updated",()=>setTimeout(boot,120));
 })();
 </script>
 

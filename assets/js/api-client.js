@@ -461,7 +461,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
         const role = categories[0] || "名將陪玩";
         const avatar = normalizeImage(c.avatar_url || c.avatar || "");
         return `
-          <article class="companion-card" data-role="${escapeHtml(role)}" data-categories="${escapeHtml(categories.join("|"))}" data-name="${escapeHtml(name)}" data-avatar-url="${escapeHtml(avatar)}" data-tags="${escapeHtml(c.status || "")}">
+          <article class="companion-card" data-companion-id="${escapeHtml(c.id || c.companion_id || "")}" data-role="${escapeHtml(role)}" data-categories="${escapeHtml(categories.join("|"))}" data-name="${escapeHtml(name)}" data-avatar-url="${escapeHtml(avatar)}" data-tags="${escapeHtml(c.status || "")}">
             <div class="art-panel theme-${["a","b","c","d","e","f","g","h"][idx % 8]}">
               ${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="avatar-mark">${escapeHtml(name.slice(0,1))}</div>`}
             </div>
@@ -484,13 +484,17 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     host.innerHTML = records.map(r => `
       <div class="row">
         <div class="badge">兌</div>
-        <div class="row-main"><div class="row-title">${escapeHtml(r.item_name || r.name || r.product_name || "兌換商品")}</div><div class="row-sub">${formatMinute(r.created_at || r.buy_time || r.created_time)}｜${escapeHtml(r.status_text || r.status || "已送出")}</div></div>
+        <div class="row-main"><div class="row-title">${escapeHtml(r.item_name || r.name || r.product_name || "兌換商品")}</div><div class="row-sub">${formatMinute(r.created_at || r.buy_time || r.created_time)}｜${escapeHtml(r.status_text || r.status || r.companion_order_status || "已送出")}</div></div>
         <div class="row-right">${money(r.cost || r.coin || r.price || 0)}短陌</div>
       </div>
     `).join("");
   }
 
   async function loadExchangeRecords(){
+    try{
+      const res = await api("formal_order_history");
+      if(res.ok) return renderRecords(res.records || res.orders || []);
+    }catch(e){}
     if(state.user?.buy_records) renderRecords(state.user.buy_records);
     else renderRecords([]);
   }
@@ -1145,7 +1149,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
       const categories = companionCategories(c);
       const role = categories[0] || "名將陪玩";
       const av = imgUrl(c.avatar_url || c.avatar || "");
-      return `<article class="companion-card" data-role="${htmlEscape(role)}" data-categories="${htmlEscape(categories.join("|"))}" data-name="${htmlEscape(name)}" data-avatar-url="${htmlEscape(av)}"><div class="art-panel">${av ? `<img src="${htmlEscape(av)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="avatar-mark">${htmlEscape(name.slice(0,1))}</div>`}</div><div class="card-body"><div class="card-top"><div class="name-block"><h3>${htmlEscape(name)}</h3><span>${htmlEscape(role)}</span></div><button class="reserve-btn" type="button" data-companion-id="${c.id||""}">預約</button></div></div></article>`;
+      return `<article class="companion-card" data-companion-id="${htmlEscape(c.id||c.companion_id||"")}" data-role="${htmlEscape(role)}" data-categories="${htmlEscape(categories.join("|"))}" data-name="${htmlEscape(name)}" data-avatar-url="${htmlEscape(av)}"><div class="art-panel">${av ? `<img src="${htmlEscape(av)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;">` : `<div class="avatar-mark">${htmlEscape(name.slice(0,1))}</div>`}</div><div class="card-body"><div class="card-top"><div class="name-block"><h3>${htmlEscape(name)}</h3><span>${htmlEscape(role)}</span></div><button class="reserve-btn" type="button" data-companion-id="${c.id||""}">預約</button></div></div></article>`;
     }).join("");
   }
   async function loadRecords(){
@@ -1171,7 +1175,12 @@ function $(sel, root=document){ return root.querySelector(sel); }
       return;
     }
 
-    const records = authUser?.buy_records || [];
+    let records = [];
+    try{
+      const formal = await api("formal_order_history");
+      if(formal.ok) records = formal.records || formal.orders || [];
+    }catch(e){}
+    if(!records.length) records = authUser?.buy_records || [];
     const host = $("#page-exchange-record .list");
     if(!host) return;
     host.innerHTML = records.length ? records.map(r=>`<div class="row"><div class="badge">兌</div><div class="row-main"><div class="row-title">${htmlEscape(r.item_name || r.name || "兌換商品")}</div><div class="row-sub">${htmlEscape(r.created_at || r.buy_time || "")}｜${htmlEscape(r.status_text || r.status || "已送出")}</div></div><div class="row-right">${money(r.cost || r.coin || 0)}短陌</div></div>`).join("") : `<div class="row"><div class="badge">兌</div><div><div class="row-title">目前沒有兌換紀錄</div><div class="row-sub">完成兌換後會顯示在這裡</div></div></div>`;

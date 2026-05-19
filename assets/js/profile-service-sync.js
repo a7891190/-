@@ -468,6 +468,8 @@
     pageEl.classList.toggle("profile-member", !isCompanion);
     pageEl.dataset.profileRole = role;
     pageEl.dataset.profileId = String(firstValue(profile.id, profile.user_id, profile.companion_id, profile.member_id, "") || "");
+    pageEl.dataset.publicProfile = "0";
+    pageEl.querySelectorAll("[data-setting-toggle],.profile-info-setting-menu").forEach(el=>{ el.style.display = ""; });
     try{
       localStorage.setItem("dream_active_profile_id", profileIdFor(role));
       localStorage.setItem("dream_persist_login_type", role);
