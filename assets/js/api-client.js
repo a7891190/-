@@ -72,10 +72,6 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     try{
       if(document.body.classList.contains("dream-authenticated") && !document.body.classList.contains("dream-guest")) return true;
     }catch(e){}
-    try{
-      const raw = localStorage.getItem("dream_persist_user") || localStorage.getItem("dream_user") || "";
-      if(raw && raw !== "null" && raw !== "{}") return true;
-    }catch(e){}
     return false;
   }
 

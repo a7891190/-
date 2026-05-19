@@ -6663,19 +6663,48 @@ function readExchangeFields(product){
 function exchangeStatusText(status){return ({pending:'已送出',dispatching:'派單處理中',shipping:'出貨中',completed:'已完成',cancelled:'已取消'}[status] || '已送出');}
 function exchangeProgressPercent(status){return ({pending:25,dispatching:55,shipping:75,completed:100,cancelled:100}[status] || 25);}
 function exchangeSteps(type){return type==='physical' ? ['已送出','處理中','出貨中','已完成'] : ['已送出','派單中','進行中','已完成'];}
-function loadLocalExchangeOrders(){try{return JSON.parse(localStorage.getItem('dream_exchange_orders_v245')||'[]')||[];}catch(_){return [];}}
-function saveLocalExchangeOrders(list){localStorage.setItem('dream_exchange_orders_v245', JSON.stringify(list||[]));}
+function loadLocalExchangeOrders(){try{localStorage.removeItem('dream_exchange_orders_v245');}catch(_){} return [];}
+function saveLocalExchangeOrders(){try{localStorage.removeItem('dream_exchange_orders_v245');}catch(_){}}
 async function submitExchangeOrder(){
   const product = currentMarketProductData || (currentMarketProductId ? DREAM_MARKET_PRODUCTS[currentMarketProductId] : null);
   if(!product) return;
   const fields = readExchangeFields(product);
   if(!fields.ok){toast?.(fields.message);return;}
-  const order = {id:'EX'+Date.now(), productId:product.id, productName:product.name, category:product.category, fulfillType:product.fulfillType, unitPrice:Number(product.price||0), quantity:getDreamQty('exchange'), price:Number(product.price||0), total:calculateProductTotal(product), totalPrice:calculateProductTotal(product), fields:fields.data, status:'pending', statusText:'已送出', progress:25, createdAt:new Date().toLocaleString('zh-TW'), needShipping:product.fulfillType==='physical'};
-  const list = [order, ...loadLocalExchangeOrders()]; saveLocalExchangeOrders(list);
-  try{fetch((window.DREAM_COMPANION_API_URL||'../backend/api.php') + '?action=create_exchange_order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)}).catch(()=>{});}catch(_){ }
-  renderExchangeRecords();
-  toast?.('已送出兌換，等待後台處理');
-  showPage('exchange-record');
+  const itemId = Number(product.id || currentMarketProductId || 0);
+  if(!Number.isFinite(itemId) || itemId <= 0){toast?.('請選擇後台上架商品');return;}
+  const noteParts = [];
+  if(fields.data.recipientName || fields.data.recipientPhone || fields.data.recipientAddress){
+    noteParts.push(`收件人：${fields.data.recipientName||'-'}`);
+    noteParts.push(`電話：${fields.data.recipientPhone||'-'}`);
+    noteParts.push(`地址：${fields.data.recipientAddress||'-'}`);
+  }
+  if(fields.data.note) noteParts.push(fields.data.note);
+  const payload = {
+    action:'buy',
+    item_id:itemId,
+    quantity:getDreamQty('exchange'),
+    game_name:fields.data.gameName || product.game || product.scope || '夢競商城',
+    server_name:fields.data.server || '-',
+    role_name:fields.data.gameName || product.name || '-',
+    role_uid:fields.data.gameName || '-',
+    reserve_time:fields.data.reserveTime || new Date().toISOString().slice(0,16),
+    assign_type:fields.data.assignOption || '不指定',
+    note:noteParts.join('\n'),
+    product_scope:product.scope || product.game || product.category || '夢競商城'
+  };
+  try{
+    const apiUrl=(window.DREAM_CONFIG&&window.DREAM_CONFIG.API_BASE)||window.DREAM_COMPANION_API_URL||'https://api.131rwjuh.com/api.php';
+    const res=await fetch(apiUrl,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(r=>r.json());
+    toast?.(res.message||(res.ok?'已送出兌換，等待後台處理':'兌換送出失敗'));
+    if(res.ok){
+      saveLocalExchangeOrders([]);
+      if(typeof window.refreshSession==='function') window.refreshSession();
+      if(typeof showPage==='function') showPage('exchange-record');
+      setTimeout(()=>window.renderDreamExchangeRecords?.(),80);
+    }
+  }catch(err){
+    toast?.(err.message||'兌換送出失敗');
+  }
 }
 
 function bindDreamQtyButtonsV250(){
@@ -6750,15 +6779,11 @@ function setMarketMode(mode){
 window.applyDreamMarketFilter = applyMarketFilter;
 function isCompanionOnlyPage(name){return ['companion-home'].includes(name);}
 function isDreamActuallyLoggedIn(){
-  return true; // v239：暫時開放所有入口可直接觀看，不強制登入
   const auth = window.__dreamFrontAuth || {};
   const user = auth.user || null;
   if(!user) return false;
   if(user.id || user.user_id || user.member_id || user.companion_id || user.username || user.account || user.display_name || user.email || user.name) return true;
-  try{
-    const persisted = JSON.parse(localStorage.getItem('dream_persist_user') || 'null');
-    return !!(persisted && (persisted.id || persisted.username || persisted.display_name || persisted.email || persisted.name));
-  }catch(_){ return false; }
+  return false;
 }
 function isDreamAdminOrTester(){
   const auth = window.__dreamFrontAuth || {};
@@ -6767,18 +6792,26 @@ function isDreamAdminOrTester(){
   return ['tester','admin','owner','developer'].some(x=>role.includes(x));
 }
 function isLoginRequiredPage(name){
-  return false; // v239：暫時開放所有入口可直接觀看
+  return ['member','companion-home','renew','review','recharge','following','favorites','exchange-record','recharge-record','backpack','achievements','checkin','raffle'].includes(name);
 }
 function showLoginRequiredView(pageName){
   sessionStorage.setItem('dream_after_login_page', pageName || 'member');
-  if(typeof toast === 'function') toast('目前已開放免登入觀看');
+  if(typeof toast === 'function') toast('請先登入後再使用此功能');
+  if(typeof showPage === 'function') showPage('login');
 }
 function requireLogin(pageName){
-  return true; // v239：暫時開放所有入口可直接觀看
+  if(!isLoginRequiredPage(pageName)) return true;
+  if(isDreamActuallyLoggedIn()) return true;
+  showLoginRequiredView(pageName);
+  return false;
 }
 function currentUserRole(){ return getDreamLoginRole(); }
 function guardPageAccess(pageName){
-  return pageName; // v239：不攔截入口，全部可觀看
+  if(isLoginRequiredPage(pageName) && !isDreamActuallyLoggedIn()){
+    sessionStorage.setItem('dream_after_login_page', pageName || 'member');
+    return 'login';
+  }
+  return pageName;
 }
 function guardDreamPageByRole(name){
   name = guardPageAccess(name);
@@ -6788,7 +6821,7 @@ function guardDreamPageByRole(name){
   if(role !== 'companion' && isCompanionOnlyPage(name)) return 'member';
   return name;
 }
-window.DreamAccessV239 = {isLoggedIn:isDreamActuallyLoggedIn, requireLogin, currentRole:currentUserRole, guardPageAccess, openViewMode:true};
+window.DreamAccessV239 = {isLoggedIn:isDreamActuallyLoggedIn, requireLogin, currentRole:currentUserRole, guardPageAccess, openViewMode:false};
 window.DreamAccessV239 = window.DreamAccessV239;
 function showPage(name, push=true){
   name = guardDreamPageByRole(name);
@@ -7839,7 +7872,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     next.updatedAt = (st && st.updatedAt) || new Date().toISOString();
     localStorage.setItem(PROFILE_EFFECT_STORE_KEY, JSON.stringify(next));
   }
-  function getAchievementInventory(){try{return JSON.parse(localStorage.getItem('dream_achievement_reward_inventory')||'{}')||{};}catch(_){return {};}}
+  function getAchievementInventory(){return {};}
   function unlockedProfileEffectKeys(){
     const inv = getAchievementInventory();
     const keys = new Set(Array.isArray(inv.profileEffects) ? inv.profileEffects : []);
@@ -8168,9 +8201,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
   function autoClaimUnlockedAchievements(items){
     const list = Array.isArray(items) ? items : [];
     let changed = false;
-    const invKey = 'dream_achievement_reward_inventory';
     let inv = {};
-    try{inv = JSON.parse(localStorage.getItem(invKey) || '{}') || {};}catch(_){inv = {};}
     inv.badges = Array.isArray(inv.badges) ? inv.badges : [];
     inv.titles = Array.isArray(inv.titles) ? inv.titles : [];
     inv.profileEffects = Array.isArray(inv.profileEffects) ? inv.profileEffects : [];
@@ -8192,7 +8223,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
       inv.claimedAchievements.push(item.id);
       changed = true;
     });
-    if(changed) localStorage.setItem(invKey, JSON.stringify(inv));
+    if(changed) {}
     return changed;
   }
   function card(item){
@@ -8349,7 +8380,11 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
   function esc(s){return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
   function load(k,f){try{return JSON.parse(localStorage.getItem(k)) ?? f}catch(e){return f}}
   function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-  function isLoggedIn(){return true} // v239：暫時開放觀看入口
+  function isLoggedIn(){
+    const auth = window.__dreamFrontAuth || {};
+    const user = auth.user || null;
+    return !!(user && (user.id || user.user_id || user.member_id || user.companion_id || user.username || user.account || user.display_name || user.email || user.name));
+  }
   function cleanVipTitle(title, code){
     return String(title || "")
       .replace("VIP等級：","")
@@ -12046,7 +12081,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click',e=>{if(e.target.closest('[data-home-search-btn]'))runHomeSearch();});
 
   window.updateDreamBackpack = function(){
-    let inv={};try{inv=JSON.parse(localStorage.getItem('dream_achievement_reward_inventory')||'{}')||{};}catch(_){inv={};}
+    const inv={};
     const n=Number(inv.raffleTickets||localStorage.getItem('dream_raffle_tickets')||0);
     document.querySelectorAll('[data-bind="raffle-ticket"]').forEach(el=>el.textContent=String(n));
     document.querySelectorAll('[data-backpack-raffle]').forEach(el=>el.textContent=`目前 ${n} 張`);
@@ -12087,11 +12122,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   window.updateCompanionBookingTotal = updateCompanionBookingTotal;
   function saveCompanionBookingOrder(data){
-    let arr=[];try{arr=JSON.parse(localStorage.getItem(companionStoreKey)||'[]')||[];}catch(_){arr=[];}
-    const order={id:'CB'+Date.now(),status:'派單處理中',progress:25,createdAt:new Date().toLocaleString('zh-TW',{hour12:false}),...data};
-    arr.unshift(order);localStorage.setItem(companionStoreKey,JSON.stringify(arr.slice(0,50)));
-    try{const old=JSON.parse(localStorage.getItem('dream_exchange_orders')||'[]')||[];old.unshift(order);localStorage.setItem('dream_exchange_orders',JSON.stringify(old.slice(0,80)));}catch(_){ }
-    return order;
+    try{localStorage.removeItem(companionStoreKey);localStorage.removeItem('dream_exchange_orders');}catch(_){}
+    return data || {};
   }
   function openCompanionBooking(card){
     const name=(card?.dataset?.name||card?.querySelector('h3')?.textContent||'夢競陪玩').trim();
@@ -12176,7 +12208,7 @@ window.addEventListener('DOMContentLoaded', () => {
     v248Modal(`<h3>主頁動態光效更換</h3><div class="decor-list">${list.map(x=>`<div class="decor-item"><div><strong>${esc(x.label)}</strong><small>永久特效｜${esc(x.tier)}</small></div><button type="button" data-v248-apply-effect="${esc(x.key)}" data-v248-effect-tier="${esc(x.tier)}">套用</button></div>`).join('')}</div><div class="modal-actions"><button class="ghost" type="button" data-v248-clear-effect>取消目前光效</button><button type="button" data-modal-close>關閉</button></div>`);
   }
   function openAvatarFrameManager(){
-    let inv={};try{inv=JSON.parse(localStorage.getItem('dream_achievement_reward_inventory')||'{}')||{};}catch(_){inv={};}
+    const inv={};
     const frames=(inv.avatarFrames&&inv.avatarFrames.length?inv.avatarFrames:['尚未解鎖外框']).slice(0,16);
     v248Modal(`<h3>個人照外框更換</h3><div class="decor-list">${frames.map((f,i)=>`<div class="decor-item"><div style="display:flex;align-items:center;gap:10px"><span class="frame-preview">${i+1}</span><div><strong>${esc(f)}</strong><small>永久外框</small></div></div><button type="button" data-v248-apply-frame="${esc(f)}">套用</button></div>`).join('')}</div><div class="modal-actions"><button class="ghost" type="button" data-v248-clear-frame>取消外框</button><button type="button" data-modal-close>關閉</button></div>`);
   }
@@ -12186,10 +12218,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if(action==='change-profile-effect'){e.preventDefault();e.stopPropagation();openProfileEffectManager();return;}
     if(action==='change-avatar-frame'){e.preventDefault();e.stopPropagation();openAvatarFrameManager();return;}
     const effect=e.target.closest('[data-v248-apply-effect]');
-    if(effect){localStorage.setItem('dream_profile_effect_quick_apply',JSON.stringify({effect:effect.dataset.v248ApplyEffect,tier:effect.dataset.v248EffectTier,updatedAt:new Date().toISOString()}));toast?.('已套用主頁動態光效');document.getElementById('profileModalMask')?.classList.remove('show');window.renderProfile?.();return;}
+    if(effect){toast?.('請先在我的背包使用後，再到正式設定中套用');document.getElementById('profileModalMask')?.classList.remove('show');return;}
     if(e.target.closest('[data-v248-clear-effect]')){window.dreamProfileFx?.clear?.(getDreamLoginRole());document.getElementById('profileModalMask')?.classList.remove('show');return;}
     const frame=e.target.closest('[data-v248-apply-frame]');
-    if(frame){localStorage.setItem('dream_avatar_frame_active_'+getDreamLoginRole(),frame.dataset.v248ApplyFrame);toast?.('已套用個人照外框');document.getElementById('profileModalMask')?.classList.remove('show');return;}
+    if(frame){toast?.('請先在我的背包使用後，再到正式設定中套用');document.getElementById('profileModalMask')?.classList.remove('show');return;}
     if(e.target.closest('[data-v248-clear-frame]')){localStorage.removeItem('dream_avatar_frame_active_'+getDreamLoginRole());toast?.('已取消個人照外框');document.getElementById('profileModalMask')?.classList.remove('show');return;}
   },true);
 })();
@@ -13681,7 +13713,7 @@ img[src*="rank_rewards/badges"]{
       const data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
       if(!data.length) return [];
       const state = readJson(ACH_STORE, {});
-      let inv = readJson("dream_achievement_reward_inventory", {});
+      let inv = {};
       const changed = [];
       data.forEach(item => {
         if(!item || item.unlocked || !itemMatchesEvent(item, eventName)) return;
@@ -13698,7 +13730,6 @@ img[src*="rank_rewards/badges"]{
         }
       });
       writeJson(ACH_STORE, state);
-      writeJson("dream_achievement_reward_inventory", inv);
       if(changed.length){
         window.renderDreamAchievements?.();
         window.updateDreamBackpack?.();
@@ -14642,23 +14673,24 @@ img[src*="rank_rewards/badges"]{
   /* 3) 先把陪玩觀看入口的登入限制關掉：只開放觀看/進入，不改下單與後台權限邏輯 */
   var openPages = {
     companion:true,
-    'companion-home':true,
     'companion-booking':true,
     profile:true
   };
   try{
     if(window.DreamAccessV239){
-      window.DreamAccessV239.requireLogin = function(){ return true; };
-      window.DreamAccessV239.guardPageAccess = function(pageName){ return pageName; };
-      window.DreamAccessV239.openViewMode = true;
+      window.DreamAccessV239.requireLogin = window.requireLogin || window.DreamAccessV239.requireLogin;
+      window.DreamAccessV239.guardPageAccess = window.guardPageAccess || window.DreamAccessV239.guardPageAccess;
+      window.DreamAccessV239.openViewMode = false;
     }
     var oldGuard = window.guardDreamPageByRole;
     window.guardDreamPageByRole = function(name){
       if(openPages[name]) return name;
       return typeof oldGuard === 'function' ? oldGuard(name) : name;
     };
-    window.isLoginRequiredPage = function(){ return false; };
-    window.requireLogin = function(){ return true; };
+    if(window.DreamAccessV239){
+      window.isLoginRequiredPage = window.isLoginRequiredPage || function(){ return false; };
+      window.requireLogin = window.DreamAccessV239.requireLogin;
+    }
   }catch(_){}
 })();
 </script>
@@ -16761,11 +16793,8 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     try{return (window.__dreamFrontAuth?.type || window.__dreamFrontAuth?.role || localStorage.getItem("dream_persist_login_type") || "member").includes("companion") ? "companion" : "member";}catch(_){return "member";}
   }
   function syncVisualLocal(slot, asset){
-    if(slot === "profile_effect" && asset){
-      try{localStorage.setItem("dream_profile_effect_quick_apply",JSON.stringify({effect:asset.item_key || asset.item_name,tier:asset.payload?.style || "unlocked",updatedAt:new Date().toISOString()}));}catch(_){}
-    }
-    if(slot === "avatar_frame" && asset){
-      try{localStorage.setItem("dream_avatar_frame_active_"+currentRole(), asset.item_key || asset.item_name || "");}catch(_){}
+    if((slot === "profile_effect" || slot === "avatar_frame") && asset){
+      try{window.renderProfile?.();}catch(_){}
     }
   }
   function cleanupMenus(){
