@@ -12134,14 +12134,13 @@ window.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const get=k=>document.querySelector(`[data-companion-booking-field="${k}"]`)?.value||'';
       if(!get('serviceItem')||!get('server')||!get('gameName')||!get('reserveTime')){toast?.('請完整填寫單項、伺服器、遊戲名、預約時間');return;}
-      const unitPrice=getCompanionUnitPriceV250();
       const quantity=getDreamQty('companion');
       const serviceName=getCompanionServiceNameV250() || get('serviceItem');
       submit.disabled=true;
       (async()=>{
         try{
           const apiUrl=(window.DREAM_COMPANION_API_URL||window.DREAM_CONFIG?.API_BASE||'https://api.131rwjuh.com/api.php');
-          const res=await fetch(apiUrl,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'companion_booking_create',companion_id:Number(submit.dataset.companionId||0),companion_name:submit.dataset.companionName||'',service_id:get('serviceItem'),service_name:serviceName,server_name:get('server'),game_name:get('gameName'),role_name:get('gameName'),reserve_time:get('reserveTime'),note:get('note'),quantity,unit_price:unitPrice,total_cost:unitPrice*quantity})}).then(r=>r.json());
+          const res=await fetch(apiUrl,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'companion_booking_create',companion_id:Number(submit.dataset.companionId||0),companion_name:submit.dataset.companionName||'',service_id:get('serviceItem'),service_name:serviceName,server_name:get('server'),game_name:get('gameName'),role_name:get('gameName'),reserve_time:get('reserveTime'),note:get('note'),quantity})}).then(r=>r.json());
           toast?.(res.message||(res.ok?'預約已送出':'預約送出失敗'));
           if(res.ok){
             try{localStorage.removeItem(companionStoreKey);localStorage.removeItem('dream_exchange_orders');localStorage.removeItem('dream_exchange_orders_v245');}catch(_){}
@@ -16857,9 +16856,6 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
       receiver_type:receiverType,
       receiver_id:Number(receiverId),
       gift_name:card.dataset.giftName || card.querySelector(".gift-name")?.textContent || "禮物",
-      price:Number(card.dataset.giftPrice || 0),
-      guardian_value:Number(card.dataset.guardianValue || card.dataset.giftPrice || 0),
-      gift_image_url:card.dataset.giftImage || card.querySelector("img")?.getAttribute("src") || ""
     }).then(res=>toast(res.message || (res.ok ? "送禮成功" : "送禮失敗")));
   },true);
   function achievementState(){try{return JSON.parse(localStorage.getItem("dream_achievement_progress_state_v277")||"{}")||{};}catch(_){return {};}}
