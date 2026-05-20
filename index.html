@@ -6440,15 +6440,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=389"></script>
-<script src="assets/js/app-hardening.js?v=390"></script>
-<script src="assets/js/front-api-stabilizer.js?v=390"></script>
-<script src="assets/js/home-render-isolation.js?v=389"></script>
-<script src="assets/js/architecture-complete-core.js?v=389"></script>
-<script src="assets/js/profile-service-sync.js?v=389"></script>
-<script src="assets/js/api-client.js?v=389"></script>
-<script src="assets/js/login-complete-controller.js?v=390"></script>
-<script src="assets/js/v26-social-client.js?v=389"></script>
+<script src="assets/js/app-config.js?v=391"></script>
+<script src="assets/js/app-hardening.js?v=391"></script>
+<script src="assets/js/front-api-stabilizer.js?v=391"></script>
+<script src="assets/js/home-render-isolation.js?v=391"></script>
+<script src="assets/js/architecture-complete-core.js?v=391"></script>
+<script src="assets/js/profile-service-sync.js?v=391"></script>
+<script src="assets/js/api-client.js?v=391"></script>
+<script src="assets/js/login-complete-controller.js?v=391"></script>
+<script src="assets/js/v26-social-client.js?v=391"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -16538,7 +16538,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=389"></script>
+<script src="assets/js/formal-front-core.js?v=391"></script>
 
 <script id="dream-v384-login-inline-guard">
 /* v384-full-current-login-architecture inline fallback */
@@ -16761,7 +16761,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
       if(!res.ok){ if(res.status===401) renderBackpack([]); return; }
       renderBackpack(res.items || []);
       window.__dreamProfileSettingAssetsV392 = res.setting_assets || [];
-    }catch(err){console.warn("[backpack_list]",err);}
+    }catch(err){if(window.DREAM_API_DEBUG) console.warn("[backpack_list]",err);}
   }
   const slotTitle = {badge:"更換成就徽章",title:"更換稱號",avatar_frame:"更換大頭照外框",profile_effect:"更換主頁特效"};
   function ensureModal(){
@@ -16924,7 +16924,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     enhanceGiftCards();
     applyDefaultListAvatars();
     updateBackpack();
-    setTimeout(syncAchievementRewards,300);
+    setTimeout(()=>syncAchievementRewards().catch(err=>{if(window.DREAM_API_DEBUG) console.warn("[achievement_reward_claim]",err);}),300);
   }
   const mo = new MutationObserver(()=>{clearTimeout(boot._t);boot._t=setTimeout(()=>{cleanupMenus();enhanceGiftCards();applyDefaultListAvatars();},80);});
   if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
@@ -16960,7 +16960,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
         if(typeof window.DREAM_SET_RANK_BOARDS==="function") window.DREAM_SET_RANK_BOARDS(boards);
         if(window.DreamCleanFormalV369&&typeof window.DreamCleanFormalV369.loadRanking==="function") window.DreamCleanFormalV369.loadRanking(true);
       }
-    }catch(e){console.warn("[v394 rankings]",e.message||e);}
+    }catch(e){if(window.DREAM_API_DEBUG) console.warn("[v394 rankings]",e.message||e);}
   }
   function orderStatusText(status){
     return ({waiting_dispatch:"等待後台派單",dispatching:"派單中",in_progress:"進行中",completed:"已完成",returned_to_member:"已退回",cancelled:"已取消"})[status]||status||"已送出";
@@ -17085,12 +17085,12 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<script src="assets/js/formal-home-profile-v401.js?v=401"></script>
+<script src="assets/js/formal-home-profile-v401.js?v=402"></script>
 
 <script id="dream-v389-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v389-formal-version-cleanup";
-  console.info("[Dream v389] formal version cleanup loaded");
+  window.DREAM_FRONT_PATCH_VERSION = "v391-login-background-cleanup";
+  console.info("[Dream v391] login/background cleanup loaded");
 })();
 </script>
 

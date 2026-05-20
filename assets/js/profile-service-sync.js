@@ -2,7 +2,7 @@
 (function(){
   if(window.__dreamProfileServiceSyncV388) return;
   window.__dreamProfileServiceSyncV388 = true;
-  console.info("[Dream v388] profile service sync controller loaded");
+  console.info("[Dream v391] profile service sync controller loaded");
 
   const $ = (s,r=document)=>r.querySelector(s);
   const $all = (s,r=document)=>Array.from(r.querySelectorAll(s));
@@ -171,7 +171,7 @@
     }
 
     if(!res || !res.ok){
-      console.warn("[Dream v388 profile]", res);
+      console.warn("[Dream v391 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }
