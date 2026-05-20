@@ -1,4 +1,4 @@
-<!-- v389-formal-version-cleanup -->
+<!-- v404-formal-release -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -5780,13 +5780,13 @@ main.app{padding-bottom:0 !important;}
       <div class="chips"><button class="chip active" data-inn-sort="time">按發佈時間</button><button class="chip" data-inn-sort="likes">按愛心數量</button><button class="chip" data-inn-sort="favorites">按收藏數量</button></div>
     </div>
     <section class="panel composer">
-      <textarea data-v26-input="inn-content" placeholder="分享你的夢競動態，內容不能空白"></textarea>
+      <textarea data-social-input="inn-content" placeholder="分享你的夢競動態，內容不能空白"></textarea>
       <div class="composer-actions">
         <label class="composer-upload">附加圖片
-          <input data-v26-input="inn-image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+          <input data-social-input="inn-image" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         </label>
-        <span class="composer-file-name" data-v26-image-name>尚未選擇圖片</span>
-        <button class="btn" data-v26-action="inn-post" type="button">＋ 發布文章</button>
+        <span class="composer-file-name" data-social-image-name>尚未選擇圖片</span>
+        <button class="btn" data-social-action="inn-post" type="button">＋ 發布文章</button>
       </div>
     </section>
     <div id="innPostList">
@@ -6287,7 +6287,7 @@ main.app{padding-bottom:0 !important;}
     </section>
   </section>
 
-  <section id="page-renew" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>會員續期</h1></section><section class="panel sub-panel"><div class="text-block">請輸入會員帳號與會員碼，確認後 VIP 會員效期將開通 永久特效。</div><div class="form-stack"><input data-v26-input="renew-username" placeholder="請輸入會員帳號"><input data-v26-input="renew-code" placeholder="請輸入會員碼"><button class="btn" data-v26-action="renew-code" type="button">確定開通 VIP</button></div></section></section>
+  <section id="page-renew" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>會員續期</h1></section><section class="panel sub-panel"><div class="text-block">請輸入會員帳號與會員碼，確認後 VIP 會員效期將開通 永久特效。</div><div class="form-stack"><input data-social-input="renew-username" placeholder="請輸入會員帳號"><input data-social-input="renew-code" placeholder="請輸入會員碼"><button class="btn" data-social-action="renew-code" type="button">確定開通 VIP</button></div></section></section>
 
   <section id="page-review" class="page" data-page="review"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>訂單評價</h1></section><section class="panel sub-panel"><div class="review-tabs"><button type="button" class="review-tab-btn active" data-review-tab="pending">待評價</button><button type="button" class="review-tab-btn" data-review-tab="records">評價紀錄</button></div><div class="text-block" data-review-note>完成訂單後，會員可評價陪玩，陪玩可評價會員。每張完成訂單只能評一次。</div><div class="review-list" data-review-list><div class="companion-empty">正在載入評價資料...</div></div></section></section>
   <section id="page-vip-info" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>VIP說明</h1></section><section class="panel sub-panel"><div class="text-block">VIP1～3：VIP經驗值減少30%<br>
@@ -6440,15 +6440,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=392"></script>
-<script src="assets/js/app-hardening.js?v=392"></script>
-<script src="assets/js/front-api-stabilizer.js?v=392"></script>
-<script src="assets/js/home-render-isolation.js?v=392"></script>
-<script src="assets/js/architecture-complete-core.js?v=392"></script>
-<script src="assets/js/profile-service-sync.js?v=392"></script>
-<script src="assets/js/api-client.js?v=392"></script>
-<script src="assets/js/login-complete-controller.js?v=392"></script>
-<script src="assets/js/v26-social-client.js?v=392"></script>
+<script src="assets/js/app-config.js?v=404"></script>
+<script src="assets/js/app-hardening.js?v=404"></script>
+<script src="assets/js/front-api-stabilizer.js?v=404"></script>
+<script src="assets/js/home-render-isolation.js?v=404"></script>
+<script src="assets/js/architecture-complete-core.js?v=404"></script>
+<script src="assets/js/profile-service-sync.js?v=404"></script>
+<script src="assets/js/api-client.js?v=404"></script>
+<script src="assets/js/login-complete-controller.js?v=404"></script>
+<script src="assets/js/social-client.js?v=404"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -8487,7 +8487,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script id="v392-public-profile-reviews">
+<script id="v404-public-profile-reviews">
 (function(){
   const API_URL = window.DREAM_COMPANION_API_URL || "https://api.131rwjuh.com/api.php";
   function esc(str){return String(str ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
@@ -8917,8 +8917,8 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     const likes = readSet('dream_inn_likes');
     document.querySelectorAll('#innPostList .post-card').forEach(card=>{
       const id=card.dataset.postId;
-      const favBtn=card.querySelector('[data-v26-action="favorite"]');
-      const likeBtn=card.querySelector('[data-v26-action="like"]');
+      const favBtn=card.querySelector('[data-social-action="favorite"]');
+      const likeBtn=card.querySelector('[data-social-action="like"]');
       favBtn?.classList.toggle('active', favs.has(id));
       likeBtn?.classList.toggle('active', likes.has(id));
       if(favBtn) favBtn.firstChild.textContent = favs.has(id) ? '★ 收藏 ' : '☆ 收藏 ';
@@ -8953,12 +8953,12 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     if(filter){e.preventDefault();innState.filter=filter.dataset.innFilter;document.querySelectorAll('[data-inn-filter]').forEach(b=>b.classList.toggle('active',b===filter));applyInnFilterSort();return;}
     const sort=e.target.closest('[data-inn-sort]');
     if(sort){e.preventDefault();innState.sort=sort.dataset.innSort;document.querySelectorAll('[data-inn-sort]').forEach(b=>b.classList.toggle('active',b===sort));applyInnFilterSort();return;}
-    const postBtn=e.target.closest('[data-v26-action="inn-post"]');
-    if(postBtn){e.preventDefault();const input=document.querySelector('[data-v26-input="inn-content"]');const text=(input?.value||'').trim();if(!text){if(typeof toast==='function')toast('動態內容不能空白');else alert('動態內容不能空白');return;}const list=document.getElementById('innPostList');if(list){const id='local_'+Date.now();const now=new Date();const timeText=now.toLocaleString('zh-TW',{hour12:false});const html=`<article class="panel post-card" data-post-id="${id}" data-author="我" data-time="${Date.now()}" data-likes="0" data-favorites="0"><div class="post-head"><div class="post-avatar">我</div><div><div class="post-name">我</div><div class="post-time">${timeText}</div></div></div><div class="post-text">${esc(text)}</div><div class="post-image"></div><div class="post-actions"><button data-v26-action="favorite" data-post-id="${id}">☆ 收藏 <span data-fav-count>0</span></button><button data-v26-action="comment" data-post-id="${id}">留言</button><button data-v26-action="like" data-post-id="${id}">♡ <span data-like-count>0</span></button></div><div style="display:flex;gap:8px;margin-top:10px"><input data-v26-comment-input="${id}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-v26-action="comment" data-post-id="${id}" type="button">送出</button></div></article>`;list.insertAdjacentHTML('afterbegin',html);input.value='';applyInnFilterSort();if(typeof toast==='function')toast('已發布動態');}
+    const postBtn=e.target.closest('[data-social-action="inn-post"]');
+    if(postBtn){e.preventDefault();const input=document.querySelector('[data-social-input="inn-content"]');const text=(input?.value||'').trim();if(!text){if(typeof toast==='function')toast('動態內容不能空白');else alert('動態內容不能空白');return;}const list=document.getElementById('innPostList');if(list){const id='local_'+Date.now();const now=new Date();const timeText=now.toLocaleString('zh-TW',{hour12:false});const html=`<article class="panel post-card" data-post-id="${id}" data-author="我" data-time="${Date.now()}" data-likes="0" data-favorites="0"><div class="post-head"><div class="post-avatar">我</div><div><div class="post-name">我</div><div class="post-time">${timeText}</div></div></div><div class="post-text">${esc(text)}</div><div class="post-image"></div><div class="post-actions"><button data-social-action="favorite" data-post-id="${id}">☆ 收藏 <span data-fav-count>0</span></button><button data-social-action="comment" data-post-id="${id}">留言</button><button data-social-action="like" data-post-id="${id}">♡ <span data-like-count>0</span></button></div><div style="display:flex;gap:8px;margin-top:10px"><input data-social-comment-input="${id}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-social-action="comment" data-post-id="${id}" type="button">送出</button></div></article>`;list.insertAdjacentHTML('afterbegin',html);input.value='';applyInnFilterSort();if(typeof toast==='function')toast('已發布動態');}
       return;}
-    const fav=e.target.closest('[data-v26-action="favorite"]');
+    const fav=e.target.closest('[data-social-action="favorite"]');
     if(fav){const set=readSet('dream_inn_favorites');const id=fav.dataset.postId;const card=fav.closest('.post-card');const span=fav.querySelector('[data-fav-count]');let count=Number(card?.dataset.favorites||0);if(set.has(id)){set.delete(id);count=Math.max(0,count-1);}else{set.add(id);count++;}if(card)card.dataset.favorites=String(count);if(span)span.textContent=String(count);writeSet('dream_inn_favorites',set);applyInnFilterSort();}
-    const like=e.target.closest('[data-v26-action="like"]');
+    const like=e.target.closest('[data-social-action="like"]');
     if(like){const set=readSet('dream_inn_likes');const id=like.dataset.postId;const card=like.closest('.post-card');const span=like.querySelector('[data-like-count]');let likes=Number(card?.dataset.likes||0);if(set.has(id)){set.delete(id);likes=Math.max(0,likes-1);}else{set.add(id);likes++;}if(card)card.dataset.likes=String(likes);if(span)span.textContent=String(likes);writeSet('dream_inn_likes',set);applyInnFilterSort();}
   }, true);
 
@@ -13743,7 +13743,7 @@ img[src*="rank_rewards/badges"]{
   patchAchievementData();
 
   window.addEventListener("click", e => {
-    const action = e.target.closest("[data-v26-action]")?.dataset?.v26Action;
+    const action = e.target.closest("[data-social-action]")?.dataset?.v26Action;
     if(action === "like") window.DreamAchievementProgress.track("inn_like", 1);
     if(action === "favorite") window.DreamAchievementProgress.track("favorite", 1);
     if(action === "inn-post") window.DreamAchievementProgress.track("inn_post", 1);
@@ -15025,7 +15025,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=392', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=404', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15221,7 +15221,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v392'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v404'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -15997,7 +15997,7 @@ body:not(.role-companion) .companion-only-panel{
 </style>
 
 
-<style id="v391-auth-center-market-companion-fix-css">
+<style id="auth-center-market-companion-fix-css">
 body.dream-authenticated .profile-login-tip,
 body.dream-authenticated .member-login-tip{display:none!important}
 body.dream-authenticated #page-member .profile-card,
@@ -16538,51 +16538,12 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=392"></script>
+<script src="assets/js/formal-front-core.js?v=404"></script>
 
-<script id="dream-v384-login-inline-guard">
-/* v384-full-current-login-architecture inline fallback */
+<script id="dream-self-profile-router">
 (function(){
-  if(window.__dreamV384InlineGuard) return;
-  window.__dreamV384InlineGuard = true;
-  console.info("[DreamLogin v384] inline guard loaded");
-  function boot(){
-    if(window.DreamLoginForceV384 && window.DreamLoginForceV384.bind) window.DreamLoginForceV384.bind();
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot); else setTimeout(boot,30);
-})();
-</script>
-
-
-<script id="dream-v385-login-toast-cleaner">
-/* v385-login-toast-auto-hide：登入成功提示自動消失 */
-(function(){
-  if(window.__dreamLoginToastCleanerV385) return;
-  window.__dreamLoginToastCleanerV385 = true;
-  function hideLoginToast(){
-    ["dreamV384LoginToast","dreamV383LoginToast","dreamV382LoginToast","dreamLoginToastV380","dreamLoginToastV381"].forEach(function(id){
-      var el = document.getElementById(id);
-      if(el){
-        el.style.opacity = "0";
-        el.style.pointerEvents = "none";
-        setTimeout(function(){ try{ el.remove(); }catch(e){} }, 260);
-      }
-    });
-  }
-  window.DreamHideLoginToastV385 = hideLoginToast;
-  window.addEventListener("hashchange", function(){
-    var p = (location.hash || "").replace(/^#/,"");
-    if(p === "member" || p === "companion-home" || p === "companion-center") setTimeout(hideLoginToast, 350);
-  });
-  window.addEventListener("dream-auth-updated", function(){ setTimeout(hideLoginToast, 1200); });
-})();
-</script>
-
-
-<script id="dream-v390-self-profile-router">
-(function(){
-  if(window.__dreamV390SelfProfileRouter) return;
-  window.__dreamV390SelfProfileRouter = true;
+  if(window.__dreamSelfProfileRouter) return;
+  window.__dreamSelfProfileRouter = true;
   function roleFrom(value){
     var v = String(value || "").toLowerCase();
     if(v.indexOf("companion") >= 0 || v.indexOf("playmate") >= 0 || v.indexOf("player") >= 0 || v.indexOf("staff") >= 0 || v.indexOf("陪玩") >= 0) return "companion";
@@ -16597,7 +16558,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     }catch(_){}
     return "member";
   }
-  function service(){ return window.DreamProfileServiceSyncV388 || null; }
+  function service(){ return window.DreamProfileServiceSync || null; }
   function openSelfProfile(value, options){
     var role = roleFrom(value);
     try{ localStorage.setItem("dream_active_profile_id", role === "companion" ? "companion-self" : "member-self"); }catch(_){}
@@ -16642,7 +16603,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<style id="v392-formal-backpack-profile-settings-css">
+<style id="v404-formal-backpack-profile-settings-css">
 #page-profile .profile-info-panel,
 #page-profile .profile-achievement-showcase,
 #page-profile .profile-gift-collection-panel,
@@ -16656,34 +16617,34 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 #page-profile .profile-equipped-title,#page-profile .profile-value-line{font-size:12px!important;color:rgba(255,238,246,.82)!important}
 #page-profile .profile-equipped-title.is-empty{color:rgba(255,238,246,.56)!important}
 .backpack-grid[data-backpack-list]{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(218px,1fr))!important;align-items:stretch!important;gap:10px!important}
-.backpack-item.v392-backpack-card{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;gap:12px!important;align-items:start!important;min-height:132px!important;padding:13px!important;border-radius:16px!important}
-.v392-backpack-main{min-width:0!important;display:grid!important;gap:5px!important}
-.v392-backpack-title{display:flex!important;justify-content:space-between!important;gap:8px!important;color:#fff4f8!important;font-weight:950!important}
-.v392-backpack-title b{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-.v392-backpack-tag{font-size:11px!important;color:#ffe0a9!important;white-space:nowrap!important}
-.v392-backpack-meta{font-size:12px!important;color:rgba(255,238,246,.72)!important;line-height:1.45!important}
-.v392-backpack-actions{display:flex!important;gap:8px!important;align-items:center!important;margin-top:4px!important}
-.v392-backpack-use,.gift-send-btn{border:0!important;border-radius:999px!important;min-height:34px!important;padding:0 13px!important;background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;font-weight:950!important;cursor:pointer!important}
-.v392-backpack-use:disabled{opacity:.48!important;cursor:not-allowed!important}
-.v392-empty{grid-column:1/-1!important;padding:18px!important;text-align:center!important;border:1px dashed rgba(255,221,190,.28)!important;border-radius:16px!important;color:rgba(255,238,246,.72)!important}
-.v392-modal-mask{position:fixed!important;inset:0!important;z-index:2147483600!important;display:none!important;align-items:center!important;justify-content:center!important;padding:18px!important;background:rgba(10,3,9,.68)!important;backdrop-filter:blur(8px)!important}
-.v392-modal-mask.show{display:flex!important}
-.v392-modal{width:min(92vw,460px)!important;max-height:min(82vh,640px)!important;overflow:auto!important;border-radius:22px!important;border:1px solid rgba(255,221,190,.38)!important;background:linear-gradient(180deg,rgba(72,28,50,.98),rgba(31,12,25,.98))!important;color:#fff3f8!important;box-shadow:0 24px 64px rgba(0,0,0,.48)!important;padding:16px!important}
-.v392-modal h3{margin:0 0 7px!important;font-size:20px!important;color:#fff6fa!important}
-.v392-modal p{margin:0 0 12px!important;color:rgba(255,238,246,.72)!important;font-size:12px!important;line-height:1.55!important}
-.v392-asset-list{display:grid!important;gap:8px!important;margin:10px 0 14px!important}
-.v392-asset-row{display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center!important;gap:10px!important;min-height:54px!important;padding:9px 10px!important;border-radius:15px!important;border:1px solid rgba(255,221,190,.24)!important;background:rgba(255,255,255,.07)!important}
-.v392-asset-row.is-active{border-color:rgba(255,224,169,.64)!important;background:rgba(255,224,169,.12)!important}
-.v392-asset-mark{width:36px!important;height:36px!important;border-radius:12px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.10)!important;color:#ffe0a9!important;font-weight:950!important}
-.v392-asset-row b{display:block!important;font-size:13px!important;color:#fff6fa!important}
-.v392-asset-row small{display:block!important;margin-top:2px!important;color:rgba(255,238,246,.62)!important;font-size:11px!important}
-.v392-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
-.v392-modal-actions button,.v392-asset-row button{min-height:38px!important;border-radius:999px!important;border:1px solid rgba(255,221,190,.32)!important;background:rgba(255,255,255,.09)!important;color:#fff3f8!important;font-weight:900!important;cursor:pointer!important}
-.v392-asset-row button{background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;border:0!important;padding:0 13px!important}
+.backpack-item.v404-backpack-card{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;gap:12px!important;align-items:start!important;min-height:132px!important;padding:13px!important;border-radius:16px!important}
+.v404-backpack-main{min-width:0!important;display:grid!important;gap:5px!important}
+.v404-backpack-title{display:flex!important;justify-content:space-between!important;gap:8px!important;color:#fff4f8!important;font-weight:950!important}
+.v404-backpack-title b{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.v404-backpack-tag{font-size:11px!important;color:#ffe0a9!important;white-space:nowrap!important}
+.v404-backpack-meta{font-size:12px!important;color:rgba(255,238,246,.72)!important;line-height:1.45!important}
+.v404-backpack-actions{display:flex!important;gap:8px!important;align-items:center!important;margin-top:4px!important}
+.v404-backpack-use,.gift-send-btn{border:0!important;border-radius:999px!important;min-height:34px!important;padding:0 13px!important;background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;font-weight:950!important;cursor:pointer!important}
+.v404-backpack-use:disabled{opacity:.48!important;cursor:not-allowed!important}
+.v404-empty{grid-column:1/-1!important;padding:18px!important;text-align:center!important;border:1px dashed rgba(255,221,190,.28)!important;border-radius:16px!important;color:rgba(255,238,246,.72)!important}
+.v404-modal-mask{position:fixed!important;inset:0!important;z-index:2147483600!important;display:none!important;align-items:center!important;justify-content:center!important;padding:18px!important;background:rgba(10,3,9,.68)!important;backdrop-filter:blur(8px)!important}
+.v404-modal-mask.show{display:flex!important}
+.v404-modal{width:min(92vw,460px)!important;max-height:min(82vh,640px)!important;overflow:auto!important;border-radius:22px!important;border:1px solid rgba(255,221,190,.38)!important;background:linear-gradient(180deg,rgba(72,28,50,.98),rgba(31,12,25,.98))!important;color:#fff3f8!important;box-shadow:0 24px 64px rgba(0,0,0,.48)!important;padding:16px!important}
+.v404-modal h3{margin:0 0 7px!important;font-size:20px!important;color:#fff6fa!important}
+.v404-modal p{margin:0 0 12px!important;color:rgba(255,238,246,.72)!important;font-size:12px!important;line-height:1.55!important}
+.v404-asset-list{display:grid!important;gap:8px!important;margin:10px 0 14px!important}
+.v404-asset-row{display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center!important;gap:10px!important;min-height:54px!important;padding:9px 10px!important;border-radius:15px!important;border:1px solid rgba(255,221,190,.24)!important;background:rgba(255,255,255,.07)!important}
+.v404-asset-row.is-active{border-color:rgba(255,224,169,.64)!important;background:rgba(255,224,169,.12)!important}
+.v404-asset-mark{width:36px!important;height:36px!important;border-radius:12px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.10)!important;color:#ffe0a9!important;font-weight:950!important}
+.v404-asset-row b{display:block!important;font-size:13px!important;color:#fff6fa!important}
+.v404-asset-row small{display:block!important;margin-top:2px!important;color:rgba(255,238,246,.62)!important;font-size:11px!important}
+.v404-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+.v404-modal-actions button,.v404-asset-row button{min-height:38px!important;border-radius:999px!important;border:1px solid rgba(255,221,190,.32)!important;background:rgba(255,255,255,.09)!important;color:#fff3f8!important;font-weight:900!important;cursor:pointer!important}
+.v404-asset-row button{background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;border:0!important;padding:0 13px!important}
 .gift-send-btn{width:100%!important;margin-top:8px!important}
 </style>
 
-<script id="v392-formal-backpack-profile-settings-js">
+<script id="v404-formal-backpack-profile-settings-js">
 (function(){
   if(window.__dreamFormalProfileSettingsV392) return;
   window.__dreamFormalProfileSettingsV392 = true;
@@ -16735,20 +16696,20 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     if(!host) return;
     const list = Array.isArray(items) ? items : [];
     if(!list.length){
-      host.innerHTML = `<div class="v392-empty">目前背包沒有可使用物品。成就、達標或活動獎勵會先送到這裡。</div>`;
+      host.innerHTML = `<div class="v404-empty">目前背包沒有可使用物品。成就、達標或活動獎勵會先送到這裡。</div>`;
       return;
     }
     host.innerHTML = list.map(item=>{
       const type = String(item.item_type || "");
       const exp = item.expires_at ? `期限：${esc(item.expires_at)}` : "永久或未設定期限";
       const hint = isSettingType(type) ? "使用後加入個人簡介設定，可再進設定切換。" : "使用後立即生效並從背包移除。";
-      return `<div class="backpack-item v392-backpack-card" data-item-type="${esc(type)}">
+      return `<div class="backpack-item v404-backpack-card" data-item-type="${esc(type)}">
         <div class="service-icon classic">${esc(itemIcon(type))}</div>
-        <div class="v392-backpack-main">
-          <div class="v392-backpack-title"><b>${esc(item.item_name || item.name || itemLabel(type))}</b><span class="v392-backpack-tag">${esc(itemLabel(type))}</span></div>
-          <div class="v392-backpack-meta">${esc(hint)}</div>
-          <div class="v392-backpack-meta">${esc(exp)}${Number(item.quantity||1)>1 ? ` ｜ ${Number(item.quantity)} 個` : ""}</div>
-          <div class="v392-backpack-actions"><button class="v392-backpack-use" type="button" data-v392-backpack-use="${Number(item.id||0)}" ${item.expired ? "disabled" : ""}>使用</button></div>
+        <div class="v404-backpack-main">
+          <div class="v404-backpack-title"><b>${esc(item.item_name || item.name || itemLabel(type))}</b><span class="v404-backpack-tag">${esc(itemLabel(type))}</span></div>
+          <div class="v404-backpack-meta">${esc(hint)}</div>
+          <div class="v404-backpack-meta">${esc(exp)}${Number(item.quantity||1)>1 ? ` ｜ ${Number(item.quantity)} 個` : ""}</div>
+          <div class="v404-backpack-actions"><button class="v404-backpack-use" type="button" data-v404-backpack-use="${Number(item.id||0)}" ${item.expired ? "disabled" : ""}>使用</button></div>
         </div>
       </div>`;
     }).join("");
@@ -16766,29 +16727,29 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   }
   const slotTitle = {badge:"更換成就徽章",title:"更換稱號",avatar_frame:"更換大頭照外框",profile_effect:"更換主頁特效"};
   function ensureModal(){
-    let mask = document.querySelector(".v392-modal-mask");
+    let mask = document.querySelector(".v404-modal-mask");
     if(mask) return mask;
     mask = document.createElement("div");
-    mask.className = "v392-modal-mask";
-    mask.innerHTML = `<div class="v392-modal" role="dialog" aria-modal="true"></div>`;
+    mask.className = "v404-modal-mask";
+    mask.innerHTML = `<div class="v404-modal" role="dialog" aria-modal="true"></div>`;
     document.body.appendChild(mask);
-    mask.addEventListener("click",e=>{if(e.target===mask || e.target.closest("[data-v392-close]")) mask.classList.remove("show");});
+    mask.addEventListener("click",e=>{if(e.target===mask || e.target.closest("[data-v404-close]")) mask.classList.remove("show");});
     return mask;
   }
   async function openAssetManager(slot){
     const mask = ensureModal();
-    const box = mask.querySelector(".v392-modal");
+    const box = mask.querySelector(".v404-modal");
     box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>正在讀取已從背包使用解鎖的項目...</p>`;
     mask.classList.add("show");
     const res = await api("profile_setting_assets",{slot});
     const list = res.ok && Array.isArray(res.assets) ? res.assets : [];
     const body = list.length ? list.map(asset=>`
-      <div class="v392-asset-row ${asset.active ? "is-active" : ""}">
-        <span class="v392-asset-mark">${esc(itemIcon(asset.item_type || slot))}</span>
+      <div class="v404-asset-row ${asset.active ? "is-active" : ""}">
+        <span class="v404-asset-mark">${esc(itemIcon(asset.item_type || slot))}</span>
         <span><b>${esc(asset.item_name || "未命名")}</b><small>${asset.active ? "目前顯示中" : "已解鎖可更換"}${asset.expires_at ? " ｜ 期限：" + esc(asset.expires_at) : ""}</small></span>
-        <button type="button" data-v392-apply-asset="${Number(asset.id||0)}" data-v392-slot="${esc(slot)}">${asset.active ? "已套用" : "套用"}</button>
-      </div>`).join("") : `<div class="v392-empty">尚未解鎖可更換項目。獲得獎勵後會先進背包，必須在背包點「使用」後，才會出現在這裡供更換；未解鎖前僅能預覽，不能套用。</div>`;
-    box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>背包物品使用後會先存進此功能庫，這裡一次只套用一個目前顯示項目。</p><div class="v392-asset-list">${body}</div><div class="v392-modal-actions"><button type="button" data-v392-clear-slot="${esc(slot)}">取消目前顯示</button><button type="button" data-v392-close>關閉</button></div>`;
+        <button type="button" data-v404-apply-asset="${Number(asset.id||0)}" data-v404-slot="${esc(slot)}">${asset.active ? "已套用" : "套用"}</button>
+      </div>`).join("") : `<div class="v404-empty">尚未解鎖可更換項目。獲得獎勵後會先進背包，必須在背包點「使用」後，才會出現在這裡供更換；未解鎖前僅能預覽，不能套用。</div>`;
+    box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>背包物品使用後會先存進此功能庫，這裡一次只套用一個目前顯示項目。</p><div class="v404-asset-list">${body}</div><div class="v404-modal-actions"><button type="button" data-v404-clear-slot="${esc(slot)}">取消目前顯示</button><button type="button" data-v404-close>關閉</button></div>`;
   }
   function currentRole(){
     try{return (window.__dreamFrontAuth?.type || window.__dreamFrontAuth?.role || localStorage.getItem("dream_persist_login_type") || "member").includes("companion") ? "companion" : "member";}catch(_){return "member";}
@@ -16829,29 +16790,29 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
         return false;
       }
     }
-    const use = e.target.closest && e.target.closest("[data-v392-backpack-use]");
+    const use = e.target.closest && e.target.closest("[data-v404-backpack-use]");
     if(use){
       e.preventDefault(); e.stopPropagation();
-      api("backpack_use",{item_id:Number(use.dataset.v392BackpackUse||0)}).then(res=>{
+      api("backpack_use",{item_id:Number(use.dataset.v404BackpackUse||0)}).then(res=>{
         toast(res.message || (res.ok ? "使用成功" : "使用失敗"));
         if(res.ok){ renderBackpack(res.items || []); window.__dreamProfileSettingAssetsV392 = res.setting_assets || []; try{window.renderDreamProfilePage?.();}catch(_){} }
       }).catch(err=>toast(err.message || "使用失敗"));
       return;
     }
-    const apply = e.target.closest && e.target.closest("[data-v392-apply-asset]");
+    const apply = e.target.closest && e.target.closest("[data-v404-apply-asset]");
     if(apply){
       e.preventDefault();
-      const slot = apply.dataset.v392Slot || "";
-      api("profile_setting_apply",{asset_id:Number(apply.dataset.v392ApplyAsset||0),slot}).then(res=>{
+      const slot = apply.dataset.v404Slot || "";
+      api("profile_setting_apply",{asset_id:Number(apply.dataset.v404ApplyAsset||0),slot}).then(res=>{
         toast(res.message || (res.ok ? "套用成功" : "套用失敗"));
         if(res.ok){ syncVisualLocal(slot,res.asset); openAssetManager(slot); try{window.renderDreamProfilePage?.(); window.renderProfile?.();}catch(_){} }
       });
       return;
     }
-    const clear = e.target.closest && e.target.closest("[data-v392-clear-slot]");
+    const clear = e.target.closest && e.target.closest("[data-v404-clear-slot]");
     if(clear){
       e.preventDefault();
-      const slot = clear.dataset.v392ClearSlot || "";
+      const slot = clear.dataset.v404ClearSlot || "";
       api("profile_setting_apply",{slot,clear:true}).then(res=>{toast(res.message || "已取消顯示"); openAssetManager(slot); try{window.renderDreamProfilePage?.();}catch(_){};});
       return;
     }
@@ -16902,7 +16863,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     if(!isAuthReady()) return;
     const data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
     if(!data.length) return;
-    const sentKey = "dream_formal_claimed_achievements_v392";
+    const sentKey = "dream_formal_claimed_achievements";
     let sent = {}; try{sent=JSON.parse(localStorage.getItem(sentKey)||"{}")||{};}catch(_){}
     const state = achievementState();
     for(const a of data){
@@ -16942,7 +16903,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<script id="v394-formal-linkage-fix-js">
+<script id="v404-formal-linkage-fix-js">
 (function(){
   if(window.__dreamFormalLinkageV394) return;
   window.__dreamFormalLinkageV394 = true;
@@ -16967,7 +16928,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
         if(typeof window.DREAM_SET_RANK_BOARDS==="function") window.DREAM_SET_RANK_BOARDS(boards);
         if(window.DreamCleanFormalV369&&typeof window.DreamCleanFormalV369.loadRanking==="function") window.DreamCleanFormalV369.loadRanking(true);
       }
-    }catch(e){if(window.DREAM_API_DEBUG) console.warn("[v394 rankings]",e.message||e);}
+    }catch(e){if(window.DREAM_API_DEBUG) console.warn("[rankings]",e.message||e);}
   }
   function orderStatusText(status){
     return ({waiting_dispatch:"等待後台派單",dispatching:"派單中",in_progress:"進行中",completed:"已完成",returned_to_member:"已退回",cancelled:"已取消"})[status]||status||"已送出";
@@ -17092,12 +17053,12 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<script src="assets/js/formal-home-profile-v401.js?v=403"></script>
+<script src="assets/js/formal-home-profile.js?v=404"></script>
 
-<script id="dream-v389-formal-cleanup-marker">
+<script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v392-login-fast-public-api";
-  console.info("[Dream v392] login fast public API loaded");
+  window.DREAM_FRONT_PATCH_VERSION = "v404-formal-release";
+
 })();
 </script>
 

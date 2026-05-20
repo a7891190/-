@@ -1,8 +1,8 @@
-/* v389-formal-version-cleanup */
+/* v404-formal-release */
 (function(){
   if(window.__dreamProfileServiceSyncV388) return;
   window.__dreamProfileServiceSyncV388 = true;
-  console.info("[Dream v392] profile service sync controller loaded");
+  
 
   const $ = (s,r=document)=>r.querySelector(s);
   const $all = (s,r=document)=>Array.from(r.querySelectorAll(s));
@@ -171,7 +171,7 @@
     }
 
     if(!res || !res.ok){
-      console.warn("[Dream v392 profile]", res);
+      if(window.DREAM_API_DEBUG) console.warn("[Dream v404 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }
@@ -218,22 +218,22 @@
     const body = mode === "name" ? `
       <label class="dream-profile-field full">
         <span>用戶名稱</span>
-        <input id="dreamV388DisplayName" maxlength="40" value="${escapeHtml(name)}" placeholder="輸入要顯示給其他用戶看的名稱">
+        <input id="dreamProfileDisplayName" maxlength="40" value="${escapeHtml(name)}" placeholder="輸入要顯示給其他用戶看的名稱">
       </label>
       <div class="dream-profile-editor-note">此名稱會作為你的公開用戶名稱，在會員中心、主頁、排行、留言與其他公開位置顯示。</div>
     ` : mode === "avatar" ? `
-      <div class="dream-profile-avatar-editor-v390">
-        <div class="dream-profile-avatar-v388" data-v388-avatar-preview>${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}">` : `<span>${escapeHtml(name.slice(0,1) || "夢")}</span>`}</div>
-        <label class="dream-profile-file-v390">
-          <input id="dreamV388AvatarFile" data-v388-avatar-file type="file" accept="image/jpeg,image/png,image/webp">
+      <div class="dream-profile-avatar-editor">
+        <div class="dream-profile-avatar" data-profile-avatar-preview>${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}">` : `<span>${escapeHtml(name.slice(0,1) || "夢")}</span>`}</div>
+        <label class="dream-profile-file">
+          <input id="dreamProfileAvatarFile" data-profile-avatar-file type="file" accept="image/jpeg,image/png,image/webp">
           <span>選擇圖片</span>
         </label>
       </div>
       <div class="dream-profile-editor-note">僅能上傳 JPG、PNG、WEBP 圖片，最多 5MB；不提供手填圖片網址。</div>
     ` : mode === "tags" ? `
-      <div class="dream-profile-tag-picker-v390" role="group" aria-label="個性標籤">
+      <div class="dream-profile-tag-picker" role="group" aria-label="個性標籤">
         ${tagOptions(role).map(tag => `
-          <label class="dream-profile-tag-option-v390">
+          <label class="dream-profile-tag-option">
             <input type="checkbox" value="${escapeHtml(tag)}" ${selected.has(tag) ? "checked" : ""}>
             <span>${escapeHtml(tag)}</span>
           </label>
@@ -243,22 +243,22 @@
     ` : `
       <label class="dream-profile-field full">
         <span>個人簡介</span>
-        <textarea id="dreamV388Intro" maxlength="500" placeholder="填寫你的基本介紹說明">${escapeHtml(intro)}</textarea>
+        <textarea id="dreamProfileIntro" maxlength="500" placeholder="填寫你的基本介紹說明">${escapeHtml(intro)}</textarea>
       </label>
       <div class="dream-profile-editor-note">這裡只會更新主頁上的個人簡介，不會更動其他帳號資料。</div>
     `;
     return `
-      <section class="panel dream-profile-panel-v388 dream-profile-editor-v390" id="dreamProfilePanelV388" data-profile-role="${escapeHtml(role)}" data-profile-mode="${escapeHtml(mode)}">
-        <div class="dream-profile-editor-head-v390">
+      <section class="panel dream-profile-panel dream-profile-editor" id="dreamProfilePanel" data-profile-role="${escapeHtml(role)}" data-profile-mode="${escapeHtml(mode)}">
+        <div class="dream-profile-editor-head">
           <div>
             <h2>${profileEditorModeLabel(mode)}</h2>
             <p>${role === "companion" ? "陪玩" : "會員"}公開主頁設定</p>
           </div>
-          <button type="button" class="btn ghost small-btn" data-v388-profile-cancel>取消</button>
+          <button type="button" class="btn ghost small-btn" data-profile-cancel>取消</button>
         </div>
-        <div class="dream-profile-form-v388">${body}</div>
-        <div class="dream-profile-editor-actions-v390">
-          <button type="button" class="btn" data-v388-profile-save>儲存</button>
+        <div class="dream-profile-form">${body}</div>
+        <div class="dream-profile-editor-actions">
+          <button type="button" class="btn" data-profile-save>儲存</button>
         </div>
       </section>`;
   }
@@ -275,35 +275,35 @@
     const status = profile.status || profile.work_status || "";
 
     const companionExtra = role === "companion" ? `
-      <label class="dream-profile-field"><span>服務遊戲 / 分類</span><input id="dreamV388Game" value="${escapeHtml(game)}" placeholder="例如：LOL、傳說、原神"></label>
-      <label class="dream-profile-field"><span>服務價格</span><input id="dreamV388Price" value="${escapeHtml(price)}" placeholder="例如：300/小時"></label>
-      <label class="dream-profile-field"><span>目前狀態</span><input id="dreamV388Status" value="${escapeHtml(status)}" placeholder="例如：上班中、休息中"></label>
+      <label class="dream-profile-field"><span>服務遊戲 / 分類</span><input id="dreamProfileGame" value="${escapeHtml(game)}" placeholder="例如：LOL、傳說、原神"></label>
+      <label class="dream-profile-field"><span>服務價格</span><input id="dreamProfilePrice" value="${escapeHtml(price)}" placeholder="例如：300/小時"></label>
+      <label class="dream-profile-field"><span>目前狀態</span><input id="dreamProfileStatus" value="${escapeHtml(status)}" placeholder="例如：上班中、休息中"></label>
     ` : "";
 
     return `
-      <section class="panel dream-profile-panel-v388" id="dreamProfilePanelV388" data-profile-role="${escapeHtml(role)}">
+      <section class="panel dream-profile-panel" id="dreamProfilePanel" data-profile-role="${escapeHtml(role)}">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px">
           <div>
             <h2 style="margin:0;font-size:20px">${profileTitle(role)}</h2>
             <div style="font-size:12px;opacity:.75;margin-top:4px">資料會同步目前登入的${role === "companion" ? "陪玩" : "會員"}帳號</div>
           </div>
-          <button type="button" class="btn small-btn" data-v388-profile-refresh>重新整理</button>
+          <button type="button" class="btn small-btn" data-profile-refresh>重新整理</button>
         </div>
-        <div class="dream-profile-grid-v388">
-          <div class="dream-profile-avatar-v388">
+        <div class="dream-profile-grid">
+          <div class="dream-profile-avatar">
             ${avatar ? `<img src="${escapeHtml(avatar)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:22px">` : `<span>${escapeHtml((name || "夢").slice(0,1))}</span>`}
           </div>
-          <div class="dream-profile-form-v388">
-            <label class="dream-profile-field"><span>顯示名稱</span><input id="dreamV388DisplayName" value="${escapeHtml(name)}" placeholder="輸入顯示名稱"></label>
-            <label class="dream-profile-field"><span>手機 / 聯絡方式</span><input id="dreamV388Phone" value="${escapeHtml(phone)}" placeholder="聯絡方式"></label>
-            <label class="dream-profile-field"><span>性別</span><input id="dreamV388Gender" value="${escapeHtml(gender)}" placeholder="男 / 女 / 不公開"></label>
+          <div class="dream-profile-form">
+            <label class="dream-profile-field"><span>顯示名稱</span><input id="dreamProfileDisplayName" value="${escapeHtml(name)}" placeholder="輸入顯示名稱"></label>
+            <label class="dream-profile-field"><span>手機 / 聯絡方式</span><input id="dreamProfilePhone" value="${escapeHtml(phone)}" placeholder="聯絡方式"></label>
+            <label class="dream-profile-field"><span>性別</span><input id="dreamProfileGender" value="${escapeHtml(gender)}" placeholder="男 / 女 / 不公開"></label>
             ${companionExtra}
-            <label class="dream-profile-field full"><span>簡介</span><textarea id="dreamV388Intro" placeholder="介紹自己">${escapeHtml(intro)}</textarea></label>
+            <label class="dream-profile-field full"><span>簡介</span><textarea id="dreamProfileIntro" placeholder="介紹自己">${escapeHtml(intro)}</textarea></label>
           </div>
         </div>
         <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-          <button type="button" class="btn" data-v388-profile-save>儲存資料</button>
-          <button type="button" class="btn ghost" data-v388-profile-back>返回</button>
+          <button type="button" class="btn" data-profile-save>儲存資料</button>
+          <button type="button" class="btn ghost" data-profile-back>返回</button>
         </div>
       </section>`;
   }
@@ -313,30 +313,30 @@
     const st = document.createElement("style");
     st.id = "dreamProfileStyleV388";
     st.textContent = `
-      .dream-profile-panel-v388{margin:12px 0;padding:16px;border-radius:22px}
-      .dream-profile-grid-v388{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}
-      .dream-profile-avatar-v388{width:120px;height:120px;border-radius:24px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;border:1px solid rgba(255,221,235,.22);overflow:hidden}
-      .dream-profile-avatar-v388 img{width:100%;height:100%;object-fit:cover;border-radius:22px;display:block}
-      .dream-profile-form-v388{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+      .dream-profile-panel{margin:12px 0;padding:16px;border-radius:22px}
+      .dream-profile-grid{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}
+      .dream-profile-avatar{width:120px;height:120px;border-radius:24px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;border:1px solid rgba(255,221,235,.22);overflow:hidden}
+      .dream-profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:22px;display:block}
+      .dream-profile-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
       .dream-profile-field{display:flex;flex-direction:column;gap:6px;font-size:13px}
       .dream-profile-field span{opacity:.75}
       .dream-profile-field input,.dream-profile-field textarea{border-radius:14px;border:1px solid rgba(255,221,235,.22);background:rgba(255,255,255,.08);color:inherit;padding:10px 12px;outline:none}
       .dream-profile-field textarea{min-height:96px;resize:vertical}
       .dream-profile-field.full{grid-column:1/-1}
-      .dream-profile-editor-v390{max-width:560px;margin:12px auto;padding:16px}
-      .dream-profile-editor-head-v390{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
-      .dream-profile-editor-head-v390 h2{margin:0;font-size:18px;color:#ffeaf3}
-      .dream-profile-editor-head-v390 p,.dream-profile-editor-note{margin:4px 0 0;font-size:12px;line-height:1.55;color:rgba(255,238,246,.70)}
-      .dream-profile-editor-actions-v390{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
-      .dream-profile-avatar-editor-v390{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-      .dream-profile-file-v390 input{position:absolute;opacity:0;pointer-events:none}
-      .dream-profile-file-v390 span{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:14px;background:linear-gradient(180deg,#ffe1ef,#ff9bc8);color:#682342;font-weight:950;cursor:pointer}
-      .dream-profile-tag-picker-v390{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-      .dream-profile-tag-option-v390{min-height:42px;display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:14px;border:1px solid rgba(255,221,235,.22);background:rgba(255,255,255,.08);font-size:13px;font-weight:900;color:#fff2f7;cursor:pointer}
-      .dream-profile-tag-option-v390 input{width:16px;height:16px;accent-color:#ff9bc8}
-      .dream-profile-tag-option-v390:has(input:checked){border-color:rgba(255,221,235,.58);background:rgba(255,155,200,.20)}
-      @media(max-width:680px){.dream-profile-grid-v388{grid-template-columns:1fr}.dream-profile-form-v388{grid-template-columns:1fr}.dream-profile-avatar-v388{width:96px;height:96px}}
-      @media(max-width:520px){.dream-profile-tag-picker-v390{grid-template-columns:1fr}}
+      .dream-profile-editor{max-width:560px;margin:12px auto;padding:16px}
+      .dream-profile-editor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+      .dream-profile-editor-head h2{margin:0;font-size:18px;color:#ffeaf3}
+      .dream-profile-editor-head p,.dream-profile-editor-note{margin:4px 0 0;font-size:12px;line-height:1.55;color:rgba(255,238,246,.70)}
+      .dream-profile-editor-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
+      .dream-profile-avatar-editor{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+      .dream-profile-file input{position:absolute;opacity:0;pointer-events:none}
+      .dream-profile-file span{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:14px;background:linear-gradient(180deg,#ffe1ef,#ff9bc8);color:#682342;font-weight:950;cursor:pointer}
+      .dream-profile-tag-picker{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+      .dream-profile-tag-option{min-height:42px;display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:14px;border:1px solid rgba(255,221,235,.22);background:rgba(255,255,255,.08);font-size:13px;font-weight:900;color:#fff2f7;cursor:pointer}
+      .dream-profile-tag-option input{width:16px;height:16px;accent-color:#ff9bc8}
+      .dream-profile-tag-option:has(input:checked){border-color:rgba(255,221,235,.58);background:rgba(255,155,200,.20)}
+      @media(max-width:680px){.dream-profile-grid{grid-template-columns:1fr}.dream-profile-form{grid-template-columns:1fr}.dream-profile-avatar{width:96px;height:96px}}
+      @media(max-width:520px){.dream-profile-tag-picker{grid-template-columns:1fr}}
     `;
     document.head.appendChild(st);
   }
@@ -509,11 +509,11 @@
     if(page() !== "profile") go("profile");
     const host = document.getElementById("page-profile") || findProfileHost(role);
     if(!host) return;
-    $all("#dreamProfilePanelV388").forEach(el=>el.remove());
+    $all("#dreamProfilePanel").forEach(el=>el.remove());
     const anchor = host.querySelector(".profile-info-panel");
     if(anchor) anchor.insertAdjacentHTML("afterend", buildProfilePanel(role, profile || current.profile || {}, mode));
     else host.insertAdjacentHTML("afterbegin", buildProfilePanel(role, profile || current.profile || {}, mode));
-    const panel = $("#dreamProfilePanelV388");
+    const panel = $("#dreamProfilePanel");
     if(panel) setTimeout(()=>panel.scrollIntoView({behavior:"smooth", block:"start"}), 30);
   }
   function renderDreamProfilePage(){
@@ -556,7 +556,7 @@
     const profile = await loadProfile(true, role);
     renderProfilePage(role, profile || {});
     if(options.editor) showProfileEditor(role, profile || {}, options.action);
-    if(window.DreamHideLoginToastV387) try{ window.DreamHideLoginToastV387(); }catch(e){}
+    if(window.DreamHideLoginToast) try{ window.DreamHideLoginToast(); }catch(e){}
     toast("\u8cc7\u6599\u5df2\u8f09\u5165");
     return;
   }
@@ -566,10 +566,10 @@
       toast("找不到資料頁容器");
       return;
     }
-    const old = host.querySelector("#dreamProfilePanelV388");
+    const old = host.querySelector("#dreamProfilePanel");
     if(old) old.remove();
     host.insertAdjacentHTML("afterbegin", buildProfilePanel(role, profile || {}));
-    if(window.DreamHideLoginToastV387) try{ window.DreamHideLoginToastV387(); }catch(e){}
+    if(window.DreamHideLoginToast) try{ window.DreamHideLoginToast(); }catch(e){}
     toast("資料已載入");
     if(host.id && host.id.startsWith("page-")){
       const p = host.id.replace(/^page-/,"");
@@ -580,11 +580,11 @@
   */
 
   async function saveProfile(){
-    const role = normalizeRoleValue($("#dreamProfilePanelV388")?.dataset?.profileRole) || getRole();
-    const panel = $("#dreamProfilePanelV388");
+    const role = normalizeRoleValue($("#dreamProfilePanel")?.dataset?.profileRole) || getRole();
+    const panel = $("#dreamProfilePanel");
     const mode = panel?.dataset?.profileMode || "bio";
     if(mode === "avatar"){
-      const file = $("#dreamV388AvatarFile")?.files?.[0];
+      const file = $("#dreamProfileAvatarFile")?.files?.[0];
       toast("正在上傳大頭照...", true);
       let res;
       try{ res = await uploadAvatar(role, file); }
@@ -605,10 +605,10 @@
       return;
     }
     const payload = mode === "tags" ? {
-      personality_tags: JSON.stringify($all("#dreamProfilePanelV388 .dream-profile-tag-option-v390 input:checked").map(input => input.value).filter(Boolean))
+      personality_tags: JSON.stringify($all("#dreamProfilePanel .dream-profile-tag-option input:checked").map(input => input.value).filter(Boolean))
     } : {
-      display_name: mode === "name" ? ($("#dreamV388DisplayName")?.value || "").trim() : undefined,
-      intro: mode === "bio" ? ($("#dreamV388Intro")?.value || "").trim() : undefined
+      display_name: mode === "name" ? ($("#dreamProfileDisplayName")?.value || "").trim() : undefined,
+      intro: mode === "bio" ? ($("#dreamProfileIntro")?.value || "").trim() : undefined
     };
     Object.keys(payload).forEach(key=>payload[key] === undefined && delete payload[key]);
     if(mode === "name" && !payload.display_name){
@@ -645,7 +645,7 @@
       const txt = (el.textContent || "").replace(/\s+/g,"");
       if(!txt) return;
       if(texts.some(t => txt.includes(t))){
-        el.dataset.v388ProfileEntry = role;
+        el.dataset.profileEntry = role;
         if(!el.title) el.title = role === "companion" ? "進入陪玩資料" : "進入個人資料";
       }
     });
@@ -682,31 +682,31 @@
           return false;
         }
       }
-      const profileBtn = e.target.closest && e.target.closest("[data-v388-profile-entry]");
+      const profileBtn = e.target.closest && e.target.closest("[data-profile-entry]");
       if(profileBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-        openProfile(profileBtn.dataset.v388ProfileEntry || getRole());
+        openProfile(profileBtn.dataset.profileEntry || getRole());
         return false;
       }
-      const cancelBtn = e.target.closest && e.target.closest("[data-v388-profile-cancel]");
+      const cancelBtn = e.target.closest && e.target.closest("[data-profile-cancel]");
       if(cancelBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-        $("#dreamProfilePanelV388")?.remove();
+        $("#dreamProfilePanel")?.remove();
         return false;
       }
-      const saveBtn = e.target.closest && e.target.closest("[data-v388-profile-save]");
+      const saveBtn = e.target.closest && e.target.closest("[data-profile-save]");
       if(saveBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
         saveProfile();
         return false;
       }
-      const refreshBtn = e.target.closest && e.target.closest("[data-v388-profile-refresh]");
+      const refreshBtn = e.target.closest && e.target.closest("[data-profile-refresh]");
       if(refreshBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
         openProfile(getRole());
         return false;
       }
-      const backBtn = e.target.closest && e.target.closest("[data-v388-profile-back]");
+      const backBtn = e.target.closest && e.target.closest("[data-profile-back]");
       if(backBtn){
         e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
         try{ if(window.DreamArchitectureV384) window.DreamArchitectureV384.go(getRole()==="companion"?"companion-home":"member"); else go(getRole()==="companion"?"companion-home":"member"); }catch(err){ go("member"); }
@@ -726,10 +726,10 @@
     }, true);
 
     document.addEventListener("change", function(e){
-      const input = e.target.closest && e.target.closest("[data-v388-avatar-file]");
+      const input = e.target.closest && e.target.closest("[data-profile-avatar-file]");
       if(!input) return;
       const file = input.files && input.files[0];
-      const preview = $("[data-v388-avatar-preview]");
+      const preview = $("[data-profile-avatar-preview]");
       if(!file || !preview) return;
       if(!/^image\/(jpeg|png|webp)$/i.test(file.type || "")){
         toast("僅支援 JPG、PNG、WEBP 圖片");
@@ -754,5 +754,5 @@
   window.renderDreamProfilePage = renderDreamProfilePage;
   window.openDreamProfile = openProfile;
   window.goProfile = openProfile;
-  window.DreamProfileServiceSyncV388 = {loadProfile, openProfile, saveProfile, syncServiceVisibility, renderProfilePage, renderDreamProfilePage, showProfileEditor};
+  window.DreamProfileServiceSync = {loadProfile, openProfile, saveProfile, syncServiceVisibility, renderProfilePage, renderDreamProfilePage, showProfileEditor};
 })();

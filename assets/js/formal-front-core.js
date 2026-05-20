@@ -12,7 +12,7 @@ window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV389;
 window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV389;
 
 
-/* v389：正式統一背景 API 呼叫，避免舊 DreamStableFetch 呼叫殘留 */
+/* 正式統一背景 API 呼叫 */
 window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
   const fn = window.DreamStableFetchV389 ||
              window.dreamStableApiV389;
@@ -32,7 +32,7 @@ window.dreamStableApiV389 = window.dreamStableApiV389;
 window.dreamStableApiV389 = window.dreamStableApiV389;
 window.dreamStableApiV389 = window.dreamStableApiV389;
 
-/* v389-formal-version-cleanup */
+/* v404-formal-release */
 
 window.dreamFormalIsLoginPageV387 = window.dreamFormalIsLoginPageV387 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
@@ -45,7 +45,7 @@ window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV387;
 window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV387;
 
 
-/* v389-formal-version-cleanup */
+/* v404-formal-release */
 window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
   const fn = window.DreamStableFetchV387 ||
              window.dreamStableApiV389 ||
@@ -102,7 +102,7 @@ window.dreamFormalIsLoginPageV379 = window.dreamFormalIsLoginPageV384;
 window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV384;
 
 
-/* v384-full-current-login-architecture */
+/* current-login-architecture */
 window.dreamFormalIsLoginPageV381 = window.dreamFormalIsLoginPageV381 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
   return p==="login" || p==="register" || p==="forgot";
@@ -269,7 +269,7 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     const root = findCompanionRoot();
     const refresh = findRefreshCard(root);
     if(!root || !refresh || !refresh.parentElement) return;
-    document.querySelectorAll("[data-v357-companion-logout],[data-v358-companion-logout],[data-v363-companion-logout],[data-v366-companion-logout]").forEach(el=>el.remove());
+    document.querySelectorAll("[data-v357-companion-logout],[data-v358-companion-logout],[data-v363-companion-logout]").forEach(el=>el.remove());
     const clone = refresh.cloneNode(true);
     setLogoutCard(clone);
     refresh.parentElement.insertBefore(clone, refresh.nextSibling);

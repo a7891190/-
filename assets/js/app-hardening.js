@@ -48,7 +48,7 @@
 
   function isGuardedAction(btn){
     if(!btn || btn.dataset.dreamNoGuard === "1") return false;
-    if(btn.matches('[data-transfer-confirm],[data-exchange-submit],[data-exchange-confirm],[data-v26-action],[data-cart-id],[data-companion-action],[data-companion-btn],[data-order-action],#front_login_btn,#front_register_btn,#legalConsentAccept')) return true;
+    if(btn.matches('[data-transfer-confirm],[data-exchange-submit],[data-exchange-confirm],[data-social-action],[data-cart-id],[data-companion-action],[data-companion-btn],[data-order-action],#front_login_btn,#front_register_btn,#legalConsentAccept')) return true;
     if(btn.closest('form')) return true;
     const txt=(btn.textContent||"").trim();
     return /送出|確認|完成|登入|註冊|購買|兌換|上傳|發布|加入購物車|接手|不接受|打卡|轉單|留言|簽到/.test(txt);
@@ -83,7 +83,7 @@
     const input = e.target;
     if(!input || input.type !== 'file' || !input.files || !input.files[0]) return;
     const file = input.files[0];
-    const key = [input.id,input.name,input.dataset.bind,input.dataset.v26Input,input.accept].join(' ').toLowerCase();
+    const key = [input.id,input.name,input.dataset.bind,input.dataset.socialInput,input.accept].join(' ').toLowerCase();
     const limit = /avatar|大頭|頭像/.test(key) ? 5 * 1024 * 1024 : 8 * 1024 * 1024;
     if(file.size > limit){
       input.value = '';
@@ -106,12 +106,17 @@
   window.addEventListener('online', ()=>{ updateNetworkBanner(); safeToast('網路已恢復'); });
   window.addEventListener('offline', updateNetworkBanner);
   window.addEventListener('error', function(e){
-    console.warn('[夢競陪玩] 前端錯誤', e.message || e.error || e);
+    if(window.DREAM_API_DEBUG) console.warn('[DreamFrontError]', e.message || e.error || e);
   });
   window.addEventListener('unhandledrejection', function(e){
     const msg = e.reason && (e.reason.message || String(e.reason));
-    console.warn('[夢競陪玩] 非同步錯誤', msg || e.reason);
-    if(/逾時|離線|Failed to fetch|NetworkError/i.test(msg||'')) safeToast(msg || '連線失敗，請稍後再試');
+    if(/逾時|離線|Failed to fetch|NetworkError/i.test(msg||'')){
+      safeToast(msg || '連線失敗，請稍後再試');
+      e.preventDefault();
+      if(window.DREAM_API_DEBUG) console.warn('[DreamNetwork]', msg || e.reason);
+      return;
+    }
+    if(window.DREAM_API_DEBUG) console.warn('[DreamAsync]', msg || e.reason);
   });
   document.addEventListener('DOMContentLoaded', function(){
     updateNetworkBanner();
@@ -126,7 +131,7 @@
 })();
 
 
-/* v389-formal-version-cleanup */
+/* v404-formal-release */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
@@ -134,7 +139,7 @@
   window.addEventListener("unhandledrejection", function(e){
     const msg = e && e.reason && (e.reason.message || String(e.reason));
     if(msg && msg.includes("連線逾時")){
-      console.warn("[DreamHardening] 背景 API 逾時已降級處理，不中斷前台");
+      if(window.DREAM_API_DEBUG) console.warn("[DreamHardening] 背景 API 逾時已降級處理，不中斷前台");
       e.preventDefault();
     }
   });
@@ -154,7 +159,7 @@
   window.__dreamHardeningTimeoutV377 = true;
   window.addEventListener('unhandledrejection', function(e){
     const msg = e && e.reason && (e.reason.message || String(e.reason));
-    if(msg && msg.includes('連線逾時')){ console.warn('[DreamHardening] 背景 API 逾時已降級處理，不中斷前台'); e.preventDefault(); }
+    if(msg && msg.includes('連線逾時')){ if(window.DREAM_API_DEBUG) console.warn('[DreamHardening] 背景 API 逾時已降級處理，不中斷前台'); e.preventDefault(); }
   });
 })();
 
@@ -187,7 +192,7 @@
 })();
 
 
-/* v384：背景錯誤降噪 */
+/* 背景錯誤降噪 */
 (function(){
   if(window.__dreamHardeningV384)return;window.__dreamHardeningV384=true;
   window.addEventListener("unhandledrejection",function(e){

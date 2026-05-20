@@ -1,7 +1,7 @@
 (function(){
   "use strict";
-  if (window.__dreamFormalHomeProfileV401) return;
-  window.__dreamFormalHomeProfileV401 = true;
+  if (window.__dreamFormalHomeProfile) return;
+  window.__dreamFormalHomeProfile = true;
 
   const CFG = window.DREAM_CONFIG || {};
   const API_BASE = CFG.API_BASE || window.DREAM_API_URL || "https://api.131rwjuh.com/api.php";
@@ -134,33 +134,33 @@
   }
 
   function injectStyle(){
-    if (document.getElementById("formalHomeProfileV401Style")) return;
+    if (document.getElementById("formalHomeProfileFormalStyle")) return;
     const style = document.createElement("style");
-    style.id = "formalHomeProfileV401Style";
+    style.id = "formalHomeProfileFormalStyle";
     style.textContent = `
-#page-home .top3-avatar img,#page-home .rank-avatar img,#page-vip-rank .v401-rank-avatar img,
+#page-home .top3-avatar img,#page-home .rank-avatar img,#page-vip-rank .formal-rank-avatar img,
 #homeRecommendCompanions .recommend-avatar img,#page-inn .post-avatar img,#page-inn .inn-comment-avatar img,
 #page-profile [data-profile-bind="avatar"] img{width:100%!important;height:100%!important;display:block!important;object-fit:cover!important;border-radius:inherit!important}
 #page-home .notice-line{cursor:pointer;position:relative;padding-right:86px}
 #page-home .notice-line .notice-history-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:1px solid rgba(255,221,235,.32);border-radius:999px;background:rgba(255,255,255,.1);color:#fff1f7;font-size:12px;font-weight:900;padding:6px 10px}
-.v401-notice-modal{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(15,4,12,.72);backdrop-filter:blur(10px)}
-.v401-notice-modal.is-open{display:flex}
-.v401-notice-dialog{width:min(920px,100%);max-height:min(82vh,720px);display:grid;grid-template-columns:minmax(220px,32%) 1fr;gap:12px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(62,18,44,.97),rgba(26,8,22,.98));border:1px solid rgba(255,210,230,.28);box-shadow:0 22px 60px rgba(0,0,0,.42);color:#fff1f7}
-.v401-notice-head{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.v401-notice-head h3{margin:0;font-size:18px}
-.v401-notice-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,221,235,.32);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer}
-.v401-notice-list{display:grid;gap:8px;overflow:auto;max-height:60vh;padding-right:4px}
-.v401-notice-item{border:1px solid rgba(255,221,235,.18);border-radius:12px;background:rgba(255,255,255,.06);color:#fff1f7;text-align:left;padding:10px;cursor:pointer}
-.v401-notice-item.active{border-color:rgba(255,214,230,.55);background:rgba(255,255,255,.12)}
-.v401-notice-item b,.v401-notice-detail h4{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.v401-notice-item span{display:block;margin-top:4px;font-size:11px;color:rgba(255,235,244,.68)}
-.v401-notice-detail{overflow:auto;max-height:60vh;border:1px solid rgba(255,221,235,.16);border-radius:14px;background:rgba(255,255,255,.055);padding:16px}
-.v401-notice-detail h4{margin:0 0 8px;font-size:20px}
-.v401-notice-detail time{display:block;margin-bottom:12px;color:rgba(255,235,244,.68);font-size:12px}
-.v401-notice-body{white-space:pre-wrap;line-height:1.75;font-size:16px}
-#page-vip-rank .v401-rank-row{grid-template-columns:48px 1fr auto!important}
-#page-vip-rank .v401-rank-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,238,246,.55);box-shadow:0 5px 14px rgba(0,0,0,.24)}
-#page-vip-rank .v401-rank-badge{position:absolute;right:-3px;bottom:-3px;min-width:18px;height:18px;border-radius:999px;display:grid;place-items:center;background:#ffd8e9;color:#641d40;border:1px solid rgba(255,255,255,.8);font-size:10px;font-weight:950}
+.formal-notice-modal{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(15,4,12,.72);backdrop-filter:blur(10px)}
+.formal-notice-modal.is-open{display:flex}
+.formal-notice-dialog{width:min(920px,100%);max-height:min(82vh,720px);display:grid;grid-template-columns:minmax(220px,32%) 1fr;gap:12px;padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(62,18,44,.97),rgba(26,8,22,.98));border:1px solid rgba(255,210,230,.28);box-shadow:0 22px 60px rgba(0,0,0,.42);color:#fff1f7}
+.formal-notice-head{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.formal-notice-head h3{margin:0;font-size:18px}
+.formal-notice-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,221,235,.32);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer}
+.formal-notice-list{display:grid;gap:8px;overflow:auto;max-height:60vh;padding-right:4px}
+.formal-notice-item{border:1px solid rgba(255,221,235,.18);border-radius:12px;background:rgba(255,255,255,.06);color:#fff1f7;text-align:left;padding:10px;cursor:pointer}
+.formal-notice-item.active{border-color:rgba(255,214,230,.55);background:rgba(255,255,255,.12)}
+.formal-notice-item b,.formal-notice-detail h4{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formal-notice-item span{display:block;margin-top:4px;font-size:11px;color:rgba(255,235,244,.68)}
+.formal-notice-detail{overflow:auto;max-height:60vh;border:1px solid rgba(255,221,235,.16);border-radius:14px;background:rgba(255,255,255,.055);padding:16px}
+.formal-notice-detail h4{margin:0 0 8px;font-size:20px}
+.formal-notice-detail time{display:block;margin-bottom:12px;color:rgba(255,235,244,.68);font-size:12px}
+.formal-notice-body{white-space:pre-wrap;line-height:1.75;font-size:16px}
+#page-vip-rank .formal-rank-row{grid-template-columns:48px 1fr auto!important}
+#page-vip-rank .formal-rank-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;display:block;position:relative;border:1px solid rgba(255,238,246,.55);box-shadow:0 5px 14px rgba(0,0,0,.24)}
+#page-vip-rank .formal-rank-badge{position:absolute;right:-3px;bottom:-3px;min-width:18px;height:18px;border-radius:999px;display:grid;place-items:center;background:#ffd8e9;color:#641d40;border:1px solid rgba(255,255,255,.8);font-size:10px;font-weight:950}
 #page-profile.active .profile-bottom-actions{gap:8px!important}
 #page-profile.profile-member.active .profile-bottom-actions{grid-template-columns:minmax(112px,1fr) minmax(112px,1fr)!important}
 #page-profile.profile-member.active .profile-bottom-actions button[data-action="follow-profile"],
@@ -169,8 +169,8 @@
 #page-profile.profile-companion.active .profile-bottom-actions{grid-template-columns:62px 62px 72px minmax(88px,1fr) minmax(88px,1fr)!important}
 #page-profile.active .profile-bottom-actions [data-action="gift-profile"]{display:flex!important;align-items:center!important;justify-content:center!important;border:1px solid rgba(255,210,228,.74)!important;border-radius:28px!important;color:#fff!important;background:rgba(255,255,255,.08)!important;font-weight:900!important}
 @media(max-width:520px){
-  .v401-notice-dialog{grid-template-columns:1fr;max-height:86vh}
-  .v401-notice-list,.v401-notice-detail{max-height:34vh}
+  .formal-notice-dialog{grid-template-columns:1fr;max-height:86vh}
+  .formal-notice-list,.formal-notice-detail{max-height:34vh}
   #page-profile.profile-companion.active .profile-bottom-actions{grid-template-columns:54px 54px 62px minmax(74px,1fr) minmax(74px,1fr)!important;gap:6px!important}
   #page-profile.active .profile-bottom-actions button{font-size:13px!important}
   #page-profile.active .profile-bottom-actions button span{font-size:12px!important}
@@ -228,10 +228,10 @@
     const panel = document.querySelector("#page-vip-rank [data-v267-rank-page]");
     if (!panel) return;
     const rows = state.boards[key] || [];
-    const tabs = BOARDS.map(board => `<button type="button" class="v267-tab ${board === key ? "active" : ""}" data-v401-rank-tab="${board}">${esc(BOARD_META[board].title)}</button>`).join("");
+    const tabs = BOARDS.map(board => `<button type="button" class="v267-tab ${board === key ? "active" : ""}" data-formal-rank-tab="${board}">${esc(BOARD_META[board].title)}</button>`).join("");
     const body = rows.length ? rows.map(row => `
-      <div class="v267-rank-row v401-rank-row">
-        <div class="v267-rank-no"><span class="v401-rank-avatar">${avatarImg(row, row.role, displayName(row))}<span class="v401-rank-badge">${Number(row.rank || 0)}</span></span></div>
+      <div class="v267-rank-row formal-rank-row">
+        <div class="v267-rank-no"><span class="formal-rank-avatar">${avatarImg(row, row.role, displayName(row))}<span class="formal-rank-badge">${Number(row.rank || 0)}</span></span></div>
         <div>
           <div class="v267-rank-name">${esc(displayName(row))}</div>
           <div class="v267-rank-sub">${esc(BOARD_META[key].title)}</div>
@@ -273,35 +273,35 @@
         if (Array.isArray(fromSnapshot) && fromSnapshot.length) state.recommended = fromSnapshot;
       }
     } catch (err) {
-      console.warn("[front_ranking_snapshot v401]", err && err.message || err);
+      console.warn("[front_ranking_snapshot formal]", err && err.message || err);
     }
     try {
       const res = await api("companion_recommendations", { limit: 5 });
       const rows = res?.companions || res?.items || res?.list || res?.data || [];
       if (Array.isArray(rows)) state.recommended = rows;
     } catch (err) {
-      console.warn("[companion_recommendations v401]", err && err.message || err);
+      console.warn("[companion_recommendations formal]", err && err.message || err);
     }
     renderAllRankViews();
   }
 
   function ensureNoticeModal(){
-    let modal = document.getElementById("v401NoticeModal");
+    let modal = document.getElementById("formalNoticeModal");
     if (modal) return modal;
     modal = document.createElement("div");
-    modal.id = "v401NoticeModal";
-    modal.className = "v401-notice-modal";
+    modal.id = "formalNoticeModal";
+    modal.className = "formal-notice-modal";
     modal.innerHTML = `
-      <div class="v401-notice-dialog" role="dialog" aria-modal="true" aria-label="歷史公告">
-        <div class="v401-notice-head"><h3>歷史公告</h3><button type="button" class="v401-notice-close" data-v401-notice-close aria-label="關閉">×</button></div>
-        <div class="v401-notice-list" data-v401-notice-list></div>
-        <article class="v401-notice-detail" data-v401-notice-detail></article>
+      <div class="formal-notice-dialog" role="dialog" aria-modal="true" aria-label="歷史公告">
+        <div class="formal-notice-head"><h3>歷史公告</h3><button type="button" class="formal-notice-close" data-formal-notice-close aria-label="關閉">×</button></div>
+        <div class="formal-notice-list" data-formal-notice-list></div>
+        <article class="formal-notice-detail" data-formal-notice-detail></article>
       </div>`;
     document.body.appendChild(modal);
     modal.addEventListener("click", event => {
-      if (event.target === modal || event.target.closest("[data-v401-notice-close]")) closeNoticeModal();
-      const item = event.target.closest("[data-v401-notice-id]");
-      if (item) selectNotice(Number(item.dataset.v401NoticeId || 0));
+      if (event.target === modal || event.target.closest("[data-formal-notice-close]")) closeNoticeModal();
+      const item = event.target.closest("[data-formal-notice-id]");
+      if (item) selectNotice(Number(item.dataset.formalNoticeId || 0));
     });
     return modal;
   }
@@ -324,30 +324,30 @@
   function selectNotice(id){
     const modal = ensureNoticeModal();
     const notice = noticeById(id);
-    modal.querySelectorAll("[data-v401-notice-id]").forEach(btn => {
-      btn.classList.toggle("active", Number(btn.dataset.v401NoticeId || 0) === Number(notice?.id || 0));
+    modal.querySelectorAll("[data-formal-notice-id]").forEach(btn => {
+      btn.classList.toggle("active", Number(btn.dataset.formalNoticeId || 0) === Number(notice?.id || 0));
     });
-    const detail = modal.querySelector("[data-v401-notice-detail]");
+    const detail = modal.querySelector("[data-formal-notice-detail]");
     if (!detail) return;
     detail.innerHTML = notice
-      ? `<h4>${esc(notice.title || "公告")}</h4><time>${esc(notice.created_at || "")}</time><div class="v401-notice-body">${esc(notice.message || "")}</div>`
-      : `<h4>目前尚無公告</h4><div class="v401-notice-body">後台尚未上架公告。</div>`;
+      ? `<h4>${esc(notice.title || "公告")}</h4><time>${esc(notice.created_at || "")}</time><div class="formal-notice-body">${esc(notice.message || "")}</div>`
+      : `<h4>目前尚無公告</h4><div class="formal-notice-body">後台尚未上架公告。</div>`;
   }
   function openNoticeModal(){
     const modal = ensureNoticeModal();
-    const list = modal.querySelector("[data-v401-notice-list]");
+    const list = modal.querySelector("[data-formal-notice-list]");
     if (list) {
       list.innerHTML = state.announcements.length ? state.announcements.map(item => `
-        <button type="button" class="v401-notice-item" data-v401-notice-id="${Number(item.id || 0)}">
+        <button type="button" class="formal-notice-item" data-formal-notice-id="${Number(item.id || 0)}">
           <b>${esc(item.title || "公告")}</b>
           <span>${esc(item.created_at || "")}</span>
-        </button>`).join("") : `<div class="v401-notice-item active"><b>目前尚無公告</b><span>等待後台上架</span></div>`;
+        </button>`).join("") : `<div class="formal-notice-item active"><b>目前尚無公告</b><span>等待後台上架</span></div>`;
     }
     modal.classList.add("is-open");
     selectNotice(Number(state.announcements[0]?.id || 0));
   }
   function closeNoticeModal(){
-    document.getElementById("v401NoticeModal")?.classList.remove("is-open");
+    document.getElementById("formalNoticeModal")?.classList.remove("is-open");
   }
   async function loadAnnouncements(){
     try {
@@ -355,7 +355,7 @@
       const rows = res?.announcements || res?.items || [];
       state.announcements = Array.isArray(rows) ? rows : [];
     } catch (err) {
-      console.warn("[announcement_list v401]", err && err.message || err);
+      console.warn("[announcement_list formal]", err && err.message || err);
       state.announcements = [];
     }
     renderNoticeLine();
@@ -416,17 +416,17 @@
       return `<article class="panel post-card" data-post-id="${esc(id)}">
         <div class="post-head">
           <div class="post-avatar" data-author-type="${esc(authorType)}">${avatarImg(post, authorType, authorName)}</div>
-          <div><div class="post-name">${esc(authorName)} <button type="button" data-v26-action="follow" data-target-type="${esc(authorType)}" data-target-id="${esc(authorId)}" style="margin-left:8px;border-radius:999px;padding:4px 8px;border:1px solid rgba(255,220,235,.28);background:rgba(255,255,255,.08);color:inherit">${post.is_following_author ? "已關注" : "關注"}</button></div><div class="post-time">${esc(timeText(post.created_at))}</div></div>
+          <div><div class="post-name">${esc(authorName)} <button type="button" data-social-action="follow" data-target-type="${esc(authorType)}" data-target-id="${esc(authorId)}" style="margin-left:8px;border-radius:999px;padding:4px 8px;border:1px solid rgba(255,220,235,.28);background:rgba(255,255,255,.08);color:inherit">${post.is_following_author ? "已關注" : "關注"}</button></div><div class="post-time">${esc(timeText(post.created_at))}</div></div>
         </div>
         <div class="post-text">${esc(post.content || "")}</div>
         ${hasImage ? `<div class="post-image"><img src="${esc(image)}" alt="客棧圖片" loading="lazy" style="width:100%;border-radius:16px;display:block"></div>` : `<div class="post-image" style="display:none"></div>`}
         <div class="post-actions">
-          <button type="button" data-v26-action="favorite" data-post-id="${esc(id)}">${post.is_favorited ? "★" : "☆"} 收藏 <span data-fav-count>${Number(post.favorite_count || 0)}</span></button>
-          <button type="button" data-v26-action="comment-open" data-post-id="${esc(id)}">留言 <span>${Number(post.comment_count || 0)}</span></button>
-          <button type="button" data-v26-action="like" data-post-id="${esc(id)}">${post.is_liked ? "♥" : "♡"} <span data-like-count>${Number(post.like_count || 0)}</span></button>
+          <button type="button" data-social-action="favorite" data-post-id="${esc(id)}">${post.is_favorited ? "★" : "☆"} 收藏 <span data-fav-count>${Number(post.favorite_count || 0)}</span></button>
+          <button type="button" data-social-action="comment-open" data-post-id="${esc(id)}">留言 <span>${Number(post.comment_count || 0)}</span></button>
+          <button type="button" data-social-action="like" data-post-id="${esc(id)}">${post.is_liked ? "♥" : "♡"} <span data-like-count>${Number(post.like_count || 0)}</span></button>
         </div>
         ${renderInnComments(post)}
-        <div style="display:flex;gap:8px;margin-top:10px"><input data-v26-comment-input="${esc(id)}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-v26-action="comment" data-post-id="${esc(id)}" type="button">送出</button></div>
+        <div style="display:flex;gap:8px;margin-top:10px"><input data-social-comment-input="${esc(id)}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-social-action="comment" data-post-id="${esc(id)}" type="button">送出</button></div>
       </article>`;
     }).join("");
     applyDefaultAvatars();
@@ -438,7 +438,7 @@
       const res = await api("inn_post_list", { limit: 50 });
       state.innPosts = res?.posts || res?.list || res?.data || [];
     } catch (err) {
-      console.warn("[inn_post_list v401]", err && err.message || err);
+      console.warn("[inn_post_list formal]", err && err.message || err);
       state.innPosts = [];
     }
     renderInnPosts();
@@ -456,7 +456,7 @@
     document.querySelectorAll([
       "#page-home .top3-avatar",
       "#page-home .rank-avatar",
-      "#page-vip-rank .v401-rank-avatar",
+      "#page-vip-rank .formal-rank-avatar",
       "#homeRecommendCompanions .recommend-avatar",
       "#page-inn .post-avatar",
       "#page-inn .inn-comment-avatar",
@@ -472,7 +472,7 @@
         if (!String(img.getAttribute("src") || "").trim()) img.src = fallback;
         return;
       }
-      if (!el.classList.contains("v401-rank-avatar") || !el.querySelector(".v401-rank-badge")) {
+      if (!el.classList.contains("formal-rank-avatar") || !el.querySelector(".formal-rank-badge")) {
         el.innerHTML = avatarImg({ role }, role, "預設用戶");
       }
     });
@@ -505,15 +505,15 @@
         setTimeout(() => renderHomeTop3(homeTab.dataset.boardKey || "vip_rank"), 0);
         setTimeout(() => renderHomeTop3(homeTab.dataset.boardKey || "vip_rank"), 120);
       }
-      const rankTab = event.target.closest("[data-v401-rank-tab]");
+      const rankTab = event.target.closest("[data-formal-rank-tab]");
       if (rankTab) {
         event.preventDefault();
-        renderRankPage(rankTab.dataset.v401RankTab || "vip_rank");
+        renderRankPage(rankTab.dataset.formalRankTab || "vip_rank");
       }
       if (event.target.closest("[data-inn-filter],[data-inn-sort]")) {
         setTimeout(renderInnPosts, 40);
       }
-      if (event.target.closest("[data-v26-action]")) {
+      if (event.target.closest("[data-social-action]")) {
         setTimeout(loadInnPosts, 500);
       }
     }, true);
@@ -573,7 +573,7 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
-  window.DREAM_REFRESH_FORMAL_HOME_V401 = function(){
+  window.DREAM_REFRESH_FORMAL_HOME = function(){
     return Promise.all([loadRankAndRecommend(), loadAnnouncements(), loadInnPosts()]).then(() => {
       ensureProfileGiftButtonLayout();
       applyDefaultAvatars();

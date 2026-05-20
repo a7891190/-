@@ -1,5 +1,5 @@
-/* v389-formal-version-cleanup */
-window.DREAM_API_CLIENT_VERSION = "v392-login-fast-public-api";
+/* v404-formal-release */
+window.DREAM_API_CLIENT_VERSION = "v404-formal-release";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -403,7 +403,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadMarketItems(){
-    // v384 guard loadMarketItems
+    // guard loadMarketItems
     if(typeof dreamIsMarketPageV384==="function" && !dreamIsMarketPageV384()) return;
     // v381 guard loadMarketItems
     if(typeof dreamIsMarketPageV381==="function" && !dreamIsMarketPageV381()) return;
@@ -435,7 +435,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadCompanions(){
-    // v384 guard loadCompanions
+    // guard loadCompanions
     const p384=(location.hash||"#home").replace(/^#/,"")||"home"; if(p384!=="companion" && p384!=="companion-home") return;
     // v381 guard loadCompanions
     const p381=(location.hash||"#home").replace(/^#/,"")||"home"; if(p381!=="companion" && p381!=="companion-home") return;
@@ -510,7 +510,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function loadRechargeRecords(){
-    // v384 guard loadRechargeRecords
+    // guard loadRechargeRecords
     if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
     // v381 guard loadRechargeRecords
     if(window.DreamStableAPI && !window.DreamStableAPI.isLoggedIn()) return;
@@ -703,8 +703,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
   }
 
   async function doRenew(){
-    const username = $("[data-v26-input='renew-username']")?.value.trim() || $("#renew_user")?.value.trim() || "";
-    const code = $("[data-v26-input='renew-code']")?.value.trim() || $("#renew_code")?.value.trim() || "";
+    const username = $("[data-social-input='renew-username']")?.value.trim() || $("#renew_user")?.value.trim() || "";
+    const code = $("[data-social-input='renew-code']")?.value.trim() || $("#renew_code")?.value.trim() || "";
     if(!username || !code) return toast("請輸入帳號與會員碼");
     try{
       const res = await api("renew", {username, code});
@@ -831,7 +831,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
         if(window.openMarketProduct && card){ e.preventDefault(); e.stopPropagation(); window.openMarketProduct(id, card); return; }
       }
 
-      if(e.target.closest("[data-v26-action='renew-code']")) doRenew();
+      if(e.target.closest("[data-social-action='renew-code']")) doRenew();
 
       if(e.target.closest("#page-forgot .btn")) doForgot();
 
@@ -1097,7 +1097,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   async function loadShop(){
-    // v384 guard loadShop
+    // guard loadShop
     if(typeof dreamIsMarketPageV384==="function" && !dreamIsMarketPageV384()) return;
     // v381 guard loadShop
     if(typeof dreamIsMarketPageV381==="function" && !dreamIsMarketPageV381()) return;
@@ -1272,8 +1272,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
   async function renew(){
     /* no auth limit */
-    const username = $("[data-v26-input='renew-username']")?.value.trim() || "";
-    const code = $("[data-v26-input='renew-code']")?.value.trim() || "";
+    const username = $("[data-social-input='renew-username']")?.value.trim() || "";
+    const code = $("[data-social-input='renew-code']")?.value.trim() || "";
     if(!username || !code) return toast("請輸入帳號與會員碼");
     const res = await api("renew", {username, code});
     toast(res.message || (res.ok ? "會員已開通 30 天" : "續期失敗"));

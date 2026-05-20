@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dream-playmate-v392';
+const CACHE_NAME = 'dream-playmate-v404';
 const APP_SHELL = [
   './',
   './index.html',
@@ -7,7 +7,7 @@ const APP_SHELL = [
   './assets/js/app-config.js',
   './assets/js/app-hardening.js',
   './assets/js/api-client.js',
-  './assets/js/v26-social-client.js',
+  './assets/js/social-client.js',
   './assets/page_bg.webp',
   './assets/logo.webp',
   './favicon.webp'

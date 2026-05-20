@@ -1,4 +1,4 @@
-/* v389-formal-version-cleanup */
+/* v404-formal-release */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});
@@ -63,12 +63,12 @@
       const authorId = post.author_id || "";
       const image = post.image_url || post.post_image_url || "";
       return `<article class="panel post-card" data-post-id="${esc(id)}">
-        <div class="post-head"><div class="post-avatar">${avatarText(authorName)}</div><div><div class="post-name">${esc(authorName)} <button type="button" data-v26-action="follow" data-target-type="${esc(authorType)}" data-target-id="${esc(authorId)}" style="margin-left:8px;border-radius:999px;padding:4px 8px;border:1px solid rgba(255,220,235,.28);background:rgba(255,255,255,.08);color:inherit">${post.is_following_author ? "已關注" : "關注"}</button></div><div class="post-time">${timeText(post.created_at)}</div></div></div>
+        <div class="post-head"><div class="post-avatar">${avatarText(authorName)}</div><div><div class="post-name">${esc(authorName)} <button type="button" data-social-action="follow" data-target-type="${esc(authorType)}" data-target-id="${esc(authorId)}" style="margin-left:8px;border-radius:999px;padding:4px 8px;border:1px solid rgba(255,220,235,.28);background:rgba(255,255,255,.08);color:inherit">${post.is_following_author ? "已關注" : "關注"}</button></div><div class="post-time">${timeText(post.created_at)}</div></div></div>
         <div class="post-text">${esc(post.content || "")}</div>
         ${image ? `<div class="post-image"><img src="${esc(image)}" alt="客棧圖片" loading="lazy" style="width:100%;border-radius:16px;display:block"></div>` : `<div class="post-image" style="display:none"></div>`}
-        <div class="post-actions"><button type="button" data-v26-action="favorite" data-post-id="${esc(id)}">${post.is_favorited ? "★" : "☆"} 收藏 <span data-fav-count>${Number(post.favorite_count||0)}</span></button><button type="button" data-v26-action="comment-open" data-post-id="${esc(id)}">留言 <span>${Number(post.comment_count||0)}</span></button><button type="button" data-v26-action="like" data-post-id="${esc(id)}">${post.is_liked ? "♥" : "♡"} <span data-like-count>${Number(post.like_count||0)}</span></button></div>
+        <div class="post-actions"><button type="button" data-social-action="favorite" data-post-id="${esc(id)}">${post.is_favorited ? "★" : "☆"} 收藏 <span data-fav-count>${Number(post.favorite_count||0)}</span></button><button type="button" data-social-action="comment-open" data-post-id="${esc(id)}">留言 <span>${Number(post.comment_count||0)}</span></button><button type="button" data-social-action="like" data-post-id="${esc(id)}">${post.is_liked ? "♥" : "♡"} <span data-like-count>${Number(post.like_count||0)}</span></button></div>
         ${renderComments(post)}
-        <div style="display:flex;gap:8px;margin-top:10px"><input data-v26-comment-input="${esc(id)}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-v26-action="comment" data-post-id="${esc(id)}" type="button">送出</button></div>
+        <div style="display:flex;gap:8px;margin-top:10px"><input data-social-comment-input="${esc(id)}" placeholder="留言不能空白" style="flex:1;border-radius:999px;padding:0 12px"><button class="btn" data-social-action="comment" data-post-id="${esc(id)}" type="button">送出</button></div>
       </article>`;
     }).join("");
   }
@@ -99,9 +99,9 @@ try{
   }
 
   document.addEventListener("change", e=>{
-    const fileInput = e.target.closest("[data-v26-input='inn-image']");
+    const fileInput = e.target.closest("[data-social-input='inn-image']");
     if(!fileInput) return;
-    const label = document.querySelector("[data-v26-image-name]");
+    const label = document.querySelector("[data-social-image-name]");
     if(label) label.textContent = fileInput.files?.[0]?.name || "尚未選擇圖片";
   });
 
@@ -111,10 +111,10 @@ try{
     const sortBtn = e.target.closest("[data-inn-sort]");
     if(sortBtn){ state.sort = sortBtn.dataset.innSort || "time"; document.querySelectorAll("[data-inn-sort]").forEach(b=>b.classList.toggle("active", b===sortBtn)); renderPosts(); return; }
 
-    const postBtn = e.target.closest("[data-v26-action='inn-post']");
+    const postBtn = e.target.closest("[data-social-action='inn-post']");
     if(postBtn){
-      const input = document.querySelector("[data-v26-input='inn-content']");
-      const imageInput = document.querySelector("[data-v26-input='inn-image']");
+      const input = document.querySelector("[data-social-input='inn-content']");
+      const imageInput = document.querySelector("[data-social-input='inn-image']");
       const content = (input?.value || "").trim();
       const file = imageInput?.files?.[0] || null;
       if(!content && !file){ toast("發文內容或圖片不能空白"); return; }
@@ -125,7 +125,7 @@ try{
         toast("發文成功");
         input.value = "";
         if(imageInput) imageInput.value = "";
-        const label = document.querySelector("[data-v26-image-name]");
+        const label = document.querySelector("[data-social-image-name]");
         if(label) label.textContent = "尚未選擇圖片";
         await loadInnPosts();
       }catch(err){ toast(err.message || "發文失敗"); }
@@ -133,10 +133,10 @@ try{
       return;
     }
 
-    const commentBtn = e.target.closest("[data-v26-action='comment']");
+    const commentBtn = e.target.closest("[data-social-action='comment']");
     if(commentBtn){
       const postId = commentBtn.dataset.postId;
-      const input = document.querySelector(`[data-v26-comment-input='${CSS.escape(String(postId))}']`);
+      const input = document.querySelector(`[data-social-comment-input='${CSS.escape(String(postId))}']`);
       const comment_text = (input?.value || "").trim();
       if(!comment_text){ toast("留言不能空白"); return; }
       try{ await api("inn_comment_create", {post_id:postId, comment_text}); toast("留言成功"); input.value=""; await loadInnPosts(); }
@@ -144,13 +144,13 @@ try{
       return;
     }
 
-    const likeBtn = e.target.closest("[data-v26-action='like']");
+    const likeBtn = e.target.closest("[data-social-action='like']");
     if(likeBtn){ try{ await api("inn_like_toggle", {post_id:likeBtn.dataset.postId}); await loadInnPosts(); }catch(err){ toast(err.message || "愛心更新失敗"); } return; }
 
-    const favBtn = e.target.closest("[data-v26-action='favorite']");
+    const favBtn = e.target.closest("[data-social-action='favorite']");
     if(favBtn){ try{ await api("inn_favorite_toggle", {post_id:favBtn.dataset.postId}); await loadInnPosts(); }catch(err){ toast(err.message || "收藏更新失敗"); } return; }
 
-    const followBtn = e.target.closest("[data-v26-action='follow']");
+    const followBtn = e.target.closest("[data-social-action='follow']");
     if(followBtn){ try{ await api("follow_toggle", {target_type:followBtn.dataset.targetType, target_id:followBtn.dataset.targetId}); toast("已更新關注紀錄"); await loadInnPosts(); }catch(err){ toast(err.message || "關注更新失敗"); } return; }
   });
 
