@@ -31,7 +31,7 @@
     const wrapped = function(input, init){
       const url = getUrl(input);
       const cfg = init ? Object.assign({}, init) : {};
-      const timeout = Number(cfg.timeout || (API_RE.test(url) ? 18000 : 28000));
+      const timeout = Number(cfg.timeout || (API_RE.test(url) ? 45000 : 30000));
       if(!navigator.onLine && isHttpUrl(url)) return Promise.reject(new Error("目前網路離線，請恢復連線後再試"));
       if(typeof AbortController === "undefined" || cfg.signal) return rawFetch(input, cfg);
       const controller = new AbortController();
