@@ -1,4 +1,4 @@
-<!-- v404-formal-release -->
+<!-- v405-formal-release -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -164,8 +164,8 @@ textarea::placeholder,input::placeholder{color:rgba(255,235,242,.58)}
 #companionGrid .companion-card .card-top{display:grid;grid-template-rows:1fr auto;gap:10px;height:100%}
 #companionGrid .companion-card .name-block{min-width:0}
 #companionGrid .companion-card .name-block span{display:block;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,238,244,.76);font-size:11px;margin-top:4px}
-#companionTabs.companion-category-row{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-snap-type:x proximity;padding-bottom:10px}
-#companionTabs.companion-category-row .chip{scroll-snap-align:start}
+#companionTabs.companion-category-row{display:flex!important;flex-wrap:nowrap!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x!important;scroll-snap-type:x proximity!important;padding-bottom:10px!important;max-width:100%!important}
+#companionTabs.companion-category-row .chip{flex:0 0 auto!important;scroll-snap-align:start!important;white-space:nowrap!important}
 .art-panel,.product-art{aspect-ratio:1/.9;background:radial-gradient(circle at 60% 35%,rgba(255,184,213,.30),transparent 28%),linear-gradient(140deg,#24111b,#783452);display:grid;place-items:center}
 .avatar-mark,.product-symbol{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,221,190,.46);background:rgba(255,210,226,.18);font-family:"DFKai-SB","KaiTi";font-size:32px;font-weight:900}
 .card-body,.product-body{padding:10px 10px 12px}.name-block h3,.product-name{font-size:15px;color:#fff7f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -8487,7 +8487,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 })();
 </script>
 
-<script id="v404-public-profile-reviews">
+<script id="v405-public-profile-reviews">
 (function(){
   const API_URL = window.DREAM_COMPANION_API_URL || "https://api.131rwjuh.com/api.php";
   function esc(str){return String(str ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
@@ -15221,7 +15221,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v404'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v405'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16603,7 +16603,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<style id="v404-formal-backpack-profile-settings-css">
+<style id="v405-formal-backpack-profile-settings-css">
 #page-profile .profile-info-panel,
 #page-profile .profile-achievement-showcase,
 #page-profile .profile-gift-collection-panel,
@@ -16617,34 +16617,34 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 #page-profile .profile-equipped-title,#page-profile .profile-value-line{font-size:12px!important;color:rgba(255,238,246,.82)!important}
 #page-profile .profile-equipped-title.is-empty{color:rgba(255,238,246,.56)!important}
 .backpack-grid[data-backpack-list]{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(218px,1fr))!important;align-items:stretch!important;gap:10px!important}
-.backpack-item.v404-backpack-card{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;gap:12px!important;align-items:start!important;min-height:132px!important;padding:13px!important;border-radius:16px!important}
-.v404-backpack-main{min-width:0!important;display:grid!important;gap:5px!important}
-.v404-backpack-title{display:flex!important;justify-content:space-between!important;gap:8px!important;color:#fff4f8!important;font-weight:950!important}
-.v404-backpack-title b{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-.v404-backpack-tag{font-size:11px!important;color:#ffe0a9!important;white-space:nowrap!important}
-.v404-backpack-meta{font-size:12px!important;color:rgba(255,238,246,.72)!important;line-height:1.45!important}
-.v404-backpack-actions{display:flex!important;gap:8px!important;align-items:center!important;margin-top:4px!important}
-.v404-backpack-use,.gift-send-btn{border:0!important;border-radius:999px!important;min-height:34px!important;padding:0 13px!important;background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;font-weight:950!important;cursor:pointer!important}
-.v404-backpack-use:disabled{opacity:.48!important;cursor:not-allowed!important}
-.v404-empty{grid-column:1/-1!important;padding:18px!important;text-align:center!important;border:1px dashed rgba(255,221,190,.28)!important;border-radius:16px!important;color:rgba(255,238,246,.72)!important}
-.v404-modal-mask{position:fixed!important;inset:0!important;z-index:2147483600!important;display:none!important;align-items:center!important;justify-content:center!important;padding:18px!important;background:rgba(10,3,9,.68)!important;backdrop-filter:blur(8px)!important}
-.v404-modal-mask.show{display:flex!important}
-.v404-modal{width:min(92vw,460px)!important;max-height:min(82vh,640px)!important;overflow:auto!important;border-radius:22px!important;border:1px solid rgba(255,221,190,.38)!important;background:linear-gradient(180deg,rgba(72,28,50,.98),rgba(31,12,25,.98))!important;color:#fff3f8!important;box-shadow:0 24px 64px rgba(0,0,0,.48)!important;padding:16px!important}
-.v404-modal h3{margin:0 0 7px!important;font-size:20px!important;color:#fff6fa!important}
-.v404-modal p{margin:0 0 12px!important;color:rgba(255,238,246,.72)!important;font-size:12px!important;line-height:1.55!important}
-.v404-asset-list{display:grid!important;gap:8px!important;margin:10px 0 14px!important}
-.v404-asset-row{display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center!important;gap:10px!important;min-height:54px!important;padding:9px 10px!important;border-radius:15px!important;border:1px solid rgba(255,221,190,.24)!important;background:rgba(255,255,255,.07)!important}
-.v404-asset-row.is-active{border-color:rgba(255,224,169,.64)!important;background:rgba(255,224,169,.12)!important}
-.v404-asset-mark{width:36px!important;height:36px!important;border-radius:12px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.10)!important;color:#ffe0a9!important;font-weight:950!important}
-.v404-asset-row b{display:block!important;font-size:13px!important;color:#fff6fa!important}
-.v404-asset-row small{display:block!important;margin-top:2px!important;color:rgba(255,238,246,.62)!important;font-size:11px!important}
-.v404-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
-.v404-modal-actions button,.v404-asset-row button{min-height:38px!important;border-radius:999px!important;border:1px solid rgba(255,221,190,.32)!important;background:rgba(255,255,255,.09)!important;color:#fff3f8!important;font-weight:900!important;cursor:pointer!important}
-.v404-asset-row button{background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;border:0!important;padding:0 13px!important}
+.backpack-item.v405-backpack-card{display:grid!important;grid-template-columns:48px minmax(0,1fr)!important;gap:12px!important;align-items:start!important;min-height:132px!important;padding:13px!important;border-radius:16px!important}
+.v405-backpack-main{min-width:0!important;display:grid!important;gap:5px!important}
+.v405-backpack-title{display:flex!important;justify-content:space-between!important;gap:8px!important;color:#fff4f8!important;font-weight:950!important}
+.v405-backpack-title b{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.v405-backpack-tag{font-size:11px!important;color:#ffe0a9!important;white-space:nowrap!important}
+.v405-backpack-meta{font-size:12px!important;color:rgba(255,238,246,.72)!important;line-height:1.45!important}
+.v405-backpack-actions{display:flex!important;gap:8px!important;align-items:center!important;margin-top:4px!important}
+.v405-backpack-use,.gift-send-btn{border:0!important;border-radius:999px!important;min-height:34px!important;padding:0 13px!important;background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;font-weight:950!important;cursor:pointer!important}
+.v405-backpack-use:disabled{opacity:.48!important;cursor:not-allowed!important}
+.v405-empty{grid-column:1/-1!important;padding:18px!important;text-align:center!important;border:1px dashed rgba(255,221,190,.28)!important;border-radius:16px!important;color:rgba(255,238,246,.72)!important}
+.v405-modal-mask{position:fixed!important;inset:0!important;z-index:2147483600!important;display:none!important;align-items:center!important;justify-content:center!important;padding:18px!important;background:rgba(10,3,9,.68)!important;backdrop-filter:blur(8px)!important}
+.v405-modal-mask.show{display:flex!important}
+.v405-modal{width:min(92vw,460px)!important;max-height:min(82vh,640px)!important;overflow:auto!important;border-radius:22px!important;border:1px solid rgba(255,221,190,.38)!important;background:linear-gradient(180deg,rgba(72,28,50,.98),rgba(31,12,25,.98))!important;color:#fff3f8!important;box-shadow:0 24px 64px rgba(0,0,0,.48)!important;padding:16px!important}
+.v405-modal h3{margin:0 0 7px!important;font-size:20px!important;color:#fff6fa!important}
+.v405-modal p{margin:0 0 12px!important;color:rgba(255,238,246,.72)!important;font-size:12px!important;line-height:1.55!important}
+.v405-asset-list{display:grid!important;gap:8px!important;margin:10px 0 14px!important}
+.v405-asset-row{display:grid!important;grid-template-columns:auto 1fr auto!important;align-items:center!important;gap:10px!important;min-height:54px!important;padding:9px 10px!important;border-radius:15px!important;border:1px solid rgba(255,221,190,.24)!important;background:rgba(255,255,255,.07)!important}
+.v405-asset-row.is-active{border-color:rgba(255,224,169,.64)!important;background:rgba(255,224,169,.12)!important}
+.v405-asset-mark{width:36px!important;height:36px!important;border-radius:12px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.10)!important;color:#ffe0a9!important;font-weight:950!important}
+.v405-asset-row b{display:block!important;font-size:13px!important;color:#fff6fa!important}
+.v405-asset-row small{display:block!important;margin-top:2px!important;color:rgba(255,238,246,.62)!important;font-size:11px!important}
+.v405-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+.v405-modal-actions button,.v405-asset-row button{min-height:38px!important;border-radius:999px!important;border:1px solid rgba(255,221,190,.32)!important;background:rgba(255,255,255,.09)!important;color:#fff3f8!important;font-weight:900!important;cursor:pointer!important}
+.v405-asset-row button{background:linear-gradient(180deg,#ffe1ef,#ff9bc8)!important;color:#652142!important;border:0!important;padding:0 13px!important}
 .gift-send-btn{width:100%!important;margin-top:8px!important}
 </style>
 
-<script id="v404-formal-backpack-profile-settings-js">
+<script id="v405-formal-backpack-profile-settings-js">
 (function(){
   if(window.__dreamFormalProfileSettingsV392) return;
   window.__dreamFormalProfileSettingsV392 = true;
@@ -16696,20 +16696,20 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     if(!host) return;
     const list = Array.isArray(items) ? items : [];
     if(!list.length){
-      host.innerHTML = `<div class="v404-empty">目前背包沒有可使用物品。成就、達標或活動獎勵會先送到這裡。</div>`;
+      host.innerHTML = `<div class="v405-empty">目前背包沒有可使用物品。成就、達標或活動獎勵會先送到這裡。</div>`;
       return;
     }
     host.innerHTML = list.map(item=>{
       const type = String(item.item_type || "");
       const exp = item.expires_at ? `期限：${esc(item.expires_at)}` : "永久或未設定期限";
       const hint = isSettingType(type) ? "使用後加入個人簡介設定，可再進設定切換。" : "使用後立即生效並從背包移除。";
-      return `<div class="backpack-item v404-backpack-card" data-item-type="${esc(type)}">
+      return `<div class="backpack-item v405-backpack-card" data-item-type="${esc(type)}">
         <div class="service-icon classic">${esc(itemIcon(type))}</div>
-        <div class="v404-backpack-main">
-          <div class="v404-backpack-title"><b>${esc(item.item_name || item.name || itemLabel(type))}</b><span class="v404-backpack-tag">${esc(itemLabel(type))}</span></div>
-          <div class="v404-backpack-meta">${esc(hint)}</div>
-          <div class="v404-backpack-meta">${esc(exp)}${Number(item.quantity||1)>1 ? ` ｜ ${Number(item.quantity)} 個` : ""}</div>
-          <div class="v404-backpack-actions"><button class="v404-backpack-use" type="button" data-v404-backpack-use="${Number(item.id||0)}" ${item.expired ? "disabled" : ""}>使用</button></div>
+        <div class="v405-backpack-main">
+          <div class="v405-backpack-title"><b>${esc(item.item_name || item.name || itemLabel(type))}</b><span class="v405-backpack-tag">${esc(itemLabel(type))}</span></div>
+          <div class="v405-backpack-meta">${esc(hint)}</div>
+          <div class="v405-backpack-meta">${esc(exp)}${Number(item.quantity||1)>1 ? ` ｜ ${Number(item.quantity)} 個` : ""}</div>
+          <div class="v405-backpack-actions"><button class="v405-backpack-use" type="button" data-v405-backpack-use="${Number(item.id||0)}" ${item.expired ? "disabled" : ""}>使用</button></div>
         </div>
       </div>`;
     }).join("");
@@ -16727,29 +16727,29 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   }
   const slotTitle = {badge:"更換成就徽章",title:"更換稱號",avatar_frame:"更換大頭照外框",profile_effect:"更換主頁特效"};
   function ensureModal(){
-    let mask = document.querySelector(".v404-modal-mask");
+    let mask = document.querySelector(".v405-modal-mask");
     if(mask) return mask;
     mask = document.createElement("div");
-    mask.className = "v404-modal-mask";
-    mask.innerHTML = `<div class="v404-modal" role="dialog" aria-modal="true"></div>`;
+    mask.className = "v405-modal-mask";
+    mask.innerHTML = `<div class="v405-modal" role="dialog" aria-modal="true"></div>`;
     document.body.appendChild(mask);
-    mask.addEventListener("click",e=>{if(e.target===mask || e.target.closest("[data-v404-close]")) mask.classList.remove("show");});
+    mask.addEventListener("click",e=>{if(e.target===mask || e.target.closest("[data-v405-close]")) mask.classList.remove("show");});
     return mask;
   }
   async function openAssetManager(slot){
     const mask = ensureModal();
-    const box = mask.querySelector(".v404-modal");
+    const box = mask.querySelector(".v405-modal");
     box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>正在讀取已從背包使用解鎖的項目...</p>`;
     mask.classList.add("show");
     const res = await api("profile_setting_assets",{slot});
     const list = res.ok && Array.isArray(res.assets) ? res.assets : [];
     const body = list.length ? list.map(asset=>`
-      <div class="v404-asset-row ${asset.active ? "is-active" : ""}">
-        <span class="v404-asset-mark">${esc(itemIcon(asset.item_type || slot))}</span>
+      <div class="v405-asset-row ${asset.active ? "is-active" : ""}">
+        <span class="v405-asset-mark">${esc(itemIcon(asset.item_type || slot))}</span>
         <span><b>${esc(asset.item_name || "未命名")}</b><small>${asset.active ? "目前顯示中" : "已解鎖可更換"}${asset.expires_at ? " ｜ 期限：" + esc(asset.expires_at) : ""}</small></span>
-        <button type="button" data-v404-apply-asset="${Number(asset.id||0)}" data-v404-slot="${esc(slot)}">${asset.active ? "已套用" : "套用"}</button>
-      </div>`).join("") : `<div class="v404-empty">尚未解鎖可更換項目。獲得獎勵後會先進背包，必須在背包點「使用」後，才會出現在這裡供更換；未解鎖前僅能預覽，不能套用。</div>`;
-    box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>背包物品使用後會先存進此功能庫，這裡一次只套用一個目前顯示項目。</p><div class="v404-asset-list">${body}</div><div class="v404-modal-actions"><button type="button" data-v404-clear-slot="${esc(slot)}">取消目前顯示</button><button type="button" data-v404-close>關閉</button></div>`;
+        <button type="button" data-v405-apply-asset="${Number(asset.id||0)}" data-v405-slot="${esc(slot)}">${asset.active ? "已套用" : "套用"}</button>
+      </div>`).join("") : `<div class="v405-empty">尚未解鎖可更換項目。獲得獎勵後會先進背包，必須在背包點「使用」後，才會出現在這裡供更換；未解鎖前僅能預覽，不能套用。</div>`;
+    box.innerHTML = `<h3>${esc(slotTitle[slot] || "更換設定")}</h3><p>背包物品使用後會先存進此功能庫，這裡一次只套用一個目前顯示項目。</p><div class="v405-asset-list">${body}</div><div class="v405-modal-actions"><button type="button" data-v405-clear-slot="${esc(slot)}">取消目前顯示</button><button type="button" data-v405-close>關閉</button></div>`;
   }
   function currentRole(){
     try{return (window.__dreamFrontAuth?.type || window.__dreamFrontAuth?.role || localStorage.getItem("dream_persist_login_type") || "member").includes("companion") ? "companion" : "member";}catch(_){return "member";}
@@ -16790,29 +16790,29 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
         return false;
       }
     }
-    const use = e.target.closest && e.target.closest("[data-v404-backpack-use]");
+    const use = e.target.closest && e.target.closest("[data-v405-backpack-use]");
     if(use){
       e.preventDefault(); e.stopPropagation();
-      api("backpack_use",{item_id:Number(use.dataset.v404BackpackUse||0)}).then(res=>{
+      api("backpack_use",{item_id:Number(use.dataset.v405BackpackUse||0)}).then(res=>{
         toast(res.message || (res.ok ? "使用成功" : "使用失敗"));
         if(res.ok){ renderBackpack(res.items || []); window.__dreamProfileSettingAssetsV392 = res.setting_assets || []; try{window.renderDreamProfilePage?.();}catch(_){} }
       }).catch(err=>toast(err.message || "使用失敗"));
       return;
     }
-    const apply = e.target.closest && e.target.closest("[data-v404-apply-asset]");
+    const apply = e.target.closest && e.target.closest("[data-v405-apply-asset]");
     if(apply){
       e.preventDefault();
-      const slot = apply.dataset.v404Slot || "";
-      api("profile_setting_apply",{asset_id:Number(apply.dataset.v404ApplyAsset||0),slot}).then(res=>{
+      const slot = apply.dataset.v405Slot || "";
+      api("profile_setting_apply",{asset_id:Number(apply.dataset.v405ApplyAsset||0),slot}).then(res=>{
         toast(res.message || (res.ok ? "套用成功" : "套用失敗"));
         if(res.ok){ syncVisualLocal(slot,res.asset); openAssetManager(slot); try{window.renderDreamProfilePage?.(); window.renderProfile?.();}catch(_){} }
       });
       return;
     }
-    const clear = e.target.closest && e.target.closest("[data-v404-clear-slot]");
+    const clear = e.target.closest && e.target.closest("[data-v405-clear-slot]");
     if(clear){
       e.preventDefault();
-      const slot = clear.dataset.v404ClearSlot || "";
+      const slot = clear.dataset.v405ClearSlot || "";
       api("profile_setting_apply",{slot,clear:true}).then(res=>{toast(res.message || "已取消顯示"); openAssetManager(slot); try{window.renderDreamProfilePage?.();}catch(_){};});
       return;
     }
@@ -16903,7 +16903,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<script id="v404-formal-linkage-fix-js">
+<script id="v405-formal-linkage-fix-js">
 (function(){
   if(window.__dreamFormalLinkageV394) return;
   window.__dreamFormalLinkageV394 = true;
@@ -17057,7 +17057,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 
 <script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v404-formal-release";
+  window.DREAM_FRONT_PATCH_VERSION = "v405-formal-release";
 
 })();
 </script>

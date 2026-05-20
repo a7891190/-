@@ -1,5 +1,5 @@
-/* v404-formal-release */
-window.DREAM_API_CLIENT_VERSION = "v404-formal-release";
+/* v405-formal-release */
+window.DREAM_API_CLIENT_VERSION = "v405-formal-release";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -919,7 +919,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(!el){
       el = document.createElement("div");
       el.id = "v45Toast";
-      el.style.cssText = "position:fixed;left:50%;bottom:112px;transform:translateX(-50%);width:min(88%,360px);padding:12px 14px;border-radius:14px;border:1px solid rgba(255,221,190,.42);background:rgba(72,28,50,.95);color:#fff1f6;text-align:center;font-size:13px;z-index:999999;box-shadow:0 14px 28px rgba(0,0,0,.4);opacity:0;transition:.2s";
+      el.style.cssText = "position:fixed;left:50%;bottom:112px;transform:translateX(-50%);width:min(88%,360px);padding:12px 14px;border-radius:14px;border:1px solid rgba(255,221,190,.42);background:rgba(72,28,50,.95);color:#fff1f6;text-align:center;font-size:13px;z-index:999999;box-shadow:0 14px 28px rgba(0,0,0,.4);opacity:0;transition:.2s;pointer-events:none";
       document.body.appendChild(el);
     }
     el.textContent = msg;
@@ -927,12 +927,14 @@ function $(sel, root=document){ return root.querySelector(sel); }
     clearTimeout(toast.t);
     toast.t = setTimeout(()=>el.style.opacity="0", 1900);
   }
-  async function api(action, payload={}){
+  async function api(action, payload={}, options={}){
+    const timeout = Number(options.timeout || ((action === "login" || action === "member_login" || action === "companion_login") ? 90000 : 45000));
     const res = await fetch(API_BASE, {
       method:"POST",
       credentials:"include",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({action, ...payload})
+      body:JSON.stringify({action, ...payload}),
+      timeout
     });
     const text = await res.text();
     try{
@@ -948,7 +950,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     let last = null;
     for(const action of actions){
       try{
-        const res = await api(action, payload);
+        const res = await api(action, payload, {timeout: action === "companion_front_list" ? 20000 : 12000});
         last = res;
         if(res && res.ok) return res;
       }catch(e){ last = {ok:false,message:e.message}; }
@@ -1192,7 +1194,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
     host.innerHTML = rows.length ? rows.join("") : `<div class="row"><div class="badge">儲</div><div><div class="row-title">目前沒有儲值紀錄</div><div class="row-sub">送出儲值申請後會顯示在這裡</div></div></div>`;
   }
   async function refreshSession(){
-    const res = await api("session");
+    if(window.__dreamLoginInProgress) return false;
+    const res = await api("session", {}, {timeout: 12000});
     if(res.ok && res.logged_in && res.user){
       setMemberUI(res.user, "member");
       return true;
@@ -1293,6 +1296,8 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
 
   function loadProtectedData(){
+    const page = pageNameFromHash();
+    if(page === "login" || page === "register" || page === "forgot" || window.__dreamLoginInProgress) return;
     // v362：loadProtectedData 私人紀錄必須登入才載入。
 
     // v347：公開資料可載入；私人紀錄必須登入後才載入。
@@ -1345,10 +1350,16 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const savedUser = localStorage.getItem("dream_persist_user");
     const savedType = localStorage.getItem("dream_persist_login_type");
     if(savedUser && savedType){ try{ setMemberUI(JSON.parse(savedUser), savedType); }catch(e){} }
-    try{ await refreshSession(); }catch(e){ console.warn('[refreshSession]', e.message || e); }
-    loadRanking(); // 排行榜可公開顯示
-    guardCurrentPage();
-    if(window.__dreamAuthSafe.isLoggedIn()) loadProtectedData();
+    const initialPage = pageNameFromHash();
+    const isLoginLike = initialPage === "login" || initialPage === "register" || initialPage === "forgot";
+    if(!isLoginLike){
+      try{ await refreshSession(); }catch(e){ console.warn('[refreshSession]', e.message || e); }
+      loadRanking();
+      guardCurrentPage();
+      if(window.__dreamAuthSafe.isLoggedIn()) loadProtectedData();
+    } else {
+      document.body.classList.add("dream-login-page");
+    }
   }
   window.DreamAuthGuard = {requireAuth, refreshSession, loadRanking, loadShop, loadCompanions};
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
