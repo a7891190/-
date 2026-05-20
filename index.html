@@ -6440,15 +6440,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=391"></script>
-<script src="assets/js/app-hardening.js?v=391"></script>
-<script src="assets/js/front-api-stabilizer.js?v=391"></script>
-<script src="assets/js/home-render-isolation.js?v=391"></script>
-<script src="assets/js/architecture-complete-core.js?v=391"></script>
-<script src="assets/js/profile-service-sync.js?v=391"></script>
-<script src="assets/js/api-client.js?v=391"></script>
-<script src="assets/js/login-complete-controller.js?v=391"></script>
-<script src="assets/js/v26-social-client.js?v=391"></script>
+<script src="assets/js/app-config.js?v=392"></script>
+<script src="assets/js/app-hardening.js?v=392"></script>
+<script src="assets/js/front-api-stabilizer.js?v=392"></script>
+<script src="assets/js/home-render-isolation.js?v=392"></script>
+<script src="assets/js/architecture-complete-core.js?v=392"></script>
+<script src="assets/js/profile-service-sync.js?v=392"></script>
+<script src="assets/js/api-client.js?v=392"></script>
+<script src="assets/js/login-complete-controller.js?v=392"></script>
+<script src="assets/js/v26-social-client.js?v=392"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -15025,7 +15025,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=325', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=392', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15221,7 +15221,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v325'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v392'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16538,7 +16538,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=391"></script>
+<script src="assets/js/formal-front-core.js?v=392"></script>
 
 <script id="dream-v384-login-inline-guard">
 /* v384-full-current-login-architecture inline fallback */
@@ -16756,6 +16756,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   async function updateBackpack(){
     const host = document.querySelector("[data-backpack-list]");
     if(!host) return;
+    if(!isAuthReady()){renderBackpack([]);return;}
     try{
       const res = await api("backpack_list");
       if(!res.ok){ if(res.status===401) renderBackpack([]); return; }
@@ -16791,6 +16792,9 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   }
   function currentRole(){
     try{return (window.__dreamFrontAuth?.type || window.__dreamFrontAuth?.role || localStorage.getItem("dream_persist_login_type") || "member").includes("companion") ? "companion" : "member";}catch(_){return "member";}
+  }
+  function isAuthReady(){
+    try{return !!(window.__dreamFrontAuth && window.__dreamFrontAuth.user);}catch(_){return false;}
   }
   function syncVisualLocal(slot, asset){
     if((slot === "profile_effect" || slot === "avatar_frame") && asset){
@@ -16895,6 +16899,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     return !!(a.unlocked || saved.unlocked || progress >= target);
   }
   async function syncAchievementRewards(){
+    if(!isAuthReady()) return;
     const data = Array.isArray(window.DREAM_ACHIEVEMENT_DATA) ? window.DREAM_ACHIEVEMENT_DATA : [];
     if(!data.length) return;
     const sentKey = "dream_formal_claimed_achievements_v392";
@@ -16923,8 +16928,10 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     cleanupMenus();
     enhanceGiftCards();
     applyDefaultListAvatars();
-    updateBackpack();
-    setTimeout(()=>syncAchievementRewards().catch(err=>{if(window.DREAM_API_DEBUG) console.warn("[achievement_reward_claim]",err);}),300);
+    if(isAuthReady()){
+      updateBackpack();
+      setTimeout(()=>syncAchievementRewards().catch(err=>{if(window.DREAM_API_DEBUG) console.warn("[achievement_reward_claim]",err);}),300);
+    }
   }
   const mo = new MutationObserver(()=>{clearTimeout(boot._t);boot._t=setTimeout(()=>{cleanupMenus();enhanceGiftCards();applyDefaultListAvatars();},80);});
   if(document.documentElement) mo.observe(document.documentElement,{childList:true,subtree:true});
@@ -17085,12 +17092,12 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 })();
 </script>
 
-<script src="assets/js/formal-home-profile-v401.js?v=402"></script>
+<script src="assets/js/formal-home-profile-v401.js?v=403"></script>
 
 <script id="dream-v389-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v391-login-background-cleanup";
-  console.info("[Dream v391] login/background cleanup loaded");
+  window.DREAM_FRONT_PATCH_VERSION = "v392-login-fast-public-api";
+  console.info("[Dream v392] login fast public API loaded");
 })();
 </script>
 

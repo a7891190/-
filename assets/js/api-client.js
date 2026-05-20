@@ -1,5 +1,5 @@
 /* v389-formal-version-cleanup */
-window.DREAM_API_CLIENT_VERSION = "v391-login-background-cleanup";
+window.DREAM_API_CLIENT_VERSION = "v392-login-fast-public-api";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
