@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'dream-playmate-v406';
+﻿const CACHE_NAME = 'dream-playmate-v407';
 const APP_SHELL = [
   './',
   './index.html',
@@ -45,4 +45,5 @@ self.addEventListener('fetch', event => {
     return;
   }
 });
+
 

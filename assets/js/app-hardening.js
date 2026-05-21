@@ -131,7 +131,7 @@
 })();
 
 
-/* v406-formal-release */
+/* v407-formal-release */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
@@ -200,4 +200,5 @@
     if(msg&&(msg.includes("連線逾時")||msg.includes("dreamFormalIsLoginPage"))){e.preventDefault();if(window.DREAM_API_DEBUG)console.warn("[DreamHardening]",msg);}
   });
 })();
+
 

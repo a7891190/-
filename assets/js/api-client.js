@@ -1,5 +1,5 @@
-﻿/* v406-formal-release */
-window.DREAM_API_CLIENT_VERSION = "v406-formal-release";
+﻿/* v407-formal-release */
+window.DREAM_API_CLIENT_VERSION = "v407-formal-release";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -21,6 +21,7 @@ function dreamIsLoginPageV378(){ const p = dreamCurrentPageV378(); return p === 
 function dreamIsMarketPageV378(){ const p = dreamCurrentPageV378(); return p === "market" || p === "shop" || p === "mall"; }
 function dreamIsInnPageV378(){ return dreamCurrentPageV378() === "inn"; }
 window.DreamLoginDebug = window.DreamLoginDebug || null;
+window.__dreamServerSessionReady = window.__dreamServerSessionReady || false;
 /* v353-global-authuser-guard */
 var authUser = window.authUser || null;
 var authType = window.authType || null;
@@ -950,7 +951,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     let last = null;
     for(const action of actions){
       try{
-        const res = await api(action, payload, {timeout: action === "companion_front_list" ? 20000 : 12000});
+        const res = await api(action, payload, {timeout: action === "companion_front_list" ? 30000 : 60000});
         last = res;
         if(res && res.ok) return res;
       }catch(e){ last = {ok:false,message:e.message}; }
@@ -1074,12 +1075,13 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
   }
   async function loadRanking(){
-    // v378 guard loadRanking
+    // v407: public ranking is background data; use the stabilizer/cache and never block login.
     if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return;
     if(window.__loadRankingRunningV376) return;
     window.__loadRankingRunningV376 = true;
     try {
-    const res = await api("vip_ranking");
+    const res = window.DreamStableFetchV389 ? await window.DreamStableFetchV389("vip_ranking", {}) : await api("vip_ranking", {}, {timeout:60000});
+    if(!res || res.ok === false){ return; }
     const rows = (res.ranking || res.items || res.data || []).map((x,i)=>({
       ...x,
       account_username:x.username || x.member_username || "",
@@ -1094,7 +1096,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(host){
       host.innerHTML = rows.length ? rows.slice(0,100).map(x=>`<div class="row"><div class="badge">${x.rank}</div><div class="row-main"><div class="row-title">${htmlEscape(x.username)}</div><div class="row-sub">VIP經驗值：${money(x.exp)}</div></div><div class="row-right">第 ${x.rank} 名</div></div>`).join("") : `<div class="row"><div class="badge">榜</div><div><div class="row-title">目前沒有排行榜資料</div><div class="row-sub">等待後台帶入</div></div></div>`;
     }
-    } catch(e){ console.warn("[loadRanking]", e.message || e); }
+    } catch(e){ if(window.DREAM_API_DEBUG) console.warn("[loadRanking]", e.message || e); }
     finally{ window.__loadRankingRunningV376 = false; }
   }
 
@@ -1195,18 +1197,18 @@ function $(sel, root=document){ return root.querySelector(sel); }
   }
   async function refreshSession(){
     if(window.__dreamLoginInProgress) return false;
-    const res = await api("session", {}, {timeout: 12000});
+    const res = await api("session", {}, {timeout: 60000});
     if(res.ok && res.logged_in && res.user){
-      setMemberUI(res.user, "member");
+      window.__dreamServerSessionReady = true; try{ window.dreamRefreshCsrfToken && window.dreamRefreshCsrfToken(); }catch(e){} setMemberUI(res.user, "member");
       return true;
     }
     // 陪玩登入前台時，後台若有獨立 session action 可由 companion_session 回傳
     const cres = await apiTry(["companion_session","companion_profile"], {});
     if(cres.ok && (cres.companion || cres.user || cres.data)){
-      setMemberUI(cres.companion || cres.user || cres.data, "companion");
+      window.__dreamServerSessionReady = true; try{ window.dreamRefreshCsrfToken && window.dreamRefreshCsrfToken(); }catch(e){} setMemberUI(cres.companion || cres.user || cres.data, "companion");
       return true;
     }
-    setMemberUI(null);
+    window.__dreamServerSessionReady = false; setMemberUI(null);
     return false;
   }
   async function login(){
@@ -1236,7 +1238,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const user = res.user || res.companion || res.data || {username};
     const role = action === "companion_login" ? "companion" : "member";
 
-    try{ setMemberUI(user, role); }catch(e){ console.warn("[DreamLogin setMemberUI]", e.message || e); }
+    window.__dreamServerSessionReady = true; try{ window.dreamRefreshCsrfToken && window.dreamRefreshCsrfToken(); }catch(e){} try{ setMemberUI(user, role); }catch(e){ if(window.DREAM_API_DEBUG) console.warn("[DreamLogin setMemberUI]", e.message || e); }
 
     try{
       localStorage.setItem("dream_persist_login_type", role);
@@ -1257,7 +1259,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     setTimeout(function(){
       try{ refreshSession(); }catch(e){}
       try{ loadProtectedData(); }catch(e){}
-    }, 350);
+    }, 1200);
   }
   async function register(){
     const display_name = $("#front_reg_display_name")?.value.trim() || "";
@@ -1303,7 +1305,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     // v347：公開資料可載入；私人紀錄必須登入後才載入。
     loadShop();
     loadCompanions();
-    if(!window.__dreamAuthSafe.isLoggedIn()) return;
+    if(!window.__dreamAuthSafe.isLoggedIn() || !window.__dreamServerSessionReady) return;
     if(window.dreamIsLoggedInSafeV352()) loadRecords();
     if(window.dreamIsLoggedInSafeV352()) loadRechargeRecords();
   }
@@ -1353,7 +1355,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const initialPage = pageNameFromHash();
     const isLoginLike = initialPage === "login" || initialPage === "register" || initialPage === "forgot";
     if(!isLoginLike){
-      try{ await refreshSession(); }catch(e){ console.warn('[refreshSession]', e.message || e); }
+      try{ await refreshSession(); }catch(e){ if(window.DREAM_API_DEBUG) console.warn('[refreshSession]', e.message || e); }
       loadRanking();
       guardCurrentPage();
       if(window.__dreamAuthSafe.isLoggedIn()) loadProtectedData();
@@ -1424,4 +1426,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     return false;
   };
 })();
+
+
+
 

@@ -1,4 +1,4 @@
-﻿/* v406-formal-release */
+﻿/* v407-formal-release */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});
@@ -159,4 +159,5 @@ try{
   else setTimeout(loadInnPosts,120);
   window.DreamInnFormalCleanV369 = {load:loadInnPosts, render:renderPosts, state};
 })();
+
 

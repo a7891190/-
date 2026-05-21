@@ -11,7 +11,7 @@
   // 若後台回傳 /uploads/... 或完整網址，前台會自動處理
   UPLOAD_BASE: "https://api.131rwjuh.com",
 
-  VERSION: "v406-formal-release"
+  VERSION: "v407-formal-release"
 };
 
 (function(){
@@ -60,29 +60,51 @@
     if(/api\.php/i.test(raw) && action && SAFE_ACTIONS.has(action)) return false;
     return true;
   }
+  function jsonSoftFail(message){
+    return new Response(JSON.stringify({ok:false,offline:true,status:0,message:message || "安全驗證準備中，請稍後再試"}), {status:200, headers:{"Content-Type":"application/json"}});
+  }
   async function csrfToken(){
     if(tokenPromise) return tokenPromise;
-    tokenPromise = originalFetch(apiBase(),{
-      method:"POST",
-      credentials:"include",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({action:"csrf_token"})
-    }).then(r=>r.json()).then(d=>d && d.csrf_token ? d.csrf_token : "").catch(()=>"");
+    tokenPromise = (async()=>{
+      if(typeof AbortController === "undefined"){
+        return originalFetch(apiBase(),{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"csrf_token"})}).then(r=>r.json()).then(d=>d && d.csrf_token ? d.csrf_token : "").catch(()=>"");
+      }
+      const c = new AbortController();
+      const timer = setTimeout(()=>c.abort(), 15000);
+      try{
+        const r = await originalFetch(apiBase(),{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"csrf_token"}),signal:c.signal});
+        const d = await r.json().catch(()=>({}));
+        return d && d.csrf_token ? d.csrf_token : "";
+      }catch(_){ return ""; }
+      finally{ clearTimeout(timer); }
+    })();
     return tokenPromise;
   }
   window.dreamRefreshCsrfToken = function(){ tokenPromise = null; return csrfToken(); };
   window.fetch = async function(input, init){
     const opts = Object.assign({}, init || {});
     const method = String(opts.method || (input && input.method) || "GET").toUpperCase();
-    if(method === "POST" && shouldAttachCsrf(input, opts)){
+    const attachCsrf = method === "POST" && shouldAttachCsrf(input, opts);
+    if(attachCsrf){
       const token = await csrfToken();
-      if(token){
-        const headers = new Headers(opts.headers || (input && input.headers) || {});
-        headers.set("X-CSRF-Token", token);
-        opts.headers = headers;
-      }
+      if(!token) return jsonSoftFail("安全驗證逾時，已停止本次背景請求");
+      const headers = new Headers(opts.headers || (input && input.headers) || {});
+      headers.set("X-CSRF-Token", token);
+      opts.headers = headers;
     }
-    return originalFetch(input, opts);
+    const res = await originalFetch(input, opts);
+    if(attachCsrf && res && res.status === 403 && !opts.__dreamCsrfRetried){
+      tokenPromise = null;
+      const fresh = await csrfToken();
+      if(!fresh) return res;
+      const retryOpts = Object.assign({}, opts, {__dreamCsrfRetried:true});
+      const headers = new Headers(retryOpts.headers || {});
+      headers.set("X-CSRF-Token", fresh);
+      retryOpts.headers = headers;
+      return originalFetch(input, retryOpts);
+    }
+    return res;
   };
 })();
+
 
