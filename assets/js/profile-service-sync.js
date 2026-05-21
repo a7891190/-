@@ -1,7 +1,7 @@
-/* v405-formal-release */
+﻿/* v406-formal-release */
 (function(){
-  if(window.__dreamProfileServiceSyncV388) return;
-  window.__dreamProfileServiceSyncV388 = true;
+  if(window.__dreamProfileServiceSyncV406) return;
+  window.__dreamProfileServiceSyncV406 = true;
   
 
   const $ = (s,r=document)=>r.querySelector(s);
@@ -49,10 +49,10 @@
     try{ return JSON.parse(localStorage.getItem("dream_persist_user") || "{}"); }catch(e){ return {}; }
   }
   function toast(msg, sticky){
-    let el = $("#dreamProfileSyncToastV388");
+    let el = $("#dreamProfileSyncToastV406");
     if(!el){
       el = document.createElement("div");
-      el.id = "dreamProfileSyncToastV388";
+      el.id = "dreamProfileSyncToastV406";
       el.style.cssText = "position:fixed;left:50%;bottom:112px;transform:translateX(-50%);width:min(88%,390px);padding:12px 15px;border-radius:16px;border:1px solid rgba(255,221,190,.42);background:rgba(72,28,50,.96);color:#fff;text-align:center;font-size:14px;font-weight:900;z-index:2147483647;box-shadow:0 14px 28px rgba(0,0,0,.45);opacity:1;transition:.2s";
       document.body.appendChild(el);
     }
@@ -171,7 +171,7 @@
     }
 
     if(!res || !res.ok){
-      if(window.DREAM_API_DEBUG) console.warn("[Dream v404 profile]", res);
+      if(window.DREAM_API_DEBUG) console.warn("[Dream v406 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }
@@ -309,9 +309,9 @@
   }
 
   function ensureStyle(){
-    if($("#dreamProfileStyleV388")) return;
+    if($("#dreamProfileStyleV406")) return;
     const st = document.createElement("style");
-    st.id = "dreamProfileStyleV388";
+    st.id = "dreamProfileStyleV406";
     st.textContent = `
       .dream-profile-panel{margin:12px 0;padding:16px;border-radius:22px}
       .dream-profile-grid{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}
@@ -589,7 +589,7 @@
       let res;
       try{ res = await uploadAvatar(role, file); }
       catch(e){ res = {ok:false, message:e.message || "大頭照上傳失敗"}; }
-      window.DreamProfileDebugV388 = {role, mode, response:res};
+      window.DreamProfileDebugV406 = {role, mode, response:res};
       if(!res || !res.ok){
         toast((res && (res.message || res.error)) || "大頭照上傳失敗");
         return;
@@ -624,7 +624,7 @@
       res = await api("member_profile_update", payload);
       if(!res || !res.ok) res = await api("profile_update", payload);
     }
-    window.DreamProfileDebugV388 = {role, payload, response:res};
+    window.DreamProfileDebugV406 = {role, payload, response:res};
     if(!res || !res.ok){
       toast((res && (res.message || res.error)) || "儲存失敗");
       return;
@@ -756,3 +756,5 @@
   window.goProfile = openProfile;
   window.DreamProfileServiceSync = {loadProfile, openProfile, saveProfile, syncServiceVisibility, renderProfilePage, renderDreamProfilePage, showProfileEditor};
 })();
+
+

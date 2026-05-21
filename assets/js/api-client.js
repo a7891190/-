@@ -1,5 +1,5 @@
-/* v405-formal-release */
-window.DREAM_API_CLIENT_VERSION = "v405-formal-release";
+﻿/* v406-formal-release */
+window.DREAM_API_CLIENT_VERSION = "v406-formal-release";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -1424,3 +1424,4 @@ function $(sel, root=document){ return root.querySelector(sel); }
     return false;
   };
 })();
+

@@ -1,4 +1,4 @@
-<!-- v405-formal-release -->
+﻿<!-- v406-formal-release -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6440,14 +6440,14 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=404"></script>
-<script src="assets/js/app-hardening.js?v=404"></script>
+<script src="assets/js/app-config.js?v=406"></script>
+<script src="assets/js/app-hardening.js?v=406"></script>
 <script src="assets/js/front-api-stabilizer.js?v=404"></script>
 <script src="assets/js/home-render-isolation.js?v=404"></script>
 <script src="assets/js/architecture-complete-core.js?v=404"></script>
-<script src="assets/js/profile-service-sync.js?v=404"></script>
-<script src="assets/js/api-client.js?v=404"></script>
-<script src="assets/js/login-complete-controller.js?v=404"></script>
+<script src="assets/js/profile-service-sync.js?v=406"></script>
+<script src="assets/js/api-client.js?v=406"></script>
+<script src="assets/js/login-complete-controller.js?v=406"></script>
 <script src="assets/js/social-client.js?v=404"></script>
 <script>
 const pageMap = {
@@ -15221,7 +15221,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v405'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v406'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -17057,10 +17057,12 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 
 <script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v405-formal-release";
+  window.DREAM_FRONT_PATCH_VERSION = "v406-formal-release";
 
 })();
 </script>
 
 </body>
 </html>
+
+

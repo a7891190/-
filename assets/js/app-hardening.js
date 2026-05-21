@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
   "use strict";
   const APP_NAME = (window.DREAM_CONFIG && window.DREAM_CONFIG.APP_NAME) || "夢競陪玩";
   const API_RE = /api\.php|upload_avatar\.php|support_upload\.php/i;
@@ -131,7 +131,7 @@
 })();
 
 
-/* v405-formal-release */
+/* v406-formal-release */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
@@ -200,3 +200,4 @@
     if(msg&&(msg.includes("連線逾時")||msg.includes("dreamFormalIsLoginPage"))){e.preventDefault();if(window.DREAM_API_DEBUG)console.warn("[DreamHardening]",msg);}
   });
 })();
+

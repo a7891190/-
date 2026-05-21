@@ -1,4 +1,4 @@
-/* v405-formal-release */
+﻿/* v406-formal-release */
 (function(){
   if(window.__dreamArchitectureCoreV384)return;window.__dreamArchitectureCoreV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}
@@ -12,3 +12,4 @@
   function isolate(){const p=page();const home=document.querySelector("#page-home");if(home){home.querySelectorAll(".companion-card,[data-companion-id],[data-role='companion-card'],#companionGrid,[data-list='companions']").forEach(el=>{if(!el.closest("[data-home-ranking],.top3-stage,.rank-scroll,.top3-board"))el.remove();});}document.body.classList.toggle("dream-login-page",isLoginPage());if(!PUBLIC.has(p)&&!isLoggedIn()){toast("請先登入後再使用");go("login");}}
   function boot(){isolate();}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(boot,80));else setTimeout(boot,80);window.addEventListener("hashchange",()=>setTimeout(boot,80));const mo=new MutationObserver(()=>{clearTimeout(boot._t);boot._t=setTimeout(isolate,120);});if(document.documentElement)mo.observe(document.documentElement,{childList:true,subtree:true});window.DreamArchitectureV384={page,isLoginPage,isLoggedIn,go,isolate};
 })();
+

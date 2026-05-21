@@ -1,4 +1,4 @@
-
+﻿
 window.dreamFormalIsLoginPageV389 = window.dreamFormalIsLoginPageV389 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
   return p==="login" || p==="register" || p==="forgot";
@@ -32,7 +32,7 @@ window.dreamStableApiV389 = window.dreamStableApiV389;
 window.dreamStableApiV389 = window.dreamStableApiV389;
 window.dreamStableApiV389 = window.dreamStableApiV389;
 
-/* v405-formal-release */
+/* v406-formal-release */
 
 window.dreamFormalIsLoginPageV387 = window.dreamFormalIsLoginPageV387 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
@@ -45,7 +45,7 @@ window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV387;
 window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV387;
 
 
-/* v405-formal-release */
+/* v406-formal-release */
 window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
   const fn = window.DreamStableFetchV387 ||
              window.dreamStableApiV389 ||
@@ -565,3 +565,4 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
   setInterval(loadBullets, POLL_MS);
   window.DreamBulletFormalV370 = {load: loadBullets};
 })();
+

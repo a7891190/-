@@ -1,4 +1,4 @@
-/* v405-formal-release */
+﻿/* v406-formal-release */
 (function(){
   if(window.__dreamFrontApiStabilizerV384) return;
   window.__dreamFrontApiStabilizerV384 = true;
@@ -20,3 +20,4 @@
   function install(){if(!window.DreamAPI||typeof window.DreamAPI.api!=="function"||window.DreamAPI.__stableV384)return false;const raw=window.DreamAPI.api.bind(window.DreamAPI);window.DreamAPI.api=function(action,payload){if(BACKGROUND.has(action)||PRIVATE.has(action))return stableApi(action,payload);return raw(action,payload);};window.DreamAPI.__stableV384=true;return true;}if(!install()){const t=setInterval(()=>{if(install())clearInterval(t);},50);setTimeout(()=>clearInterval(t),5000);}
   document.addEventListener("error",function(e){const img=e.target;if(!img||img.tagName!=="IMG"||img.dataset.avatarFallback)return;const src=img.getAttribute("src")||"";if(/companion_|avatar|uploads/i.test(src)){img.dataset.avatarFallback="1";img.src="assets/default-avatar.webp";}},true);
 })();
+
