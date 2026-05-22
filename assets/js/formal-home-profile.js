@@ -361,12 +361,14 @@
     } catch (err) {
       console.warn("[front_ranking_snapshot formal]", err && err.message || err);
     }
-    try {
-      const res = await api("companion_recommendations", { limit: 5 });
-      const rows = res?.companions || res?.items || res?.list || res?.data || [];
-      if (Array.isArray(rows)) state.recommended = rows;
-    } catch (err) {
-      console.warn("[companion_recommendations formal]", err && err.message || err);
+    if (!Array.isArray(state.recommended) || !state.recommended.length) {
+      try {
+        const res = await api("companion_recommendations", { limit: 5 });
+        const rows = res?.companions || res?.items || res?.list || res?.data || [];
+        if (Array.isArray(rows)) state.recommended = rows;
+      } catch (err) {
+        console.warn("[companion_recommendations formal]", err && err.message || err);
+      }
     }
     renderAllRankViews();
   }
