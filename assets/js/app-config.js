@@ -1,4 +1,4 @@
-﻿window.DREAM_CONFIG = {
+window.DREAM_CONFIG = {
   APP_NAME: "夢競陪玩",
   // 已依照目前上架中的前台 index(51).html 帶入正式 API
   API_BASE: "https://api.131rwjuh.com/api.php",
@@ -11,7 +11,7 @@
   // 若後台回傳 /uploads/... 或完整網址，前台會自動處理
   UPLOAD_BASE: "https://api.131rwjuh.com",
 
-  VERSION: "v407-formal-release"
+  VERSION: "v409-formal-release"
 };
 
 (function(){

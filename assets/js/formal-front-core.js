@@ -1,4 +1,4 @@
-﻿
+
 window.dreamFormalIsLoginPageV389 = window.dreamFormalIsLoginPageV389 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
   return p==="login" || p==="register" || p==="forgot";
@@ -325,18 +325,20 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     }
   }
   function companionTopFive(data){
-    const rows = data && data.activity && Array.isArray(data.activity.items) ? data.activity.items : [];
+    let rows = [];
+    if(data && Array.isArray(data.recommended_companions) && data.recommended_companions.length) rows = data.recommended_companions;
+    else if(data && Array.isArray(data.recommendations) && data.recommendations.length) rows = data.recommendations;
+    else if(data && data.activity && Array.isArray(data.activity.items)) rows = data.activity.items;
     return rows.slice(0,5).map((x,i)=>({
       id:x.companion_id||x.id||"",
       rank:Number(x.rank||i+1),
       name:x.display_name||x.name||x.username||"陪玩",
       avatar:mediaUrl(x.avatar_url||x.avatar||x.image_url||x.photo_url||x.companion_avatar_url||x.author_avatar_url||""),
-      orders:Number(x.total_orders||x.completed_orders||x.order_count||0),
+      orders:Number(x.completed_order_count||x.total_completed_orders||x.total_orders||x.completed_orders||x.order_count||x.orders||0),
       score:x.score??x.weighted_orders??"",
       grade:x.grade_label||x.grade_code||""
     }));
-  }
-  function cleanupHomeCompanionLeaks(){
+  }  function cleanupHomeCompanionLeaks(){
     const home=document.getElementById("page-home");
     const allowed=document.getElementById("homeRecommendCompanions");
     if(!home) return;

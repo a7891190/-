@@ -168,6 +168,11 @@
 #page-profile.profile-member.active .profile-bottom-actions .service-main{display:none!important}
 #page-profile.profile-companion.active .profile-bottom-actions{grid-template-columns:62px 62px 72px minmax(88px,1fr) minmax(88px,1fr)!important}
 #page-profile.active .profile-bottom-actions [data-action="gift-profile"]{display:flex!important;align-items:center!important;justify-content:center!important;border:1px solid rgba(255,210,228,.74)!important;border-radius:28px!important;color:#fff!important;background:rgba(255,255,255,.08)!important;font-weight:900!important}
+#page-companion .companion-newcomer-panel{overflow:hidden!important}
+#page-companion .companion-newcomer-list{display:flex!important;grid-template-columns:none!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:8px 2px 4px!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important}
+#page-companion .companion-newcomer-list .recommend-card{flex:0 0 128px!important;min-width:128px!important;min-height:136px!important;scroll-snap-align:start!important}
+#page-companion .companion-newcomer-list .recommend-avatar{width:58px!important;height:58px!important}
+#page-companion .companion-newcomer-list .recommend-meta{display:grid!important;gap:2px!important}
 /* v408: keep formal injected leaderboard styles aligned with the final mobile layout */
 #page-home .home-leaderboard-tabs,#page-home .home-top3-card,#page-home .top3-wrapper,#page-home .rank-scroll,#page-home [data-rank-scroll],#page-vip-rank .v267-rank-page-panel{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
 #page-home .leaderboard-tab-row,#page-vip-rank .v267-tabs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 10px!important;margin:0 0 2px!important;-webkit-overflow-scrolling:touch!important;scroll-snap-type:x proximity!important;touch-action:pan-x!important}
@@ -274,6 +279,71 @@
         <div class="recommend-meta"><span>#${Number(row.rank || index + 1)}</span><span class="recommend-total-score">接單 ${orders} 單</span></div>
       </article>`;
     }).join("");
+  }
+  function currentPage(){
+    return (location.hash || "#home").replace(/^#/, "") || "home";
+  }
+  function companionOrderCount(row){
+    return Number(row?.completed_order_count ?? row?.total_completed_orders ?? row?.completed_orders ?? row?.order_count ?? row?.orders ?? 0) || 0;
+  }
+  function companionCreatedMs(row){
+    const raw = row?.created_at || row?.createdAt || "";
+    const ms = raw ? Date.parse(raw) : NaN;
+    return Number.isFinite(ms) ? ms : Number(row?.id || row?.companion_id || 0);
+  }
+  function ensureNewcomerHost(){
+    let host = document.getElementById("companionNewcomers");
+    const panel = document.querySelector("#page-companion .companion-newcomer-panel") || document.querySelector("#page-companion .info-strip");
+    if (!host && panel) {
+      host = document.createElement("div");
+      host.id = "companionNewcomers";
+      host.className = "recommend-list companion-newcomer-list";
+      panel.appendChild(host);
+    }
+    if (panel) {
+      const title = panel.querySelector("h2");
+      const desc = panel.querySelector("p");
+      if (title) title.textContent = "本期五名新人陪玩";
+      if (desc) desc.textContent = "本期五名新人陪玩主要顯示新建立、接單數較少的陪玩。";
+    }
+    return host;
+  }
+  function renderCompanionNewcomers(rows){
+    const host = ensureNewcomerHost();
+    if (!host) return;
+    const list = (Array.isArray(rows) ? rows : [])
+      .filter(row => row && (row.id || row.companion_id))
+      .sort((a,b) => companionOrderCount(a) - companionOrderCount(b) || companionCreatedMs(b) - companionCreatedMs(a) || Number(b.id || b.companion_id || 0) - Number(a.id || a.companion_id || 0))
+      .slice(0, 5);
+    if (!list.length) {
+      host.innerHTML = `<div class="companion-empty">目前尚無新人陪玩資料</div>`;
+      return;
+    }
+    host.innerHTML = list.map((row, index) => {
+      const name = displayName(row, "陪玩");
+      const orders = companionOrderCount(row);
+      return `<article class="recommend-card newcomer-card" data-open-recommend-profile="${esc(row.companion_id || row.id || "")}">
+        <div class="recommend-avatar">${avatarImg(row, "companion", name)}</div>
+        <div class="recommend-name">${esc(name)}</div>
+        <div class="recommend-meta"><span>新人 #${index + 1}</span><span class="recommend-total-score">接單 ${orders} 單</span></div>
+      </article>`;
+    }).join("");
+    applyDefaultAvatars();
+  }
+  async function loadCompanionNewcomers(){
+    if (currentPage() !== "companion" && currentPage() !== "companion-home") return;
+    const host = ensureNewcomerHost();
+    if (!host) return;
+    if (!host.dataset.loaded) host.innerHTML = `<div class="companion-empty">正在載入新人陪玩...</div>`;
+    try {
+      const res = await api("companion_front_list", {});
+      const rows = res?.companions || res?.items || res?.list || res?.data || [];
+      host.dataset.loaded = "1";
+      renderCompanionNewcomers(rows);
+    } catch (err) {
+      host.innerHTML = `<div class="companion-empty">新人陪玩資料載入失敗</div>`;
+      console.warn("[companion_newcomers]", err && err.message || err);
+    }
   }
   function renderAllRankViews(){
     renderHomeTop3(state.homeBoard || "vip_rank");
@@ -473,7 +543,7 @@
       "#page-home .top3-avatar",
       "#page-home .rank-avatar",
       "#page-vip-rank .formal-rank-avatar",
-      "#homeRecommendCompanions .recommend-avatar",
+      "#homeRecommendCompanions .recommend-avatar",`r`n      "#companionNewcomers .recommend-avatar",
       "#page-inn .post-avatar",
       "#page-inn .inn-comment-avatar",
       "#page-profile [data-profile-bind='avatar']",
@@ -532,6 +602,9 @@
       if (event.target.closest("[data-social-action]")) {
         setTimeout(loadInnPosts, 500);
       }
+      if (event.target.closest('[data-go="companion"],[data-target="companion"],#page-companion')) {
+        setTimeout(loadCompanionNewcomers, 300);
+      }
     }, true);
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") closeNoticeModal();
@@ -545,11 +618,13 @@
       ensureProfileGiftButtonLayout();
       applyDefaultAvatars();
       loadInnPosts();
+      loadCompanionNewcomers();
     }, 160));
     window.addEventListener("dream-auth-updated", () => setTimeout(() => {
       loadRankAndRecommend();
       loadAnnouncements();
       loadInnPosts();
+      loadCompanionNewcomers();
       ensureProfileGiftButtonLayout();
       applyDefaultAvatars();
     }, 180));
@@ -582,6 +657,7 @@
     loadRankAndRecommend();
     loadAnnouncements();
     loadInnPosts();
+    loadCompanionNewcomers();
     setTimeout(() => {
       renderAllRankViews();
       applyDefaultAvatars();
@@ -590,7 +666,7 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
   window.DREAM_REFRESH_FORMAL_HOME = function(){
-    return Promise.all([loadRankAndRecommend(), loadAnnouncements(), loadInnPosts()]).then(() => {
+    return Promise.all([loadRankAndRecommend(), loadAnnouncements(), loadInnPosts(), loadCompanionNewcomers()]).then(() => {
       ensureProfileGiftButtonLayout();
       applyDefaultAvatars();
     });
