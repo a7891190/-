@@ -1,4 +1,4 @@
-<!-- v409-formal-release -->
+<!-- v410-formal-release -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6440,15 +6440,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=409"></script>
-<script src="assets/js/app-hardening.js?v=409"></script>
-<script src="assets/js/front-api-stabilizer.js?v=409"></script>
-<script src="assets/js/home-render-isolation.js?v=409"></script>
-<script src="assets/js/architecture-complete-core.js?v=409"></script>
-<script src="assets/js/profile-service-sync.js?v=409"></script>
-<script src="assets/js/api-client.js?v=409"></script>
-<script src="assets/js/login-complete-controller.js?v=409"></script>
-<script src="assets/js/social-client.js?v=409"></script>
+<script src="assets/js/app-config.js?v=410"></script>
+<script src="assets/js/app-hardening.js?v=410"></script>
+<script src="assets/js/front-api-stabilizer.js?v=410"></script>
+<script src="assets/js/home-render-isolation.js?v=410"></script>
+<script src="assets/js/architecture-complete-core.js?v=410"></script>
+<script src="assets/js/profile-service-sync.js?v=410"></script>
+<script src="assets/js/api-client.js?v=410"></script>
+<script src="assets/js/login-complete-controller.js?v=410"></script>
+<script src="assets/js/social-client.js?v=410"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -15027,7 +15027,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=409', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=410', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15223,7 +15223,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v409'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v410'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16540,7 +16540,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=409"></script>
+<script src="assets/js/formal-front-core.js?v=410"></script>
 
 <script id="dream-self-profile-router">
 (function(){
@@ -17097,11 +17097,11 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 @media(max-width:420px){#page-home .home-leaderboard-tabs{padding:10px!important;border-radius:18px!important}#page-home .leaderboard-tab,#page-vip-rank .v267-tab{font-size:11px!important;padding:8px 10px!important}#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 </style>
 
-<script src="assets/js/formal-home-profile.js?v=409"></script>
+<script src="assets/js/formal-home-profile.js?v=410"></script>
 
 <script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v409-formal-release";
+  window.DREAM_FRONT_PATCH_VERSION = "v410-formal-release";
 
 })();
 </script>
