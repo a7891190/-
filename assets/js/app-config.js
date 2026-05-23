@@ -11,7 +11,7 @@ window.DREAM_CONFIG = {
   // 若後台回傳 /uploads/... 或完整網址，前台會自動處理
   UPLOAD_BASE: "https://api.131rwjuh.com",
 
-  VERSION: "v412-formal-release"
+  VERSION: "v414-home-rank-restore"
 };
 
 (function(){

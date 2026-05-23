@@ -289,9 +289,9 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     if(comp && !comp.querySelector(".companion-card") && !comp.querySelector(".companion-empty")) comp.innerHTML='<div class="companion-empty">目前尚無陪玩資料</div>';
   }
 
-  const RANK_CACHE_KEY = "dream_front_rank_cache_clean_v369";
-  const RANK_TIME_KEY = "dream_front_rank_cache_time_clean_v369";
-  const RANK_TTL = 5 * 60 * 1000;
+  const RANK_CACHE_KEY = "dream_front_rank_cache_clean_v414";
+  const RANK_TIME_KEY = "dream_front_rank_cache_time_clean_v414";
+  const RANK_TTL = 30 * 60 * 1000;
 
   async function getRanking(force){
     const now=Date.now();
@@ -378,22 +378,14 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
     return out;
   }
   function renderRanking(data){
-    if(window.DreamHomeRenderIsolationV377 && typeof window.DreamHomeRenderIsolationV377.renderHomeRanking === "function"){ window.DreamHomeRenderIsolationV377.renderHomeRanking(data); return; }
-    const items=rankItems(data);
+    /* v414：首頁排行榜由 formal-home-profile 渲染六大榜切換與第 4～13 名，本模組只同步正式榜單資料。 */
+    try{
+      if(data && data.boards && typeof window.DREAM_SET_RANK_BOARDS === "function"){
+        window.DREAM_SET_RANK_BOARDS(data.boards);
+      }
+    }catch(e){}
     cleanupHomeCompanionLeaks();
-    if(!items.length) return;
-    ensureRankStyle();
-    sectionsByText(["本期前三名","前三名"]).slice(0,2).forEach(sec=>{
-      let box=sec.querySelector("[data-clean-top3]");
-      if(!box){ box=document.createElement("div"); box.className="dream-clean-rank-wrap"; box.setAttribute("data-clean-top3","1"); sec.appendChild(box); }
-      box.innerHTML=items.slice(0,3).map(card).join("");
-    });
-    sectionsByText(["後10名","後十名","排行榜"]).slice(0,4).forEach(sec=>{
-      if(sec.querySelector("[data-clean-top3]")) return;
-      let box=sec.querySelector("[data-clean-rank-list]");
-      if(!box){ box=document.createElement("div"); box.className="dream-clean-rank-wrap"; box.setAttribute("data-clean-rank-list","1"); sec.appendChild(box); }
-      box.innerHTML=(items.slice(3,13).length?items.slice(3,13):items.slice(0,10)).map(card).join("");
-    });
+    document.querySelectorAll("#page-home [data-clean-rank-list],#page-home [data-clean-top3]").forEach(el=>el.remove());
   }
   async function loadRanking(force){
     if(window.dreamFormalIsLoginPageV379 && window.dreamFormalIsLoginPageV379()) return;

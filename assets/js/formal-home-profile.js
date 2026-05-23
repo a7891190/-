@@ -173,11 +173,10 @@
 #page-companion .companion-newcomer-list .recommend-card{flex:0 0 128px!important;min-width:128px!important;min-height:136px!important;scroll-snap-align:start!important}
 #page-companion .companion-newcomer-list .recommend-avatar{width:58px!important;height:58px!important}
 #page-companion .companion-newcomer-list .recommend-meta{display:grid!important;gap:2px!important}
-/* v408: keep formal injected leaderboard styles aligned with the final mobile layout */
-#page-home .home-leaderboard-tabs,#page-home .home-top3-card,#page-home .top3-wrapper,#page-home .rank-scroll,#page-home [data-rank-scroll],#page-vip-rank .v267-rank-page-panel{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
-#page-home .leaderboard-tab-row,#page-vip-rank .v267-tabs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 10px!important;margin:0 0 2px!important;-webkit-overflow-scrolling:touch!important;scroll-snap-type:x proximity!important;touch-action:pan-x!important}
-#page-home .leaderboard-tab,#page-vip-rank .v267-tab{flex:0 0 auto!important;min-width:max-content!important;max-width:none!important;white-space:nowrap!important;scroll-snap-align:start!important}
-#page-home .rank-scroll,#page-home .rank-scroll[data-rank-scroll],#page-home [data-rank-scroll]{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:stretch!important;gap:9px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:4px 2px 12px!important;margin:0 0 12px!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x!important}
+/* v414: 首頁恢復六大排行榜切換，完整排行榜保留在 #page-vip-rank */
+#page-home .home-top3-card,#page-home .top3-wrapper,#page-vip-rank .v267-rank-page-panel{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#page-vip-rank .v267-tabs{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 10px!important;margin:0 0 2px!important;-webkit-overflow-scrolling:touch!important;scroll-snap-type:x proximity!important;touch-action:pan-x!important}
+#page-vip-rank .v267-tab{flex:0 0 auto!important;min-width:max-content!important;max-width:none!important;white-space:nowrap!important;scroll-snap-align:start!important}
 #page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex:0 0 clamp(146px,43vw,176px)!important;width:clamp(146px,43vw,176px)!important;min-width:146px!important;max-width:176px!important;min-height:62px!important;display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;grid-template-areas:"no title" "no value"!important;align-items:center!important;gap:3px 8px!important;padding:9px 10px!important;box-sizing:border-box!important;scroll-snap-align:start!important}
 #page-home .rank-chip .rank-no{grid-area:no!important;width:34px!important;height:34px!important;margin:0!important}
 #page-home .rank-chip .rank-title{grid-area:title!important;display:block!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;line-height:1.25!important}
@@ -188,7 +187,7 @@
 #page-vip-rank .v267-rank-row>div:nth-child(2),#page-vip-rank .formal-rank-row>div:nth-child(2){min-width:0!important;overflow:hidden!important}
 #page-vip-rank .v267-rank-name,#page-vip-rank .v267-rank-sub{display:block!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
 #page-vip-rank .v267-rank-value{grid-column:auto!important;justify-self:end!important;max-width:34vw!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-@media(max-width:420px){#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
+@media(max-width:420px){#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 @media(max-width:520px){
   .formal-notice-dialog{grid-template-columns:1fr;max-height:86vh}
   .formal-notice-list,.formal-notice-detail{max-height:34vh}
@@ -204,7 +203,7 @@
     state.homeBoard = key;
     writeStore("dream_home_board_key", key);
     const rows = state.boards[key] || [];
-    const meta = BOARD_META[key];
+    const meta = BOARD_META[key] || BOARD_META.vip_rank;
     document.querySelectorAll("#page-home [data-board-key]").forEach(btn => btn.classList.toggle("active", btn.dataset.boardKey === key));
     document.querySelectorAll("#page-home [data-current-leaderboard-title]").forEach(el => { el.textContent = meta.title; });
     [["second", rows[1], 2], ["first", rows[0], 1], ["third", rows[2], 3]].forEach(([cls, row, displayRank]) => {
@@ -227,16 +226,18 @@
         if (valueEl) valueEl.textContent = row ? rankValueText(key, row) : "等待正式排行榜";
       }
     });
-    const scroller = document.querySelector("#page-home [data-rank-scroll]");
-    if (scroller) {
-      const list = rows.slice(3, 13);
-      scroller.innerHTML = list.length ? list.map(row => `
-        <div class="rank-chip">
-          <span class="rank-no"><span class="rank-avatar">${avatarImg(row, row.role, displayName(row))}</span></span>
-          <span class="rank-title">${esc(displayName(row))}</span>
-          <span class="rank-value">第 ${Number(row.rank || 0)} 名｜${esc(rankValueText(key, row))}</span>
-        </div>`).join("") : `<div class="rank-chip rank-empty"><span class="rank-title">尚無正式排行榜資料</span><span class="rank-value">等待後台交易資料</span></div>`;
-    }
+    const belowRows = rows.slice(3, 13);
+    document.querySelectorAll("#page-home [data-rank-scroll],#page-home .rank-scroll").forEach(el => {
+      if (!belowRows.length) {
+        el.innerHTML = `<div class="rank-chip"><div class="rank-no">#4</div><div class="rank-title">尚無資料</div><div class="rank-value">等待正式排行榜</div></div>`;
+      } else {
+        el.innerHTML = belowRows.map((row, i) => {
+          const rank = Number(row.rank || i + 4) || (i + 4);
+          return `<div class="rank-chip"><div class="rank-no">#${rank}</div><div class="rank-title">${esc(displayName(row))}</div><div class="rank-value">${esc(rankValueText(key, row))}</div></div>`;
+        }).join("");
+      }
+      el.style.display = "flex";
+    });
     setTimeout(() => {
       try { window.DREAM_APPLY_RANK_TOP3_GUFENG?.(); } catch (_) {}
       applyDefaultAvatars();
@@ -589,10 +590,11 @@
     document.addEventListener("click", event => {
       const notice = event.target.closest("#page-home .notice-line");
       if (notice) { event.preventDefault(); openNoticeModal(); return; }
-      const homeTab = event.target.closest("#page-home [data-board-key]");
-      if (homeTab) {
-        setTimeout(() => renderHomeTop3(homeTab.dataset.boardKey || "vip_rank"), 0);
-        setTimeout(() => renderHomeTop3(homeTab.dataset.boardKey || "vip_rank"), 120);
+      const homeRankTab = event.target.closest("#page-home [data-board-key]");
+      if (homeRankTab) {
+        event.preventDefault();
+        renderHomeTop3(homeRankTab.dataset.boardKey || "vip_rank");
+        return;
       }
       const rankTab = event.target.closest("[data-formal-rank-tab]");
       if (rankTab) {
