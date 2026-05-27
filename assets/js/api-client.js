@@ -1,4 +1,4 @@
-﻿/* v407-formal-release */
+/* v407-formal-release */
 window.DREAM_API_CLIENT_VERSION = "v407-formal-release";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
