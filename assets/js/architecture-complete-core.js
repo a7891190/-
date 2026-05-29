@@ -1,4 +1,4 @@
-﻿/* v407-formal-release */
+﻿/* v419-formal-closeout */
 (function(){
   if(window.__dreamArchitectureCoreV384)return;window.__dreamArchitectureCoreV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}

@@ -1,4 +1,4 @@
-<!-- v418-zh-error-text -->
+<!-- v419-formal-closeout -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6426,15 +6426,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=418"></script>
-<script src="assets/js/app-hardening.js?v=418"></script>
-<script src="assets/js/front-api-stabilizer.js?v=418"></script>
-<script src="assets/js/home-render-isolation.js?v=418"></script>
-<script src="assets/js/architecture-complete-core.js?v=418"></script>
-<script src="assets/js/profile-service-sync.js?v=418"></script>
-<script src="assets/js/api-client.js?v=418"></script>
-<script src="assets/js/login-complete-controller.js?v=418"></script>
-<script src="assets/js/social-client.js?v=418"></script>
+<script src="assets/js/app-config.js?v=419"></script>
+<script src="assets/js/app-hardening.js?v=419"></script>
+<script src="assets/js/front-api-stabilizer.js?v=419"></script>
+<script src="assets/js/home-render-isolation.js?v=419"></script>
+<script src="assets/js/architecture-complete-core.js?v=419"></script>
+<script src="assets/js/profile-service-sync.js?v=419"></script>
+<script src="assets/js/api-client.js?v=419"></script>
+<script src="assets/js/login-complete-controller.js?v=419"></script>
+<script src="assets/js/social-client.js?v=419"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -10558,7 +10558,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }, true);
   document.addEventListener('input',function(e){ const inp=e.target.closest('[data-transfer-search]'); if(!inp)return; const q=inp.value.trim().toLowerCase(); document.querySelectorAll('.transfer-target').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'flex':'none';}); });
   function closeTransferModal(){ const m=document.querySelector('[data-transfer-modal]'); if(m)m.hidden=true; }
-  async function openTransferModal(dispatchId){ const m=document.querySelector('[data-transfer-modal]'); if(!m)return; m.hidden=false; const list=m.querySelector('[data-transfer-list]'); const ok=m.querySelector('[data-transfer-confirm]'); if(ok){ok.disabled=true; ok.dataset.dispatchId=dispatchId||findFirstActiveDispatchId()||''; delete ok.dataset.targetCompanionId;} if(list)list.innerHTML='<div class="companion-empty">正在載入陪玩...</div>'; let rows=[]; try{ const r=await fetch(apiUrl,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'companions'})}).then(r=>r.json()); rows=r.companions||r.items||r.data||[]; }catch(_){} if(!rows.length){ rows=['天策','巡撫','提督','少傅','都督','司命'].map((name,i)=>({id:i+1,display_name:name,username:name})); } if(list) list.innerHTML=rows.map(c=>`<div class="transfer-target" data-id="${c.id||c.companion_id||''}"><b>${c.display_name||c.name||c.username||'陪玩'}</b><span>${c.username||''}</span></div>`).join(''); }
+  async function openTransferModal(dispatchId){ const m=document.querySelector('[data-transfer-modal]'); if(!m)return; m.hidden=false; const list=m.querySelector('[data-transfer-list]'); const ok=m.querySelector('[data-transfer-confirm]'); if(ok){ok.disabled=true; ok.dataset.dispatchId=dispatchId||findFirstActiveDispatchId()||''; delete ok.dataset.targetCompanionId;} if(list)list.innerHTML='<div class="companion-empty">正在載入陪玩...</div>'; let rows=[]; try{ const dispatch_id=Number(ok?.dataset?.dispatchId||0); const payload=dispatch_id?{action:'companion_transfer_targets',dispatch_id}:{action:'companions'}; const r=await fetch(apiUrl,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(r=>r.json()); rows=r.targets||r.companions||r.items||r.data||[]; }catch(_){} if(!rows.length){ if(list) list.innerHTML='<div class="companion-empty">目前沒有可轉單的陪玩</div>'; return; } if(list) list.innerHTML=rows.map(c=>`<div class="transfer-target" data-id="${c.id||c.companion_id||''}"><b>${c.display_name||c.name||c.username||'陪玩'}</b><span>${c.username||''}</span></div>`).join(''); }
   function findFirstActiveDispatchId(){ const btn=document.querySelector('[data-companion-action="complete"][data-dispatch-id]'); return btn?.dataset.dispatchId||''; }
   const oldSetItem=localStorage.setItem.bind(localStorage);
   document.addEventListener('click',function(e){ if(e.target.closest('#front_login_btn')){ const user=document.querySelector('#front_login_user')?.value||''; if(document.querySelector('#front_login_remember')?.checked) localStorage.setItem('dream_remember_username',user); }},true);
@@ -15007,7 +15007,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=418', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=419', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15203,7 +15203,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v418'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v419'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16520,7 +16520,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=418"></script>
+<script src="assets/js/formal-front-core.js?v=419"></script>
 
 <script id="dream-self-profile-router">
 (function(){
@@ -16902,7 +16902,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     return data;
   }
   function clearLegacyLocalOrders(){
-    ["dream_exchange_orders","dream_exchange_orders_v245","dream_companion_exchange_orders_v250","dream_achievement_reward_inventory","dream_raffle_tickets"].forEach(k=>{try{localStorage.removeItem(k);}catch(_){}});
+    ["dream_exchange_orders","dream_exchange_orders_v245","dream_companion_exchange_orders_v250","dream_achievement_reward_inventory","dream_reward_inventory_member","dream_reward_inventory_companion","dream_raffle_tickets","dream_raffle_state","dream_achievement_progress_state_v277"].forEach(k=>{try{localStorage.removeItem(k);}catch(_){}});
   }
   async function syncRankBoards(force){
     try{
@@ -17077,10 +17077,10 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 @media(max-width:420px){#page-home .home-leaderboard-tabs{padding:10px!important;border-radius:18px!important}#page-home .leaderboard-tab,#page-vip-rank .v267-tab{font-size:11px!important;padding:8px 10px!important}#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 </style>
 
-<script src="assets/js/formal-home-profile.js?v=418"></script>
+<script src="assets/js/formal-home-profile.js?v=419"></script>
 
 
-<style id="v418-zh-error-text-css">
+<style id="v419-formal-closeout-css">
 /* 首頁只保留公告、推薦陪玩與本期前三名；完整排行榜放在功能服務的排行榜頁。 */
 #page-home .home-leaderboard-tabs,
 #page-home [data-rank-scroll],
@@ -17089,14 +17089,14 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </style>
 <script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v418-zh-error-text";
+  window.DREAM_FRONT_PATCH_VERSION = "v419-formal-closeout";
 
 })();
 </script>
 
 
-<style id="v418-zh-error-text-final-css">
-/* v418：首頁清理完成。首頁只保留公告、推薦陪玩與本期前三名；完整排行榜移至功能服務 > 排行榜。 */
+<style id="v419-formal-closeout-final-css">
+/* v419：正式收尾，統一版本、清理舊 fallback，首頁只保留公告、推薦陪玩與本期前三名。 */
 #page-home .home-leaderboard-tabs,
 #page-home [data-rank-scroll],
 #page-home .rank-scroll{display:none!important}

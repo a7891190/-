@@ -1,5 +1,5 @@
-/* v407-formal-release */
-window.DREAM_API_CLIENT_VERSION = "v407-formal-release";
+/* v419-formal-closeout */
+window.DREAM_API_CLIENT_VERSION = "v419-formal-closeout";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -1075,7 +1075,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
   }
   async function loadRanking(){
-    // v407: public ranking is background data; use the stabilizer/cache and never block login.
+    // v419: public ranking is background data; use the stabilizer/cache and never block login.
     if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return;
     if(window.__loadRankingRunningV376) return;
     window.__loadRankingRunningV376 = true;
