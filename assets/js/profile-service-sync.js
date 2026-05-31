@@ -1,4 +1,4 @@
-﻿/* v419-formal-closeout */
+﻿/* v420-center-name-effect-fix */
 (function(){
   if(window.__dreamProfileServiceSyncV407) return;
   window.__dreamProfileServiceSyncV407 = true;
@@ -172,7 +172,7 @@
     }
 
     if(!res || !res.ok){
-      if(window.DREAM_API_DEBUG) console.warn("[Dream v419 profile]", res);
+      if(window.DREAM_API_DEBUG) console.warn("[Dream v420 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }

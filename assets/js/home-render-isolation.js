@@ -1,4 +1,4 @@
-﻿/* v419-formal-closeout */
+﻿/* v420-center-name-effect-fix */
 (function(){
   if(window.__dreamHomeRenderIsolationV384)return;window.__dreamHomeRenderIsolationV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}

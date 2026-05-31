@@ -1,4 +1,4 @@
-﻿/* v419-formal-closeout */
+﻿/* v420-center-name-effect-fix */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});
