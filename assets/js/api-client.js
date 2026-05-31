@@ -1,5 +1,5 @@
-/* v420-center-name-effect-fix */
-window.DREAM_API_CLIENT_VERSION = "v420-center-name-effect-fix";
+/* v423-first-login-limited-shortmo-rewards */
+window.DREAM_API_CLIENT_VERSION = "v423-first-login-limited-shortmo-rewards";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -201,6 +201,59 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     return new Intl.DateTimeFormat("zh-TW", {timeZone:"Asia/Taipei", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", hour12:false}).format(dt);
   }
 
+
+  function parseVipExpireStateV422(value){
+    const raw = String(value ?? "").trim();
+    if(!raw || /^(未開通|尚未開通|未設定|無|null|undefined)$/i.test(raw)){
+      return {active:false, expired:false, text:"未開通"};
+    }
+    if(/已到期|過期|逾期|失效/.test(raw)){
+      return {active:false, expired:true, text:"已到期"};
+    }
+    if(/永久|無期限|陪玩登入/.test(raw)){
+      return {active:true, expired:false, text:raw};
+    }
+
+    let dt = null;
+    const hasZone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(raw);
+    if(hasZone){
+      const zoned = new Date(raw.replace(" ","T"));
+      if(!Number.isNaN(zoned.getTime())) dt = zoned;
+    }
+    if(!dt){
+      const m = raw.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})(?:[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+      if(m){
+        dt = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4] || 23), Number(m[5] || 59), Number(m[6] || 59));
+      }
+    }
+    if(!dt){
+      const parsed = new Date(raw.replace(/\//g,"-").replace(" ","T"));
+      if(!Number.isNaN(parsed.getTime())) dt = parsed;
+    }
+    if(dt && !Number.isNaN(dt.getTime())){
+      if(dt.getTime() <= Date.now()) return {active:false, expired:true, text:"已到期"};
+      return {active:true, expired:false, text:formatMinute(raw) || raw};
+    }
+
+    if(/開通|有效|active/i.test(raw)) return {active:true, expired:false, text:raw};
+    return {active:false, expired:false, text:raw};
+  }
+
+  function vipEntitlementDisplayV422(user, type){
+    if(!user) return {status:"鎖定", expireText:"尚未開通", active:false};
+    const rawExpire = user.member_expire || user.expire_at || user.vip_expire || user.member_expired_at || user.vip_expired_at || "";
+    const expire = parseVipExpireStateV422(rawExpire);
+    if(expire.expired) return {status:"未開通", expireText:"已到期", active:false};
+    if(expire.active) return {status:"開通", expireText:expire.text || "未設定", active:true};
+    if(type === "companion" && !rawExpire) return {status:"開通", expireText:"陪玩登入", active:true};
+
+    const rawStatus = String(user.vip_status || user.member_status || "").trim();
+    if(/已到期|過期|逾期|失效/.test(rawStatus)) return {status:"未開通", expireText:"已到期", active:false};
+    if(/未開通|尚未開通|鎖定/.test(rawStatus)) return {status:"未開通", expireText:expire.text || "未開通", active:false};
+    if(/開通|有效|active/i.test(rawStatus)) return {status:"開通", expireText:expire.text || "未設定", active:true};
+    return {status:"未開通", expireText:expire.text || "未開通", active:false};
+  }
+
   function updateMemberUI(user){
     state.user = user || null;
     if(!user){
@@ -226,8 +279,9 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     const nextExp = Number(user.next_exp || 298888);
     const vipName = safeText(user.vip_name || user.vip_title || user.vip_level_name, "客官");
     const vipLevel = Number.isFinite(Number(user.vip_level)) ? Number(user.vip_level) : inferVipLevelFromName(vipName);
-    const expire = safeText(user.member_expire || user.expire_at || user.vip_expire, "未開通");
-    const opened = (expire && expire !== "未開通") ? "開通" : safeText(user.vip_status || user.member_status, "鎖定");
+    const vipState = vipEntitlementDisplayV422(user, "member");
+    const expire = vipState.expireText;
+    const opened = vipState.status;
 
     setBind("member-id", "會員 ID：" + uid);
     setBind("member-name", username);
@@ -1020,8 +1074,9 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const coin = user ? (user.coin || user.short_coin || 0) : 0;
     const exp = user ? (user.exp || user.vip_exp || 0) : 0;
     const vipName = user ? (user.vip_name || user.vip_title || user.vip_level_name || (type === "companion" ? "陪玩帳號" : "客官")) : "未登入";
-    const expire = user ? (user.member_expire || user.expire_at || user.vip_expire || (type === "companion" ? "陪玩登入" : "未開通")) : "尚未開通";
-    const vipOpen = user ? ((expire && expire !== "未開通") || type === "companion" ? "開通" : "鎖定") : "鎖定";
+    const vipState = vipEntitlementDisplayV422(user, type);
+    const expire = vipState.expireText;
+    const vipOpen = vipState.status;
     const avatar = imgUrl(user?.avatar_url || user?.avatar || "");
 
     $all("[data-bind='member-id']").forEach(el=>el.textContent = user ? ((type === "companion" ? "陪玩 ID：" : "會員 ID：") + id) : "");
@@ -1037,7 +1092,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     $all("[data-bind='vip-status-main']").forEach(el=>el.textContent = vipOpen);
     $all("[data-bind='vip-status']").forEach(el=>el.textContent = "VIP權益：（" + vipOpen + "）");
     $all("[data-bind='vip-expire']").forEach(el=>el.textContent = "到期：" + expire);
-    window.__dreamFrontAuth = { user: authUser || null, type: authType || null, exclusive: !!(type === "companion" || vipOpen === "開通") };
+    window.__dreamFrontAuth = { user: authUser || null, type: authType || null, exclusive: !!vipState.active };
     try{ window.dispatchEvent(new CustomEvent("dream-auth-updated", {detail: window.__dreamFrontAuth})); }catch(e){}
     $all("[data-bind='member-avatar']").forEach(el=>{
       if(avatar) el.innerHTML = `<img src="${htmlEscape(avatar)}" alt="${htmlEscape(name)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
@@ -1075,7 +1130,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
   }
   async function loadRanking(){
-    // v420: public ranking is background data; use the stabilizer/cache and never block login.
+    // v423: public ranking is background data; use the stabilizer/cache and never block login.
     if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return;
     if(window.__loadRankingRunningV376) return;
     window.__loadRankingRunningV376 = true;
