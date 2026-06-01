@@ -1,4 +1,4 @@
-﻿/* v424-badge-name-effect-split */
+﻿/* v425-profile-name-left-fit */
 (function(){
   if(window.__dreamArchitectureCoreV384)return;window.__dreamArchitectureCoreV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}
