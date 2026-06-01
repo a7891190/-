@@ -1,4 +1,4 @@
-﻿/* v423-first-login-limited-shortmo-rewards */
+﻿/* v424-badge-name-effect-split */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});

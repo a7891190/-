@@ -1,4 +1,4 @@
-﻿/* v423-first-login-limited-shortmo-rewards */
+﻿/* v424-badge-name-effect-split */
 (function(){
   if(window.__dreamProfileServiceSyncV407) return;
   window.__dreamProfileServiceSyncV407 = true;
@@ -172,7 +172,7 @@
     }
 
     if(!res || !res.ok){
-      if(window.DREAM_API_DEBUG) console.warn("[Dream v423 profile]", res);
+      if(window.DREAM_API_DEBUG) console.warn("[Dream v424 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }
@@ -365,12 +365,18 @@
   }
   function achievementHtml(items){
     const list = asArray(items).map(item => {
-      if(item && typeof item === "object") return firstValue(item.name, item.title, item.label, item.badge_name);
-      return item;
-    }).filter(x => String(x || "").trim() !== "").slice(0, 5);
-    while(list.length < 5) list.push("");
-    return list.map(item => item
-      ? `<div class="achievement-slot"><span class="icon">&#9733;</span><span>${escapeHtml(item)}</span></div>`
+      if(item && typeof item === "object"){
+        const payload = item.payload || item.item_payload || {};
+        return {
+          name: firstValue(item.item_name, item.name, item.title, item.label, item.badge_name, item.item_key),
+          image: firstValue(item.image_url, item.icon128, item.icon512, item.icon, payload.image_url, payload.icon128, payload.icon512, payload.icon)
+        };
+      }
+      return {name:item, image:""};
+    }).filter(x => String(x.name || "").trim() !== "").slice(0, 5);
+    while(list.length < 5) list.push({name:"", image:""});
+    return list.map(item => item.name
+      ? `<div class="achievement-slot has-badge">${item.image ? `<img class="v325-achievement-badge-img" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy">` : `<span class="icon">&#9733;</span>`}<span>${escapeHtml(item.name)}</span></div>`
       : `<div class="achievement-slot is-empty">\u5c1a\u672a\u8a2d\u5b9a</div>`
     ).join("");
   }
@@ -423,7 +429,7 @@
       const duplicateBadge = menu.querySelector('[data-setting-action="edit-achievement-badges"]');
       if(duplicateBadge) duplicateBadge.remove();
       const badgeBtn = menu.querySelector('[data-setting-action="edit-bio-achievements"]');
-      if(badgeBtn) badgeBtn.textContent = "\u66f4\u63db\u6210\u5c31\u5fbd\u7ae0";
+      if(badgeBtn) badgeBtn.textContent = "\u66f4\u63db\u5fbd\u7ae0";
       if(!menu.querySelector('[data-setting-action="change-title"]')){
         const btn = document.createElement("button");
         btn.type = "button";

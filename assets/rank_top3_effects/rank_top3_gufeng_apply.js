@@ -442,6 +442,10 @@
     return clone.textContent.replace(/\s+/g, " ").trim();
   }
 
+  function shouldHideBadges(host, options) {
+    return !!(options && options.badge === false) || !!(host && host.dataset && (host.dataset.rankTop3NoBadge === "1" || host.dataset.rankRewardNoBadge === "1" || host.dataset.rankNoBadge === "1"));
+  }
+
   function cloneBadges(host, board, rank, options) {
     const existing = Array.from(host.querySelectorAll(".v267-badges,.rank-name-badges,.rank-top3-gufeng-badges"))
       .map(node => {
@@ -529,12 +533,13 @@
       current.dataset.rankBoard === board &&
       current.dataset.rank === String(rank)
     ) {
+      if (shouldHideBadges(host, options)) host.querySelectorAll(".rank-top3-gufeng-badges,.rank-name-badges,.v267-badges").forEach(node => node.remove());
       if (options.holder !== false) registerHolder(name, board, rank);
       return name;
     }
 
     if (options.holder !== false) registerHolder(name, board, rank);
-    const badges = options.badge === false ? [] : cloneBadges(host, board, rank, options);
+    const badges = shouldHideBadges(host, options) ? [] : cloneBadges(host, board, rank, options);
     host.innerHTML = "";
     host.classList.add("rank-top3-prestige-host");
     if (options.global) host.classList.add("rank-top3-global-host");
@@ -606,7 +611,7 @@
       const rank = Number(host.dataset.rankTop3Rank || host.dataset.rankRewardRank || 0);
       const explicitName = host.dataset.rankTop3Name || host.dataset.rankRewardName;
       if (explicitName && !host.querySelector(".rank-top3-gufeng-name")) host.textContent = explicitName;
-      replaceHost(host, board, rank, false, { global: true });
+      replaceHost(host, board, rank, false, { global: true, badge: shouldHideBadges(host, {}) ? false : undefined });
     });
   }
 

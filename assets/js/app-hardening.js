@@ -131,7 +131,7 @@
 })();
 
 
-/* v423-first-login-limited-shortmo-rewards */
+/* v424-badge-name-effect-split */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
