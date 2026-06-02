@@ -1,4 +1,4 @@
-<!-- v425-profile-name-left-fit -->
+<!-- v426-profile-avatar-grid-sync -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6426,15 +6426,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=425"></script>
-<script src="assets/js/app-hardening.js?v=425"></script>
-<script src="assets/js/front-api-stabilizer.js?v=425"></script>
-<script src="assets/js/home-render-isolation.js?v=425"></script>
-<script src="assets/js/architecture-complete-core.js?v=425"></script>
-<script src="assets/js/profile-service-sync.js?v=425"></script>
-<script src="assets/js/api-client.js?v=425"></script>
-<script src="assets/js/login-complete-controller.js?v=425"></script>
-<script src="assets/js/social-client.js?v=425"></script>
+<script src="assets/js/app-config.js?v=426"></script>
+<script src="assets/js/app-hardening.js?v=426"></script>
+<script src="assets/js/front-api-stabilizer.js?v=426"></script>
+<script src="assets/js/home-render-isolation.js?v=426"></script>
+<script src="assets/js/architecture-complete-core.js?v=426"></script>
+<script src="assets/js/profile-service-sync.js?v=426"></script>
+<script src="assets/js/api-client.js?v=426"></script>
+<script src="assets/js/login-complete-controller.js?v=426"></script>
+<script src="assets/js/social-client.js?v=426"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -12429,8 +12429,8 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script src="assets/rank_top3_effects/effects_config.js"></script>
-<script src="assets/rank_top3_effects/renderer.js?v=425"></script>
-<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=425"></script>
+<script src="assets/rank_top3_effects/renderer.js?v=426"></script>
+<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=426"></script>
 
 <style id="v272-profile-top3-avatar-fix-css">
 /* v272：主頁守護版面、底部操作與預設大頭照資源 */
@@ -15019,7 +15019,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=425', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=426', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15215,7 +15215,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v425'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v426'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16532,7 +16532,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=425"></script>
+<script src="assets/js/formal-front-core.js?v=426"></script>
 
 <script id="dream-self-profile-router">
 (function(){
@@ -17092,11 +17092,11 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 @media(max-width:420px){#page-home .home-leaderboard-tabs{padding:10px!important;border-radius:18px!important}#page-home .leaderboard-tab,#page-vip-rank .v267-tab{font-size:11px!important;padding:8px 10px!important}#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 </style>
 
-<script src="assets/js/formal-home-profile.js?v=425"></script>
+<script src="assets/js/formal-home-profile.js?v=426"></script>
 
 
-<style id="v425-profile-name-left-fit-css">
-/* v425: center-card name effects stay fixed and no longer bundle badges. */
+<style id="v426-profile-avatar-grid-sync-css">
+/* v426: center-card name effects stay fixed and no longer bundle badges. */
 #page-member .profile-card .profile-main,
 #page-companion-home .profile-card .profile-main{
   min-width:0!important;
@@ -17203,14 +17203,14 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </style>
 <script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v425-profile-name-left-fit";
+  window.DREAM_FRONT_PATCH_VERSION = "v426-profile-avatar-grid-sync";
 
 })();
 </script>
 
 
-<style id="v425-profile-name-left-fit-final-css">
-/* v425：正式收尾，統一版本、清理舊 fallback，首頁只保留公告、推薦陪玩與本期前三名。 */
+<style id="v426-profile-avatar-grid-sync-final-css">
+/* v426：正式收尾，統一版本、清理舊 fallback，首頁只保留公告、推薦陪玩與本期前三名。 */
 #page-home .home-leaderboard-tabs,
 #page-home [data-rank-scroll],
 #page-home .rank-scroll{display:none!important}
@@ -17239,7 +17239,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 }
 
 
-/* v425: profile page name effect stays left and reserves room for gender. */
+/* v426: profile page name effect stays left and reserves room for gender. */
 #page-profile .profile-top{
   grid-template-columns:132px minmax(0,1fr)!important;
 }
@@ -17316,6 +17316,55 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     min-width:30px!important;
     padding-left:6px!important;
     padding-right:6px!important;
+  }
+}
+
+
+/* v426: keep profile avatar size and text grid column synchronized. */
+#page-profile{
+  --dream-profile-avatar-size:132px;
+  --dream-profile-avatar-gap:24px;
+}
+#page-profile .profile-top{
+  grid-template-columns:var(--dream-profile-avatar-size) minmax(0,1fr)!important;
+  gap:var(--dream-profile-avatar-gap)!important;
+  align-items:center!important;
+}
+#page-profile .profile-avatar-lg{
+  width:var(--dream-profile-avatar-size)!important;
+  height:var(--dream-profile-avatar-size)!important;
+  min-width:var(--dream-profile-avatar-size)!important;
+  max-width:var(--dream-profile-avatar-size)!important;
+}
+#page-profile .profile-head-info{
+  min-width:0!important;
+  padding-left:0!important;
+  transform:none!important;
+}
+#page-profile .profile-name-row h2:not(.rank-top3-global-host),
+#page-profile .profile-name-row [data-profile-bind="name"]:not(.rank-top3-global-host){
+  display:block!important;
+  max-width:calc(100% - 46px)!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+@media(min-width:700px){
+  #page-profile{
+    --dream-profile-avatar-size:160px;
+    --dream-profile-avatar-gap:26px;
+  }
+}
+@media(max-width:430px){
+  #page-profile{
+    --dream-profile-avatar-size:124px;
+    --dream-profile-avatar-gap:18px;
+  }
+}
+@media(max-width:380px){
+  #page-profile{
+    --dream-profile-avatar-size:112px;
+    --dream-profile-avatar-gap:12px;
   }
 }
 </style>
