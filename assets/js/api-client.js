@@ -1,5 +1,5 @@
-/* v426-profile-avatar-grid-sync */
-window.DREAM_API_CLIENT_VERSION = "v426-profile-avatar-grid-sync";
+/* v427-auth-deeplink-refresh */
+window.DREAM_API_CLIENT_VERSION = "v427-auth-deeplink-refresh";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -1130,7 +1130,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     }
   }
   async function loadRanking(){
-    // v426: public ranking is background data; use the stabilizer/cache and never block login.
+    // v427: public ranking is background data; use the stabilizer/cache and never block login.
     if(typeof dreamIsLoginPageV378==="function" && dreamIsLoginPageV378()) return;
     if(window.__loadRankingRunningV376) return;
     window.__loadRankingRunningV376 = true;
@@ -1409,8 +1409,17 @@ function $(sel, root=document){ return root.querySelector(sel); }
     if(savedUser && savedType){ try{ setMemberUI(JSON.parse(savedUser), savedType); }catch(e){} }
     const initialPage = pageNameFromHash();
     const isLoginLike = initialPage === "login" || initialPage === "register" || initialPage === "forgot";
+    const cachedAuthReady = !!(window.__dreamAuthSafe && window.__dreamAuthSafe.isLoggedIn && window.__dreamAuthSafe.isLoggedIn());
+    if(!isLoginLike && cachedAuthReady && isProtectedPage(initialPage) && typeof window.showPage === "function"){
+      try{ window.showPage(initialPage, false); }catch(e){}
+    }
     if(!isLoginLike){
-      try{ await refreshSession(); }catch(e){ if(window.DREAM_API_DEBUG) console.warn('[refreshSession]', e.message || e); }
+      let sessionRestored = false;
+      try{ sessionRestored = await refreshSession(); }catch(e){ if(window.DREAM_API_DEBUG) console.warn('[refreshSession]', e.message || e); }
+      const canShowInitial = !!(window.__dreamAuthSafe && window.__dreamAuthSafe.isLoggedIn && window.__dreamAuthSafe.isLoggedIn());
+      if((sessionRestored || canShowInitial) && isProtectedPage(initialPage) && typeof window.showPage === "function"){
+        try{ window.showPage(initialPage, false); }catch(e){}
+      }
       loadRanking();
       guardCurrentPage();
       if(window.__dreamAuthSafe.isLoggedIn()) loadProtectedData();

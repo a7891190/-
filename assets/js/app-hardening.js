@@ -131,7 +131,7 @@
 })();
 
 
-/* v426-profile-avatar-grid-sync */
+/* v427-auth-deeplink-refresh */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;
