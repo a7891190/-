@@ -131,7 +131,7 @@
 })();
 
 
-/* v427-auth-deeplink-refresh */
+/* v430-restore-legacy-tags */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;

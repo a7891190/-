@@ -32,7 +32,7 @@ window.dreamStableApiV389 = window.dreamStableApiV389;
 window.dreamStableApiV389 = window.dreamStableApiV389;
 window.dreamStableApiV389 = window.dreamStableApiV389;
 
-/* v427-auth-deeplink-refresh */
+/* v430-restore-legacy-tags */
 
 window.dreamFormalIsLoginPageV387 = window.dreamFormalIsLoginPageV387 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
@@ -45,7 +45,7 @@ window.dreamFormalIsLoginPageV384 = window.dreamFormalIsLoginPageV387;
 window.dreamFormalIsLoginPageV386 = window.dreamFormalIsLoginPageV387;
 
 
-/* v427-auth-deeplink-refresh */
+/* v430-restore-legacy-tags */
 window.dreamStableApiV389 = window.dreamStableApiV389 || async function(action, payload){
   const fn = window.DreamStableFetchV387 ||
              window.dreamStableApiV389 ||

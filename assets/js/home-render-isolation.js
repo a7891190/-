@@ -1,4 +1,4 @@
-﻿/* v427-auth-deeplink-refresh */
+﻿/* v430-restore-legacy-tags */
 (function(){
   if(window.__dreamHomeRenderIsolationV384)return;window.__dreamHomeRenderIsolationV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}

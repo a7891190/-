@@ -1,4 +1,4 @@
-<!-- v427-auth-deeplink-refresh -->
+<!-- v430-restore-legacy-tags -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6426,15 +6426,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=427"></script>
-<script src="assets/js/app-hardening.js?v=427"></script>
-<script src="assets/js/front-api-stabilizer.js?v=427"></script>
-<script src="assets/js/home-render-isolation.js?v=427"></script>
-<script src="assets/js/architecture-complete-core.js?v=427"></script>
-<script src="assets/js/profile-service-sync.js?v=427"></script>
-<script src="assets/js/api-client.js?v=427"></script>
-<script src="assets/js/login-complete-controller.js?v=427"></script>
-<script src="assets/js/social-client.js?v=427"></script>
+<script src="assets/js/app-config.js?v=430"></script>
+<script src="assets/js/app-hardening.js?v=430"></script>
+<script src="assets/js/front-api-stabilizer.js?v=430"></script>
+<script src="assets/js/home-render-isolation.js?v=430"></script>
+<script src="assets/js/architecture-complete-core.js?v=430"></script>
+<script src="assets/js/profile-service-sync.js?v=430"></script>
+<script src="assets/js/api-client.js?v=430"></script>
+<script src="assets/js/login-complete-controller.js?v=430"></script>
+<script src="assets/js/social-client.js?v=430"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -8140,7 +8140,7 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
     const sampleOrders = role === 'companion' ? '286' : '0';
     const sampleLevel = role === 'companion' ? '等級：Lv1 高評陪玩' : 'VIP等級：無VIP會員';
     const sampleBio = role === 'companion' ? '擅長陪玩、娛樂單與穩定接單，會依照需求提供舒適的陪伴體驗。' : '這位會員還沒有填寫個人簡介。';
-    const sampleTags = role === 'companion' ? ['陪玩人員','天策(魔王)','溫柔耐心'] : ['無VIP會員','佛系娛樂','守時不鴿'];
+    const sampleTags = role === 'companion' ? ['溫柔','聊天高手','耐心陪打','深夜在線','溫柔耐心'] : ['大方','聊天舒服','尊重陪玩','佛系娛樂','守時不鴿'];
     const realLayer = buildProfileFxLayer(presetKey, tier, '', effectConfig);
     const previewRootLayer = buildProfileFxLayer(presetKey, tier, "page-fullscreen-pfx", effectConfig);
     const slots = ['初入樂園','資料達人','VIP 啟程','按讚之交','收藏愛好者'];
@@ -8374,8 +8374,8 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 <script>
 /* v58 修正個人資料/會員名稱/陪玩名稱無法跳轉 */
 (function(){
-  const companionTags = ["天策(魔王)","巡撫(頂尖)","提督(技術)","聲甜軟妹","低音男神","暖場話多","整活搞笑","高冷沉穩","絕活專精","哄睡陪伴","深夜在線","全天秒接","新手導師","心態天花板","多游全能","女老闆專屬","溫柔耐心","手眼通天"];
-  const memberTags = ["脾氣超好","佛系娛樂","社牛能聊","內向安靜","新手小白","敢打敢衝","本人高玩","聲控優先","顏質優先","固定點單","隨緣散單","深夜玩家","周末玩家","娛樂整活","心態極穩","女陪優先","男陪優先","玻璃心","多游通玩","守時不鴿"];
+  const companionTags = ["溫柔","活潑","甜嗓","高冷","治癒","搞笑","黏人","撒嬌","元氣","安靜","佛系","毒舌","耐心","暖心","可愛","反差","開朗","穩重","親切","話多","會撒嬌","超會聊","陪聊系","暖心型","慢熟型","氣氛王","甜妹系","御姐感","奶狗系","貓系感","會哄人","很耐心","愛聊天","會接話","小話癆","很貼心","陪伴型","安靜型","可愛型","互動強","情緒穩定","可鹽可甜","溫柔陪伴","聊天高手","哄睡專家","反差魅力","氣氛擔當","默契滿分","開心果系","耐心陪打","穩定上分","氣氛帶動","耐心教學","聲音陪伴","戰術指揮","娛樂陪玩","新手友善","高配合度","深夜在線","溫柔陪聊","天策(魔王)","巡撫(頂尖)","提督(技術)","聲甜軟妹","低音男神","暖場話多","整活搞笑","高冷沉穩","絕活專精","哄睡陪伴","全天秒接","新手導師","心態天花板","多游全能","女老闆專屬","溫柔耐心","手眼通天"];
+  const memberTags = ["大方","專情","慢熱","主動","幽默","溫和","理性","感性","佛系","黏人","社牛","社恐","紳士","可愛","隨和","真誠","愛聊","安靜","好哄","寵人","慢熱型","主動型","紳士型","寵人系","好相處","愛聊天","有耐心","很專情","很大方","小黏人","會照顧","好脾氣","懂尊重","願意聽","穩定型","互動派","陪伴派","理性派","感性派","輕鬆聊","情緒穩定","溫柔有禮","聊天舒服","出手大方","專一寵人","安靜陪伴","互動積極","真誠待人","穩定下單","尊重陪玩","新手會員","活躍會員","收藏控","聊天派","競技派","休閒派","夜貓子","暖心支持","任務控","VIP養成","脾氣超好","佛系娛樂","社牛能聊","內向安靜","新手小白","敢打敢衝","本人高玩","聲控優先","顏質優先","固定點單","隨緣散單","深夜玩家","周末玩家","娛樂整活","心態極穩","女陪優先","男陪優先","玻璃心","多游通玩","守時不鴿"];
   const gameOptions = ["三角洲行動","英雄聯盟","PUBGM","傳說對決","無畏契約","聲音陪伴"];
   let activeProfileId = localStorage.getItem("dream_active_profile_id") || "member-self";
 
@@ -8422,13 +8422,13 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
       "member-self":{
         id:"member-self",type:"member",name:"夢競會員",avatar:"夢",gender:"",
         rating:0,recommend:0,orders:0,status:"在線",level:memberLevel,fixedTag:fixedVipTag(memberLevel),
-        bio:"這位會員還沒有填寫個人簡介。",achievementSlots:["初入樂園","資料達人","VIP 啟程","按讚之交","收藏愛好者"],tags:["佛系娛樂","守時不鴿"],games:["三角洲行動"],
+        bio:"這位會員還沒有填寫個人簡介。",achievementSlots:["初入樂園","資料達人","VIP 啟程","按讚之交","收藏愛好者"],tags:["大方","聊天舒服","佛系娛樂","守時不鴿"],games:["三角洲行動"],
         reviews:[],posts:["今天想找人一起放鬆玩幾場。"],litGifts:[]
       },
       "companion-self":{
         id:"companion-self",type:"companion",name:"夢競陪玩",avatar:"陪",gender:"female",
         rating:0,recommend:0,orders:0,status:"空閒",level:memberLevel,fixedTag:fixedVipTag(memberLevel),
-        bio:"這位陪玩還沒有填寫個人簡介。",achievementSlots:["初次登場","人氣陪玩","穩定在線","成就徽章","高評陪玩"],tags:["陪玩人員"],games:["三角洲行動"],
+        bio:"這位陪玩還沒有填寫個人簡介。",achievementSlots:["初次登場","人氣陪玩","穩定在線","成就徽章","高評陪玩"],tags:["溫柔","耐心陪打","深夜在線","溫柔耐心"],games:["三角洲行動"],
         reviews:[],posts:["目前開放測試陪玩主頁。"],litGifts:[]
       }
     };
@@ -12435,8 +12435,8 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script src="assets/rank_top3_effects/effects_config.js"></script>
-<script src="assets/rank_top3_effects/renderer.js?v=427"></script>
-<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=427"></script>
+<script src="assets/rank_top3_effects/renderer.js?v=430"></script>
+<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=430"></script>
 
 <style id="v272-profile-top3-avatar-fix-css">
 /* v272：主頁守護版面、底部操作與預設大頭照資源 */
@@ -13736,6 +13736,8 @@ img[src*="rank_rewards/badges"]{
       if(changed.length){
         window.renderDreamAchievements?.();
         window.updateDreamBackpack?.();
+        try{window.dispatchEvent(new CustomEvent("dream-achievement-completed",{detail:{items:changed.map(x=>x&&x.id).filter(Boolean)}}));}catch(_){}
+        try{if(typeof window.syncDreamAchievementRewards==="function") setTimeout(()=>window.syncDreamAchievementRewards(),120);}catch(_){}
         window.toast?.(`完成成就：${changed[0].name}${changed.length > 1 ? ` 等 ${changed.length} 項` : ""}`);
       }
       return changed;
@@ -15025,7 +15027,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./sw.js?v=427', {scope:'./'}).catch(function(err){
+    navigator.serviceWorker.register('./sw.js?v=430', {scope:'./'}).catch(function(err){
       console.warn('[夢競陪玩] Service Worker 註冊失敗', err);
     });
   });
@@ -15221,7 +15223,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v427'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v430'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -16538,7 +16540,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=427"></script>
+<script src="assets/js/formal-front-core.js?v=430"></script>
 
 <script id="dream-self-profile-router">
 (function(){
@@ -16889,6 +16891,8 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     }
     updateBackpack();
   }
+  window.syncDreamAchievementRewards = syncAchievementRewards;
+  window.addEventListener("dream-achievement-completed",()=>setTimeout(()=>syncAchievementRewards().catch(err=>{if(window.DREAM_API_DEBUG) console.warn("[achievement_reward_claim]",err);}),120));
   const oldUpdate = window.updateDreamBackpack;
   window.updateDreamBackpack = function(){try{oldUpdate&&oldUpdate();}catch(_){} updateBackpack();};
   function boot(){
@@ -16923,7 +16927,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     return data;
   }
   function clearLegacyLocalOrders(){
-    ["dream_exchange_orders","dream_exchange_orders_v245","dream_companion_exchange_orders_v250","dream_achievement_reward_inventory","dream_reward_inventory_member","dream_reward_inventory_companion","dream_raffle_tickets","dream_raffle_state","dream_achievement_progress_state_v277"].forEach(k=>{try{localStorage.removeItem(k);}catch(_){}});
+    ["dream_exchange_orders","dream_exchange_orders_v245","dream_companion_exchange_orders_v250","dream_achievement_reward_inventory","dream_reward_inventory_member","dream_reward_inventory_companion","dream_raffle_tickets","dream_raffle_state"].forEach(k=>{try{localStorage.removeItem(k);}catch(_){}});
   }
   async function syncRankBoards(force){
     try{
@@ -17098,11 +17102,11 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 @media(max-width:420px){#page-home .home-leaderboard-tabs{padding:10px!important;border-radius:18px!important}#page-home .leaderboard-tab,#page-vip-rank .v267-tab{font-size:11px!important;padding:8px 10px!important}#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 </style>
 
-<script src="assets/js/formal-home-profile.js?v=427"></script>
+<script src="assets/js/formal-home-profile.js?v=430"></script>
 
 
-<style id="v427-auth-deeplink-refresh-css">
-/* v427: center-card name effects stay fixed and no longer bundle badges. */
+<style id="v430-restore-legacy-tags-css">
+/* v430: center-card name effects stay fixed and no longer bundle badges. */
 #page-member .profile-card .profile-main,
 #page-companion-home .profile-card .profile-main{
   min-width:0!important;
@@ -17209,14 +17213,14 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </style>
 <script id="dream-formal-cleanup-marker">
 (function(){
-  window.DREAM_FRONT_PATCH_VERSION = "v427-auth-deeplink-refresh";
+  window.DREAM_FRONT_PATCH_VERSION = "v430-restore-legacy-tags";
 
 })();
 </script>
 
 
-<style id="v427-auth-deeplink-refresh-final-css">
-/* v427：正式收尾，統一版本、清理舊 fallback，首頁只保留公告、推薦陪玩與本期前三名。 */
+<style id="v430-restore-legacy-tags-final-css">
+/* v430：正式收尾，統一版本、清理舊 fallback，首頁只保留公告、推薦陪玩與本期前三名。 */
 #page-home .home-leaderboard-tabs,
 #page-home [data-rank-scroll],
 #page-home .rank-scroll{display:none!important}
@@ -17245,7 +17249,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 }
 
 
-/* v427: profile page name effect stays left and reserves room for gender. */
+/* v430: profile page name effect stays left and reserves room for gender. */
 #page-profile .profile-top{
   grid-template-columns:132px minmax(0,1fr)!important;
 }
@@ -17326,7 +17330,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 }
 
 
-/* v427: keep profile avatar size and text grid column synchronized. */
+/* v430: keep profile avatar size and text grid column synchronized. */
 #page-profile{
   --dream-profile-avatar-size:132px;
   --dream-profile-avatar-gap:24px;
@@ -17371,6 +17375,68 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   #page-profile{
     --dream-profile-avatar-size:112px;
     --dream-profile-avatar-gap:12px;
+  }
+}
+</style>
+
+<style id="v430-restore-legacy-tags-backpack-css">
+/* v430: align every backpack item with one consistent card grid. */
+.backpack-grid[data-backpack-list]{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  align-items:stretch!important;
+  gap:10px!important;
+}
+.backpack-grid[data-backpack-list] .backpack-item,
+.backpack-grid[data-backpack-list] .backpack-item.v405-backpack-card{
+  display:grid!important;
+  grid-template-columns:58px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:14px!important;
+  min-height:88px!important;
+  padding:14px 16px!important;
+  border-radius:16px!important;
+}
+.backpack-grid[data-backpack-list] .service-icon{
+  width:48px!important;
+  height:48px!important;
+  min-width:48px!important;
+  align-self:center!important;
+  justify-self:center!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+}
+.backpack-grid[data-backpack-list] .backpack-item>div:last-child,
+.backpack-grid[data-backpack-list] .v405-backpack-main{
+  min-width:0!important;
+  display:grid!important;
+  align-content:center!important;
+  gap:4px!important;
+  line-height:1.35!important;
+}
+.backpack-grid[data-backpack-list] .backpack-item b,
+.backpack-grid[data-backpack-list] .v405-backpack-title b{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.backpack-grid[data-backpack-list] .backpack-item span,
+.backpack-grid[data-backpack-list] .v405-backpack-meta{
+  overflow-wrap:anywhere!important;
+}
+.backpack-grid[data-backpack-list] .v405-backpack-title{
+  align-items:center!important;
+  min-height:22px!important;
+}
+.backpack-grid[data-backpack-list] .v405-backpack-actions{
+  margin-top:6px!important;
+  align-self:end!important;
+}
+@media(min-width:720px){
+  .backpack-grid[data-backpack-list]{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
 </style>

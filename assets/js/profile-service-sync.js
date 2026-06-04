@@ -1,7 +1,7 @@
-﻿/* v427-auth-deeplink-refresh */
+﻿/* v430-restore-legacy-tags */
 (function(){
-  if(window.__dreamProfileServiceSyncV407) return;
-  window.__dreamProfileServiceSyncV407 = true;
+  if(window.__dreamProfileServiceSyncV430) return;
+  window.__dreamProfileServiceSyncV430 = true;
   
 
   const $ = (s,r=document)=>r.querySelector(s);
@@ -49,10 +49,10 @@
     try{ return JSON.parse(localStorage.getItem("dream_persist_user") || "{}"); }catch(e){ return {}; }
   }
   function toast(msg, sticky){
-    let el = $("#dreamProfileSyncToastV407");
+    let el = $("#dreamProfileSyncToastV430");
     if(!el){
       el = document.createElement("div");
-      el.id = "dreamProfileSyncToastV407";
+      el.id = "dreamProfileSyncToastV430";
       el.style.cssText = "position:fixed;left:50%;bottom:112px;transform:translateX(-50%);width:min(88%,390px);padding:12px 15px;border-radius:16px;border:1px solid rgba(255,221,190,.42);background:rgba(72,28,50,.96);color:#fff;text-align:center;font-size:14px;font-weight:900;z-index:2147483647;box-shadow:0 14px 28px rgba(0,0,0,.45);opacity:1;transition:.2s";
       document.body.appendChild(el);
     }
@@ -172,7 +172,7 @@
     }
 
     if(!res || !res.ok){
-      if(window.DREAM_API_DEBUG) console.warn("[Dream v427 profile]", res);
+      if(window.DREAM_API_DEBUG) console.warn("[Dream v430 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }
@@ -192,8 +192,8 @@
   }
 
   const PERSONALITY_TAGS = {
-    member: ["新手會員","活躍會員","收藏控","聊天派","競技派","休閒派","夜貓子","暖心支持","任務控","VIP養成"],
-    companion: ["穩定上分","氣氛帶動","耐心教學","聲音陪伴","戰術指揮","娛樂陪玩","新手友善","高配合度","深夜在線","溫柔陪聊"]
+    member: ["大方","專情","慢熱","主動","幽默","溫和","理性","感性","佛系","黏人","社牛","社恐","紳士","可愛","隨和","真誠","愛聊","安靜","好哄","寵人","慢熱型","主動型","紳士型","寵人系","好相處","愛聊天","有耐心","很專情","很大方","小黏人","會照顧","好脾氣","懂尊重","願意聽","穩定型","互動派","陪伴派","理性派","感性派","輕鬆聊","情緒穩定","溫柔有禮","聊天舒服","出手大方","專一寵人","安靜陪伴","互動積極","真誠待人","穩定下單","尊重陪玩","新手會員","活躍會員","收藏控","聊天派","競技派","休閒派","夜貓子","暖心支持","任務控","VIP養成","脾氣超好","佛系娛樂","社牛能聊","內向安靜","新手小白","敢打敢衝","本人高玩","聲控優先","顏質優先","固定點單","隨緣散單","深夜玩家","周末玩家","娛樂整活","心態極穩","女陪優先","男陪優先","玻璃心","多游通玩","守時不鴿"],
+    companion: ["溫柔","活潑","甜嗓","高冷","治癒","搞笑","黏人","撒嬌","元氣","安靜","佛系","毒舌","耐心","暖心","可愛","反差","開朗","穩重","親切","話多","會撒嬌","超會聊","陪聊系","暖心型","慢熟型","氣氛王","甜妹系","御姐感","奶狗系","貓系感","會哄人","很耐心","愛聊天","會接話","小話癆","很貼心","陪伴型","安靜型","可愛型","互動強","情緒穩定","可鹽可甜","溫柔陪伴","聊天高手","哄睡專家","反差魅力","氣氛擔當","默契滿分","開心果系","耐心陪打","穩定上分","氣氛帶動","耐心教學","聲音陪伴","戰術指揮","娛樂陪玩","新手友善","高配合度","深夜在線","溫柔陪聊","天策(魔王)","巡撫(頂尖)","提督(技術)","聲甜軟妹","低音男神","暖場話多","整活搞笑","高冷沉穩","絕活專精","哄睡陪伴","全天秒接","新手導師","心態天花板","多游全能","女老闆專屬","溫柔耐心","手眼通天"]
   };
 
   function tagOptions(role){
