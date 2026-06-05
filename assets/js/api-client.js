@@ -1,5 +1,5 @@
-/* v432-formal-finish */
-window.DREAM_API_CLIENT_VERSION = "v432-formal-finish";
+/* v434-legacy-cleanup */
+window.DREAM_API_CLIENT_VERSION = "v434-legacy-cleanup";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -1103,7 +1103,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     ["first","second","third"].forEach(cls=>{
       const a = $(`.top3-avatar.${cls}`);
       const t = $(`.top3-text.${cls}`);
-      if(a) a.textContent = "?";
+      if(a) a.textContent = "夢";
       if(t) t.innerHTML = `<span class="name">載入中</span><span class="value">VIP經驗值 0</span>`;
     });
   }
@@ -1113,7 +1113,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
       const a = $(`.top3-avatar.${p.cls}`);
       const t = $(`.top3-text.${p.cls}`);
       if(!p.item){
-        if(a) a.textContent = "?";
+        if(a) a.textContent = "夢";
         if(t) t.innerHTML = `<span class="name">暫無資料</span><span class="value">VIP經驗值 0</span>`;
         continue;
       }
