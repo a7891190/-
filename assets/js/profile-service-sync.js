@@ -384,17 +384,39 @@
     const list = Array.isArray(profile?.active_assets) ? profile.active_assets : [];
     return list.find(item => item && item.slot === slot && !item.expired) || null;
   }
+  function isVipOpenV435(profile){
+    if(!profile) return false;
+    const level = Number(firstValue(profile.vip_level, profile.vipLevel, profile.member_level, profile.level_no, 0)) || 0;
+    const exp = Number(firstValue(profile.vip_exp, profile.exp, profile.vip_total_recharge_coin, profile.vip_total_recharge, 0)) || 0;
+    const status = String(firstValue(profile.vip_status, profile.member_status, profile.vip_open_status, "")).toLowerCase();
+    const expire = firstValue(profile.member_expire, profile.vip_expire, profile.expire_at, profile.expired_at, "");
+    let dateActive = false;
+    if(expire && !/未開通|已到期|永久|無/.test(String(expire))){
+      const parsed = Date.parse(String(expire).replace(" ", "T"));
+      dateActive = Number.isFinite(parsed) && parsed > Date.now();
+    }
+    const statusActive = /active|open|valid|開通|有效|啟用/.test(status) && !/inactive|expired|close|未開通|已到期|停用/.test(status);
+    return (level > 0 || exp > 0) && (statusActive || dateActive || !status);
+  }
   function profileLevelHtml(role, profile, fallbackLevel){
     const title = activeAsset(profile, "title");
-    const vipLevel = firstValue(profile?.vip_level, profile?.vipLevel, profile?.member_level, profile?.level_no, "0");
-    const vipName = role === "companion"
-      ? firstValue(profile?.vip_name, profile?.vip_title, profile?.vip_level_name, profile?.level, profile?.grade, profile?.status, fallbackLevel, "\u966a\u73a9")
-      : firstValue(profile?.vip_name, profile?.vip_title, profile?.vip_level_name, fallbackLevel, "\u7121VIP\u6703\u54e1");
     const charm = numberText(firstValue(profile?.charm_value, profile?.charm, 0), 0);
     const guardian = numberText(firstValue(profile?.guardian_value, profile?.guardian, 0), 0);
     const titleName = title ? firstValue(title.item_name, title.name, title.title) : "";
+    if(role === "companion"){
+      const label = firstValue(profile?.level, profile?.grade, profile?.status, fallbackLevel, "\u966a\u73a9");
+      return [
+        `<span class="profile-vip-line"><b>${escapeHtml(label)}</b></span>`,
+        titleName ? `<span class="profile-equipped-title">\u7a31\u865f\uff1a${escapeHtml(titleName)}</span>` : `<span class="profile-equipped-title is-empty">\u7a31\u865f\uff1a\u5c1a\u672a\u8a2d\u5b9a</span>`,
+        `<span class="profile-value-line">\u9b45\u529b\u503c ${escapeHtml(charm)} \uff5c \u5b88\u8b77\u503c ${escapeHtml(guardian)}</span>`
+      ].join("");
+    }
+    const vipLevel = Number(firstValue(profile?.vip_level, profile?.vipLevel, profile?.member_level, profile?.level_no, 0)) || 0;
+    const opened = isVipOpenV435(profile) && vipLevel > 0;
+    const vipNameRaw = opened ? firstValue(profile?.vip_name, profile?.vip_title, profile?.vip_level_name, fallbackLevel, "") : "";
+    const vipName = /客官|無VIP會員|未開通|VIP\s*0/i.test(String(vipNameRaw)) ? "" : vipNameRaw;
     return [
-      `<span class="profile-vip-line"><b>VIP ${escapeHtml(vipLevel)}</b><span>${escapeHtml(vipName)}</span></span>`,
+      opened ? `<span class="profile-vip-line"><b>VIP ${escapeHtml(vipLevel)}</b>${vipName ? `<span>${escapeHtml(vipName)}</span>` : ""}</span>` : `<span class="profile-vip-line" data-vip-unopened="1"><b>\u672a\u958b\u901a</b></span>`,
       titleName ? `<span class="profile-equipped-title">\u7a31\u865f\uff1a${escapeHtml(titleName)}</span>` : `<span class="profile-equipped-title is-empty">\u7a31\u865f\uff1a\u5c1a\u672a\u8a2d\u5b9a</span>`,
       `<span class="profile-value-line">\u9b45\u529b\u503c ${escapeHtml(charm)} \uff5c \u5b88\u8b77\u503c ${escapeHtml(guardian)}</span>`
     ].join("");
@@ -470,7 +492,7 @@
     const recommend = firstValue(profile.recommend_count, profile.recommend, profile.likes, profile.like_count, 0);
     const level = isCompanion
       ? firstValue(profile.level, profile.grade, profile.status, "\u767b\u5165\u8eab\u5206\uff1a\u966a\u73a9")
-      : firstValue(profile.vip_name, profile.vip_title, profile.vip_level_name, profile.vip_level ? ("VIP\u7b49\u7d1a\uff1a" + profile.vip_level) : "", "VIP\u7b49\u7d1a\uff1a\u7121VIP\u6703\u54e1");
+      : (isVipOpenV435(profile) && Number(profile.vip_level || profile.vipLevel || profile.member_level || 0) > 0 ? firstValue(profile.vip_name, profile.vip_title, profile.vip_level_name, profile.vip_level ? ("VIP\u7b49\u7d1a\uff1a" + profile.vip_level) : "", "") : "\u672a\u958b\u901a");
     pageEl.classList.toggle("profile-companion", isCompanion);
     pageEl.classList.toggle("profile-member", !isCompanion);
     pageEl.dataset.profileRole = role;

@@ -1,5 +1,5 @@
-/* v434-legacy-cleanup */
-window.DREAM_API_CLIENT_VERSION = "v434-legacy-cleanup";
+/* v435-display-polish */
+window.DREAM_API_CLIENT_VERSION = "v435-display-polish";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -277,7 +277,7 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     const uid = safeText(user.member_id || user.user_code || user.id || user.user_id, "00000000");
     const exp = Number(user.exp || user.vip_exp || 0);
     const nextExp = Number(user.next_exp || 298888);
-    const vipName = safeText(user.vip_name || user.vip_title || user.vip_level_name, "客官");
+    const vipName = safeText(user.vip_name || user.vip_title || user.vip_level_name, "");
     const vipLevel = Number.isFinite(Number(user.vip_level)) ? Number(user.vip_level) : inferVipLevelFromName(vipName);
     const vipState = vipEntitlementDisplayV422(user, "member");
     const expire = vipState.expireText;
@@ -1050,7 +1050,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
   function vipLevelLabel(user, type){
     if(type === "companion") return "登入身分：陪玩";
     if(!user) return "VIP等級：無VIP會員";
-    if(user.svip || String(user.vip_level || user.vip_rank || "").toUpperCase() === "SVIP") return formatVipLevelV45("SVIP", user.vip_name || user.vip_title || "客官");
+    if(user.svip || String(user.vip_level || user.vip_rank || "").toUpperCase() === "SVIP") return formatVipLevelV45("SVIP", user.vip_name || user.vip_title || "");
     const raw = user.vip_level ?? user.vip_rank ?? user.vip ?? user.member_vip_level ?? "";
     const str = String(raw).toUpperCase().trim();
     const matched = str.match(/VIP\s*([1-9]|10)/);
@@ -1073,7 +1073,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const id = user ? (user.member_id || user.user_code || user.id || user.user_id || user.companion_id || "00000000") : "";
     const coin = user ? (user.coin || user.short_coin || 0) : 0;
     const exp = user ? (user.exp || user.vip_exp || 0) : 0;
-    const vipName = user ? (user.vip_name || user.vip_title || user.vip_level_name || (type === "companion" ? "陪玩帳號" : "客官")) : "未登入";
+    const vipName = user ? (user.vip_name || user.vip_title || user.vip_level_name || (type === "companion" ? "陪玩帳號" : "")) : "未登入";
     const vipState = vipEntitlementDisplayV422(user, type);
     const expire = vipState.expireText;
     const vipOpen = vipState.status;
