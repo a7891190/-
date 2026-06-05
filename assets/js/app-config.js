@@ -11,7 +11,7 @@ window.DREAM_CONFIG = {
   // 若後台回傳 /uploads/... 或完整網址，前台會自動處理
   UPLOAD_BASE: "https://api.131rwjuh.com",
 
-  VERSION: "v431-logout-button-reset"
+  VERSION: "v432-formal-finish"
 };
 
 (function(){
@@ -24,7 +24,7 @@ window.DREAM_CONFIG = {
     "login","member_login","register","verify_email","companion_login","request_reset",
     "public_profile","profile_public","user_public_profile","profile_public_reviews",
     "front_ranking_snapshot","vip_ranking","companion_front_list","companions","companion_recommendations",
-    "shop_list","shop_categories","bullet_event_list","announcement_list","inn_post_list","achievements_list"
+    "shop_list","shop_categories","bullet_event_list","announcement_list","inn_post_list","achievements_list","push_public_key"
   ]);
   function apiBase(){
     try{return (window.DREAM_CONFIG && window.DREAM_CONFIG.API_BASE) || "https://api.131rwjuh.com/api.php";}catch(_){return "https://api.131rwjuh.com/api.php";}

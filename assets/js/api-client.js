@@ -1,5 +1,5 @@
-/* v431-logout-button-reset */
-window.DREAM_API_CLIENT_VERSION = "v431-logout-button-reset";
+/* v432-formal-finish */
+window.DREAM_API_CLIENT_VERSION = "v432-formal-finish";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -285,8 +285,8 @@ window.__dreamAuthSafe.isLoggedIn = function(){
 
     setBind("member-id", "會員 ID：" + uid);
     setBind("member-name", username);
-    const vipCode = (user.svip || String(vipName).toUpperCase().includes("SVIP") || vipLevel <= 0) ? "SVIP" : ("VIP" + vipLevel);
-    setBind("vip-level", formatVipLevel(vipCode, vipName));
+    const vipCode = (user.svip || String(vipName).toUpperCase().includes("SVIP")) ? "SVIP" : (vipLevel > 0 ? ("VIP" + vipLevel) : "");
+    setBind("vip-level", (vipState.active && vipCode) ? formatVipLevel(vipCode, vipName) : "未開通");
     setBind("vip-exp", "VIP經驗值：" + money(exp) + " / " + money(nextExp));
     setBind("member-gender-icon", String(user.gender || user.sex || "").toLowerCase().includes("female") || String(user.gender || user.sex || "").includes("女") ? "♀" : (String(user.gender || user.sex || "").toLowerCase().includes("male") || String(user.gender || user.sex || "").includes("男") ? "♂" : "◇"));
     setBind("member-profile-tip", "會員個人中心");
@@ -1081,7 +1081,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
 
     $all("[data-bind='member-id']").forEach(el=>el.textContent = user ? ((type === "companion" ? "陪玩 ID：" : "會員 ID：") + id) : "");
     $all("[data-bind='member-name']").forEach(el=>el.textContent = name);
-    $all("[data-bind='vip-level']").forEach(el=>el.textContent = vipLevelLabel(user, type));
+    $all("[data-bind='vip-level']").forEach(el=>{ const label = vipLevelLabel(user, type); el.textContent = (vipState.active && user && !/VIP等級：無VIP會員|VIP0|SVIP\s*客官/.test(label)) ? label : "未開通"; });
     $all("[data-bind='vip-exp']").forEach(el=>el.textContent = user ? ("VIP經驗值：" + money(exp) + " / 298888") : "");
     $all("[data-bind='member-gender-icon']").forEach(el=>{ const g=String(user?.gender || user?.sex || '').toLowerCase(); el.textContent = g.includes('female') || g.includes('女') ? '♀' : (g.includes('male') || g.includes('男') ? '♂' : '◇'); });
     $all("[data-bind='member-profile-tip']").forEach(el=>el.textContent = user ? (type === "companion" ? "陪玩個人中心" : "會員個人中心") : "登入後可查看個人中心");

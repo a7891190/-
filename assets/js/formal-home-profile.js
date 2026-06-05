@@ -167,7 +167,9 @@
 #page-profile.profile-member.active .profile-bottom-actions .reserve-main,
 #page-profile.profile-member.active .profile-bottom-actions .service-main{display:none!important}
 #page-profile.profile-companion.active .profile-bottom-actions{grid-template-columns:62px 62px 72px minmax(88px,1fr) minmax(88px,1fr)!important}
-#page-profile.active .profile-bottom-actions [data-action="gift-profile"]{display:flex!important;align-items:center!important;justify-content:center!important;border:1px solid rgba(255,210,228,.74)!important;border-radius:28px!important;color:#fff!important;background:rgba(255,255,255,.08)!important;font-weight:900!important}
+#page-profile.active .profile-bottom-actions [data-action="gift-profile"]{display:grid!important;grid-template-rows:34px auto!important;place-items:center!important;align-content:center!important;border:0!important;border-radius:0!important;color:#fff!important;background:transparent!important;font-weight:900!important}
+#homeRecommendCompanions{display:flex!important;grid-template-columns:none!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:8px 2px 6px!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important}
+#homeRecommendCompanions .recommend-card{flex:0 0 128px!important;min-width:128px!important;scroll-snap-align:start!important}
 #page-companion .companion-newcomer-panel{overflow:hidden!important}
 #page-companion .companion-newcomer-list{display:flex!important;grid-template-columns:none!important;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:8px 2px 4px!important;scroll-snap-type:x proximity!important;-webkit-overflow-scrolling:touch!important}
 #page-companion .companion-newcomer-list .recommend-card{flex:0 0 128px!important;min-width:128px!important;min-height:136px!important;scroll-snap-align:start!important}
@@ -576,8 +578,9 @@
       gift.type = "button";
       gift.dataset.action = "gift-profile";
       gift.className = "gift-main";
-      gift.innerHTML = "<span>送禮</span>";
+      gift.innerHTML = '<span class="profile-stat-icon gift" aria-hidden="true">送</span><span>送禮</span>';
     }
+    gift.innerHTML = '<span class="profile-stat-icon gift" aria-hidden="true">送</span><span>送禮</span>';
     const recommend = bar.querySelector('[data-action="recommend-profile"]');
     if (recommend && recommend.nextElementSibling !== gift) {
       recommend.insertAdjacentElement("afterend", gift);
