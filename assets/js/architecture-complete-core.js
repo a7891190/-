@@ -1,4 +1,4 @@
-﻿/* v430-restore-legacy-tags */
+﻿/* v431-logout-button-reset */
 (function(){
   if(window.__dreamArchitectureCoreV384)return;window.__dreamArchitectureCoreV384=true;
   function page(){return(location.hash||"#home").replace(/^#/,"")||"home";}

@@ -1,4 +1,4 @@
-﻿/* v430-restore-legacy-tags */
+﻿/* v431-logout-button-reset */
 (function(){
   if(window.__dreamProfileServiceSyncV430) return;
   window.__dreamProfileServiceSyncV430 = true;
@@ -172,7 +172,7 @@
     }
 
     if(!res || !res.ok){
-      if(window.DREAM_API_DEBUG) console.warn("[Dream v430 profile]", res);
+      if(window.DREAM_API_DEBUG) console.warn("[Dream v431 profile]", res);
       current = {role, user:getPersistUser(), profile:getPersistUser(), loadedAt:Date.now()};
       return current.profile;
     }

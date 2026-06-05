@@ -131,7 +131,7 @@
 })();
 
 
-/* v430-restore-legacy-tags */
+/* v431-logout-button-reset */
 (function(){
   if(window.__dreamHardeningTimeoutV376) return;
   window.__dreamHardeningTimeoutV376 = true;

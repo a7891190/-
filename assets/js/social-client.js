@@ -1,4 +1,4 @@
-﻿/* v430-restore-legacy-tags */
+﻿/* v431-logout-button-reset */
 (function(){
   if (!window.DreamAPI) return;
   const api = (action, payload) => window.dreamStableApiV387 ? window.dreamStableApiV387(action, payload || {}) : window.DreamAPI.api(action, payload || {});
