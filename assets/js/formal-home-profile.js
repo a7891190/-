@@ -2,7 +2,7 @@
   "use strict";
   if (window.__dreamFormalHomeProfile) return;
   window.__dreamFormalHomeProfile = true;
-  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v439-profile-routing";
+  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v440-profile-routing";
 
   const CFG = window.DREAM_CONFIG || {};
   const API_BASE = CFG.API_BASE || window.DREAM_API_URL || "https://api.131rwjuh.com/api.php";
@@ -356,7 +356,7 @@
     host.innerHTML = list.map((row, index) => {
       const name = displayName(row, "陪玩");
       const orders = companionOrderCount(row);
-      return `<article class="recommend-card newcomer-card" data-open-recommend-profile="${esc(row.companion_id || row.id || "")}">
+      return `<article class="recommend-card newcomer-card" data-open-recommend-profile="${esc(row.companion_id || row.id || "")}" data-profile-role="companion" data-profile-id="${esc(row.companion_id || row.id || "")}" tabindex="0" role="button">
         <div class="recommend-avatar">${avatarImg(row, "companion", name)}</div>
         <div class="recommend-name">${esc(name)}</div>
         <div class="recommend-meta"><span>新人 #${index + 1}</span><span class="recommend-total-score">接單 ${orders} 單</span></div>
