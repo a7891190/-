@@ -2,6 +2,7 @@
   "use strict";
   if (window.__dreamFormalHomeProfile) return;
   window.__dreamFormalHomeProfile = true;
+  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v436-profile-routing";
 
   const CFG = window.DREAM_CONFIG || {};
   const API_BASE = CFG.API_BASE || window.DREAM_API_URL || "https://api.131rwjuh.com/api.php";
@@ -90,6 +91,14 @@
   }
   function displayName(row, fallback){
     return String(row?.display_name || row?.name || row?.nickname || row?.username || fallback || "用戶");
+  }
+  function profileId(row){
+    return Number(row?.id ?? row?.user_id ?? row?.member_id ?? row?.companion_id ?? row?.author_id ?? row?.target_id ?? 0) || 0;
+  }
+  function profileAttrs(row, fallbackRole){
+    const id = profileId(row);
+    const role = roleOf(row, fallbackRole || "member");
+    return id > 0 ? ` data-profile-role="${esc(role)}" data-profile-id="${id}" tabindex="0" role="button"` : "";
   }
   function numberText(value){
     return Number(value || 0).toLocaleString("zh-TW");
@@ -213,6 +222,17 @@
       const text = document.querySelector(`#page-home .top3-text.${cls}`);
       if (avatar) {
         avatar.innerHTML = row ? avatarImg(row, row.role, displayName(row)) : avatarImg({ role: "member" }, "member", "預設用戶");
+        if (row && profileId(row) > 0) {
+          avatar.dataset.profileRole = roleOf(row, "member");
+          avatar.dataset.profileId = String(profileId(row));
+          avatar.tabIndex = 0;
+          avatar.setAttribute("role", "button");
+        } else {
+          delete avatar.dataset.profileRole;
+          delete avatar.dataset.profileId;
+          avatar.removeAttribute("tabindex");
+          avatar.removeAttribute("role");
+        }
       }
       if (text) {
         const nameEl = text.querySelector(".name");
@@ -223,6 +243,17 @@
             nameEl.dataset.rankTop3Board = key;
             nameEl.dataset.rankTop3Rank = String(displayRank);
             nameEl.dataset.rankTop3Name = displayName(row);
+            nameEl.dataset.profileRole = roleOf(row, "member");
+            nameEl.dataset.profileId = String(profileId(row));
+            nameEl.tabIndex = 0;
+            nameEl.setAttribute("role", "button");
+            text.dataset.profileRole = roleOf(row, "member");
+            text.dataset.profileId = String(profileId(row));
+          } else {
+            delete nameEl.dataset.profileRole;
+            delete nameEl.dataset.profileId;
+            delete text.dataset.profileRole;
+            delete text.dataset.profileId;
           }
         }
         if (valueEl) valueEl.textContent = row ? rankValueText(key, row) : "等待正式排行榜";
@@ -235,7 +266,7 @@
       } else {
         el.innerHTML = belowRows.map((row, i) => {
           const rank = Number(row.rank || i + 4) || (i + 4);
-          return `<div class="rank-chip"><div class="rank-no">#${rank}</div><div class="rank-title">${esc(displayName(row))}</div><div class="rank-value">${esc(rankValueText(key, row))}</div></div>`;
+          return `<div class="rank-chip"${profileAttrs(row, row.role || "member")}><div class="rank-no">#${rank}</div><div class="rank-title">${esc(displayName(row))}</div><div class="rank-value">${esc(rankValueText(key, row))}</div></div>`;
         }).join("");
       }
       el.style.display = "flex";
@@ -254,7 +285,7 @@
     const rows = state.boards[key] || [];
     const tabs = BOARDS.map(board => `<button type="button" class="v267-tab ${board === key ? "active" : ""}" data-formal-rank-tab="${board}">${esc(BOARD_META[board].title)}</button>`).join("");
     const body = rows.length ? rows.map(row => `
-      <div class="v267-rank-row formal-rank-row">
+      <div class="v267-rank-row formal-rank-row"${profileAttrs(row, row.role || "member")}>
         <div class="v267-rank-no"><span class="formal-rank-avatar">${avatarImg(row, row.role, displayName(row))}<span class="formal-rank-badge">${Number(row.rank || 0)}</span></span></div>
         <div>
           <div class="v267-rank-name">${esc(displayName(row))}</div>
@@ -276,7 +307,7 @@
     host.innerHTML = rows.map((row, index) => {
       const name = displayName(row, "陪玩");
       const orders = Number(row.completed_order_count ?? row.total_completed_orders ?? row.orders ?? row.order_count ?? 0) || 0;
-      return `<article class="recommend-card" data-open-recommend-profile="${esc(row.companion_id || row.id || "")}">
+      return `<article class="recommend-card" data-open-recommend-profile="${esc(row.companion_id || row.id || "")}" data-profile-role="companion" data-profile-id="${esc(row.companion_id || row.id || "")}" tabindex="0" role="button">
         <div class="recommend-avatar">${avatarImg(row, "companion", name)}</div>
         <div class="recommend-name">${esc(name)}</div>
         <div class="recommend-meta"><span>#${Number(row.rank || index + 1)}</span><span class="recommend-total-score">接單 ${orders} 單</span></div>
@@ -470,7 +501,7 @@
     if (!comments.length) return "";
     return `<div class="inn-comments">${comments.map(comment => {
       const name = comment.author_name || comment.display_name || comment.username || "用戶";
-      return `<div class="inn-comment">
+      return `<div class="inn-comment"${profileAttrs(comment, comment.author_type)}>
         <div class="inn-comment-avatar" data-author-type="${esc(roleOf(comment, comment.author_type))}">${avatarImg(comment, roleOf(comment, comment.author_type), name)}</div>
         <div><b>${esc(name)}</b><span>${esc(comment.comment_text || comment.content || "")}</span></div>
       </div>`;
@@ -504,8 +535,8 @@
       const authorId = post.author_id || "";
       const image = mediaUrl(post.image_url || post.post_image_url || "", authorType);
       const hasImage = !!(post.image_url || post.post_image_url);
-      return `<article class="panel post-card" data-post-id="${esc(id)}">
-        <div class="post-head">
+      return `<article class="panel post-card" data-post-id="${esc(id)}" data-author-role="${esc(authorType)}" data-author-id="${esc(authorId)}">
+        <div class="post-head"${profileAttrs({role:authorType,id:authorId}, authorType)}>
           <div class="post-avatar" data-author-type="${esc(authorType)}">${avatarImg(post, authorType, authorName)}</div>
           <div><div class="post-name">${esc(authorName)} <button type="button" data-social-action="follow" data-target-type="${esc(authorType)}" data-target-id="${esc(authorId)}" style="margin-left:8px;border-radius:999px;padding:4px 8px;border:1px solid rgba(255,220,235,.28);background:rgba(255,255,255,.08);color:inherit">${post.is_following_author ? "已關注" : "關注"}</button></div><div class="post-time">${esc(timeText(post.created_at))}</div></div>
         </div>
@@ -591,6 +622,17 @@
 
   function bindEvents(){
     document.addEventListener("click", event => {
+      const profileTarget = event.target.closest("[data-profile-role][data-profile-id]");
+      if (profileTarget && !event.target.closest("button[data-social-action],button[data-action],.reserve-btn,[data-companion-booking-open]")) {
+        const role = roleOf({role:profileTarget.dataset.profileRole}, "member");
+        const id = Number(profileTarget.dataset.profileId || 0);
+        if (id > 0 && typeof window.openDreamPublicProfileV394 === "function") {
+          event.preventDefault();
+          event.stopPropagation();
+          window.openDreamPublicProfileV394(role, id);
+          return;
+        }
+      }
       const notice = event.target.closest("#page-home .notice-line");
       if (notice) { event.preventDefault(); openNoticeModal(); return; }
       const homeRankTab = event.target.closest("#page-home [data-board-key]");
@@ -615,6 +657,14 @@
       }
     }, true);
     document.addEventListener("keydown", event => {
+      if ((event.key === "Enter" || event.key === " ") && event.target.matches?.("[data-profile-role][data-profile-id]")) {
+        const id = Number(event.target.dataset.profileId || 0);
+        if (id > 0 && typeof window.openDreamPublicProfileV394 === "function") {
+          event.preventDefault();
+          window.openDreamPublicProfileV394(roleOf({role:event.target.dataset.profileRole}, "member"), id);
+          return;
+        }
+      }
       if (event.key === "Escape") closeNoticeModal();
       if ((event.key === "Enter" || event.key === " ") && event.target.closest?.("#page-home .notice-line")) {
         event.preventDefault();

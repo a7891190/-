@@ -1,5 +1,5 @@
-/* v435-display-polish */
-window.DREAM_API_CLIENT_VERSION = "v435-display-polish";
+/* v436-profile-routing */
+window.DREAM_API_CLIENT_VERSION = "v436-profile-routing";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }

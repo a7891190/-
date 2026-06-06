@@ -545,7 +545,12 @@
     const panel = $("#dreamProfilePanel");
     if(panel) setTimeout(()=>panel.scrollIntoView({behavior:"smooth", block:"start"}), 30);
   }
+  function publicProfileIsOpen(){
+    const pageEl = document.getElementById("page-profile");
+    return !!(pageEl && pageEl.dataset.publicProfile === "1" && Number(pageEl.dataset.profileId || 0) > 0);
+  }
   function renderDreamProfilePage(){
+    if(publicProfileIsOpen()) return;
     const role = getRole();
     const cached = current.role === role && current.profile ? current.profile : getPersistUser();
     renderProfilePage(role, cached || {});
@@ -581,6 +586,8 @@
     ensureStyle();
     toast("正在載入資料...", true);
     try{ localStorage.setItem("dream_active_profile_id", profileIdFor(role)); }catch(e){}
+    const pageEl = document.getElementById("page-profile");
+    if(pageEl){ pageEl.dataset.publicProfile = "0"; delete pageEl.dataset.publicProfileTarget; }
     if(page() !== "profile") go("profile");
     const profile = await loadProfile(true, role);
     renderProfilePage(role, profile || {});
@@ -770,8 +777,8 @@
       setTimeout(()=>URL.revokeObjectURL(url), 1200);
     }, true);
 
-    window.addEventListener("hashchange", ()=>setTimeout(()=>{syncServiceVisibility(); if(page()==="profile") renderDreamProfilePage();}, 120));
-    window.addEventListener("dream-auth-updated", ()=>setTimeout(()=>{if(window.__dreamServerSessionReady) loadProfile(true); syncServiceVisibility(); if(page()==="profile") renderDreamProfilePage();}, 180));
+    window.addEventListener("hashchange", ()=>setTimeout(()=>{syncServiceVisibility(); if(page()==="profile" && !publicProfileIsOpen()) renderDreamProfilePage();}, 120));
+    window.addEventListener("dream-auth-updated", ()=>setTimeout(()=>{if(window.__dreamServerSessionReady && !publicProfileIsOpen()) loadProfile(true); syncServiceVisibility(); if(page()==="profile" && !publicProfileIsOpen()) renderDreamProfilePage();}, 180));
     setInterval(syncServiceVisibility, 1200);
     syncServiceVisibility();
     if(isLoggedIn() && window.__dreamServerSessionReady) loadProfile(false).catch(()=>{});
