@@ -623,7 +623,7 @@
   function bindEvents(){
     document.addEventListener("click", event => {
       const profileTarget = event.target.closest("[data-profile-role][data-profile-id]");
-      if (profileTarget && !event.target.closest("button[data-social-action],button[data-action],.reserve-btn,[data-companion-booking-open]")) {
+      if (profileTarget && !window.__dreamPublicProfileRouterV436 && !event.target.closest("button[data-social-action],button[data-action],.reserve-btn,[data-companion-booking-open]")) {
         const role = roleOf({role:profileTarget.dataset.profileRole}, "member");
         const id = Number(profileTarget.dataset.profileId || 0);
         if (id > 0 && typeof window.openDreamPublicProfileV394 === "function") {
@@ -657,7 +657,7 @@
       }
     }, true);
     document.addEventListener("keydown", event => {
-      if ((event.key === "Enter" || event.key === " ") && event.target.matches?.("[data-profile-role][data-profile-id]")) {
+      if (!window.__dreamPublicProfileRouterV436 && (event.key === "Enter" || event.key === " ") && event.target.matches?.("[data-profile-role][data-profile-id]")) {
         const id = Number(event.target.dataset.profileId || 0);
         if (id > 0 && typeof window.openDreamPublicProfileV394 === "function") {
           event.preventDefault();

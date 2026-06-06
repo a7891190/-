@@ -8877,43 +8877,6 @@ window.DREAM_ACHIEVEMENT_DATA = [{"id":"member-001","type":"member","seq":1,"sta
 /* v86 首頁推薦陪玩 + 夢競客棧功能 + 簽到月曆 */
 (function(){
   const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  function companionLevelBonus(level){
-    const text = String(level || '');
-    if(text.includes('天策')) return 10;
-    if(text.includes('巡撫')) return 5;
-    return 0;
-  }
-  const recommendSeed = [];
-  function scoreCompanion(c){
-    const ratingScore = Number(c.rating || 0) * 20 * 0.5;
-    const orderScore = Math.min(Number(c.orders || 0), 300) / 300 * 100 * 0.3;
-    const recentScore = Math.min(Number(c.recent || 0), 30) / 30 * 100 * 0.2;
-    return ratingScore + orderScore + recentScore + companionLevelBonus(c.level);
-  }
-  function renderRecommendCards(host, items){
-    if(!host) return;
-    host.innerHTML = items.map(c => `<article class="recommend-card" data-open-recommend-profile="${esc(c.id)}"><div class="recommend-avatar">${esc(c.avatar || c.name.slice(0,1))}</div><div class="recommend-name">${esc(c.name)}</div><div class="recommend-meta"><span>${esc(c.level)}</span><span class="recommend-total-score">評分 ${Number(c.rating||0).toFixed(1)}</span></div></article>`).join('');
-  }
-  function renderHomeRecommendations(){
-    const host = document.getElementById('homeRecommendCompanions');
-    if(!host) return;
-    const items = recommendSeed.map(x => ({...x, score: scoreCompanion(x)})).sort((a,b)=>b.score-a.score).slice(0,8);
-    renderRecommendCards(host, items);
-  }
-  function shuffleArray(arr){ const copy = arr.slice(); for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; } return copy; }
-  function renderCompanionRecommendations(){
-    const host = document.getElementById('companionGrid');
-    if(!host) return;
-    const items = shuffleArray(recommendSeed).slice(0,8);
-    renderRecommendCards(host, items);
-  }
-  document.addEventListener('click', e => {
-    const card = e.target.closest('[data-open-recommend-profile]');
-    if(!card) return;
-    e.preventDefault();
-    if(typeof window.openDreamProfile === 'function') window.openDreamProfile(card.dataset.openRecommendProfile);
-    else if(typeof window.showPage === 'function') window.showPage('companion');
-  }, true);
 
   const innState = {filter:'all', sort:'time'};
   function readSet(key){try{return new Set(JSON.parse(localStorage.getItem(key) || '[]'));}catch(e){return new Set();}}
@@ -17121,9 +17084,9 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     if(gift){e.preventDefault();const page=document.getElementById("page-profile");const role=page?.dataset.profileRole||"member";const id=Number(page?.dataset.profileId||0);const name=page?.querySelector('[data-profile-bind="name"]')?.textContent?.trim()||"用戶";window.__dreamGiftReceiverV394={type:role,id,name};if(typeof window.showPage==="function")window.showPage("gift");else location.hash="#gift";setTimeout(updateGiftHint,60);return;}
     const reserve=e.target.closest&&e.target.closest('#page-profile [data-action="reserve-profile"]');
     if(reserve){const page=document.getElementById("page-profile");if(page?.dataset.profileRole==="companion"){e.preventDefault();openBookingFromProfile();return;}}
-    const rec=e.target.closest&&e.target.closest("[data-open-recommend-profile]");
+    const rec=!window.__dreamPublicProfileRouterV436&&e.target.closest&&e.target.closest("[data-open-recommend-profile]");
     if(rec){e.preventDefault();e.stopPropagation();openPublicProfile("companion",rec.dataset.openRecommendProfile);return;}
-    const card=e.target.closest&&e.target.closest("#page-companion .companion-card");
+    const card=!window.__dreamPublicProfileRouterV436&&e.target.closest&&e.target.closest("#page-companion .companion-card");
     if(card&&!e.target.closest(".reserve-btn,[data-companion-booking-open]")){
       const id=card.dataset.companionId||card.querySelector("[data-companion-id]")?.dataset.companionId||"";
       if(id){e.preventDefault();openPublicProfile("companion",id);return;}
@@ -18246,9 +18209,15 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     });
   }
   function preview(el){
-    const nameNode=el.querySelector(".recommend-name,.v267-rank-name,.rank-title,.post-name,.name");
+    const nameNode=el.querySelector(".recommend-name,.v267-rank-name,.rank-title,.post-name,.name,h3");
     const img=el.querySelector("img");
-    let name=String(nameNode?.textContent||img?.alt||el.getAttribute("aria-label")||"").replace(/大頭照/g,"").replace(/#\d+[\s\S]*$/,"").trim();
+    let rawName="";
+    if(nameNode){
+      const copy=nameNode.cloneNode(true);
+      copy.querySelectorAll("button,[data-social-action],.rank-top3-gufeng-badges,.rank-name-badges,.v267-badges").forEach(node=>node.remove());
+      rawName=copy.textContent||"";
+    }
+    let name=String(rawName||img?.alt||el.getAttribute("aria-label")||"").replace(/大頭照/g,"").replace(/#\d+[\s\S]*$/,"").trim();
     return {name:name,avatar:img?.currentSrc||img?.src||""};
   }
   function open(el){
@@ -18421,6 +18390,4 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </style>
 </body>
 </html>
-
-
 
