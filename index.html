@@ -1,4 +1,4 @@
-<!-- v436-profile-routing -->
+<!-- v437-profile-routing -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -15229,7 +15229,7 @@ body:not(.role-companion) .companion-only-panel{
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v436'; }).map(function(k){ return caches.delete(k); }));
+    return Promise.all(keys.filter(function(k){ return /^dream-playmate-v/.test(k) && k !== 'dream-playmate-v437'; }).map(function(k){ return caches.delete(k); }));
   }).catch(function(){});
 })();
 </script>
@@ -17034,7 +17034,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     id=Number(id||0); if(!id) return;
     const page=document.getElementById("page-profile");
     if(page){page.dataset.publicProfile="1";page.dataset.profileRole=role;page.dataset.profileId=String(id);page.dataset.publicProfileTarget=role+":"+id;}
-    try{localStorage.setItem("dream_public_profile_target_v436",JSON.stringify({role,id}));}catch(_){}
+    try{localStorage.setItem("dream_public_profile_target_v437",JSON.stringify({role,id}));}catch(_){}
     const res=await api("public_profile",{target_type:role,target_id:id});
     if(!res.ok) return toast(res.message||"主頁載入失敗");
     renderPublicProfile(role,res.profile||res.user||res.data||{});
@@ -18125,7 +18125,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </script>
 
 
-<script id="v436-public-profile-router">
+<script id="v437-public-profile-router">
 (function(){
   if(window.__dreamPublicProfileRouterV436) return;
   window.__dreamPublicProfileRouterV436 = true;

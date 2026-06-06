@@ -478,6 +478,7 @@
     });
   }
   function renderProfilePage(role, profile){
+    if(publicProfileIsOpen()) return;
     role = normalizeRoleValue(role) || getRole();
     profile = Object.assign({}, profile || getPersistUser() || {}, {role});
     current = {role, user:profile, profile, loadedAt:Date.now()};
@@ -554,7 +555,7 @@
     const role = getRole();
     const cached = current.role === role && current.profile ? current.profile : getPersistUser();
     renderProfilePage(role, cached || {});
-    loadProfile(true, role).then(profile=>{ if(profile) renderProfilePage(role, profile); }).catch(()=>{});
+    loadProfile(true, role).then(profile=>{ if(profile && !publicProfileIsOpen()) renderProfilePage(role, profile); }).catch(()=>{});
   }
 
   function findProfileHost(role){
