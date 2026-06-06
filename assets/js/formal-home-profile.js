@@ -2,7 +2,7 @@
   "use strict";
   if (window.__dreamFormalHomeProfile) return;
   window.__dreamFormalHomeProfile = true;
-  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v440-profile-routing";
+  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v441-profile-vip-layout";
 
   const CFG = window.DREAM_CONFIG || {};
   const API_BASE = CFG.API_BASE || window.DREAM_API_URL || "https://api.131rwjuh.com/api.php";
@@ -150,6 +150,8 @@
 #page-home .top3-avatar img,#page-home .rank-avatar img,#page-vip-rank .formal-rank-avatar img,
 #homeRecommendCompanions .recommend-avatar img,#page-inn .post-avatar img,#page-inn .inn-comment-avatar img,
 #page-profile [data-profile-bind="avatar"] img{width:100%!important;height:100%!important;display:block!important;object-fit:cover!important;border-radius:inherit!important}
+#homeRecommendCompanions .recommend-avatar,#companionNewcomers .recommend-avatar{position:relative!important;border-radius:50%!important;overflow:hidden!important;isolation:isolate!important}
+#homeRecommendCompanions .recommend-avatar img,#companionNewcomers .recommend-avatar img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important}
 #page-home .notice-line{cursor:pointer;position:relative;padding-right:86px}
 #page-home .notice-line .notice-history-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:1px solid rgba(255,221,235,.32);border-radius:999px;background:rgba(255,255,255,.1);color:#fff1f7;font-size:12px;font-weight:900;padding:6px 10px}
 .formal-notice-modal{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(15,4,12,.72);backdrop-filter:blur(10px)}

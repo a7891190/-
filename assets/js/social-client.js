@@ -1,4 +1,4 @@
-/* v440-profile-routing */
+/* v441-profile-vip-layout */
 ﻿/* v431-logout-button-reset */
 (function(){
   if (!window.DreamAPI) return;

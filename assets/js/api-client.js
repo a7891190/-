@@ -1,5 +1,5 @@
-/* v440-profile-routing */
-window.DREAM_API_CLIENT_VERSION = "v440-profile-routing";
+/* v441-profile-vip-layout */
+window.DREAM_API_CLIENT_VERSION = "v441-profile-vip-layout";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -245,8 +245,6 @@ window.__dreamAuthSafe.isLoggedIn = function(){
     const expire = parseVipExpireStateV422(rawExpire);
     if(expire.expired) return {status:"未開通", expireText:"已到期", active:false};
     if(expire.active) return {status:"開通", expireText:expire.text || "未設定", active:true};
-    if(type === "companion" && !rawExpire) return {status:"開通", expireText:"陪玩登入", active:true};
-
     const rawStatus = String(user.vip_status || user.member_status || "").trim();
     if(/已到期|過期|逾期|失效/.test(rawStatus)) return {status:"未開通", expireText:"已到期", active:false};
     if(/未開通|尚未開通|鎖定/.test(rawStatus)) return {status:"未開通", expireText:expire.text || "未開通", active:false};
@@ -1048,7 +1046,6 @@ function $(sel, root=document){ return root.querySelector(sel); }
     return "VIP等級：" + code + (cleaned ? " " + cleaned : "");
   }
   function vipLevelLabel(user, type){
-    if(type === "companion") return "登入身分：陪玩";
     if(!user) return "VIP等級：無VIP會員";
     if(user.svip || String(user.vip_level || user.vip_rank || "").toUpperCase() === "SVIP") return formatVipLevelV45("SVIP", user.vip_name || user.vip_title || "");
     const raw = user.vip_level ?? user.vip_rank ?? user.vip ?? user.member_vip_level ?? "";
@@ -1073,7 +1070,7 @@ function $(sel, root=document){ return root.querySelector(sel); }
     const id = user ? (user.member_id || user.user_code || user.id || user.user_id || user.companion_id || "00000000") : "";
     const coin = user ? (user.coin || user.short_coin || 0) : 0;
     const exp = user ? (user.exp || user.vip_exp || 0) : 0;
-    const vipName = user ? (user.vip_name || user.vip_title || user.vip_level_name || (type === "companion" ? "陪玩帳號" : "")) : "未登入";
+    const vipName = user ? (user.vip_name || user.vip_title || user.vip_level_name || "") : "未登入";
     const vipState = vipEntitlementDisplayV422(user, type);
     const expire = vipState.expireText;
     const vipOpen = vipState.status;
@@ -1490,7 +1487,5 @@ function $(sel, root=document){ return root.querySelector(sel); }
     return false;
   };
 })();
-
-
 
 
