@@ -15424,6 +15424,8 @@ body:not(.role-companion) .companion-only-panel{
     });
   }
   function markBackTargets(){
+    var page=document.getElementById('page-profile');
+    if(page && page.dataset.publicProfile==='1') return;
     var active='';try{active=localStorage.getItem('dream_active_profile_id')||'';}catch(_){}
     var target=active==='companion-self'?'companion-home':'member';
     document.querySelectorAll('#page-profile .profile-back,#page-profile [data-profile-back]').forEach(function(back){back.dataset.go=target;back.setAttribute('data-go',target);});
@@ -17011,7 +17013,6 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     }catch(_){}
   }
   window.DreamClosePublicProfileV443=closePublicProfile;
-  window.DreamClosePublicProfileV442=closePublicProfile;
   function profileLevelHtml(role,p){
     const vipLevel=Math.max(0,Number(p.vip_level||p.vipLevel||p.member_level||0)||0);
     const vipFlag=p.vip_active;

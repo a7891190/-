@@ -92,7 +92,7 @@
 
       if(page() === "profile"){
         try{
-          const close = window.DreamClosePublicProfileV443 || window.DreamClosePublicProfileV442;
+          const close = window.DreamClosePublicProfileV443;
           if(typeof close === "function") close();
         }catch(err){}
       }

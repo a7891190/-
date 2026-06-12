@@ -2,7 +2,7 @@
   "use strict";
   if (window.__dreamFormalHomeProfile) return;
   window.__dreamFormalHomeProfile = true;
-  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v442-profile-back-vip-status";
+  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v443-route-integrity";
 
   const CFG = window.DREAM_CONFIG || {};
   const API_BASE = CFG.API_BASE || window.DREAM_API_URL || "https://api.131rwjuh.com/api.php";

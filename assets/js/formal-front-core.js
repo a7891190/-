@@ -1,4 +1,4 @@
-/* v442-profile-back-vip-status */
+/* v443-route-integrity */
 
 window.dreamFormalIsLoginPageV389 = window.dreamFormalIsLoginPageV389 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
