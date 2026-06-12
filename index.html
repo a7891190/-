@@ -1,4 +1,4 @@
-<!-- v441-profile-vip-layout -->
+<!-- v442-profile-back-vip-status -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6426,15 +6426,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=441"></script>
-<script src="assets/js/app-hardening.js?v=441"></script>
-<script src="assets/js/front-api-stabilizer.js?v=441"></script>
-<script src="assets/js/home-render-isolation.js?v=441"></script>
-<script src="assets/js/architecture-complete-core.js?v=441"></script>
-<script src="assets/js/profile-service-sync.js?v=441"></script>
-<script src="assets/js/api-client.js?v=441"></script>
-<script src="assets/js/login-complete-controller.js?v=441"></script>
-<script src="assets/js/social-client.js?v=441"></script>
+<script src="assets/js/app-config.js?v=442"></script>
+<script src="assets/js/app-hardening.js?v=442"></script>
+<script src="assets/js/front-api-stabilizer.js?v=442"></script>
+<script src="assets/js/home-render-isolation.js?v=442"></script>
+<script src="assets/js/architecture-complete-core.js?v=442"></script>
+<script src="assets/js/profile-service-sync.js?v=442"></script>
+<script src="assets/js/api-client.js?v=442"></script>
+<script src="assets/js/login-complete-controller.js?v=442"></script>
+<script src="assets/js/social-client.js?v=442"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -6827,8 +6827,9 @@ function showPage(name, push=true){
       profilePage.dataset.publicProfile = '0';
       delete profilePage.dataset.publicProfileTarget;
       delete profilePage.dataset.profileLoading;
+      delete profilePage.dataset.publicProfileReturn;
     }
-    window.__dreamPublicProfileRequestV441 = Number(window.__dreamPublicProfileRequestV441 || 0) + 1;
+    window.__dreamPublicProfileRequestV442 = Number(window.__dreamPublicProfileRequestV442 || 0) + 1;
     window.__dreamGiftReceiverV394 = null;
     try{
       Object.keys(localStorage).forEach(key=>{
@@ -12422,8 +12423,8 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script src="assets/rank_top3_effects/effects_config.js"></script>
-<script src="assets/rank_top3_effects/renderer.js?v=441"></script>
-<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=441"></script>
+<script src="assets/rank_top3_effects/renderer.js?v=442"></script>
+<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=442"></script>
 
 <style id="v272-profile-top3-avatar-fix-css">
 /* v272：主頁守護版面、底部操作與預設大頭照資源 */
@@ -15010,11 +15011,11 @@ body:not(.role-companion) .companion-only-panel{
 </script>
 
 
-<script id="dream-pwa-register-v441">
+<script id="dream-pwa-register-v442">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', async function(){
-    const resetKey = 'dream_cache_reset_v441';
+    const resetKey = 'dream_cache_reset_v442';
     try{
       if(localStorage.getItem(resetKey) !== '1'){
         const registrations = await navigator.serviceWorker.getRegistrations();
@@ -15025,7 +15026,7 @@ body:not(.role-companion) .companion-only-panel{
         }
         localStorage.setItem(resetKey, '1');
       }
-      await navigator.serviceWorker.register('./sw.js?v=441', {scope:'./', updateViaCache:'none'});
+      await navigator.serviceWorker.register('./sw.js?v=442', {scope:'./', updateViaCache:'none'});
     }catch(err){
       console.warn('[夢競陪玩] 快取更新失敗', err);
     }
@@ -15218,11 +15219,11 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
-<script id="v441-cache-purge">
+<script id="v442-cache-purge">
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(key){ return key !== 'dream-playmate-v441'; }).map(function(key){ return caches.delete(key); }));
+    return Promise.all(keys.filter(function(key){ return key !== 'dream-playmate-v442'; }).map(function(key){ return caches.delete(key); }));
   }).catch(function(){});
 })();
 </script>
@@ -16539,7 +16540,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=441"></script>
+<script src="assets/js/formal-front-core.js?v=442"></script>
 
 <script id="dream-self-profile-router">
 (function(){
@@ -16979,6 +16980,37 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   function setBind(root,key,value,html){
     root.querySelectorAll(`[data-profile-bind="${key}"]`).forEach(el=>{if(html)el.innerHTML=value;else el.textContent=value;});
   }
+  function profilePageName(){
+    return (location.hash||"#home").replace(/^#/,"")||"home";
+  }
+  function publicProfileReturnPage(page,role){
+    const current=profilePageName();
+    if(current&&current!=="profile") page.dataset.publicProfileReturn=current;
+    if(!page.dataset.publicProfileReturn) page.dataset.publicProfileReturn=role==="companion"?"companion":"member";
+    const target=page.dataset.publicProfileReturn;
+    page.querySelectorAll(".profile-back,#page-profile [data-profile-back]").forEach(back=>{
+      back.dataset.go=target;
+      back.setAttribute("data-go",target);
+    });
+    return target;
+  }
+  function closePublicProfile(){
+    const page=document.getElementById("page-profile");
+    window.__dreamPublicProfileRequestV442=Number(window.__dreamPublicProfileRequestV442||0)+1;
+    window.__dreamGiftReceiverV394=null;
+    if(page){
+      page.dataset.publicProfile="0";
+      delete page.dataset.publicProfileTarget;
+      delete page.dataset.profileLoading;
+      delete page.dataset.publicProfileReturn;
+    }
+    try{
+      Object.keys(localStorage).forEach(key=>{
+        if(key==="dream_public_profile_target"||/^dream_public_profile_target_v\d+$/.test(key)) localStorage.removeItem(key);
+      });
+    }catch(_){}
+  }
+  window.DreamClosePublicProfileV442=closePublicProfile;
   function profileLevelHtml(role,p){
     const vipLevel=Math.max(0,Number(p.vip_level||p.vipLevel||p.member_level||0)||0);
     const vipFlag=p.vip_active;
@@ -17026,7 +17058,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     setBind(page,"gift-count",`已收到 ${gifts.length} 種禮物`);
     setBind(page,"gift-wall",gifts.length?gifts.slice(0,12).map(g=>`<span class="profile-gift-dot" title="${esc(g.gift_name||"禮物")}">${g.gift_image_url?`<img src="${esc(mediaUrl(g.gift_image_url))}" alt="${esc(g.gift_name||"禮物")}">`:esc(String(g.gift_name||"禮").slice(0,1))}</span>`).join(""):'<div class="companion-empty">尚未收到禮物</div>',true);
     page.querySelectorAll("[data-setting-toggle],.profile-info-setting-menu").forEach(el=>{el.style.display="none";});
-    page.querySelectorAll(".profile-back,#page-profile [data-profile-back]").forEach(back=>back.dataset.go=role==="companion"?"companion":"member");
+    publicProfileReturnPage(page,role);
     window.__dreamGiftReceiverV394={type:role,id:Number(page.dataset.profileId||0),name};
     if(typeof window.showPage==="function") window.showPage("profile"); else location.hash="#profile";
   }
@@ -17044,6 +17076,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     page.dataset.profileId=String(id);
     page.dataset.publicProfileTarget=key;
     page.dataset.profileLoading="1";
+    publicProfileReturnPage(page,role);
     setBind(page,"title",role==="companion"?"陪玩主頁":"會員主頁");
     setBind(page,"avatar",'<img src="'+esc(avatar)+'" alt="'+esc(name)+'" loading="eager">',true);
     setBind(page,"name",name);
@@ -17066,13 +17099,13 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     role = String(role || "").toLowerCase().includes("companion") ? "companion" : "member";
     id=Number(id||0); if(!id) return;
     const key=role+":"+id;
-    const requestId=(Number(window.__dreamPublicProfileRequestV441||0)+1);
-    window.__dreamPublicProfileRequestV441=requestId;
-    publicProfilePreview(role,id,preview||window.__dreamPublicProfilePreviewV441||null);
-    try{localStorage.setItem("dream_public_profile_target_v441",JSON.stringify({role,id}));}catch(_){}
+    const requestId=(Number(window.__dreamPublicProfileRequestV442||0)+1);
+    window.__dreamPublicProfileRequestV442=requestId;
+    publicProfilePreview(role,id,preview||window.__dreamPublicProfilePreviewV442||null);
+    try{localStorage.setItem("dream_public_profile_target_v442",JSON.stringify({role,id}));}catch(_){}
     const res=await api("public_profile",{target_type:role,target_id:id});
     const page=document.getElementById("page-profile");
-    if(requestId!==window.__dreamPublicProfileRequestV441||page?.dataset.publicProfileTarget!==key) return;
+    if(requestId!==window.__dreamPublicProfileRequestV442||page?.dataset.publicProfileTarget!==key) return;
     if(!res.ok){
       if(page){page.dataset.profileLoading="0";setBind(page,"bio","資料載入失敗，請稍後再試。");}
       return toast(res.message||"主頁載入失敗");
@@ -17170,7 +17203,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 @media(max-width:420px){#page-home .home-leaderboard-tabs{padding:10px!important;border-radius:18px!important}#page-home .leaderboard-tab,#page-vip-rank .v267-tab{font-size:11px!important;padding:8px 10px!important}#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 </style>
 
-<script src="assets/js/formal-home-profile.js?v=441"></script>
+<script src="assets/js/formal-home-profile.js?v=442"></script>
 
 
 <style id="v431-logout-button-reset-css">
@@ -17786,7 +17819,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     }
     const permission = await Notification.requestPermission();
     if(permission !== "granted"){ toast("尚未允許手機推播"); return; }
-    const reg = await navigator.serviceWorker.register("sw.js?v=441");
+    const reg = await navigator.serviceWorker.register("sw.js?v=442");
     const old = await reg.pushManager.getSubscription();
     const sub = old || await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:urlBase64ToUint8Array(keyRes.public_key)});
     const saved = await api("save_push_subscription", {subscription:sub.toJSON ? sub.toJSON() : sub});
@@ -18166,7 +18199,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </script>
 
 
-<script id="v441-public-profile-router">
+<script id="v442-public-profile-router">
 (function(){
   if(window.__dreamPublicProfileRouterV436) return;
   window.__dreamPublicProfileRouterV436 = true;
@@ -18250,15 +18283,19 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     const id=Number(el?.dataset?.profileId||0);if(id<=0)return false;
     if(typeof window.openDreamPublicProfileV394!=="function")return false;
     const data=preview(el);
-    window.__dreamPublicProfilePreviewV441=data;
+    window.__dreamPublicProfilePreviewV442=data;
     window.openDreamPublicProfileV394(role(el.dataset.profileRole),id,data);
-    window.__dreamLastPublicProfileOpenV441={key:role(el.dataset.profileRole)+":"+id,at:Date.now()};
+    window.__dreamLastPublicProfileOpenV442={key:role(el.dataset.profileRole)+":"+id,at:Date.now()};
     return true;
+  }
+  function isProfileControl(target){
+    return !!(target&&target.closest&&target.closest("#page-profile .profile-back,#page-profile [data-profile-back],#page-profile [data-go],#page-profile button,#page-profile a,#page-profile input,#page-profile select,#page-profile textarea,#page-profile label"));
   }
   let profileGesture=null;
   document.addEventListener("pointerdown",function(e){
+    if(isProfileControl(e.target)){profileGesture=null;return;}
     const el=e.target.closest&&e.target.closest("[data-profile-role][data-profile-id]");
-    if(!el)return;
+    if(!el||el.id==="page-profile")return;
     profileGesture={pointerId:e.pointerId,key:role(el.dataset.profileRole)+":"+Number(el.dataset.profileId||0),x:e.clientX,y:e.clientY,moved:false};
   },true);
   document.addEventListener("pointermove",function(e){
@@ -18266,27 +18303,32 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     if(Math.hypot(e.clientX-profileGesture.x,e.clientY-profileGesture.y)>9)profileGesture.moved=true;
   },true);
   function route(e){
+    if(isProfileControl(e.target)){profileGesture=null;return;}
     const el=e.target.closest&&e.target.closest("[data-profile-role][data-profile-id]");
-    if(!el||e.target.closest("button[data-action],button[data-social-action],.reserve-btn,[data-companion-booking-open]"))return;
+    if(!el||el.id==="page-profile"||e.target.closest("button[data-action],button[data-social-action],.reserve-btn,[data-companion-booking-open]"))return;
     const key=role(el.dataset.profileRole)+":"+Number(el.dataset.profileId||0);
     if(e.type==="pointerup"&&profileGesture&&profileGesture.pointerId===e.pointerId){
       const moved=profileGesture.moved||profileGesture.key!==key;
       profileGesture=null;
       if(moved){
-        window.__dreamProfileDragSuppressV441={key,until:Date.now()+900};
+        window.__dreamProfileDragSuppressV442={key,until:Date.now()+900};
         return;
       }
     }
-    const drag=window.__dreamProfileDragSuppressV441;
+    const drag=window.__dreamProfileDragSuppressV442;
     if(e.type==="click"&&drag&&drag.key===key&&Date.now()<drag.until){
       e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return;
     }
-    const last=window.__dreamLastPublicProfileOpenV441;
+    const last=window.__dreamLastPublicProfileOpenV442;
     if(e.type==="click"&&last&&last.key===key&&Date.now()-last.at<900){
       e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return;
     }
     if(open(el)){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();}
   }
+  document.addEventListener("click",function(e){
+    const back=e.target.closest&&e.target.closest("#page-profile .profile-back,#page-profile [data-profile-back]");
+    if(back&&typeof window.DreamClosePublicProfileV442==="function") window.DreamClosePublicProfileV442();
+  },true);
   document.addEventListener("pointerup",route,true);
   document.addEventListener("pointercancel",function(){profileGesture=null;},true);
   document.addEventListener("click",route,true);
@@ -18304,7 +18346,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </script>
 
 
-<style id="v441-profile-unified-layout">
+<style id="v442-profile-unified-layout">
 /* Member and companion public profiles share one stable, container-sized layout. */
 #page-profile{
   container-type:inline-size!important;
@@ -18515,7 +18557,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 }
 </style>
 
-<style id="v441-profile-click-targets">
+<style id="v442-profile-click-targets">
 /* Decorative top-three layers stay transparent, while real user targets remain tappable. */
 #page-home .v35-top3 .top3-avatar[data-profile-id],
 #page-home .v35-top3 .top3-text[data-profile-id],

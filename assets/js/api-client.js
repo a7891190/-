@@ -1,5 +1,5 @@
-/* v441-profile-vip-layout */
-window.DREAM_API_CLIENT_VERSION = "v441-profile-vip-layout";
+/* v442-profile-back-vip-status */
+window.DREAM_API_CLIENT_VERSION = "v442-profile-back-vip-status";
 
 function dreamCurrentPageV384(){ return (location.hash || "#home").replace(/^#/,"") || "home"; }
 function dreamIsMarketPageV384(){ const p=dreamCurrentPageV384(); return p==="market" || p==="shop" || p==="mall"; }
@@ -1487,5 +1487,4 @@ function $(sel, root=document){ return root.querySelector(sel); }
     return false;
   };
 })();
-
 

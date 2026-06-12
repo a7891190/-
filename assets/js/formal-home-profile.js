@@ -2,7 +2,7 @@
   "use strict";
   if (window.__dreamFormalHomeProfile) return;
   window.__dreamFormalHomeProfile = true;
-  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v441-profile-vip-layout";
+  window.DREAM_FORMAL_HOME_PROFILE_VERSION = "v442-profile-back-vip-status";
 
   const CFG = window.DREAM_CONFIG || {};
   const API_BASE = CFG.API_BASE || window.DREAM_API_URL || "https://api.131rwjuh.com/api.php";

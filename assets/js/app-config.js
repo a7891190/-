@@ -11,7 +11,7 @@ window.DREAM_CONFIG = {
   // 若後台回傳 /uploads/... 或完整網址，前台會自動處理
   UPLOAD_BASE: "https://api.131rwjuh.com",
 
-  VERSION: "v441-profile-vip-layout"
+  VERSION: "v442-profile-back-vip-status"
 };
 
 (function(){
@@ -106,4 +106,3 @@ window.DREAM_CONFIG = {
     return res;
   };
 })();
-

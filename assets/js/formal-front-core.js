@@ -1,4 +1,4 @@
-/* v441-profile-vip-layout */
+/* v442-profile-back-vip-status */
 
 window.dreamFormalIsLoginPageV389 = window.dreamFormalIsLoginPageV389 || function(){
   const p=(location.hash||"#home").replace(/^#/,"")||"home";
@@ -560,4 +560,3 @@ window.dreamFormalIsLoginPageV378 = window.dreamFormalIsLoginPageV379;
   setInterval(loadBullets, POLL_MS);
   window.DreamBulletFormalV370 = {load: loadBullets};
 })();
-

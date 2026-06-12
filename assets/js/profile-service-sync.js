@@ -584,7 +584,7 @@
     toast("正在載入資料...", true);
     try{ localStorage.setItem("dream_active_profile_id", profileIdFor(role)); }catch(e){}
     const pageEl = document.getElementById("page-profile");
-    if(pageEl){ pageEl.dataset.publicProfile = "0"; delete pageEl.dataset.publicProfileTarget; }
+    if(pageEl){ pageEl.dataset.publicProfile = "0"; delete pageEl.dataset.publicProfileTarget; delete pageEl.dataset.publicProfileReturn; }
     if(page() !== "profile") go("profile");
     const profile = await loadProfile(true, role);
     renderProfilePage(role, profile || {});
