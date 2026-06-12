@@ -1,4 +1,4 @@
-<!-- v442-profile-back-vip-status -->
+<!-- v443-route-integrity -->
 <!-- barrage34-same-as-window -->
 <!-- v336-real-preview1-fan-fix -->
 <!DOCTYPE html>
@@ -6273,7 +6273,7 @@ main.app{padding-bottom:0 !important;}
     </section>
   </section>
 
-  <section id="page-renew" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>會員續期</h1></section><section class="panel sub-panel"><div class="text-block">請輸入會員帳號與會員碼，確認後 VIP 會員效期將開通 永久特效。</div><div class="form-stack"><input data-social-input="renew-username" placeholder="請輸入會員帳號"><input data-social-input="renew-code" placeholder="請輸入會員碼"><button class="btn" data-social-action="renew-code" type="button">確定開通 VIP</button></div></section></section>
+  <section id="page-renew" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>會員續期</h1></section><section class="panel sub-panel"><div class="text-block">請輸入會員帳號與會員碼，確認後 VIP 會員效期將開通或延長 30 天。</div><div class="form-stack"><input data-social-input="renew-username" placeholder="請輸入會員帳號"><input data-social-input="renew-code" placeholder="請輸入會員碼"><button class="btn" data-social-action="renew-code" type="button">確定開通 VIP</button></div></section></section>
 
   <section id="page-review" class="page" data-page="review"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>訂單評價</h1></section><section class="panel sub-panel"><div class="review-tabs"><button type="button" class="review-tab-btn active" data-review-tab="pending">待評價</button><button type="button" class="review-tab-btn" data-review-tab="records">評價紀錄</button></div><div class="text-block" data-review-note>完成訂單後，會員可評價陪玩，陪玩可評價會員。每張完成訂單只能評一次。</div><div class="review-list" data-review-list><div class="companion-empty">正在載入評價資料...</div></div></section></section>
   <section id="page-vip-info" class="page"><section class="topbar"><button class="back-btn" data-go="member">‹</button><h1>VIP說明</h1></section><section class="panel sub-panel"><div class="text-block">VIP1～3：VIP經驗值減少30%<br>
@@ -6426,15 +6426,15 @@ main.app{padding-bottom:0 !important;}
 
 <nav class="bottom-nav-wrap"><div class="bottom-nav"><img class="bottom-nav-bg" src="assets/bottom_nav.webp" alt="底部選單背景"><div class="nav-links"><a class="nav-link active" data-go="home"><img src="assets/home_icon.webp" alt="首頁"></a><a class="nav-link" data-go="companion"><img src="assets/companion_icon.webp" alt="陪玩"></a><a class="nav-link" data-go="inn"><img src="assets/inn_icon.webp" alt="客棧"></a><a class="nav-link" data-go="market"><img src="assets/market_icon.webp" alt="市集"></a><a class="nav-link" data-go="member"><img src="assets/member_icon.webp" alt="會員"></a></div></div></nav>
 <div class="toast" id="toast"></div>
-<script src="assets/js/app-config.js?v=442"></script>
-<script src="assets/js/app-hardening.js?v=442"></script>
-<script src="assets/js/front-api-stabilizer.js?v=442"></script>
-<script src="assets/js/home-render-isolation.js?v=442"></script>
-<script src="assets/js/architecture-complete-core.js?v=442"></script>
-<script src="assets/js/profile-service-sync.js?v=442"></script>
-<script src="assets/js/api-client.js?v=442"></script>
-<script src="assets/js/login-complete-controller.js?v=442"></script>
-<script src="assets/js/social-client.js?v=442"></script>
+<script src="assets/js/app-config.js?v=443"></script>
+<script src="assets/js/app-hardening.js?v=443"></script>
+<script src="assets/js/front-api-stabilizer.js?v=443"></script>
+<script src="assets/js/home-render-isolation.js?v=443"></script>
+<script src="assets/js/architecture-complete-core.js?v=443"></script>
+<script src="assets/js/profile-service-sync.js?v=443"></script>
+<script src="assets/js/api-client.js?v=443"></script>
+<script src="assets/js/login-complete-controller.js?v=443"></script>
+<script src="assets/js/social-client.js?v=443"></script>
 <script>
 const pageMap = {
   home:'page-home', login:'page-login', register:'page-login', companion:'page-companion', 'companion-home':'page-companion-home', inn:'page-inn', market:'page-market', raffle:'page-raffle', gift:'page-gift', member:'page-member', achievements:'page-achievements', profile:'page-profile',
@@ -6829,7 +6829,7 @@ function showPage(name, push=true){
       delete profilePage.dataset.profileLoading;
       delete profilePage.dataset.publicProfileReturn;
     }
-    window.__dreamPublicProfileRequestV442 = Number(window.__dreamPublicProfileRequestV442 || 0) + 1;
+    window.__dreamPublicProfileRequestV443 = Number(window.__dreamPublicProfileRequestV443 || 0) + 1;
     window.__dreamGiftReceiverV394 = null;
     try{
       Object.keys(localStorage).forEach(key=>{
@@ -12423,8 +12423,8 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script src="assets/rank_top3_effects/effects_config.js"></script>
-<script src="assets/rank_top3_effects/renderer.js?v=442"></script>
-<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=442"></script>
+<script src="assets/rank_top3_effects/renderer.js?v=443"></script>
+<script src="assets/rank_top3_effects/rank_top3_gufeng_apply.js?v=443"></script>
 
 <style id="v272-profile-top3-avatar-fix-css">
 /* v272：主頁守護版面、底部操作與預設大頭照資源 */
@@ -15011,11 +15011,11 @@ body:not(.role-companion) .companion-only-panel{
 </script>
 
 
-<script id="dream-pwa-register-v442">
+<script id="dream-pwa-register-v443">
 (function(){
   if(!('serviceWorker' in navigator) || location.protocol === 'file:') return;
   window.addEventListener('load', async function(){
-    const resetKey = 'dream_cache_reset_v442';
+    const resetKey = 'dream_cache_reset_v443';
     try{
       if(localStorage.getItem(resetKey) !== '1'){
         const registrations = await navigator.serviceWorker.getRegistrations();
@@ -15026,7 +15026,7 @@ body:not(.role-companion) .companion-only-panel{
         }
         localStorage.setItem(resetKey, '1');
       }
-      await navigator.serviceWorker.register('./sw.js?v=442', {scope:'./', updateViaCache:'none'});
+      await navigator.serviceWorker.register('./sw.js?v=443', {scope:'./', updateViaCache:'none'});
     }catch(err){
       console.warn('[夢競陪玩] 快取更新失敗', err);
     }
@@ -15219,11 +15219,11 @@ body:not(.role-companion) .companion-only-panel{
 })();
 </script>
 
-<script id="v442-cache-purge">
+<script id="v443-cache-purge">
 (function(){
   if(!('caches' in window)) return;
   caches.keys().then(function(keys){
-    return Promise.all(keys.filter(function(key){ return key !== 'dream-playmate-v442'; }).map(function(key){ return caches.delete(key); }));
+    return Promise.all(keys.filter(function(key){ return key !== 'dream-playmate-v443'; }).map(function(key){ return caches.delete(key); }));
   }).catch(function(){});
 })();
 </script>
@@ -16540,7 +16540,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   };
 })();
 </script>
-<script src="assets/js/formal-front-core.js?v=442"></script>
+<script src="assets/js/formal-front-core.js?v=443"></script>
 
 <script id="dream-self-profile-router">
 (function(){
@@ -16996,7 +16996,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   }
   function closePublicProfile(){
     const page=document.getElementById("page-profile");
-    window.__dreamPublicProfileRequestV442=Number(window.__dreamPublicProfileRequestV442||0)+1;
+    window.__dreamPublicProfileRequestV443=Number(window.__dreamPublicProfileRequestV443||0)+1;
     window.__dreamGiftReceiverV394=null;
     if(page){
       page.dataset.publicProfile="0";
@@ -17010,6 +17010,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
       });
     }catch(_){}
   }
+  window.DreamClosePublicProfileV443=closePublicProfile;
   window.DreamClosePublicProfileV442=closePublicProfile;
   function profileLevelHtml(role,p){
     const vipLevel=Math.max(0,Number(p.vip_level||p.vipLevel||p.member_level||0)||0);
@@ -17099,13 +17100,13 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     role = String(role || "").toLowerCase().includes("companion") ? "companion" : "member";
     id=Number(id||0); if(!id) return;
     const key=role+":"+id;
-    const requestId=(Number(window.__dreamPublicProfileRequestV442||0)+1);
-    window.__dreamPublicProfileRequestV442=requestId;
-    publicProfilePreview(role,id,preview||window.__dreamPublicProfilePreviewV442||null);
-    try{localStorage.setItem("dream_public_profile_target_v442",JSON.stringify({role,id}));}catch(_){}
+    const requestId=(Number(window.__dreamPublicProfileRequestV443||0)+1);
+    window.__dreamPublicProfileRequestV443=requestId;
+    publicProfilePreview(role,id,preview||window.__dreamPublicProfilePreviewV443||null);
+    try{localStorage.setItem("dream_public_profile_target_v443",JSON.stringify({role,id}));}catch(_){}
     const res=await api("public_profile",{target_type:role,target_id:id});
     const page=document.getElementById("page-profile");
-    if(requestId!==window.__dreamPublicProfileRequestV442||page?.dataset.publicProfileTarget!==key) return;
+    if(requestId!==window.__dreamPublicProfileRequestV443||page?.dataset.publicProfileTarget!==key) return;
     if(!res.ok){
       if(page){page.dataset.profileLoading="0";setBind(page,"bio","資料載入失敗，請稍後再試。");}
       return toast(res.message||"主頁載入失敗");
@@ -17203,7 +17204,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 @media(max-width:420px){#page-home .home-leaderboard-tabs{padding:10px!important;border-radius:18px!important}#page-home .leaderboard-tab,#page-vip-rank .v267-tab{font-size:11px!important;padding:8px 10px!important}#page-home .rank-chip,#page-home .rank-scroll .rank-chip{flex-basis:152px!important;width:152px!important;min-width:152px!important;max-width:152px!important}#page-vip-rank .v267-rank-row,#page-vip-rank .formal-rank-row{grid-template-columns:40px minmax(0,1fr) minmax(58px,max-content)!important;gap:7px!important;padding:8px!important}#page-vip-rank .v267-rank-value{max-width:28vw!important;font-size:11px!important}}
 </style>
 
-<script src="assets/js/formal-home-profile.js?v=442"></script>
+<script src="assets/js/formal-home-profile.js?v=443"></script>
 
 
 <style id="v431-logout-button-reset-css">
@@ -17819,7 +17820,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     }
     const permission = await Notification.requestPermission();
     if(permission !== "granted"){ toast("尚未允許手機推播"); return; }
-    const reg = await navigator.serviceWorker.register("sw.js?v=442");
+    const reg = await navigator.serviceWorker.register("sw.js?v=443");
     const old = await reg.pushManager.getSubscription();
     const sub = old || await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:urlBase64ToUint8Array(keyRes.public_key)});
     const saved = await api("save_push_subscription", {subscription:sub.toJSON ? sub.toJSON() : sub});
@@ -18199,7 +18200,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </script>
 
 
-<script id="v442-public-profile-router">
+<script id="v443-public-profile-router">
 (function(){
   if(window.__dreamPublicProfileRouterV436) return;
   window.__dreamPublicProfileRouterV436 = true;
@@ -18283,9 +18284,9 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
     const id=Number(el?.dataset?.profileId||0);if(id<=0)return false;
     if(typeof window.openDreamPublicProfileV394!=="function")return false;
     const data=preview(el);
-    window.__dreamPublicProfilePreviewV442=data;
+    window.__dreamPublicProfilePreviewV443=data;
     window.openDreamPublicProfileV394(role(el.dataset.profileRole),id,data);
-    window.__dreamLastPublicProfileOpenV442={key:role(el.dataset.profileRole)+":"+id,at:Date.now()};
+    window.__dreamLastPublicProfileOpenV443={key:role(el.dataset.profileRole)+":"+id,at:Date.now()};
     return true;
   }
   function isProfileControl(target){
@@ -18311,15 +18312,15 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
       const moved=profileGesture.moved||profileGesture.key!==key;
       profileGesture=null;
       if(moved){
-        window.__dreamProfileDragSuppressV442={key,until:Date.now()+900};
+        window.__dreamProfileDragSuppressV443={key,until:Date.now()+900};
         return;
       }
     }
-    const drag=window.__dreamProfileDragSuppressV442;
+    const drag=window.__dreamProfileDragSuppressV443;
     if(e.type==="click"&&drag&&drag.key===key&&Date.now()<drag.until){
       e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return;
     }
-    const last=window.__dreamLastPublicProfileOpenV442;
+    const last=window.__dreamLastPublicProfileOpenV443;
     if(e.type==="click"&&last&&last.key===key&&Date.now()-last.at<900){
       e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return;
     }
@@ -18327,7 +18328,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
   }
   document.addEventListener("click",function(e){
     const back=e.target.closest&&e.target.closest("#page-profile .profile-back,#page-profile [data-profile-back]");
-    if(back&&typeof window.DreamClosePublicProfileV442==="function") window.DreamClosePublicProfileV442();
+    if(back&&typeof window.DreamClosePublicProfileV443==="function") window.DreamClosePublicProfileV443();
   },true);
   document.addEventListener("pointerup",route,true);
   document.addEventListener("pointercancel",function(){profileGesture=null;},true);
@@ -18346,7 +18347,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 </script>
 
 
-<style id="v442-profile-unified-layout">
+<style id="v443-profile-unified-layout">
 /* Member and companion public profiles share one stable, container-sized layout. */
 #page-profile{
   container-type:inline-size!important;
@@ -18557,7 +18558,7 @@ body.dream-authenticated #page-companion-home .profile-card{cursor:default}
 }
 </style>
 
-<style id="v442-profile-click-targets">
+<style id="v443-profile-click-targets">
 /* Decorative top-three layers stay transparent, while real user targets remain tappable. */
 #page-home .v35-top3 .top3-avatar[data-profile-id],
 #page-home .v35-top3 .top3-text[data-profile-id],
